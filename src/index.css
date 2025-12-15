@@ -1,0 +1,279 @@
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Patrick+Hand&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap');
+
+:root {
+  --primary-color: #FFD700;
+  --secondary-color: #FF6B6B;
+  --accent-color: #4ECDC4;
+  --bg-color: #FFF9C4;
+  --text-color: #2D3436;
+  --card-bg: #FFFFFF;
+  --font-main: 'Fredoka', sans-serif;
+  --font-hand: 'Patrick Hand', cursive;
+  --shadow-hard: 6px 6px 0px #000;
+  --shadow-hover: 3px 3px 0px #000;
+  --border-thick: 3px solid #000;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f8f9fa;
+  background-image:
+    linear-gradient(#e1e1e1 1px, transparent 1px),
+    linear-gradient(90deg, #e1e1e1 1px, transparent 1px);
+  background-size: 30px 30px;
+  color: var(--text-color);
+  font-family: var(--font-main);
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-hand);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+button {
+  cursor: pointer;
+  border: var(--border-thick);
+  box-shadow: var(--shadow-hard);
+  transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  font-family: var(--font-hand);
+  font-weight: bold;
+  font-size: 1.1rem;
+  padding: 10px 20px;
+  border-radius: 12px;
+  text-transform: uppercase;
+}
+
+button:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0px #000;
+}
+
+button:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px #000;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.card {
+  background: var(--card-bg);
+  border: var(--border-thick);
+  border-radius: 20px;
+  padding: 40px;
+  margin: 20px 0;
+  box-shadow: var(--shadow-hard);
+  position: relative;
+  transition: transform 0.3s ease;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #000;
+  box-shadow: 20px 0 0 #000;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.nav-item:hover {
+  color: var(--secondary-color) !important;
+}
+
+.nav-item::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 3px;
+  bottom: -5px;
+  left: 0;
+  background-color: var(--secondary-color);
+  transition: width 0.3s;
+}
+
+.nav-item:hover::after {
+  width: 100%;
+}
+
+.emoji-bounce {
+  display: inline-block;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-15px) rotate(10deg);
+  }
+}
+
+/* Scrollbar beautification */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FFF9C4;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #000;
+  border-radius: 6px;
+  border: 3px solid #FFF9C4;
+}
+
+/* ========================================
+   RESPONSIVE DESIGN - Mobile & Tablet
+   ======================================== */
+
+/* Tablets and smaller laptops (1024px and below) */
+@media (max-width: 1024px) {
+  .container {
+    max-width: 90%;
+    padding: 15px;
+  }
+
+  .card {
+    padding: 30px;
+    margin: 15px 0;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Tablets (768px and below) */
+@media (max-width: 768px) {
+  body {
+    background-size: 20px 20px;
+  }
+
+  .container {
+    padding: 10px;
+  }
+
+  .card {
+    padding: 20px;
+    margin: 10px 0;
+    border-radius: 15px;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.75rem;
+  }
+
+  h3 {
+    font-size: 1.3rem;
+  }
+
+  button {
+    font-size: 1rem;
+    padding: 8px 16px;
+  }
+}
+
+/* Mobile devices (480px and below) */
+@media (max-width: 480px) {
+  body {
+    background-size: 15px 15px;
+    font-size: 14px;
+  }
+
+  .container {
+    padding: 8px;
+  }
+
+  .card {
+    padding: 15px;
+    margin: 8px 0;
+    border-radius: 12px;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+    letter-spacing: 0.5px;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.2rem;
+  }
+
+  button {
+    font-size: 0.9rem;
+    padding: 6px 12px;
+    border-width: 2px;
+  }
+
+  button:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0px #000;
+  }
+
+  button:active {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0px #000;
+  }
+}
+
+/* Very small mobile devices (360px and below) */
+@media (max-width: 360px) {
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.3rem;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+  }
+
+  .card {
+    padding: 12px;
+  }
+}
