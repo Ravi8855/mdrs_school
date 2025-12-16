@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import confetti from 'canvas-confetti';
+import React, { useEffect, useState } from "react";
+import confetti from "canvas-confetti";
 
-import Navbar from './components/Navbar';
-import BestFriendsPage from './components/BestFriendsPage';
-import ClassmatesPage from './components/ClassmatesPage';
-import TeachersPage from './components/TeachersPage';
-import SchoolHome from './components/SchoolHome';
-import WorkersPage from './components/WorkersPage';
-import GalleryPage from './components/GalleryPage';
-import SpinWheelPage from './components/SpinWheelPage';
+import Navbar from "./components/Navbar";
+import BestFriendsPage from "./components/BestFriendsPage";
+import ClassmatesPage from "./components/ClassmatesPage";
+import TeachersPage from "./components/TeachersPage";
+import SchoolHome from "./components/SchoolHome";
+import WorkersPage from "./components/WorkersPage";
+import GalleryPage from "./components/GalleryPage";
+import SpinWheelPage from "./components/SpinWheelPage";
+import Footer from "./components/Footer"; // ✅ added footer
 
 function App() {
-  const [randomJoke, setRandomJoke] = useState('');
+  const [randomJoke, setRandomJoke] = useState("");
 
   const jokes = [
     "Teacher: Why are you talking? Me: I'm not talking, I'm just exchanging information.",
@@ -19,14 +20,14 @@ function App() {
     "Math: The only place where people buy 64 watermelons and no one wonders why.",
     "I'm not sleeping in class, I'm just testing gravity with my eyelids.",
     "Student: *drops pen* Class: *chaos ensues*",
-    "Teacher: 'I will wait until it is quiet.' Class: *Takes a nap*"
+    "Teacher: 'I will wait until it is quiet.' Class: *Takes a nap*",
   ];
 
   const handleConfetti = () => {
     confetti({
       particleCount: 100,
       spread: 70,
-      origin: { y: 0.6 }
+      origin: { y: 0.6 },
     });
   };
 
@@ -38,7 +39,7 @@ function App() {
   const handleNavigate = (target) => {
     const element = document.getElementById(target);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 
@@ -75,15 +76,8 @@ function App() {
         <SpinWheelPage />
       </section>
 
-      <footer style={{
-        marginTop: 'auto',
-        padding: '20px',
-        textAlign: 'center',
-        background: '#f5f7fa',
-        color: '#888'
-      }}>
-        <p>© {new Date().getFullYear()} MDRS Shahapur</p>
-      </footer>
+      {/* ✅ PREMIUM FOOTER ADDED HERE */}
+      <Footer />
     </div>
   );
 }

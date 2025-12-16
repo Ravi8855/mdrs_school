@@ -1,116 +1,136 @@
-import React from 'react';
+import React from "react";
+import collegeImg from "../assets/college.jpg";
+import desaiImg from "../assets/desai.jpg";
 
 const SchoolHome = () => {
-    return (
-        <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: '85vh',
-            textAlign: 'center',
-            padding: '20px',
-            background: 'linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab)',
-            backgroundSize: '400% 400%',
-            animation: 'gradientBG 15s ease infinite',
-            fontFamily: "'Montserrat', sans-serif",
-            color: 'white'
-        }}>
-            {/* Google Fonts Import for Professional Typography */}
-            <style>
-                {`@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap');`}
-            </style>
+  return (
+    <section className="home-hero">
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Poppins:wght@400;600&display=swap');
 
-            <div style={{
-                maxWidth: '1000px',
-                padding: '60px 40px',
-                background: 'rgba(255, 255, 255, 0.1)',
-                backdropFilter: 'blur(15px)',
-                borderRadius: '30px',
-                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-                border: '1px solid rgba(255, 255, 255, 0.18)',
-                animation: 'slideUp 1s ease-out',
-                position: 'relative',
-                overflow: 'hidden'
-            }}>
-                {/* Decorative Elements */}
-                <div style={{
-                    position: 'absolute', top: '-50px', left: '-50px', width: '150px', height: '150px',
-                    background: 'rgba(255,255,255,0.1)', borderRadius: '50%', filter: 'blur(40px)'
-                }}></div>
-                <div style={{
-                    position: 'absolute', bottom: '-50px', right: '-50px', width: '200px', height: '200px',
-                    background: 'rgba(255,215,0,0.2)', borderRadius: '50%', filter: 'blur(50px)'
-                }}></div>
+        .home-hero {
+          min-height: 100vh;
+          width: 100%;
+          background-image:
+            linear-gradient(
+              rgba(0, 0, 0, 0.55),
+              rgba(0, 0, 0, 0.65)
+            ),
+            url(${collegeImg});
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
 
-                <div style={{ animation: 'fadeIn 1.5s ease-out' }}>
-                    <span style={{ fontSize: '4rem', display: 'block', marginBottom: '10px', animation: 'float 3s ease-in-out infinite' }}>🏫</span>
-                    <h2 style={{
-                        textTransform: 'uppercase',
-                        letterSpacing: '8px',
-                        fontSize: '1rem',
-                        marginBottom: '15px',
-                        fontWeight: '600',
-                        color: 'rgba(255,255,255,0.9)'
-                    }}>Welcome To</h2>
-                </div>
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
+        }
 
-                <h1 style={{
-                    fontFamily: "'Cinzel', serif", // Professional, monumental font
-                    fontSize: '3rem',
-                    fontWeight: '700',
-                    lineHeight: '1.4',
-                    marginBottom: '30px',
-                    background: 'linear-gradient(to right, #fff, #ffd700, #fff)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    textShadow: '0px 4px 10px rgba(0,0,0,0.3)',
-                    animation: 'shimmer 3s infinite linear'
-                }}>
-                    MORARJI DESAI RESIDENTIAL SCHOOL DORIGUDDA UKKENALA SHAHAPUR, YADGIR DIST - 585309
-                </h1>
+        .home-card {
+          max-width: 1000px;
+          width: 100%;
+          padding: 55px 30px;
+          text-align: center;
 
-                <div style={{
-                    display: 'inline-block',
-                    padding: '12px 35px',
-                    border: '1px solid rgba(255,255,255,0.4)',
-                    borderRadius: '50px',
-                    background: 'rgba(0,0,0,0.3)',
-                    fontSize: '1.2rem',
-                    letterSpacing: '2px',
-                    fontFamily: "'Cinzel', serif",
-                    fontWeight: '600'
-                }}>
-                    Excellence in Education ✨
-                </div>
-            </div>
+          background: rgba(0, 0, 0, 0.35);
+          backdrop-filter: blur(14px);
+          border-radius: 28px;
 
-            <style>{`
-                @keyframes gradientBG {
-                    0% { background-position: 0% 50%; }
-                    50% { background-position: 100% 50%; }
-                    100% { background-position: 0% 50%; }
-                }
-                @keyframes slideUp {
-                    from { transform: translateY(50px); opacity: 0; }
-                    to { transform: translateY(0); opacity: 1; }
-                }
-                @keyframes float {
-                    0% { transform: translateY(0px); }
-                    50% { transform: translateY(-15px); }
-                    100% { transform: translateY(0px); }
-                }
-                @keyframes shimmer {
-                    0% { background-position: -200% center; }
-                    100% { background-position: 200% center; }
-                }
-                @keyframes fadeIn {
-                    from { opacity: 0; }
-                    to { opacity: 1; }
-                }
-            `}</style>
+          box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
+        }
+
+        /* ===== MORARJI DESAI IMAGE ===== */
+        .desai-image {
+          width: 130px;
+          height: 130px;
+          object-fit: cover;
+          border-radius: 50%;
+
+          /* 🔽 REDUCED GAP HERE */
+          margin-bottom: 12px;
+
+          border: 4px solid #FFD700;
+          box-shadow:
+            0 0 15px rgba(255, 215, 0, 0.6),
+            0 0 30px rgba(255, 215, 0, 0.4);
+        }
+
+        /* ===== SCHOOL NAME ===== */
+        .school-name {
+          font-family: 'Montserrat', sans-serif;
+          font-size: clamp(2.4rem, 5vw, 4.5rem);
+          font-weight: 900;
+          letter-spacing: 2px;
+
+          /* 🔽 REDUCED TOP GAP */
+          margin-top: 0;
+          margin-bottom: 12px;
+
+          color: #FFD700;
+
+          text-shadow:
+            0 0 6px rgba(255, 215, 0, 0.6),
+            0 0 14px rgba(255, 215, 0, 0.4);
+        }
+
+        .school-subtitle {
+          font-family: 'Poppins', sans-serif;
+          font-size: clamp(1rem, 2.5vw, 1.4rem);
+          font-weight: 600;
+          letter-spacing: 1px;
+          color: #f5e6a8;
+          margin-bottom: 26px;
+        }
+
+        .school-tagline {
+          font-family: 'Poppins', sans-serif;
+          font-size: clamp(1rem, 2.5vw, 1.25rem);
+          font-weight: 500;
+          color: #ffffff;
+          max-width: 800px;
+          margin: 0 auto;
+          line-height: 1.7;
+
+          text-shadow: 0 0 6px rgba(255, 255, 255, 0.3);
+        }
+
+        @media (max-width: 600px) {
+          .home-card {
+            padding: 40px 20px;
+          }
+
+          .desai-image {
+            width: 110px;
+            height: 110px;
+            margin-bottom: 10px;
+          }
+        }
+      `}</style>
+
+      <div className="home-card">
+        {/* Morarji Desai Image */}
+        <img
+          src={desaiImg}
+          alt="Morarji Desai"
+          className="desai-image"
+        />
+
+        <h1 className="school-name">
+          MORARJI DESAI RESIDENTIAL SCHOOL
+        </h1>
+
+        <div className="school-subtitle">
+          DORIGUDDA UKKENALA, SHAHAPUR, YADGIR DIST – 585309
         </div>
-    );
+
+        <p className="school-tagline">
+          A place where discipline builds character, education shapes the future,
+          and students grow with confidence, values, and purpose ✨
+        </p>
+      </div>
+    </section>
+  );
 };
 
 export default SchoolHome;
