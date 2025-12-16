@@ -21,6 +21,7 @@ const TeachersPage = () => {
     "Yamuna Mam",
     "Revan Siddappa Sir",
     "Mamtha Mam",
+    "Sharanu naykodi sir",
   ];
 
   return (
@@ -35,9 +36,6 @@ const TeachersPage = () => {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
 
-        /* =========================
-           🔥 STRONG GOLD GLOW 🔥
-        ========================== */
         @keyframes superGlow {
           0% {
             box-shadow:
@@ -67,17 +65,11 @@ const TeachersPage = () => {
           font-weight: 700;
           color: #2d3436;
           border-radius: 18px;
-          background: linear-gradient(
-            135deg,
-            #fff6d8,
-            #ffffff,
-            #fff6d8
-          );
+          background: linear-gradient(135deg, #fff6d8, #ffffff, #fff6d8);
           border: 3px solid #f4b400;
           animation: superGlow 2.8s ease-in-out infinite;
         }
 
-        /* ===== Principal Card ===== */
         .principal-card {
           max-width: 420px;
           margin: 0 auto 50px;
@@ -125,8 +117,10 @@ const TeachersPage = () => {
           box-shadow: 0 8px 20px rgba(0,0,0,0.08);
         }
 
-        /* Tablet */
-        @media (max-width: 900px) {
+        /* ✅ KEY FIX:
+           Mobile Chrome Desktop View (~980px)
+           FORCE 3 COLUMNS */
+        @media (max-width: 1100px) {
           .teachers-grid {
             grid-template-columns: repeat(3, 1fr);
           }
@@ -152,21 +146,18 @@ const TeachersPage = () => {
         Our Respected Teacher's
       </h1>
 
-      {/* 🔥 STRONGLY GLOWING CARD */}
       <div className="appreciation-card">
-       "You saw potential in us when we saw nothing."
+        "You saw potential in us when we saw nothing."
         <span style={{ color: "#b88700", fontWeight: 900 }}>
           {" "}We truly appreciate you.
         </span>” 🤍
       </div>
 
-      {/* Principal */}
       <div className="principal-card">
         <div className="principal-title">Principal</div>
         <div className="principal-name">{principal}</div>
       </div>
 
-      {/* Teachers */}
       <div className="teachers-grid">
         {teachers.map((name, index) => (
           <div key={index} className="teacher-pill">

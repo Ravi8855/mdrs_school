@@ -86,13 +86,13 @@ const BestFriendsPage = () => {
             {/* Hero */}
             <div style={{ textAlign: 'center', padding: '80px 20px' }}>
                 <h1 style={{ fontSize: '3.5rem', fontFamily: 'var(--font-hand)', color: '#FF4757', textShadow: '3px 3px 0px #000' }}>
-                    Best Friends Forever (BFFs) 💫
+                    Best Friends Forever (BFFs) 
                 </h1>
                 <div style={{ fontSize: '1.5rem', marginTop: '20px', minHeight: '1.5em', fontWeight: 'bold' }}>
                     {subtitles[subtitle]}
                 </div>
                 <div style={{ marginTop: '30px', fontSize: '3rem' }}>
-                    👫 👬 👭 😂 📚
+                    👫 👬 👭 
                 </div>
             </div>
 

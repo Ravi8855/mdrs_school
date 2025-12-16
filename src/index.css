@@ -1,3 +1,10 @@
+/* 🔒 Fix horizontal overflow on all devices */
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Patrick+Hand&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap');
 
@@ -32,6 +39,13 @@ body {
   overflow-x: hidden;
 }
 
+/* 🔒 REQUIRED FIX FOR REACT */
+#root {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 h1,
 h2,
 h3 {
@@ -53,6 +67,10 @@ button {
   border-radius: 12px;
   text-transform: uppercase;
 }
+
+/* ⬇️ REST OF YOUR FILE REMAINS 100% SAME */
+/* (no change below this line) */
+
 
 button:hover {
   transform: translate(-2px, -2px);
