@@ -56,9 +56,10 @@ function App() {
         <ClassmatesPage />
       </section>
 
-      <section id="teachers">
-        <TeachersPage />
-      </section>
+     <section id="teachers" className="page-section">
+  <TeachersPage />
+</section>
+
 
       <section id="workers">
         <WorkersPage />
