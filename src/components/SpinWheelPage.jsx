@@ -210,7 +210,7 @@ const SpinWheelPage = () => {
                     textShadow: '0 8px 20px rgba(0,0,0,0.4)',
                     letterSpacing: '2px'
                 }}>
-                    Spin the Wheel – Class Legends 🌀
+                    Spin the Wheel – Class Legends 
                 </h1>
                 <p style={{
                     fontSize: '1.5rem',

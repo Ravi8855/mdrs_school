@@ -124,7 +124,7 @@ const GalleryPage = () => {
                     <div key={index} className="gallery-card" style={{ animation: `fadeIn 0.5s ease backwards ${index * 0.1}s` }}>
                         {img.hidden ? (
                             <div className="hidden-placeholder">
-                                <span style={{ fontSize: '3rem', marginBottom: '10px' }}>🙈</span>
+                                <span style={{ fontSize: '3rem', marginBottom: '10px' }}></span>
                                 <span>Surprise Memory</span>
                             </div>
                         ) : (
