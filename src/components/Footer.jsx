@@ -36,32 +36,56 @@ const Footer = () => {
 
         .footer-icons a {
           font-size: 2rem;
-          transition: transform 0.3s ease;
+          animation: floatIcon 3s ease-in-out infinite;
         }
+
+        /* Slight delay for natural flow */
+        .footer-icons a:nth-child(1) { animation-delay: 0s; }
+        .footer-icons a:nth-child(2) { animation-delay: 0.3s; }
+        .footer-icons a:nth-child(3) { animation-delay: 0.6s; }
+        .footer-icons a:nth-child(4) { animation-delay: 0.9s; }
 
         .footer-icons a:hover {
           transform: translateY(-6px) scale(1.1);
         }
 
-        /* Individual icon colors + glow */
-        .linkedin {
+        @keyframes floatIcon {
+          0%   { transform: translateY(0); }
+          50%  { transform: translateY(-10px); }
+          100% { transform: translateY(0); }
+        }
+
+        /* 🔥 STRONG NEON GLOW (SVG SAFE) */
+        .linkedin svg {
           color: #0a66c2;
-          text-shadow: 0 0 12px rgba(10, 102, 194, 0.8);
+          filter:
+            drop-shadow(0 0 8px #0a66c2)
+            drop-shadow(0 0 16px #0a66c2)
+            drop-shadow(0 0 32px rgba(10, 102, 194, 0.9));
         }
 
-        .github {
+        .github svg {
           color: #ffffff;
-          text-shadow: 0 0 12px rgba(255, 255, 255, 0.7);
+          filter:
+            drop-shadow(0 0 8px #ffffff)
+            drop-shadow(0 0 16px #ffffff)
+            drop-shadow(0 0 32px rgba(255, 255, 255, 0.9));
         }
 
-        .whatsapp {
+        .whatsapp svg {
           color: #25d366;
-          text-shadow: 0 0 12px rgba(37, 211, 102, 0.9);
+          filter:
+            drop-shadow(0 0 8px #25d366)
+            drop-shadow(0 0 18px #25d366)
+            drop-shadow(0 0 36px rgba(37, 211, 102, 0.95));
         }
 
-        .instagram {
+        .instagram svg {
           color: #e1306c;
-          text-shadow: 0 0 12px rgba(225, 48, 108, 0.9);
+          filter:
+            drop-shadow(0 0 8px #e1306c)
+            drop-shadow(0 0 18px #e1306c)
+            drop-shadow(0 0 36px rgba(225, 48, 108, 0.95));
         }
 
         .footer-copy {
@@ -81,7 +105,7 @@ const Footer = () => {
       `}</style>
 
       <div className="footer-title">
-        Proudly built by SSLC 2014–2015 Batch Student's
+        Proudly built by SSLC 2015–2016 Batch Student's
       </div>
 
       <div className="footer-icons">
