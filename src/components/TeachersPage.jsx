@@ -1,4 +1,6 @@
 import React from "react";
+<h1 className="page-title">Our Respected Teachers</h1>
+
 
 const TeachersPage = () => {
   const principal = "Eranna Arkera Sir";
@@ -161,7 +163,7 @@ const TeachersPage = () => {
       <div className="teachers-grid">
         {teachers.map((name, index) => (
           <div key={index} className="teacher-pill">
-            🎓 {name}
+             {name}
           </div>
         ))}
       </div>

@@ -295,3 +295,48 @@ button:active {
     padding: 12px;
   }
 }
+
+
+
+
+/* 🌟 Global Page Title Style */
+.page-title {
+  font-family: 'Poppins', 'Montserrat', sans-serif;
+  font-size: clamp(2.2rem, 4vw, 3rem);
+  font-weight: 800;
+  text-align: center;
+  letter-spacing: 1.5px;
+  color: #1f2933;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+}
+
+/* Mobile clarity */
+@media (max-width: 600px) {
+  .page-title {
+    font-size: 2rem;
+    letter-spacing: 1px;
+  }
+}
+
+
+
+/* ========================================
+   FIX BIG GAPS IN MOBILE CHROME DESKTOP VIEW
+   ======================================== */
+
+/* Target mobile devices even in desktop mode */
+@media (max-width: 768px) {
+
+  section {
+    min-height: auto !important;
+    padding-top: 40px !important;
+    padding-bottom: 40px !important;
+  }
+
+  /* Reduce accidental empty vertical space */
+  section:empty {
+    display: none !important;
+  }
+
+}
