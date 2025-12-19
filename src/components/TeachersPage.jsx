@@ -109,7 +109,7 @@ const TeachersPage = () => {
         /* ===== Teachers Grid ===== */
         .teachers-grid {
           display: grid;
-          grid-template-columns: repeat(4, 1fr);
+          grid-template-columns: repeat(2, 1fr);
           gap: 22px;
           max-width: 1100px;
           margin: 0 auto;
@@ -131,10 +131,10 @@ const TeachersPage = () => {
 
         /* ✅ KEY FIX:
            Mobile Chrome Desktop View (~980px)
-           FORCE 3 COLUMNS */
+           FORCE 2 COLUMNS */
         @media (max-width: 1100px) {
           .teachers-grid {
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
           }
         }
 
