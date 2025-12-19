@@ -70,6 +70,9 @@ const TeachersPage = () => {
           background: linear-gradient(135deg, #fff6d8, #ffffff, #fff6d8);
           border: 3px solid #f4b400;
           animation: superGlow 2.8s ease-in-out infinite;
+          font-size: 1.5rem;
+          font-family: 'Poppins', sans-serif;
+          line-height: 1.5;
         }
 
         .principal-card {
@@ -95,9 +98,12 @@ const TeachersPage = () => {
         }
 
         .principal-name {
-          font-size: 1.45rem;
+          font-size: 1.6rem;
           font-weight: 800;
           color: #2d3436;
+          font-family: 'Poppins', sans-serif;
+          line-height: 1.3;
+          letter-spacing: 0.4px;
         }
 
         /* ===== Teachers Grid ===== */
@@ -117,6 +123,10 @@ const TeachersPage = () => {
           font-weight: 700;
           color: #2d3436;
           box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+          font-size: 1.2rem;
+          font-family: 'Poppins', sans-serif;
+          line-height: 1.4;
+          letter-spacing: 0.3px;
         }
 
         /* ✅ KEY FIX:
@@ -129,9 +139,42 @@ const TeachersPage = () => {
         }
 
         /* Mobile */
-        @media (max-width: 600px) {
+        @media (max-width: 768px) {
           .teachers-grid {
             grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+          }
+          
+          .teacher-pill {
+            font-size: 1.1rem;
+            padding: 12px 16px;
+          }
+        }
+        
+        @media (max-width: 480px) {
+          .teachers-grid {
+            grid-template-columns: 1fr;
+            gap: 15px;
+          }
+          
+          .teacher-pill {
+            font-size: 1.05rem;
+            padding: 10px 14px;
+          }
+          
+          .principal-name {
+            font-size: 1.7rem;
+          }
+        }
+        
+        @media (max-width: 360px) {
+          .teacher-pill {
+            font-size: 1rem;
+            padding: 8px 12px;
+          }
+          
+          .principal-name {
+            font-size: 1.5rem;
           }
         }
       `}</style>

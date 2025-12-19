@@ -86,6 +86,25 @@ const SchoolHome = () => {
           text-shadow: 0 0 6px rgba(255, 255, 255, 0.3);
         }
 
+        @media (max-width: 768px) {
+          .home-card {
+            padding: 40px 25px;
+          }
+
+          .desai-image {
+            width: 110px;
+            height: 110px;
+          }
+          
+          .school-name {
+            margin-bottom: 8px;
+          }
+          
+          .school-subtitle {
+            margin-bottom: 18px;
+          }
+        }
+        
         @media (max-width: 600px) {
           .home-card {
             padding: 35px 18px;
@@ -94,6 +113,41 @@ const SchoolHome = () => {
           .desai-image {
             width: 105px;
             height: 105px;
+          }
+          
+          .school-name {
+            margin-bottom: 6px;
+          }
+        }
+        
+        @media (max-width: 480px) {
+          .home-card {
+            padding: 30px 15px;
+          }
+
+          .desai-image {
+            width: 95px;
+            height: 95px;
+            border-width: 3px;
+          }
+          
+          .school-subtitle {
+            margin-bottom: 15px;
+          }
+          
+          .school-tagline {
+            line-height: 1.5;
+          }
+        }
+        
+        @media (max-width: 360px) {
+          .home-card {
+            padding: 25px 12px;
+          }
+
+          .desai-image {
+            width: 85px;
+            height: 85px;
           }
         }
       `}</style>

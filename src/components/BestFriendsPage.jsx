@@ -95,21 +95,28 @@ const BestFriendsPage = () => {
                 <h1 style={{
                     fontSize: '3.5rem',
                     color: '#FF4757',
-                    textShadow: '3px 3px 0px #000'
+                    textShadow: '3px 3px 0px #000',
+                    fontFamily: 'Poppins, sans-serif',
+                    lineHeight: '1.2',
+                    letterSpacing: '0.5px'
                 }}>
                     Best Friends Forever (BFFs)
                 </h1>
 
                 <div style={{
-                    fontSize: '1.5rem',
+                    fontSize: '1.6rem',
                     marginTop: '20px',
                     minHeight: '1.5em',
-                    fontWeight: 'bold'
+                    fontWeight: 'bold',
+                    padding: '0 15px',
+                    fontFamily: 'Poppins, sans-serif',
+                    lineHeight: '1.4',
+                    letterSpacing: '0.3px'
                 }}>
                     {subtitles[subtitle]}
                 </div>
 
-                <div style={{ marginTop: '30px', fontSize: '3rem' }}>
+                <div style={{ marginTop: '30px', fontSize: '3rem', lineHeight: '1' }}>
                     👫 👬 👭
                 </div>
             </div>
@@ -123,13 +130,15 @@ const BestFriendsPage = () => {
                 borderRadius: '20px',
                 border: '3px solid #000',
                 boxShadow: '8px 8px 0px rgba(0,0,0,0.1)',
-                textAlign: 'center'
+                textAlign: 'center',
+                width: '90%',
+                boxSizing: 'border-box'
             }}>
-                <h2 style={{ fontSize: '2rem', marginBottom: '20px', color: '#E91E63' }}>
+                <h2 style={{ fontSize: '2rem', marginBottom: '20px', color: '#E91E63', fontFamily: 'Poppins, sans-serif', lineHeight: '1.3' }}>
                     🔥 Friendship Reality Check 🔥
                 </h2>
 
-                <p style={{ marginBottom: '20px', fontWeight: 'bold' }}>
+                <p style={{ marginBottom: '20px', fontWeight: 'bold', fontSize: '1.2rem', fontFamily: 'Poppins, sans-serif', lineHeight: '1.4' }}>
                     Enter names to see the truth:
                 </p>
 
@@ -139,7 +148,7 @@ const BestFriendsPage = () => {
                         placeholder="Your Name"
                         value={yourName}
                         onChange={(e) => setYourName(e.target.value)}
-                        style={{ padding: '15px', fontSize: '1.2rem', borderRadius: '10px', border: '2px solid #000' }}
+                        style={{ padding: '15px', fontSize: '1.2rem', borderRadius: '10px', border: '2px solid #000', width: '100%', boxSizing: 'border-box', fontFamily: 'Poppins, sans-serif' }}
                     />
 
                     <div style={{ fontSize: '1.5rem' }}>➕</div>
@@ -149,7 +158,7 @@ const BestFriendsPage = () => {
                         placeholder="Friend Name"
                         value={friendName}
                         onChange={(e) => setFriendName(e.target.value)}
-                        style={{ padding: '15px', fontSize: '1.2rem', borderRadius: '10px', border: '2px solid #000' }}
+                        style={{ padding: '15px', fontSize: '1.2rem', borderRadius: '10px', border: '2px solid #000', width: '100%', boxSizing: 'border-box', fontFamily: 'Poppins, sans-serif' }}
                     />
                 </div>
 
@@ -163,8 +172,12 @@ const BestFriendsPage = () => {
                         fontSize: '1.2rem',
                         borderRadius: '50px',
                         cursor: 'pointer',
-                        fontWeight: 'bold'
+                        fontWeight: 'bold',
+                        width: '100%',
+                        maxWidth: '300px',
+                        margin: '20px auto 0'
                     }}
+                    className="button-responsive"
                 >
                     Generate Truth! 💣
                 </button>

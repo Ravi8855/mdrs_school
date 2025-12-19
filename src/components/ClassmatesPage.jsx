@@ -135,24 +135,69 @@ const ClassmatesPage = () => {
           box-sizing: border-box;
           padding: 16px 10px;
           border-radius: 20px;
-          font-size: 1.2rem;
+          font-size: 1.3rem;
           font-weight: 700;
           color: #2d3436;
           text-align: center;
           box-shadow: 0 10px 25px rgba(0,0,0,0.12);
           transition: transform 0.3s ease;
+          font-family: 'Poppins', sans-serif;
+          line-height: 1.4;
+          letter-spacing: 0.5px;
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 1024px) {
           .classmates-grid {
             grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+          }
+          
+          .classmate-card {
+            font-size: 1.2rem;
+            padding: 14px 8px;
           }
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 768px) {
           .classmates-grid {
             grid-template-columns: repeat(2, 1fr);
             padding: 20px;
+            gap: 15px;
+          }
+          
+          .classmate-card {
+            font-size: 1.15rem;
+            padding: 12px 6px;
+          }
+        }
+        
+        @media (max-width: 480px) {
+          .classmates-grid {
+            grid-template-columns: 1fr;
+            padding: 15px;
+            gap: 12px;
+          }
+          
+          .classmate-card {
+            font-size: 1.1rem;
+            padding: 10px 5px;
+            letter-spacing: 0.3px;
+          }
+          
+          .batch-text {
+            font-size: 1.3rem;
+          }
+        }
+        
+        @media (max-width: 360px) {
+          .classmate-card {
+            font-size: 1rem;
+            padding: 8px 4px;
+            letter-spacing: 0.2px;
+          }
+          
+          .batch-text {
+            font-size: 1.1rem;
           }
         }
 

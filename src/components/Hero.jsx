@@ -53,7 +53,9 @@ const Hero = () => {
                     padding: '12px 35px',
                     borderRadius: '50px',
                     marginBottom: '30px',
-                    cursor: 'default'
+                    cursor: 'default',
+                    maxWidth: '90%',
+                    overflow: 'hidden'
                 }}>
                     <span style={{ fontSize: '1.2rem', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px', color: '#2d3436' }}>
                         Welcome to

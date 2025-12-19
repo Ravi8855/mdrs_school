@@ -49,6 +49,11 @@ const GalleryPage = () => {
                     flex-direction: column;
                     align-items: center;
                 }
+                
+                .gallery-card:hover {
+                    transform: translateY(-5px);
+                    box-shadow: 0 15px 45px rgba(0,0,0,0.1);
+                }
 
                 .gallery-card:hover {
                     transform: translateY(-5px);
@@ -61,6 +66,18 @@ const GalleryPage = () => {
                     object-fit: cover;
                     border-radius: 15px;
                     margin-bottom: 15px;
+                }
+                
+                @media (max-width: 768px) {
+                    .gallery-image {
+                        height: 200px;
+                    }
+                }
+                
+                @media (max-width: 480px) {
+                    .gallery-image {
+                        height: 180px;
+                    }
                 }
                 
                 .hidden-placeholder {
@@ -76,6 +93,22 @@ const GalleryPage = () => {
                     font-size: 1.2rem;
                     font-weight: bold;
                     flex-direction: column;
+                    font-family: 'Poppins', sans-serif;
+                    line-height: 1.4;
+                }
+                
+                @media (max-width: 768px) {
+                    .hidden-placeholder {
+                        height: 200px;
+                        font-size: 1.1rem;
+                    }
+                }
+                
+                @media (max-width: 480px) {
+                    .hidden-placeholder {
+                        height: 180px;
+                        font-size: 1rem;
+                    }
                 }
 
                 .view-btn {
@@ -90,6 +123,8 @@ const GalleryPage = () => {
                     display: flex;
                     align-items: center;
                     gap: 8px;
+                    font-family: 'Poppins', sans-serif;
+                    font-size: 1rem;
                 }
 
                 .view-btn:hover {
@@ -99,27 +134,31 @@ const GalleryPage = () => {
                 `}
             </style>
 
-            <header style={{ textAlign: 'center', marginBottom: '50px' }}>
+            <header style={{ textAlign: 'center', marginBottom: '40px', padding: '0 15px' }}>
                 <h1 style={{
                     fontSize: '3.5rem',
                     background: 'linear-gradient(to right, #667eea, #764ba2)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     marginBottom: '10px',
-                    fontWeight: '700'
+                    fontWeight: '700',
+                    lineHeight: '1.2',
+                    fontFamily: 'Poppins, sans-serif',
+                    letterSpacing: '0.5px'
                 }}>
                     Memories Gallery 📸
                 </h1>
-                <p style={{ color: '#666', fontSize: '1.2rem' }}>Capturing the best moments of our school life.</p>
+                <p style={{ color: '#666', fontSize: '1.3rem', padding: '0 10px', fontFamily: 'Poppins, sans-serif', lineHeight: '1.5', fontWeight: '500' }}>Capturing the best moments of our school life.</p>
             </header>
 
             <div style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-                gap: '30px',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+                gap: '25px',
                 maxWidth: '1200px',
-                margin: '0 auto'
-            }}>
+                margin: '0 auto',
+                padding: '0 15px'
+            }} className="responsive-grid">
                 {images.map((img, index) => (
                     <div key={index} className="gallery-card" style={{ animation: `fadeIn 0.5s ease backwards ${index * 0.1}s` }}>
                         {img.hidden ? (

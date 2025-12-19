@@ -126,6 +126,43 @@ const SpinWheelPage = () => {
                     0%, 100% { transform: scale(1); }
                     50% { transform: scale(1.05); }
                 }
+                
+                @media (max-width: 768px) {
+                    .spin-button {
+                        padding: 20px 50px;
+                        font-size: 1.5rem;
+                    }
+                    
+                    .wheel {
+                        width: 300px;
+                        height: 300px;
+                    }
+                }
+                
+                @media (max-width: 480px) {
+                    .spin-button {
+                        padding: 18px 40px;
+                        font-size: 1.3rem;
+                        border-radius: 50px;
+                    }
+                    
+                    .wheel {
+                        width: 250px;
+                        height: 250px;
+                    }
+                }
+                
+                @media (max-width: 360px) {
+                    .spin-button {
+                        padding: 15px 35px;
+                        font-size: 1.2rem;
+                    }
+                    
+                    .wheel {
+                        width: 220px;
+                        height: 220px;
+                    }
+                }
 
                 .spin-button {
                     background: linear-gradient(45deg, #FFD700, #FFA500);
@@ -188,6 +225,8 @@ const SpinWheelPage = () => {
                     align-items: center;
                     justify-content: center;
                     font-size: 2.5rem;
+                    font-family: 'Poppins', sans-serif;
+                    font-weight: 700;
                 }
 
                 .result-card {
@@ -198,6 +237,7 @@ const SpinWheelPage = () => {
                     padding: 50px;
                     animation: fadeInUp 0.5s ease;
                     box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+                    font-family: 'Poppins', sans-serif;
                 }
                 `}
             </style>
@@ -208,15 +248,19 @@ const SpinWheelPage = () => {
                     fontWeight: '900',
                     marginBottom: '15px',
                     textShadow: '0 8px 20px rgba(0,0,0,0.4)',
-                    letterSpacing: '2px'
+                    letterSpacing: '2px',
+                    fontFamily: 'Poppins, sans-serif',
+                    lineHeight: '1.1'
                 }}>
                     Spin the Wheel – Class Legends 
                 </h1>
                 <p style={{
-                    fontSize: '1.5rem',
+                    fontSize: '1.6rem',
                     opacity: 0.95,
                     fontWeight: '500',
-                    textShadow: '0 2px 10px rgba(0,0,0,0.3)'
+                    textShadow: '0 2px 10px rgba(0,0,0,0.3)',
+                    fontFamily: 'Poppins, sans-serif',
+                    lineHeight: '1.4'
                 }}>
                     Who will be crowned today?
                 </p>
@@ -231,7 +275,7 @@ const SpinWheelPage = () => {
                 margin: '0 auto'
             }}>
                 {/* Wheel */}
-                <div style={{ position: 'relative' }}>
+                <div style={{ position: 'relative', width: '100%', display: 'flex', justifyContent: 'center' }}>
                     <div className="wheel" style={{
                         transform: `rotate(${wheelRotation}deg)`
                     }}>

@@ -66,6 +66,42 @@ button {
   padding: 10px 20px;
   border-radius: 12px;
   text-transform: uppercase;
+  width: fit-content;
+  box-sizing: border-box;
+}
+
+.button-full-width {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.button-responsive {
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  button {
+    font-size: 1rem;
+    padding: 12px 20px;
+  }
+  
+  .button-responsive {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  button {
+    font-size: 0.95rem;
+    padding: 10px 16px;
+    border-width: 2px;
+  }
+  
+  .button-full-width {
+    padding: 12px;
+  }
 }
 
 /* ⬇️ REST OF YOUR FILE REMAINS 100% SAME */
@@ -86,6 +122,7 @@ button:active {
   max-width: 1000px;
   margin: 0 auto;
   padding: 20px;
+  width: 100%;
 }
 
 .card {
@@ -98,6 +135,46 @@ button:active {
   position: relative;
   transition: transform 0.3s ease;
   overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.card-flexible {
+  background: var(--card-bg);
+  border: var(--border-thick);
+  border-radius: 20px;
+  padding: 40px;
+  margin: 20px 0;
+  box-shadow: var(--shadow-hard);
+  position: relative;
+  transition: transform 0.3s ease;
+  overflow: hidden;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: 30px;
+  }
+  
+  .card-flexible {
+    padding: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 20px;
+    border-radius: 15px;
+  }
+  
+  .card-flexible {
+    padding: 20px;
+    border-radius: 15px;
+  }
 }
 
 .card::before {
@@ -171,16 +248,66 @@ button:active {
    RESPONSIVE DESIGN - Mobile & Tablet
    ======================================== */
 
+/* Large screens (laptops/desktops) */
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px;
+  }
+  
+  .card {
+    padding: 50px;
+  }
+  
+  h1 {
+    font-size: 3rem;
+  }
+  
+  h2 {
+    font-size: 2.5rem;
+  }
+  
+  h3 {
+    font-size: 2rem;
+  }
+}
+
+/* Medium screens (smaller laptops/tablets) */
+@media (max-width: 1199px) and (min-width: 1024px) {
+  .container {
+    max-width: 95%;
+    padding: 25px;
+  }
+  
+  .card {
+    padding: 40px;
+    margin: 25px 0;
+  }
+  
+  h1 {
+    font-size: 2.8rem;
+  }
+  
+  h2 {
+    font-size: 2.2rem;
+  }
+  
+  h3 {
+    font-size: 1.8rem;
+  }
+}
+
 /* Tablets and smaller laptops (1024px and below) */
 @media (max-width: 1024px) {
   .container {
     max-width: 90%;
-    padding: 15px;
+    padding: 20px;
   }
 
   .card {
     padding: 30px;
-    margin: 15px 0;
+    margin: 20px 0;
   }
 
   h1 {
@@ -203,30 +330,83 @@ button:active {
   }
 
   .container {
-    padding: 10px;
+    padding: 15px;
+    max-width: 95%;
   }
 
   .card {
-    padding: 20px;
-    margin: 10px 0;
+    padding: 25px;
+    margin: 15px 0;
     border-radius: 15px;
   }
 
   h1 {
-    font-size: 2rem;
+    font-size: 2.2rem;
   }
 
   h2 {
-    font-size: 1.75rem;
+    font-size: 1.8rem;
   }
 
   h3 {
-    font-size: 1.3rem;
+    font-size: 1.4rem;
   }
 
   button {
+    font-size: 1.1rem;
+    padding: 10px 20px;
+  }
+  
+  /* Flexible grid layouts */
+  .grid-responsive {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+  }
+}
+
+/* Large mobile devices (600px and below) */
+@media (max-width: 600px) {
+  body {
+    font-size: 15px;
+  }
+  
+  .container {
+    padding: 12px;
+    max-width: 100%;
+  }
+  
+  .card {
+    padding: 20px;
+    margin: 12px 0;
+    border-radius: 12px;
+  }
+  
+  h1 {
+    font-size: 2rem;
+    letter-spacing: 1px;
+  }
+  
+  h2 {
+    font-size: 1.7rem;
+  }
+  
+  h3 {
+    font-size: 1.3rem;
+  }
+  
+  button {
     font-size: 1rem;
     padding: 8px 16px;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  /* Stack elements vertically on small screens */
+  .flex-column-mobile {
+    flex-direction: column !important;
+  }
+  
+  .text-center-mobile {
+    text-align: center !important;
   }
 }
 
@@ -238,17 +418,17 @@ button:active {
   }
 
   .container {
-    padding: 8px;
+    padding: 10px;
   }
 
   .card {
-    padding: 15px;
-    margin: 8px 0;
+    padding: 18px;
+    margin: 10px 0;
     border-radius: 12px;
   }
 
   h1 {
-    font-size: 1.75rem;
+    font-size: 1.8rem;
     letter-spacing: 0.5px;
   }
 
@@ -261,8 +441,8 @@ button:active {
   }
 
   button {
-    font-size: 0.9rem;
-    padding: 6px 12px;
+    font-size: 0.95rem;
+    padding: 8px 14px;
     border-width: 2px;
   }
 
@@ -275,12 +455,18 @@ button:active {
     transform: translate(1px, 1px);
     box-shadow: 1px 1px 0px #000;
   }
+  
+  /* More compact spacing on very small screens */
+  .compact-mobile {
+    padding: 5px !important;
+    margin: 5px 0 !important;
+  }
 }
 
 /* Very small mobile devices (360px and below) */
 @media (max-width: 360px) {
   h1 {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
   }
 
   h2 {
@@ -292,7 +478,31 @@ button:active {
   }
 
   .card {
-    padding: 12px;
+    padding: 15px;
+  }
+  
+  button {
+    font-size: 0.9rem;
+    padding: 6px 12px;
+  }
+}
+
+/* Ultra-wide screen support */
+@media (min-width: 1600px) {
+  .container {
+    max-width: 1400px;
+  }
+  
+  h1 {
+    font-size: 3.5rem;
+  }
+  
+  h2 {
+    font-size: 2.8rem;
+  }
+  
+  h3 {
+    font-size: 2.2rem;
   }
 }
 
@@ -330,15 +540,32 @@ button:active {
 
   section {
     min-height: auto !important;
-    padding-top: 40px !important;
-    padding-bottom: 40px !important;
+    padding-top: 30px !important;
+    padding-bottom: 30px !important;
   }
 
   /* Reduce accidental empty vertical space */
   section:empty {
     display: none !important;
   }
+  
+  /* Improve section spacing on mobile */
+  section:not(:last-child) {
+    margin-bottom: 20px;
+  }
 
+}
+
+/* Additional mobile fixes */
+@media (max-width: 480px) {
+  section {
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
+  }
+  
+  section:not(:last-child) {
+    margin-bottom: 15px;
+  }
 }
 
 
@@ -351,4 +578,176 @@ button:active {
   font-weight: 800;
   letter-spacing: 1px;
   text-align: center;
+}
+
+/* Responsive utility classes */
+.hide-on-mobile {
+  display: block;
+}
+
+.show-on-mobile {
+  display: none;
+}
+
+.responsive-flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.responsive-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 25px;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.padding-normal {
+  padding: 20px;
+}
+
+.margin-vertical {
+  margin: 20px 0;
+}
+
+@media (max-width: 768px) {
+  .hide-on-mobile {
+    display: none;
+  }
+  
+  .show-on-mobile {
+    display: block;
+  }
+  
+  .responsive-flex {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .responsive-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+  
+  .mobile-full-width {
+    width: 100% !important;
+  }
+  
+  .mobile-padding-reduce {
+    padding: 10px !important;
+  }
+  
+  .mobile-text-center {
+    text-align: center;
+  }
+  
+  .mobile-flex-column {
+    flex-direction: column !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .responsive-flex {
+    gap: 10px;
+  }
+  
+  .responsive-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .mobile-padding-reduce {
+    padding: 5px !important;
+  }
+  
+  .mobile-full-width {
+    width: 100% !important;
+  }
+  
+  .text-smaller {
+    font-size: 0.9em;
+  }
+}
+
+/* Flexbox alignment utilities */
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.align-start {
+  align-items: flex-start;
+}
+
+.align-end {
+  align-items: flex-end;
+}
+
+/* Grid utilities */
+.grid-cols-1 {
+  grid-template-columns: 1fr;
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-gap-sm {
+  gap: 10px;
+}
+
+.grid-gap-md {
+  gap: 20px;
+}
+
+.grid-gap-lg {
+  gap: 30px;
+}
+
+@media (max-width: 768px) {
+  .grid-cols-2 {
+    grid-template-columns: 1fr;
+  }
+  
+  .grid-gap-lg {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid-gap-md {
+    gap: 15px;
+  }
+  
+  .grid-gap-lg {
+    gap: 15px;
+  }
 }

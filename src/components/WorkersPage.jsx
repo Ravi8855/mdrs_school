@@ -128,9 +128,12 @@ const WorkersPage = () => {
           grid-template-columns: repeat(2, 1fr);
           gap: 28px;
           text-align: center;
-          font-size: 1.15rem;
+          font-size: 1.25rem;
           font-weight: 700;
           color: #2d3436;
+          font-family: 'Poppins', sans-serif;
+          line-height: 1.4;
+          letter-spacing: 0.3px;
         }
 
         .workers-names div {
@@ -138,6 +141,12 @@ const WorkersPage = () => {
           padding: 18px 10px;
           border-radius: 14px;
           box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .workers-names div:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 15px 35px rgba(0,0,0,0.1);
         }
 
         /* Keep same on all devices */
@@ -147,11 +156,29 @@ const WorkersPage = () => {
           }
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 768px) {
           .workers-title { font-size: 2.2rem; }
           .workers-names {
             grid-template-columns: repeat(2, 1fr);
+            font-size: 1.15rem;
+            gap: 20px;
+          }
+        }
+        
+        @media (max-width: 480px) {
+          .workers-title { font-size: 2rem; }
+          .workers-names {
+            grid-template-columns: repeat(2, 1fr);
+            font-size: 1.05rem;
+            gap: 15px;
+          }
+        }
+        
+        @media (max-width: 360px) {
+          .workers-title { font-size: 1.8rem; }
+          .workers-names {
             font-size: 1rem;
+            gap: 12px;
           }
         }
       `}</style>

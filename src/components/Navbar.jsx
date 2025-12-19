@@ -26,7 +26,8 @@ const Navbar = ({ onNavigate }) => {
         transition: 'all 0.3s ease',
         borderBottom: '3px solid #000',
         boxShadow: scrolled ? '0 10px 20px rgba(0,0,0,0.1)' : 'none',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
+        width: '100%'
     };
 
     const linkStyle = {
@@ -64,12 +65,14 @@ const Navbar = ({ onNavigate }) => {
                         padding: 20px;
                         border-bottom: 3px solid #000;
                         box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+                        max-height: 70vh;
+                        overflow-y: auto;
                     }
                     
                     .nav-links .nav-item {
                         margin: 10px 0 !important;
                         font-size: 1.1rem !important;
-                        padding: 10px;
+                        padding: 15px;
                         text-align: center;
                         border-bottom: 1px solid rgba(0,0,0,0.1);
                     }
@@ -81,11 +84,15 @@ const Navbar = ({ onNavigate }) => {
                         font-size: 1.8rem;
                         cursor: pointer;
                         padding: 5px;
+                        z-index: 1001;
                     }
                     
                     .school-name {
                         font-size: 1.2rem !important;
                     }
+                    
+                    /* Prevent scrolling when menu is open */
+                    ${mobileMenuOpen ? 'body { overflow: hidden; }' : ''}
                 }
                 
                 @media (min-width: 769px) {
@@ -100,12 +107,28 @@ const Navbar = ({ onNavigate }) => {
                 
                 @media (max-width: 480px) {
                     .school-name {
-                        font-size: 1rem !important;
+                        font-size: 1.1rem !important;
                         letter-spacing: 1px !important;
                     }
                     
                     .nav-links .nav-item {
                         font-size: 1rem !important;
+                        padding: 12px;
+                    }
+                    
+                    .mobile-menu-btn {
+                        font-size: 1.5rem;
+                    }
+                }
+                
+                @media (max-width: 360px) {
+                    .school-name {
+                        font-size: 1rem !important;
+                    }
+                    
+                    .nav-links .nav-item {
+                        font-size: 0.9rem !important;
+                        padding: 10px;
                     }
                 }
                 `}
@@ -118,7 +141,10 @@ const Navbar = ({ onNavigate }) => {
                         fontWeight: '900',
                         letterSpacing: '2px',
                         cursor: 'pointer',
-                        fontFamily: "'Poppins', sans-serif"
+                        fontFamily: "'Poppins', sans-serif",
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis'
                     }}
                     onClick={() => handleNavClick('home')}
                 >

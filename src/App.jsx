@@ -44,7 +44,7 @@ function App() {
   };
 
   return (
-    <div className="app-wrapper">
+    <div className="app-wrapper" style={{ width: '100%', overflowX: 'hidden' }}>
       <Navbar onNavigate={handleNavigate} />
 
       {/* All sections rendered on single page */}
