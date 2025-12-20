@@ -9,7 +9,9 @@ import SchoolHome from "./components/SchoolHome";
 import WorkersPage from "./components/WorkersPage";
 import GalleryPage from "./components/GalleryPage";
 import SpinWheelPage from "./components/SpinWheelPage";
+import Alumni from "./components/Alumni";
 import Footer from "./components/Footer"; // ✅ added footer
+
 
 function App() {
   const [randomJoke, setRandomJoke] = useState("");
@@ -65,12 +67,16 @@ function App() {
         <WorkersPage />
       </section>
 
-      <section id="bff">
-        <BestFriendsPage />
+      <section id="alumni">
+        <Alumni />
       </section>
 
       <section id="gallery">
         <GalleryPage />
+      </section>
+
+      <section id="bff">
+        <BestFriendsPage />
       </section>
 
       <section id="spin-wheel">

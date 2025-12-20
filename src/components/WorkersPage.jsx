@@ -39,7 +39,7 @@ const WorkersPage = () => {
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
 
         .workers-section {
-          min-height: 100vh;
+          min-height: 10vh;
           padding: 80px 20px;
           font-family: 'Poppins', sans-serif;
           background: linear-gradient(135deg, #eef2f7, #dbe6f6);
@@ -55,11 +55,12 @@ const WorkersPage = () => {
         .workers-title {
           text-align: center;
           font-size: 3rem;
-          font-weight: 800;
+          font-weight: 600;
           margin-bottom: 14px;
           background: linear-gradient(90deg, #1e3c72, #2a5298);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
+          fontFamily: "Poppins, sans-serif",
         }
 
         .appreciation-ribbon {
@@ -128,16 +129,16 @@ const WorkersPage = () => {
           grid-template-columns: repeat(2, 1fr);
           gap: 28px;
           text-align: center;
-          font-size: 1.25rem;
-          font-weight: 700;
-          color: #2d3436;
+          font-size: 1.5rem;
+          font-weight: 650;
+          color: #050809ff;
           font-family: 'Poppins', sans-serif;
           line-height: 1.4;
           letter-spacing: 0.3px;
         }
 
         .workers-names div {
-          background: rgba(255,255,255,0.7);
+          background: rgba(243, 235, 235, 0.94);
           padding: 18px 10px;
           border-radius: 14px;
           box-shadow: 0 12px 30px rgba(0,0,0,0.06);

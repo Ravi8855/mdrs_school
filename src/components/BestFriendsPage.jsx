@@ -10,8 +10,8 @@ const BestFriendsPage = () => {
     const [toast, setToast] = useState('');
 
     const subtitles = [
-        "From first bench to last bench — together always 😎",
-        "Not by blood, but by attendance shortage 😂"
+        "From first bench to last bench — together always",
+        "Not by blood, but by attendance shortage"
     ];
 
     useEffect(() => {
@@ -45,7 +45,6 @@ const BestFriendsPage = () => {
             c => normalize(c) === normalize(friendName)
         );
 
-        // ✅ FIX: popup if ANY ONE name is wrong
         if (!isYourNameValid || !isFriendNameValid) {
             setToast("Select your classmates only");
             setTimeout(() => setToast(''), 3000);
@@ -86,19 +85,18 @@ const BestFriendsPage = () => {
             background: '#fff',
             backgroundImage: 'radial-gradient(#ddd 1px, transparent 1px)',
             backgroundSize: '20px 20px',
-            minHeight: '100vh',
-            paddingBottom: '50px',
-            fontFamily: 'Arial, system-ui, sans-serif'
+            minHeight: 'auto',
+            paddingBottom: '40px',
+            fontFamily: "Poppins, sans-serif",
         }}>
             {/* Hero */}
-            <div style={{ textAlign: 'center', padding: '80px 20px' }}>
+            <div style={{ textAlign: 'center', padding: '20px 20px' }}>
                 <h1 style={{
-                    fontSize: '3.5rem',
+                    fontSize: '1.8rem',
                     color: '#FF4757',
-                    textShadow: '3px 3px 0px #000',
                     fontFamily: 'Poppins, sans-serif',
                     lineHeight: '1.2',
-                    letterSpacing: '0.5px'
+                    letterSpacing: '1.5px'
                 }}>
                     Best Friends Forever (BFFs)
                 </h1>
@@ -124,8 +122,8 @@ const BestFriendsPage = () => {
             {/* Form */}
             <section style={{
                 maxWidth: '600px',
-                margin: '40px auto',
-                padding: '30px',
+                margin: '20px auto',
+                padding: '24px',
                 background: '#FFF9C4',
                 borderRadius: '20px',
                 border: '3px solid #000',
@@ -135,7 +133,7 @@ const BestFriendsPage = () => {
                 boxSizing: 'border-box'
             }}>
                 <h2 style={{ fontSize: '2rem', marginBottom: '20px', color: '#E91E63', fontFamily: 'Poppins, sans-serif', lineHeight: '1.3' }}>
-                    🔥 Friendship Reality Check 🔥
+                    Friendship Reality Check
                 </h2>
 
                 <p style={{ marginBottom: '20px', fontWeight: 'bold', fontSize: '1.2rem', fontFamily: 'Poppins, sans-serif', lineHeight: '1.4' }}>
@@ -148,7 +146,7 @@ const BestFriendsPage = () => {
                         placeholder="Your Name"
                         value={yourName}
                         onChange={(e) => setYourName(e.target.value)}
-                        style={{ padding: '15px', fontSize: '1.2rem', borderRadius: '10px', border: '2px solid #000', width: '100%', boxSizing: 'border-box', fontFamily: 'Poppins, sans-serif' }}
+                        style={{ padding: '15px', fontSize: '1.3rem', borderRadius: '10px', border: '3px solid #000', width: '100%', boxSizing: 'border-box', fontFamily: 'Poppins, sans-serif' }}
                     />
 
                     <div style={{ fontSize: '1.5rem' }}>➕</div>
@@ -169,29 +167,31 @@ const BestFriendsPage = () => {
                         background: '#000',
                         color: '#fff',
                         padding: '15px 30px',
-                        fontSize: '1.2rem',
+                        fontSize: '1rem',
                         borderRadius: '50px',
                         cursor: 'pointer',
                         fontWeight: 'bold',
                         width: '100%',
-                        maxWidth: '300px',
+                        maxWidth: '250px',
                         margin: '20px auto 0'
+
                     }}
                     className="button-responsive"
                 >
-                    Generate Truth! 💣
+                    Generate Truth!
                 </button>
 
                 {roastResult && (
                     <div style={{ marginTop: '30px' }}>
-                        <h3 style={{
+                        <h2 style={{
                             background: '#fff',
                             padding: '20px',
                             borderRadius: '15px',
                             border: '2px dashed #000'
+
                         }}>
                             {roastResult}
-                        </h3>
+                        </h2>
                     </div>
                 )}
             </section>

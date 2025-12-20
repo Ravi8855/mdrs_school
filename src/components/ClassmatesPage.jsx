@@ -9,19 +9,18 @@ const ClassmatesPage = () => {
     "Parvati", "Prema", "Roopa", "Savita", "Sharanamma",
     "Shweta", "Shweta H", "Suvarna", "Umashree",
     "Mahesh", "Praveen", "Suchitra", "Shreedevi",
-    "Mamtha", "Archana"
+    "Mamtha", "Archana",
   ];
 
-  /* 🌈 Soft lovable gradients */
   const gradients = [
-    "linear-gradient(135deg, #fdfbfb, #ebedee)",
+    "linear-gradient(135deg, #9f1440ff, #e36dc0ff)",
     "linear-gradient(135deg, #fceabb, #f8b500)",
     "linear-gradient(135deg, #d4fc79, #96e6a1)",
     "linear-gradient(135deg, #a1c4fd, #c2e9fb)",
     "linear-gradient(135deg, #fbc2eb, #a6c1ee)",
-    "linear-gradient(135deg, #ffecd2, #fcb69f)",
-    "linear-gradient(135deg, #fdfcfb, #e2d1c3)",
-    "linear-gradient(135deg, #d9afd9, #97d9e1)"
+    "linear-gradient(135deg, #5cce1eff, #fcb69f)",
+    "linear-gradient(135deg, #f3800eff, #e2d1c3)",
+    "linear-gradient(135deg, #d9afd9, #11c1d5ff)"
   ];
 
   const [classmates, setClassmates] = useState(initialClassmates);
@@ -41,49 +40,36 @@ const ClassmatesPage = () => {
         background: "#fff",
         backgroundImage: "radial-gradient(#ddd 1px, transparent 1px)",
         backgroundSize: "20px 20px",
-        minHeight: "100vh",
-        paddingBottom: "80px",
+        paddingBottom: "24px",
         fontFamily: "'Poppins', sans-serif",
       }}
+      className="page-wrap"
     >
-      {/* HEADER */}
-      <div style={{ textAlign: "center", padding: "60px 20px" }}>
+      <div style={{ textAlign: "center", padding: "20px 20px" }}>
         <h1
           style={{
             fontSize: "2.8rem",
             fontFamily: "'Cinzel', serif",
-            fontWeight: "800",
+            fontWeight: "80",
             background: "linear-gradient(45deg, #FF416C, #FF4B2B)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
-            letterSpacing: "1px",
           }}
         >
           SSLC 2015–2016 Batch Student's 🎓
         </h1>
 
-        {/* 🔘 Button font matches name cards */}
-        <button
-          onClick={shuffleClassmates}
-          style={{
-            marginTop: "20px",
-            padding: "12px 38px",
-            fontSize: "1.1rem",
-            background: "#2d3436",
-            color: "#fff",
-            border: "none",
-            borderRadius: "50px",
-            cursor: "pointer",
-            fontWeight: "700",
-            fontFamily: "'Poppins', sans-serif",
-            letterSpacing: "0.5px",
-          }}
-        >
-          Click me
-        </button>
+        {/* ✅ BUTTON WRAPPER FOR PERFECT CENTERING */}
+        <div className="shuffle-btn-wrap">
+          <button
+            onClick={shuffleClassmates}
+            className="shuffle-btn"
+          >
+            Click Me
+          </button>
+        </div>
       </div>
 
-      {/* NAMES GRID */}
       <div className="classmates-grid">
         {classmates.map((name, index) => (
           <div
@@ -105,7 +91,6 @@ const ClassmatesPage = () => {
         ))}
       </div>
 
-      {/* FOOTER */}
       <footer
         style={{
           textAlign: "center",
@@ -119,105 +104,111 @@ const ClassmatesPage = () => {
         </p>
       </footer>
 
-      {/* STYLES */}
       <style>{`
+        .shuffle-btn-wrap {
+          display: flex;
+          justify-content: center;
+          margin-top: 16px;
+        }
+
+        .shuffle-btn {
+          padding: 8px 22px;
+          font-size: 0.95rem;
+          background: #2d3436;
+          color: #fff;
+          border: none;
+          border-radius: 20px;
+          cursor: pointer;
+          font-weight: 600;
+          min-width: 110px;
+          width: auto;
+          display: inline-block;
+        }
+        
+        @media (min-width: 1200px) {
+          .shuffle-btn {
+            padding: 9px 24px;
+            font-size: 1rem;
+            border-radius: 22px;
+            min-width: 120px;
+          }
+        }
+
         .classmates-grid {
           display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: 25px;
-          max-width: 1200px;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 16px;
+          max-width: 100%;
           margin: 0 auto;
-          padding: 20px 40px;
+          padding: 8px 16px 24px;
+        }
+
+        @media (min-width: 900px) {
+          .classmates-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+            max-width: 920px;
+          }
         }
 
         .classmate-card {
-          width: 100%;
-          box-sizing: border-box;
-          padding: 16px 10px;
-          border-radius: 20px;
-          font-size: 1.3rem;
+          min-height: 72px;
+          padding: 14px 12px;
+          border-radius: 12px;
+          box-shadow: 0 8px 24px rgba(16,24,40,0.08);
+          display: flex;
+          align-items: center;
+          justify-content: center;
           font-weight: 700;
-          color: #2d3436;
+          color: #111827;
+          font-size: clamp(0.95rem, 2.4vw, 1.05rem);
           text-align: center;
-          box-shadow: 0 10px 25px rgba(0,0,0,0.12);
-          transition: transform 0.3s ease;
-          font-family: 'Poppins', sans-serif;
-          line-height: 1.4;
-          letter-spacing: 0.5px;
+          transition: transform 160ms ease, box-shadow 160ms ease;
         }
 
-        @media (max-width: 1024px) {
-          .classmates-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-          }
-          
-          .classmate-card {
-            font-size: 1.2rem;
-            padding: 14px 8px;
-          }
+        .classmate-card:hover {
+          transform: translateY(-6px) scale(1.02);
+          box-shadow: 0 20px 40px rgba(2,6,23,0.12);
         }
 
         @media (max-width: 768px) {
-          .classmates-grid {
-            grid-template-columns: repeat(2, 1fr);
-            padding: 20px;
-            gap: 15px;
-          }
-          
-          .classmate-card {
-            font-size: 1.15rem;
-            padding: 12px 6px;
+          .shuffle-btn {
+            padding: 7px 20px;
+            font-size: 0.9rem;
+            border-radius: 18px;
+            min-width: 100px;
           }
         }
         
         @media (max-width: 480px) {
-          .classmates-grid {
-            grid-template-columns: 1fr;
-            padding: 15px;
-            gap: 12px;
-          }
-          
-          .classmate-card {
-            font-size: 1.1rem;
-            padding: 10px 5px;
-            letter-spacing: 0.3px;
-          }
-          
-          .batch-text {
-            font-size: 1.3rem;
+          .shuffle-btn {
+            padding: 5px 16px;
+            font-size: 0.8rem;
+            border-radius: 14px;
+            min-width: 85px;
           }
         }
         
         @media (max-width: 360px) {
-          .classmate-card {
-            font-size: 1rem;
-            padding: 8px 4px;
-            letter-spacing: 0.2px;
-          }
-          
-          .batch-text {
-            font-size: 1.1rem;
+          .shuffle-btn {
+            padding: 4px 14px;
+            font-size: 0.75rem;
+            border-radius: 12px;
+            min-width: 75px;
           }
         }
 
         .batch-text {
-          font-size: 1.6rem;
+          font-size: 1.4rem;
           font-weight: 800;
           color: #FFD700;
-          animation: batchGlow 2s ease-in-out infinite;
-          text-shadow: 0 0 15px rgba(255,215,0,0.8);
-        }
-
-        @keyframes batchGlow {
-          0% { transform: scale(1); }
-          50% { transform: scale(1.08); }
-          100% { transform: scale(1); }
+          text-shadow: 0 0 10px rgba(255,215,0,0.6);
+          margin: 0;
         }
 
         @keyframes float {
           from { transform: translateY(0); }
-          to { transform: translateY(-10px); }
+          to { transform: translateY(-6px); }
         }
       `}</style>
     </div>

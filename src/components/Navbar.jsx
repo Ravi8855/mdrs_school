@@ -20,12 +20,12 @@ const Navbar = ({ onNavigate }) => {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: '15px 20px',
-        backgroundColor: scrolled ? 'rgba(255, 255, 255, 0.98)' : 'rgba(255, 255, 255, 0.9)',
-        backdropFilter: 'blur(10px)',
-        transition: 'all 0.3s ease',
-        borderBottom: '3px solid #000',
-        boxShadow: scrolled ? '0 10px 20px rgba(0,0,0,0.1)' : 'none',
+        padding: '12px 18px',
+        backgroundColor: scrolled ? 'rgba(255,255,255,0.72)' : 'rgba(255,255,255,0.6)',
+        backdropFilter: 'blur(8px)',
+        transition: 'all 0.28s ease',
+        borderBottom: '1px solid rgba(0,0,0,0.06)',
+        boxShadow: scrolled ? '0 6px 18px rgba(0,0,0,0.08)' : 'none',
         flexWrap: 'wrap',
         width: '100%'
     };
@@ -160,11 +160,12 @@ const Navbar = ({ onNavigate }) => {
                 </button>
 
                 <div className="nav-links" style={{ display: 'flex' }}>
-                    <span style={linkStyle} className="nav-item" onClick={() => handleNavClick('home')}>Home 🏠</span>
+                    <span style={linkStyle} className="nav-item" onClick={() => handleNavClick('home')}>Home</span>
                     <span style={{ ...linkStyle, color: '#6C5CE7' }} className="nav-item" onClick={() => handleNavClick('classmates')}>Classmates 🎓</span>
                     <span style={{ ...linkStyle, color: '#00cec9' }} className="nav-item" onClick={() => handleNavClick('teachers')}>Teachers 🍎</span>
-                    <span style={{ ...linkStyle, color: '#fd79a8' }} className="nav-item" onClick={() => handleNavClick('workers')}>Workers 🛠️</span>
                     <span style={{ ...linkStyle, color: '#FF4757' }} className="nav-item" onClick={() => handleNavClick('bff')}>BFFs ❤️</span>
+                    <span style={{ ...linkStyle, color: '#fd79a8' }} className="nav-item" onClick={() => handleNavClick('workers')}>Workers 🛠️</span>
+                    <span style={{ ...linkStyle, color: '#2274A5' }} className="nav-item" onClick={() => handleNavClick('alumni')}>Alumni</span>
                     <span style={{ ...linkStyle, color: '#e17055' }} className="nav-item" onClick={() => handleNavClick('gallery')}>Gallery 📸</span>
                     <span style={{ ...linkStyle, color: '#a29bfe' }} className="nav-item" onClick={() => handleNavClick('spin-wheel')}>Spin Wheel 🌀</span>
                 </div>

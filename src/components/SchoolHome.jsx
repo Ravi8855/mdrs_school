@@ -13,26 +13,33 @@ const SchoolHome = () => {
           width: 100%;
           background-image:
             linear-gradient(
-              rgba(0, 0, 0, 0.45),
-              rgba(0, 0, 0, 0.6)
+              rgba(0, 0, 0, 0.25),
+              rgba(0, 0, 0, 0.35)
             ),
             url(${collegeImg});
           background-size: cover;
-          background-position: center;
+          background-position: center center;
           background-repeat: no-repeat;
 
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 20px;
+          padding: 40px 20px;
+          margin-bottom: 0;
         }
 
-        /* ❌ NO BLUR CARD */
+        /* ✅ CARD WITHOUT BLUR / OVERLAY */
         .home-card {
           max-width: 1000px;
           width: 100%;
-          padding: 45px 28px;
+          padding: 40px 30px;
           text-align: center;
+          margin-bottom: 0;
+
+          background: transparent; /* 🔥 REMOVED DARK CARD */
+          border-radius: 0;
+          backdrop-filter: none; /* Explicitly remove any backdrop blur effects */
+          -webkit-backdrop-filter: none; /* Safari support */
         }
 
         /* ===== MORARJI DESAI IMAGE ===== */
@@ -52,102 +59,89 @@ const SchoolHome = () => {
         /* ===== SCHOOL NAME ===== */
         .school-name {
           font-family: 'Montserrat', sans-serif;
-          font-size: clamp(2.1rem, 4.8vw, 3.9rem);
+          font-size: clamp(2.3rem, 4.8vw, 4.2rem);
           font-weight: 900;
           letter-spacing: 2px;
 
           margin-top: 0;
-          margin-bottom: 10px;
+          margin-bottom: 15px;
 
           color: #FFD700;
           text-shadow:
-            0 0 6px rgba(255, 215, 0, 0.6),
-            0 0 14px rgba(255, 215, 0, 0.4);
+            0 0 8px rgba(255, 215, 0, 0.7),
+            0 0 16px rgba(255, 215, 0, 0.5);
+          line-height: 1.1;
         }
 
         .school-subtitle {
           font-family: 'Poppins', sans-serif;
-          font-size: clamp(0.95rem, 2.2vw, 1.25rem);
+          font-size: clamp(1rem, 2.2vw, 1.4rem);
           font-weight: 600;
-          letter-spacing: 1px;
+          letter-spacing: 1.2px;
           color: #f5e6a8;
-          margin-bottom: 22px;
+          margin-bottom: 25px;
+          line-height: 1.4;
         }
 
         .school-tagline {
           font-family: 'Poppins', sans-serif;
-          font-size: clamp(0.95rem, 2.2vw, 1.15rem);
+          font-size: clamp(1rem, 2.2vw, 1.3rem);
           font-weight: 500;
           color: #ffffff;
-          max-width: 800px;
+          max-width: 850px;
           margin: 0 auto;
-          line-height: 1.65;
+          line-height: 1.7;
 
-          text-shadow: 0 0 6px rgba(255, 255, 255, 0.3);
+          text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+          padding: 0 15px;
         }
 
         @media (max-width: 768px) {
+          .home-hero {
+            padding: 30px 15px;
+          }
+
           .home-card {
-            padding: 40px 25px;
+            padding: 35px 20px;
           }
 
           .desai-image {
             width: 110px;
             height: 110px;
           }
-          
-          .school-name {
-            margin-bottom: 8px;
-          }
-          
-          .school-subtitle {
-            margin-bottom: 18px;
-          }
         }
-        
-        @media (max-width: 600px) {
-          .home-card {
-            padding: 35px 18px;
-          }
 
-          .desai-image {
-            width: 105px;
-            height: 105px;
-          }
-          
-          .school-name {
-            margin-bottom: 6px;
-          }
-        }
-        
-        @media (max-width: 480px) {
+        @media (max-width: 600px) {
           .home-card {
             padding: 30px 15px;
           }
 
           .desai-image {
-            width: 95px;
-            height: 95px;
-            border-width: 3px;
-          }
-          
-          .school-subtitle {
-            margin-bottom: 15px;
-          }
-          
-          .school-tagline {
-            line-height: 1.5;
+            width: 100px;
+            height: 100px;
           }
         }
-        
-        @media (max-width: 360px) {
+
+        @media (max-width: 480px) {
           .home-card {
             padding: 25px 12px;
           }
 
           .desai-image {
-            width: 85px;
-            height: 85px;
+            width: 90px;
+            height: 90px;
+            border-width: 3px;
+          }
+        }
+
+        @media (max-width: 360px) {
+          .home-card {
+            padding: 20px 10px;
+          }
+
+          .desai-image {
+            width: 80px;
+            height: 80px;
           }
         }
       `}</style>

@@ -21,8 +21,8 @@ const GalleryPage = () => {
 
     return (
         <div style={{
-            minHeight: '100vh',
-            padding: '40px 20px',
+            minHeight: 'auto',
+            padding: '20px 20px',
             background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
             fontFamily: "'Poppins', sans-serif",
             position: 'relative'
@@ -100,7 +100,7 @@ const GalleryPage = () => {
                 @media (max-width: 768px) {
                     .hidden-placeholder {
                         height: 200px;
-                        font-size: 1.1rem;
+                        font-size: 1.4rem;
                     }
                 }
                 
@@ -115,16 +115,16 @@ const GalleryPage = () => {
                     background: black;
                     color: white;
                     border: none;
-                    padding: 10px 25px;
-                    border-radius: 50px;
-                    font-weight: 600;
+                    padding: 7px 17px;
+                    border-radius:10px;
+                    font-weight: 500;
                     cursor: pointer;
                     transition: all 0.3s ease;
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
+                    // display: flex;
+                    align-items:center;
+                    gap: 4px;
                     font-family: 'Poppins', sans-serif;
-                    font-size: 1rem;
+                    font-size:1.2rem;
                 }
 
                 .view-btn:hover {
@@ -134,9 +134,9 @@ const GalleryPage = () => {
                 `}
             </style>
 
-            <header style={{ textAlign: 'center', marginBottom: '40px', padding: '0 15px' }}>
+            <header style={{ textAlign: 'center', marginBottom: '20px', padding: '0 15px' }}>
                 <h1 style={{
-                    fontSize: '3.5rem',
+                    fontSize: '3rem',
                     background: 'linear-gradient(to right, #667eea, #764ba2)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
@@ -146,7 +146,7 @@ const GalleryPage = () => {
                     fontFamily: 'Poppins, sans-serif',
                     letterSpacing: '0.5px'
                 }}>
-                    Memories Gallery 📸
+                    Memories Gallery 
                 </h1>
                 <p style={{ color: '#666', fontSize: '1.3rem', padding: '0 10px', fontFamily: 'Poppins, sans-serif', lineHeight: '1.5', fontWeight: '500' }}>Capturing the best moments of our school life.</p>
             </header>
@@ -170,7 +170,7 @@ const GalleryPage = () => {
                             <img src={img.src} alt={`Memory ${index + 1}`} className="gallery-image" />
                         )}
                         <button className="view-btn" onClick={() => setSelectedImage(img.src)}>
-                            View Photo 👁️
+                            View Photo 
                         </button>
                     </div>
                 ))}

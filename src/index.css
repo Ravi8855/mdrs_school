@@ -1,111 +1,102 @@
-/* 🔒 Fix horizontal overflow on all devices */
-html, body {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
+/* Modern global theme and reset — upgraded for production UI */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Poppins:wght@600;700;800&display=swap');
+
+/* === GLOBAL RESET (MUST BE AT TOP) === */
+:root{
+  /* color system */
+  --primary-600: #3366FF; /* vivid brand blue */
+  --primary-400: #5C8CFF;
+  --accent-500: #00C2A8;
+  --muted-600: #6B7280;
+  --bg-50: #F7FAFC;
+  --surface: rgba(255,255,255,0.72);
+  --glass-border: rgba(255,255,255,0.14);
+  --text-900: #0F1724;
+  --success: #16A34A;
+  --danger: #EF4444;
+
+  /* layout tokens */
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+  --shadow-lg: 0 20px 40px rgba(12,14,20,0.08);
+  --shadow-md: 0 10px 24px rgba(12,14,20,0.06);
+  --glass-blur: 8px;
+
+  /* fonts */
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  --font-display: 'Poppins', system-ui, sans-serif;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Patrick+Hand&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap');
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;width:100%;height:100%;-webkit-font-smoothing:antialiased}
 
-:root {
-  --primary-color: #FFD700;
-  --secondary-color: #FF6B6B;
-  --accent-color: #4ECDC4;
-  --bg-color: #FFF9C4;
-  --text-color: #2D3436;
-  --card-bg: #FFFFFF;
-  --font-main: 'Fredoka', sans-serif;
-  --font-hand: 'Patrick Hand', cursive;
-  --shadow-hard: 6px 6px 0px #000;
-  --shadow-hover: 3px 3px 0px #000;
-  --border-thick: 3px solid #000;
+body{
+  font-family:var(--font-sans);
+  color:var(--text-900);
+  background: linear-gradient(180deg,#f7fbff 0%, #f3f6fb 60%);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  overflow-x:hidden;
 }
 
-* {
-  box-sizing: border-box;
-}
+/* root element for React apps */
+#root{min-height:100svh;width:100%}
 
-body {
-  margin: 0;
-  padding: 0;
-  background-color: #f8f9fa;
-  background-image:
-    linear-gradient(#e1e1e1 1px, transparent 1px),
-    linear-gradient(90deg, #e1e1e1 1px, transparent 1px);
-  background-size: 30px 30px;
-  color: var(--text-color);
-  font-family: var(--font-main);
-  overflow-x: hidden;
-}
+/* Typography */
+h1,h2,h3{font-family:var(--font-display);margin:0}
+h1{font-weight:800;letter-spacing:0.6px}
+h2{font-weight:700}
+h3{font-weight:600}
 
-/* 🔒 REQUIRED FIX FOR REACT */
-#root {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-}
+/* Buttons: modern primary and subtle variants */
+button{display:inline-flex;align-items:center;gap:8px;border:0;padding:10px 18px;border-radius:10px;background:var(--primary-600);color:#fff;font-weight:600;cursor:pointer;transition:transform .14s ease, box-shadow .14s ease}
+button.secondary{background:transparent;border:1px solid rgba(15,23,36,0.06);color:var(--text-900)}
+button:focus{outline:2px solid rgba(51,102,255,0.18);outline-offset:2px}
+button:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
 
-h1,
-h2,
-h3 {
-  font-family: var(--font-hand);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
+/* Utility container */
+.container{max-width:1200px;margin:0 auto;padding:28px;width:100%}
+.page-wrap{padding-top:28px;padding-bottom:28px}
 
-button {
-  cursor: pointer;
-  border: var(--border-thick);
-  box-shadow: var(--shadow-hard);
-  transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  font-family: var(--font-hand);
-  font-weight: bold;
-  font-size: 1.1rem;
-  padding: 10px 20px;
-  border-radius: 12px;
-  text-transform: uppercase;
-  width: fit-content;
-  box-sizing: border-box;
-}
+/* Cards */
+.card,.card-flexible{background:var(--surface);backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur));border-radius:var(--radius-lg);border:1px solid var(--glass-border);box-shadow:var(--shadow-md);padding:28px;margin:14px 0}
+.card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg)}
 
-.button-full-width {
-  width: 100%;
-  margin-bottom: 10px;
-}
+/* Glass style */
+.glass-card{background:linear-gradient(180deg, rgba(255,255,255,0.7), rgba(255,255,255,0.6));border-radius:var(--radius-md);border:1px solid rgba(255,255,255,0.14);box-shadow:var(--shadow-md)}
 
-.button-responsive {
-  width: 100%;
-  max-width: 300px;
-  margin: 0 auto;
-}
+/* Navbar helpers (if present) */
+.nav-item{position:relative;padding:8px 10px;color:var(--muted-600);text-decoration:none;font-weight:600}
+.nav-item:hover{color:var(--primary-600)}
+.nav-item::after{content:'';position:absolute;left:0;bottom:-6px;height:3px;width:0;background:var(--primary-600);transition:width .28s}
+.nav-item:hover::after{width:100%}
 
-@media (max-width: 768px) {
-  button {
-    font-size: 1rem;
-    padding: 12px 20px;
-  }
-  
-  .button-responsive {
-    max-width: 100%;
-  }
-}
+/* Page title */
+.page-title{font-family:var(--font-display);font-weight:800;text-transform:uppercase;color:var(--text-900);letter-spacing:1px;margin-bottom:22px}
 
-@media (max-width: 480px) {
-  button {
-    font-size: 0.95rem;
-    padding: 10px 16px;
-    border-width: 2px;
-  }
-  
-  .button-full-width {
-    padding: 12px;
-  }
-}
+/* emoji bounce - keep but soften */
+.emoji-bounce{display:inline-block;animation:bounce 2.2s infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px) rotate(4deg)}}
 
-/* ⬇️ REST OF YOUR FILE REMAINS 100% SAME */
-/* (no change below this line) */
+/* Scrollbar (subtle) */
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#bcc8ff,#7b91ff);border-radius:999px}
+
+/* Responsive grid utilities */
+.responsive-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+
+/* small helpers preserved from original file */
+.flex-center{display:flex;align-items:center;justify-content:center}
+.text-center{text-align:center}
+
+/* preserve some legacy classes to avoid breaking layouts */
+.button-full-width{width:100%;margin-bottom:10px}
+.button-responsive{width:100%;max-width:320px;margin:0 auto}
+
+@media (max-width:768px){.container{padding:18px}.card{padding:18px}.page-wrap{padding-top:20px;padding-bottom:20px}}
 
 
 button:hover {
@@ -125,26 +116,45 @@ button:active {
   width: 100%;
 }
 
+/* Reduce bottom whitespace between pages and ensure stacked pages don't create large gaps on mobile */
+.container, main, section {
+  padding-bottom: 8px;
+}
+
+/* page-wrap provides consistent top/bottom spacing but avoids forcing full viewport height */
+.page-wrap {
+  padding-top: 18px;
+  padding-bottom: 18px;
+}
+
+@media (min-width: 900px) {
+  .page-wrap { padding-top: 36px; padding-bottom: 36px }
+}
+
 .card {
   background: var(--card-bg);
+  backdrop-filter: blur(8px) saturate(120%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
   border: var(--border-thick);
-  border-radius: 20px;
+  border-radius: 16px;
   padding: 40px;
-  margin: 20px 0;
+  margin: 12px 0; /* reduced to avoid large gaps between sections */
   box-shadow: var(--shadow-hard);
   position: relative;
-  transition: transform 0.3s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
   overflow: hidden;
   width: 100%;
   box-sizing: border-box;
 }
 
-.card-flexible {
+  .card-flexible {
   background: var(--card-bg);
+  backdrop-filter: blur(6px) saturate(120%);
+  -webkit-backdrop-filter: blur(6px) saturate(120%);
   border: var(--border-thick);
-  border-radius: 20px;
+  border-radius: 16px;
   padding: 40px;
-  margin: 20px 0;
+  margin: 12px 0;
   box-shadow: var(--shadow-hard);
   position: relative;
   transition: transform 0.3s ease;
@@ -155,25 +165,46 @@ button:active {
   box-sizing: border-box;
 }
 
+/* Reusable glass card style for unified theme */
+.glass-card {
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(6px) saturate(120%);
+  -webkit-backdrop-filter: blur(6px) saturate(120%);
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  box-shadow: 0 8px 24px rgba(12,14,20,0.06);
+  border-radius: 14px;
+}
+
+.glass-card .alumni-thumb {
+  border: 3px solid rgba(255,255,255,0.7);
+}
+
+/* Make default card elements use glass look to unify pages */
+.card, .card-flexible {
+  background: rgba(255,255,255,0.64);
+}
+
 @media (max-width: 768px) {
   .card {
-    padding: 30px;
+    padding: 24px;
   }
   
   .card-flexible {
-    padding: 30px;
+    padding: 24px;
   }
 }
 
 @media (max-width: 480px) {
   .card {
-    padding: 20px;
-    border-radius: 15px;
+    padding: 14px;
+    border-radius: 12px;
+    margin: 8px 0; /* tighter spacing to avoid large gaps between stacked pages */
   }
   
   .card-flexible {
-    padding: 20px;
-    border-radius: 15px;
+    padding: 14px;
+    border-radius: 12px;
+    margin: 8px 0;
   }
 }
 
@@ -418,7 +449,7 @@ button:active {
   }
 
   .container {
-    padding: 10px;
+    padding: 8px 10px 6px 10px;
   }
 
   .card {
@@ -540,8 +571,8 @@ button:active {
 
   section {
     min-height: auto !important;
-    padding-top: 30px !important;
-    padding-bottom: 30px !important;
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
   }
 
   /* Reduce accidental empty vertical space */
@@ -549,9 +580,9 @@ button:active {
     display: none !important;
   }
   
-  /* Improve section spacing on mobile */
+  /* Improve section spacing on mobile - reduced for seamless flow */
   section:not(:last-child) {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
 
 }
@@ -559,12 +590,12 @@ button:active {
 /* Additional mobile fixes */
 @media (max-width: 480px) {
   section {
-    padding-top: 20px !important;
-    padding-bottom: 20px !important;
+    padding-top: 15px !important;
+    padding-bottom: 15px !important;
   }
   
   section:not(:last-child) {
-    margin-bottom: 15px;
+    margin-bottom: 8px;
   }
 }
 
@@ -751,3 +782,37 @@ button:active {
     gap: 15px;
   }
 }
+
+/* Layout helper: make app wrapper a column so footer can stick when content is short */
+.app-wrapper{display:flex;flex-direction:column;min-height:100vh}
+.app-wrapper > footer{margin-top:auto}
+
+/* Ensure spin wheel section has no extra bottom spacing before footer */
+#spin-wheel, #spin-wheel .container {
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* Defensive: remove extra top spacing between consecutive sections */
+section + section { margin-top: 0; padding-top: 0 }
+
+/* Ensure no gaps between sections for professional appearance */
+section { 
+  margin: 0; 
+  padding: 0; 
+  width: 100%; 
+  box-sizing: border-box; 
+}
+
+/* Home section should take full height and have no bottom margin */
+#home { 
+  margin-bottom: 0; 
+  padding-bottom: 0; 
+  min-height: 100vh;
+}
+
+/* All sections except home should have appropriate top padding */
+section:not(#home) { 
+  padding-top: 40px; 
+}
+
