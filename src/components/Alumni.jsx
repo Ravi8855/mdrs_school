@@ -18,12 +18,12 @@ import GangaImg from "../assets/Ganga.jpeg";
 import RoopaImg from "../assets/Roopa.jpeg";
 import ShwetaImg from "../assets/Shweta.jpg";
 import AmbikaImg from "../assets/Ambika.jpeg";
-import VinodImg from"../assets/Vinod.jpg";
-import MaheshImg from"../assets/Mahesh.jpeg";
+import VinodImg from "../assets/Vinod.jpg";
+import MaheshImg from "../assets/Mahesh.jpeg";
 import PraveenImg from "../assets/Praveen.jpeg";
-import SunilImg from"../assets/Sunil.jpeg";
-import BheembaiImg from"../assets/Bheembai.Jpeg";
-import SuchitraImg from"../assets/Suchitra.jpeg";
+import SunilImg from "../assets/Sunil.jpeg";
+import BheembaiImg from "../assets/Bheembai.jpeg";
+import SuchitraImg from "../assets/Suchitra.jpeg";
 import RaviImg from "../assets/Ravi.png";
 
 const studentsData = [
