@@ -24,6 +24,7 @@ import PraveenImg from "../assets/Praveen.jpeg";
 import SunilImg from "../assets/Sunil.jpeg";
 import BheembaiImg from "../assets/Bheembai.jpeg";
 import SuchitraImg from "../assets/Suchitra.jpeg";
+import SavitaImg from"../assets/Savita.jpeg";
 import RaviImg from "../assets/Ravi.png";
 
 const studentsData = [
@@ -50,6 +51,7 @@ const studentsData = [
   {name:"Sunil",qual:"Paramedical (working)"},
   {name:"Bheembai",qual:"BA in Gulabarga"},
   {name:"Suchitra",qual:"Nursing"},
+  {name:"Savita",qual:"BSc(CBZ)"},
   { name: "Ravi", qual: "Engineering (CSE) in Mysore" },
 ];
 
@@ -78,6 +80,7 @@ const galleryPaths = {
   Sunil:SunilImg,
   Bheembai:BheembaiImg,
   Suchitra:SuchitraImg,
+  Savita:SavitaImg,
   Ravi: RaviImg,
 
 };
