@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Alumni.css";
 
-import JattappaImg from"../assets/Jattappa.Jpeg";
+import JattappaImg from "../assets/Jattappa.jpeg";
 import ChandrashekarImg from "../assets/Chandrashekar.jpeg";
 import VireshImg from "../assets/Viresh.jpg";
 import AmbadasImg from "../assets/Ambadas.jpeg";
