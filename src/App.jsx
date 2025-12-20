@@ -14,6 +14,7 @@ import Footer from "./components/Footer"; // ✅ added footer
 
 
 function App() {
+  // Latest deployment with all Alumni component fixes
   const [randomJoke, setRandomJoke] = useState("");
 
   const jokes = [
