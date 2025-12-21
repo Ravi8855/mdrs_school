@@ -1,4 +1,4 @@
-.alumni-section{padding:28px 12px 64px}
+.alumni-section{padding:28px 20px 64px}
 
 .alumni-subtitle{font-size:1.2rem;color:#666;text-align:center;margin-top:-10px;margin-bottom:30px;font-family:var(--font-body)}
 
@@ -27,9 +27,9 @@
 
 @media (max-width:900px){.alumni-grid{grid-template-columns:repeat(3,minmax(180px,1fr))}}
 @media (min-width: 1200px){.alumni-grid{grid-template-columns:repeat(3,minmax(240px,1fr));gap:24px}}
-@media (max-width:768px){.alumni-subtitle{font-size:1.1rem;margin-bottom:25px}}
+@media (max-width:768px){.alumni-subtitle{font-size:1.1rem;margin-bottom:25px}.alumni-section{padding:24px 16px 56px}}
 
-@media (max-width:480px){.alumni-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.alumni-item{padding:12px}.alumni-avatar{width:86px;height:86px}.alumni-subtitle{font-size:1rem;margin-bottom:20px;margin-top:-5px}.alumni-card{padding:25px 15px}.alumni-avatar{width:100px;height:100px;margin-bottom:15px}.alumni-card-body h3{font-size:1.3rem;margin:0 0 12px 0}.alumni-qual{font-size:.9rem;margin:0 0 15px 0}}
+@media (max-width:480px){.alumni-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.alumni-item{padding:12px}.alumni-avatar{width:86px;height:86px}.alumni-subtitle{font-size:1rem;margin-bottom:20px;margin-top:-5px}.alumni-card{padding:25px 15px}.alumni-avatar{width:100px;height:100px;margin-bottom:15px}.alumni-card-body h3{font-size:1.3rem;margin:0 0 12px 0}.alumni-qual{font-size:.9rem;margin:0 0 15px 0}.alumni-section{padding:20px 12px 48px}}
 
 @keyframes pop{0%{transform:scale(.98);opacity:0}100%{transform:scale(1);opacity:1}}
 
