@@ -23,9 +23,10 @@ import MaheshImg from "../assets/Mahesh.jpeg";
 import PraveenImg from "../assets/Praveen.jpeg";
 import SunilImg from "../assets/Sunil.jpeg";
 import BheembaiImg from "../assets/Bheembai.jpeg";
+import SuvarnaImg from "../assets/Suvarna.jpeg";
 import SuchitraImg from "../assets/Suchitra.jpeg";
-import SavitaImg from"../assets/Savita.jpeg";
-import Mallamma from"../assets/Mallamma.jpeg";
+import SavitaImg from "../assets/Savita.jpeg";
+import MallammaImg from "../assets/Mallamma.jpeg";
 import RaviImg from "../assets/Ravi.png";
 
 const studentsData = [
@@ -42,7 +43,7 @@ const studentsData = [
   { name: "Prema", qual: "BSc final year in Surapur" },
   { name: "Chaitra", qual: "Paramedical and BSc CBZ Degree in Shahapur" },
   { name: "Umashree", qual: "BSc Final year in Surapur" },
-  { name: "Ganga", qual: "B.Sc nursing 3rd year in Surapur" },
+  { name: "Ganga", qual: "BSc nursing 3rd year in Surapur" },
   { name: "Roopa", qual: "2nd PUC" },
   { name: "Shweta", qual: "BSc nursing in Gulbarga" },
   { name: "Ambika", qual: "Masters in Forensic Science in Bangalore" },
@@ -51,6 +52,7 @@ const studentsData = [
  { name: "Praveen", qual: "PUC(working) in Shahapur" },
   {name:"Sunil",qual:"Paramedical (working)"},
   {name:"Bheembai",qual:"BA in Gulabarga"},
+  {name:"Suvarna",qual:"BSc Nursing"},
   {name:"Suchitra",qual:"Nursing"},
   {name:"Savita",qual:"BSc(CBZ)"},
   {name:"Mallamma", qual: "Diploma Nursing" },
@@ -81,9 +83,10 @@ const galleryPaths = {
   Praveen: PraveenImg,
   Sunil:SunilImg,
   Bheembai:BheembaiImg,
+  Suvarna:SuvarnaImg,
   Suchitra:SuchitraImg,
   Savita:SavitaImg,
-  Mallamma:Mallamma,
+  Mallamma:MallammaImg,
   Ravi: RaviImg,
 
 };
