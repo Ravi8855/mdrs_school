@@ -47,7 +47,7 @@ const studentsData = [
   { name: "Roopa", qual: "2nd PUC" },
   { name: "Shweta", qual: "BSc nursing in Gulbarga" },
   { name: "Ambika", qual: "Masters in Forensic Science in Bangalore" },
-  {name: "Vinod",qual:"BA in Vijapur"},
+  {name: "Vinod",qual:"BA in Vijayapur"},
   {name:"Mahesh",qual:"BA in Shahapur"},
  { name: "Praveen", qual: "PUC(working) in Shahapur" },
   {name:"Sunil",qual:"Paramedical (working)"},
