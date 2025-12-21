@@ -2,7 +2,7 @@
 
 .alumni-subtitle{font-size:1.2rem;color:#666;text-align:center;margin-top:-10px;margin-bottom:30px;font-family:var(--font-body)}
 
-.alumni-grid{display:grid;grid-template-columns:repeat(3,minmax(220px,1fr));gap:20px;align-items:start}
+.alumni-grid{display:grid;grid-template-columns:repeat(3,minmax(220px,1fr));gap:24px;align-items:start}
 
 .alumni-item{background:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.82));border-radius:12px;border:1px solid rgba(15,23,36,0.04);padding:16px;display:flex;flex-direction:column;align-items:center;gap:10px;transition:transform .22s cubic-bezier(.2,.9,.2,1),box-shadow .22s;box-shadow:0 8px 20px rgba(12,14,20,0.06)}
 .alumni-item[tabindex],.alumni-item:focus{outline:2px solid rgba(51,102,255,0.12);outline-offset:4px}
@@ -25,11 +25,11 @@
 .alumni-qual{color:var(--muted-600);font-size:.95rem;margin:0 0 20px 0}
 .alumni-actions{display:flex;gap:10px;justify-content:center}
 
-@media (max-width:900px){.alumni-grid{grid-template-columns:repeat(3,minmax(180px,1fr))}}
+@media (max-width:900px){.alumni-grid{grid-template-columns:repeat(3,minmax(180px,1fr));gap:20px}}
 @media (min-width: 1200px){.alumni-grid{grid-template-columns:repeat(3,minmax(240px,1fr));gap:24px}}
 @media (max-width:768px){.alumni-subtitle{font-size:1.1rem;margin-bottom:25px}.alumni-section{padding:24px 16px 56px}}
 
-@media (max-width:480px){.alumni-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.alumni-item{padding:12px}.alumni-avatar{width:86px;height:86px}.alumni-subtitle{font-size:1rem;margin-bottom:20px;margin-top:-5px}.alumni-card{padding:25px 15px}.alumni-avatar{width:100px;height:100px;margin-bottom:15px}.alumni-card-body h3{font-size:1.3rem;margin:0 0 12px 0}.alumni-qual{font-size:.9rem;margin:0 0 15px 0}.alumni-section{padding:20px 12px 48px}}
+@media (max-width:480px){.alumni-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.alumni-item{padding:12px}.alumni-avatar{width:86px;height:86px}.alumni-subtitle{font-size:1rem;margin-bottom:20px;margin-top:-5px}.alumni-card{padding:25px 15px}.alumni-avatar{width:100px;height:100px;margin-bottom:15px}.alumni-card-body h3{font-size:1.3rem;margin:0 0 12px 0}.alumni-qual{font-size:.9rem;margin:0 0 15px 0}}
 
 @keyframes pop{0%{transform:scale(.98);opacity:0}100%{transform:scale(1);opacity:1}}
 

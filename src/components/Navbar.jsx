@@ -26,7 +26,7 @@ const Navbar = ({ onNavigate }) => {
         transition: 'all 0.28s ease',
         borderBottom: '1px solid rgba(0,0,0,0.06)',
         boxShadow: scrolled ? '0 6px 18px rgba(0,0,0,0.08)' : 'none',
-        flexWrap: 'wrap',
+        flexWrap: 'nowrap',
         width: '100%'
     };
 
@@ -81,10 +81,13 @@ const Navbar = ({ onNavigate }) => {
                         display: block !important;
                         background: none;
                         border: none;
-                        font-size: 1.8rem;
+                        font-size: 1.4rem;
                         cursor: pointer;
-                        padding: 5px;
+                        padding: 3px;
                         z-index: 1001;
+                        color: #000;
+                        font-weight: bold;
+                        position: relative;
                     }
                     
                     .school-name {
@@ -102,6 +105,8 @@ const Navbar = ({ onNavigate }) => {
                     
                     .nav-links {
                         display: flex !important;
+                        justify-content: center;
+                        flex-wrap: wrap;
                     }
                 }
                 
@@ -134,32 +139,48 @@ const Navbar = ({ onNavigate }) => {
                 `}
             </style>
             <nav style={navStyle}>
-                <div
-                    className="school-name"
-                    style={{
-                        fontSize: '1.5rem',
-                        fontWeight: '900',
-                        letterSpacing: '2px',
-                        cursor: 'pointer',
-                        fontFamily: "'Poppins', sans-serif",
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis'
-                    }}
-                    onClick={() => handleNavClick('home')}
-                >
-                    WELCOME TO MDRS<span style={{ color: '#FFD700' }}></span>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                    <button
+                        className="mobile-menu-btn"
+                        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                        style={{
+                            display: 'none',
+                            background: 'none',
+                            border: 'none',
+                            fontSize: '1.4rem',
+                            cursor: 'pointer',
+                            padding: '3px',
+                            zIndex: 1001,
+                            color: '#000',
+                            fontWeight: 'bold'
+                        }}
+                    >
+                        {mobileMenuOpen ? '✕' : '☰'}
+                    </button>
+
+                    <div
+                        className="school-name"
+                        style={{
+                            fontSize: '1.5rem',
+                            fontWeight: '900',
+                            letterSpacing: '2px',
+                            cursor: 'pointer',
+                            fontFamily: "'Poppins', sans-serif",
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            flex: 1,
+                            textAlign: 'center'
+                        }}
+                        onClick={() => handleNavClick('home')}
+                    >
+                        WELCOME TO MDRS<span style={{ color: '#FFD700' }}></span>
+                    </div>
+
+                    <div style={{ width: '30px' }}></div>
                 </div>
 
-                <button
-                    className="mobile-menu-btn"
-                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                    style={{ display: 'none' }}
-                >
-                    {mobileMenuOpen ? '✕' : '☰'}
-                </button>
-
-                <div className="nav-links" style={{ display: 'flex' }}>
+                <div className="nav-links" style={{ display: 'flex', width: '100%', marginTop: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
                     <span style={linkStyle} className="nav-item" onClick={() => handleNavClick('home')}>Home</span>
                     <span style={{ ...linkStyle, color: '#6C5CE7' }} className="nav-item" onClick={() => handleNavClick('classmates')}>Classmates 🎓</span>
                     <span style={{ ...linkStyle, color: '#00cec9' }} className="nav-item" onClick={() => handleNavClick('teachers')}>Teachers 🍎</span>
