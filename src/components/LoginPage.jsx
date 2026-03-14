@@ -1,26 +1,28 @@
 import React, { useState } from "react";
 import "./Login.css";
 
-// Demo credentials (for development / demo use only)
-const DEMO_USERNAME = "mdrs";
-const DEMO_PASSWORD = "school";
-
 const LoginPage = ({ onLogin }) => {
-  const [email, setEmail] = useState("");
+  const adminUser = import.meta.env.VITE_ADMIN_USER ?? "admin";
+  const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD ?? "admin0511";
+
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [focused, setFocused] = useState({ email: false, password: false });
+  const [focused, setFocused] = useState({ username: false, password: false });
   const [error, setError] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setError("");
-    const user = email.trim();
+    const user = username.trim();
     const pass = password.trim();
-    if (!user || !pass) return;
-    if (user === DEMO_USERNAME && pass === DEMO_PASSWORD) {
+    if (!user || !pass) {
+      setError("Please enter user name and password.");
+      return;
+    }
+    if (user === adminUser && pass === adminPassword) {
       onLogin?.();
     } else {
-      setError("Invalid username or password. Use demo: mdrs / school");
+      setError("Invalid user name or password.");
     }
   };
 
@@ -47,19 +49,20 @@ const LoginPage = ({ onLogin }) => {
             <form className="login-form" onSubmit={handleSubmit}>
               <div className="login-field">
                 <label
-                  className={`login-label ${email || focused.email ? "login-label-up" : ""}`}
-                  htmlFor="login-email"
+                  className={`login-label ${username || focused.username ? "login-label-up" : ""}`}
+                  htmlFor="login-username"
                 >
-                  Email or username
+                  User name
                 </label>
                 <input
-                  id="login-email"
+                  id="login-username"
                   type="text"
                   className="login-input"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  onFocus={() => setFocused((f) => ({ ...f, email: true }))}
-                  onBlur={() => setFocused((f) => ({ ...f, email: false }))}
+                  placeholder="Enter user name"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  onFocus={() => setFocused((f) => ({ ...f, username: true }))}
+                  onBlur={() => setFocused((f) => ({ ...f, username: false }))}
                   autoComplete="username"
                   required
                 />
@@ -77,6 +80,7 @@ const LoginPage = ({ onLogin }) => {
                   id="login-password"
                   type="password"
                   className="login-input"
+                  placeholder="Enter password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   onFocus={() => setFocused((f) => ({ ...f, password: true }))}
