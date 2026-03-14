@@ -130,16 +130,20 @@ export default function Alumni() {
             }}
             style={{ animationDelay: `${i * 40}ms` }}
           >
-            <img
-              src={galleryPaths[s.name] || "/react.svg"}
-              alt={s.name}
-              className="alumni-thumb"
-              loading="lazy"
-              onClick={(e) => {
-                e.stopPropagation();
-                openLightbox(galleryPaths[s.name] || "/react.svg", s.name);
-              }}
-            />
+            <div className="alumni-thumb-wrap">
+              <div className="alumni-thumb-inner">
+                <img
+                  src={galleryPaths[s.name] || "/react.svg"}
+                  alt={s.name}
+                  className="alumni-thumb"
+                  loading="lazy"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openLightbox(galleryPaths[s.name] || "/react.svg", s.name);
+                  }}
+                />
+              </div>
+            </div>
             <div className="alumni-meta">
               <span className="alumni-name">{s.name}</span>
             </div>
@@ -152,15 +156,19 @@ export default function Alumni() {
         <div className="alumni-modal" role="dialog" aria-modal="true" aria-label={`Details for ${selected.name}`}>
           <div className="alumni-overlay" onClick={() => { closeCard(); closeLightbox(); }} />
           <div className="alumni-card">
-            <img
-              src={selected.img}
-              alt={selected.name}
-              className="alumni-avatar"
-              onClick={(e) => {
-                e.stopPropagation();
-                openLightbox(selected.img, selected.name);
-              }}
-            />
+            <div className="alumni-avatar-wrap">
+              <div className="alumni-avatar-inner">
+                <img
+                  src={selected.img}
+                  alt={selected.name}
+                  className="alumni-avatar"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openLightbox(selected.img, selected.name);
+                  }}
+                />
+              </div>
+            </div>
             <div className="alumni-card-body">
               <h3 className="alumni-card-name">{selected.name}</h3>
               <div className="alumni-qual-badge">

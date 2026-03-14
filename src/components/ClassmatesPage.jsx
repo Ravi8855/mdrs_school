@@ -13,14 +13,14 @@ const ClassmatesPage = () => {
   ];
 
   const gradients = [
-    "linear-gradient(135deg, #9f1440ff, #e36dc0ff)",
-    "linear-gradient(135deg, #fceabb, #f8b500)",
-    "linear-gradient(135deg, #d4fc79, #96e6a1)",
-    "linear-gradient(135deg, #a1c4fd, #c2e9fb)",
-    "linear-gradient(135deg, #fbc2eb, #a6c1ee)",
-    "linear-gradient(135deg, #5cce1eff, #fcb69f)",
-    "linear-gradient(135deg, #f3800eff, #e2d1c3)",
-    "linear-gradient(135deg, #d9afd9, #11c1d5ff)"
+    "linear-gradient(145deg, #fef3c7 0%, #fde68a 100%)",
+    "linear-gradient(145deg, #e0f2fe 0%, #bae6fd 100%)",
+    "linear-gradient(145deg, #fce7f3 0%, #fbcfe8 100%)",
+    "linear-gradient(145deg, #d1fae5 0%, #a7f3d0 100%)",
+    "linear-gradient(145deg, #ede9fe 0%, #ddd6fe 100%)",
+    "linear-gradient(145deg, #fef9c3 0%, #fef08a 100%)",
+    "linear-gradient(145deg, #e0e7ff 0%, #c7d2fe 100%)",
+    "linear-gradient(145deg, #fce4ec 0%, #f8bbd9 100%)",
   ];
 
   const [classmates, setClassmates] = useState(initialClassmates);
@@ -59,13 +59,9 @@ const ClassmatesPage = () => {
             className="classmate-card reveal-card"
             style={{
               background: gradients[index % gradients.length],
-              transform: isShuffling
-                ? `scale(0.9) rotate(${Math.random() * 10 - 5}deg)`
-                : "rotate(0deg)",
-              opacity: isShuffling ? 0.6 : 1,
-              animation: isShuffling
-                ? "none"
-                : `float ${3 + Math.random()}s ease-in-out infinite alternate`,
+              transform: isShuffling ? `scale(0.96)` : undefined,
+              opacity: isShuffling ? 0.7 : 1,
+              animation: isShuffling ? "none" : undefined,
             }}
           >
             {name}
@@ -126,16 +122,16 @@ const ClassmatesPage = () => {
         .classmates-grid {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 16px;
+          gap: clamp(14px, 3vw, 22px);
           max-width: 100%;
           margin: 0 auto;
           padding: 8px clamp(12px, 4vw, 24px) 24px;
         }
         @media (max-width: 480px) {
-          .classmates-grid { padding: 8px 12px 20px; gap: 12px; }
+          .classmates-grid { padding: 8px 12px 20px; gap: 14px; }
         }
         @media (max-width: 360px) {
-          .classmates-grid { padding: 6px 10px 16px; gap: 10px; }
+          .classmates-grid { padding: 6px 10px 16px; gap: 12px; }
         }
 
         @media (min-width: 900px) {
@@ -147,24 +143,32 @@ const ClassmatesPage = () => {
         }
 
         .classmate-card {
-          min-height: 72px;
-          padding: 14px 12px;
-          border-radius: var(--radius-lg, 16px);
-          box-shadow: var(--shadow, 0 2px 12px rgba(0,0,0,0.06));
-          border: 1px solid var(--border, rgba(0,0,0,0.06));
+          min-height: 76px;
+          padding: 18px;
+          border-radius: 16px;
+          box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+          border: 1px solid rgba(255,255,255,0.6);
           display: flex;
           align-items: center;
           justify-content: center;
-          font-weight: 700;
-          color: #111827;
-          font-size: clamp(0.95rem, 2.4vw, 1.05rem);
+          font-family: 'Poppins', var(--font-body, sans-serif);
+          font-weight: 600;
+          font-size: 16px;
+          color: #1f2937;
           text-align: center;
-          transition: transform 0.22s ease, box-shadow 0.22s ease;
+          transition: all 0.3s ease;
         }
 
         .classmate-card:hover {
           transform: translateY(-4px);
-          box-shadow: 0 12px 28px rgba(0,0,0,0.1), 0 4px 8px rgba(0,0,0,0.06);
+          box-shadow: 0 12px 28px rgba(0,0,0,0.15), 0 0 0 2px rgba(56, 189, 248, 0.35);
+        }
+
+        @media (max-width: 480px) {
+          .classmate-card {
+            font-size: 15px;
+            padding: 16px;
+          }
         }
 
         @media (max-width: 768px) {
@@ -195,10 +199,6 @@ const ClassmatesPage = () => {
         }
 
 
-        @keyframes float {
-          from { transform: translateY(0); }
-          to { transform: translateY(-6px); }
-        }
       `}</style>
     </div>
   );

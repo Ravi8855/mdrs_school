@@ -3,6 +3,19 @@ import React from "react";
 const TeachersPage = () => {
   const principal = "Eranna Arkera Sir";
 
+  const teacherGradients = [
+    "linear-gradient(145deg, #e7f5ff 0%, #a5d8ff 100%)",
+    "linear-gradient(145deg, #d3f9d8 0%, #b2f2bb 100%)",
+    "linear-gradient(145deg, #e5dbff 0%, #d0bfff 100%)",
+    "linear-gradient(145deg, #fff9db 0%, #ffe066 100%)",
+    "linear-gradient(145deg, #fff4e6 0%, #ffd8a8 100%)",
+    "linear-gradient(145deg, #e7f5ff 0%, #a5d8ff 100%)",
+    "linear-gradient(145deg, #d3f9d8 0%, #b2f2bb 100%)",
+    "linear-gradient(145deg, #e5dbff 0%, #d0bfff 100%)",
+    "linear-gradient(145deg, #fff9db 0%, #ffe066 100%)",
+    "linear-gradient(145deg, #fff4e6 0%, #ffd8a8 100%)",
+  ];
+
   const teachers = [
     "Jattappa Sir",
     "Bhagamma Mam",
@@ -30,18 +43,6 @@ const TeachersPage = () => {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
 
-        @keyframes superGlow {
-          0% {
-            box-shadow: 0 0 25px rgba(255,193,7,0.6);
-          }
-          50% {
-            box-shadow: 0 0 60px rgba(255,193,7,0.9);
-          }
-          100% {
-            box-shadow: 0 0 25px rgba(255,193,7,0.6);
-          }
-        }
-
         .teachers-page {
           font-family: var(--font-body, 'Poppins', sans-serif);
           background: var(--bg-section, #f1f5f9);
@@ -49,34 +50,42 @@ const TeachersPage = () => {
         .appreciation-card {
           max-width: 830px;
           margin: 0 auto 28px;
-          padding: 30px 36px;
+          padding: 28px 32px;
           text-align: center;
           font-weight: 700;
           color: #2d3436;
           border-radius: 16px;
-          background: linear-gradient(135deg, #fffbf0, #ffffff, #fffbf0);
-          border: 1px solid rgba(244, 180, 0, 0.4);
-          box-shadow: 0 4px 20px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
-          animation: superGlow 2.8s ease-in-out infinite;
+          background: linear-gradient(145deg, #fff9db 0%, #fff4e6 50%, #fff9db 100%);
+          border: 1px solid rgba(255, 224, 102, 0.5);
+          box-shadow: 0 6px 18px rgba(0,0,0,0.08);
           font-size: 1.5rem;
           line-height: 1.5;
+          transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+        .appreciation-card:hover {
+          box-shadow: 0 10px 24px rgba(0,0,0,0.1);
         }
 
         .principal-card {
           max-width: 400px;
           margin: 0 auto 50px;
-          padding: 24px 20px;
+          padding: 20px 24px;
           border-radius: 16px;
           text-align: center;
-          background: #ffffff;
-          border: 1px solid rgba(244, 180, 0, 0.35);
-          box-shadow: 0 4px 20px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+          background: linear-gradient(145deg, #fff9db 0%, #ffe066 100%);
+          border: 2px solid rgba(245, 158, 11, 0.5);
+          box-shadow: 0 8px 24px rgba(0,0,0,0.1), 0 0 0 1px rgba(251, 191, 36, 0.2);
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .principal-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 12px 32px rgba(0,0,0,0.12), 0 0 20px rgba(251, 191, 36, 0.25);
         }
 
         .principal-title {
           font-size: 0.9rem;
           font-weight: 800;
-          color: #6b4f00;
+          color: #92400e;
           letter-spacing: 1px;
           margin-bottom: 8px;
           text-transform: uppercase;
@@ -85,45 +94,44 @@ const TeachersPage = () => {
         .principal-name {
           font-size: 1.6rem;
           font-weight: 700;
-          color: #2d3436;
+          color: #1f2937;
         }
 
-        /* ===== Teachers Grid (FINAL FIX) ===== */
         .teachers-grid {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 22px;
+          gap: clamp(14px, 3vw, 22px);
           max-width: 900px;
           margin: 0 auto;
           justify-items: center;
+          padding: 0 clamp(12px, 4vw, 20px);
         }
 
         .teacher-pill {
           width: 100%;
           max-width: 320px;
-          min-height: 64px;
-          background: #ffffff;
-          border-radius: 14px;
-          border: 1px solid rgba(0,0,0,0.05);
-          box-shadow: 0 2px 12px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+          min-height: 68px;
+          border-radius: 16px;
+          border: 1px solid rgba(255,255,255,0.7);
+          box-shadow: 0 6px 18px rgba(0,0,0,0.08);
           display: flex;
           align-items: center;
           justify-content: center;
           text-align: center;
-          font-weight: 700;
-          color: #2d3436;
+          font-weight: 600;
+          color: #1f2937;
           font-family: 'Poppins', sans-serif;
-          font-size: clamp(0.95rem, 2.4vw, 1.2rem);
-          line-height: 1.25;
-          padding: 12px 10px;
+          font-size: clamp(0.95rem, 2.4vw, 1.1rem);
+          line-height: 1.3;
+          padding: 16px 14px;
           white-space: normal;
           word-break: break-word;
           overflow-wrap: anywhere;
-          transition: transform 0.2s ease, box-shadow 0.2s ease;
+          transition: all 0.3s ease;
         }
         .teacher-pill:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+          transform: translateY(-4px);
+          box-shadow: 0 10px 24px rgba(0,0,0,0.15);
         }
 
         .teachers-title {
@@ -141,7 +149,7 @@ const TeachersPage = () => {
             font-size: clamp(1.1rem, 3.5vw, 1.4rem);
           }
           .principal-card {
-            padding: 20px 16px;
+            padding: 18px 20px;
           }
           .principal-name { font-size: 1.4rem; }
           .teachers-grid { gap: 16px; }
@@ -150,7 +158,8 @@ const TeachersPage = () => {
         @media (max-width: 480px) {
           .teacher-pill {
             max-width: 260px;
-            min-height: 58px;
+            min-height: 62px;
+            padding: 14px 12px;
             font-size: clamp(0.9rem, 3.5vw, 1.05rem);
           }
           .appreciation-card {
@@ -187,7 +196,11 @@ const TeachersPage = () => {
 
       <div className="teachers-grid">
         {teachers.map((name, index) => (
-          <div key={index} className="teacher-pill reveal-card">
+          <div
+            key={index}
+            className="teacher-pill reveal-card"
+            style={{ background: teacherGradients[index % teacherGradients.length] }}
+          >
             {name}
           </div>
         ))}
