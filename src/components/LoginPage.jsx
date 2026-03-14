@@ -71,7 +71,7 @@ const LoginPage = ({ onLogin }) => {
           <div className="login-card-inner">
             <div className="login-header">
               <div className="login-logo">
-                <span className="login-logo-icon">MDRS</span>
+                <img src="/gallery/desai.jpg" alt="MDRS School" className="login-logo-img" />
               </div>
               <h1 className="login-title">MDRS School</h1>
               <p className="login-subtitle login-welcome-text">Welcome back to MDRS School</p>

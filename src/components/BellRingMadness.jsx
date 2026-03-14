@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 
 const LEADERBOARD_KEY = "bell-ring-madness-leaderboard";
-const GAME_DURATION = 30;
+const GAME_DURATION = 15;
 const BELL_VISIBLE_MIN = 1200;
 const BELL_VISIBLE_MAX = 1800;
 const SPAWN_INTERVAL_MIN = 1000;
