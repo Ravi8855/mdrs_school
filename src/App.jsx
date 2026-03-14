@@ -7,16 +7,17 @@ import AnimatedSection from "./components/AnimatedSection";
 import ClassmatesPage from "./components/ClassmatesPage";
 import TeachersPage from "./components/TeachersPage";
 import SchoolHome from "./components/SchoolHome";
-import WorkersPage from "./components/WorkersPage";
 import GalleryPage from "./components/GalleryPage";
 import Alumni from "./components/Alumni";
 import BellRingMadness from "./components/BellRingMadness";
 import Footer from "./components/Footer";
 
+const SESSION_KEY = "isLoggedIn";
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     try {
-      return JSON.parse(localStorage.getItem("mdrs-school-logged-in") ?? "false");
+      return sessionStorage.getItem(SESSION_KEY) === "true";
     } catch {
       return false;
     }
@@ -49,10 +50,19 @@ function App() {
 
   const handleLogin = () => {
     try {
-      localStorage.setItem("mdrs-school-logged-in", "true");
+      sessionStorage.setItem(SESSION_KEY, "true");
       setIsLoggedIn(true);
     } catch {
       setIsLoggedIn(true);
+    }
+  };
+
+  const handleLogout = () => {
+    try {
+      sessionStorage.removeItem(SESSION_KEY);
+      setIsLoggedIn(false);
+    } catch {
+      setIsLoggedIn(false);
     }
   };
 
@@ -77,7 +87,7 @@ function App() {
 
   return (
     <div className="app-wrapper" style={{ width: '100%', overflowX: 'hidden' }}>
-      <Navbar onNavigate={handleNavigate} />
+      <Navbar onNavigate={handleNavigate} onLogout={handleLogout} />
 
       {/* All sections rendered on single page */}
       <section id="home">
@@ -90,10 +100,6 @@ function App() {
 
       <section id="classmates" className="page-section">
         <AnimatedSection><ClassmatesPage /></AnimatedSection>
-      </section>
-
-      <section id="workers" className="page-section">
-        <AnimatedSection><WorkersPage /></AnimatedSection>
       </section>
 
       <section id="alumni" className="page-section">

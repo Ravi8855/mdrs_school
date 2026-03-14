@@ -1,17 +1,10 @@
 import React from "react";
-import {
-  FaLinkedin,
-  FaGithub,
-  FaWhatsapp,
-  FaInstagram,
-  FaEnvelope,
-} from "react-icons/fa";
+import { FaEnvelope, FaWhatsapp } from "react-icons/fa";
 
 const QUICK_LINKS = [
   { id: "home", label: "Home" },
   { id: "classmates", label: "Classmates" },
   { id: "teachers", label: "Teachers" },
-  { id: "workers", label: "Workers" },
   { id: "alumni", label: "Alumni" },
   { id: "gallery", label: "Gallery" },
   { id: "bell-game", label: "Bell Game" },
@@ -156,36 +149,6 @@ const Footer = () => {
           text-align: center;
         }
 
-        .footer-icons {
-          display: flex;
-          justify-content: center;
-          gap: 24px;
-          flex-wrap: wrap;
-          margin-bottom: 24px;
-        }
-
-        .footer-icons a {
-          font-size: 1.5rem;
-          color: #94a3b8;
-          transition: transform 0.2s ease, color 0.2s ease;
-        }
-
-        .footer-icons a:hover {
-          transform: translateY(-4px);
-        }
-
-        .linkedin:hover { color: #0a66c2 !important; }
-        .linkedin svg {
-          color: inherit;
-          filter: drop-shadow(0 0 6px currentColor);
-        }
-        .github:hover { color: #fff !important; }
-        .github svg { color: inherit; }
-        .whatsapp:hover { color: #25d366 !important; }
-        .whatsapp svg { color: inherit; }
-        .instagram:hover { color: #e1306c !important; }
-        .instagram svg { color: inherit; }
-
         .footer-copy {
           font-size: 0.875rem;
           text-align: center;
@@ -237,7 +200,6 @@ const Footer = () => {
           </div>
           <div className="footer-credit">
             <p className="footer-title">Proudly built by SSLC 2015–2016 Batch Students</p>
-            <p className="footer-copy">© {new Date().getFullYear()} MDRS • Built with love and memories</p>
           </div>
           <div className="footer-block">
             <h4>Quick Links</h4>
@@ -252,45 +214,6 @@ const Footer = () => {
         </div>
 
         <div className="footer-divider" />
-
-        <div className="footer-icons">
-          <a
-            href="https://www.linkedin.com/in/ravi-s-b7b86135a/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="linkedin"
-            aria-label="LinkedIn"
-          >
-            <FaLinkedin />
-          </a>
-          <a
-            href="https://github.com/Ravi8855"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="github"
-            aria-label="GitHub"
-          >
-            <FaGithub />
-          </a>
-          <a
-            href="https://wa.me/918855025560"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="whatsapp"
-            aria-label="WhatsApp"
-          >
-            <FaWhatsapp />
-          </a>
-          <a
-            href="https://www.instagram.com/ravi_____here?igsh=MXByZ3M3cWVnaWVoNg=="
-            target="_blank"
-            rel="noopener noreferrer"
-            className="instagram"
-            aria-label="Instagram"
-          >
-            <FaInstagram />
-          </a>
-        </div>
       </div>
     </footer>
   );

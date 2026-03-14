@@ -6,6 +6,13 @@ const BELL_VISIBLE_MIN = 1200;
 const BELL_VISIBLE_MAX = 1800;
 const SPAWN_INTERVAL_MIN = 1000;
 const SPAWN_INTERVAL_MAX = 2000;
+const allowedStudents = [
+  "Ambadas", "Arun", "Bhimu", "Bhimashankar", "Hrutik", "Jattappa", "Ningappa",
+  "Mallikarjun", "Marilinga", "Ravi", "Vinod", "Viresh", "Chandrashekar", "Gollalappa",
+  "Sunil", "Ambika", "Bheembai", "Chaitra", "Ganga", "Mallamma", "Ningamma",
+  "Parvati", "Prema", "Roopa", "Savita", "Sharanamma", "Shweta", "Shweta H",
+  "Suvarna", "Umashree", "Mahesh", "Praveen", "Suchitra", "Shreedevi", "Mamtha", "Archana",
+];
 
 function getLeaderboard() {
   try {
@@ -53,6 +60,7 @@ export default function BellRingMadness() {
   const [gameOver, setGameOver] = useState(false);
   const [leaderboard, setLeaderboard] = useState(getLeaderboard);
   const [finalRank, setFinalRank] = useState(null);
+  const [nameError, setNameError] = useState("");
 
   const gameAreaRef = useRef(null);
   const spawnTimerRef = useRef(null);
@@ -120,7 +128,14 @@ export default function BellRingMadness() {
   }, [gameStarted, gameOver, scheduleNextBell]);
 
   const handleStartGame = () => {
-    if (!playerName.trim()) return;
+    const name = playerName.trim();
+    if (!name) return;
+    const allowedLower = allowedStudents.map((s) => s.toLowerCase());
+    if (!allowedLower.includes(name.toLowerCase())) {
+      setNameError("Enter your original name.");
+      return;
+    }
+    setNameError("");
     setGameStarted(true);
     setTimeLeft(GAME_DURATION);
     setScore(0);
@@ -476,6 +491,11 @@ export default function BellRingMadness() {
             onChange={(e) => setPlayerName(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleStartGame()}
           />
+          {nameError && (
+            <p className="bell-name-error" role="alert" style={{ color: "#ff2d2d", fontSize: "14px", marginTop: "6px", fontWeight: 500 }}>
+              {nameError}
+            </p>
+          )}
           <button
             type="button"
             className="bell-start-btn"

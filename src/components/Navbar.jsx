@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const Navbar = ({ onNavigate }) => {
+const Navbar = ({ onNavigate, onLogout }) => {
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -28,7 +28,6 @@ const Navbar = ({ onNavigate }) => {
         { id: 'home', label: 'Home' },
         { id: 'classmates', label: 'Classmates' },
         { id: 'teachers', label: 'Teachers' },
-        { id: 'workers', label: 'Workers' },
         { id: 'alumni', label: 'Alumni' },
         { id: 'gallery', label: 'Gallery' },
         { id: 'bell-game', label: 'Bell Game' },
@@ -160,6 +159,18 @@ const Navbar = ({ onNavigate }) => {
                     background: rgba(251, 191, 36, 0.15);
                     color: #fbbf24;
                 }
+                .mdrs-nav-logout {
+                    margin-left: 8px;
+                    padding: 8px 14px;
+                    background: transparent;
+                    border: 1px solid rgba(248, 250, 252, 0.5);
+                    color: rgba(248, 250, 252, 0.9);
+                }
+                .mdrs-nav-logout:hover {
+                    background: rgba(220, 53, 69, 0.2);
+                    border-color: rgba(220, 53, 69, 0.5);
+                    color: #f87171;
+                }
 
                 @media (max-width: 1024px) {
                     .mdrs-nav-inner { padding: 12px 16px; }
@@ -211,6 +222,15 @@ const Navbar = ({ onNavigate }) => {
                                 {item.label}
                             </button>
                         ))}
+                        {onLogout && (
+                            <button
+                                type="button"
+                                className="mdrs-nav-item mdrs-nav-logout"
+                                onClick={() => { onLogout(); setMobileMenuOpen(false); }}
+                            >
+                                Logout
+                            </button>
+                        )}
                     </div>
                 </div>
 
@@ -225,6 +245,15 @@ const Navbar = ({ onNavigate }) => {
                             {item.label}
                         </button>
                     ))}
+                    {onLogout && (
+                        <button
+                            type="button"
+                            className="mdrs-nav-item mdrs-nav-logout"
+                            onClick={() => { onLogout(); setMobileMenuOpen(false); }}
+                        >
+                            Logout
+                        </button>
+                    )}
                 </div>
             </nav>
         </>

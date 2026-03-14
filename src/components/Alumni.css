@@ -4,7 +4,9 @@
 
 .alumni-grid{display:grid;grid-template-columns:repeat(3,minmax(min(160px, 100%),1fr));gap:clamp(16px, 3vw, 24px);align-items:start;max-width:1200px;margin:0 auto;padding:0 clamp(12px, 4vw, 20px);box-sizing:border-box}
 
-.alumni-item,.button.alumni-item,button.alumni-item{background:#ffffff;border-radius:14px;border:1px solid rgba(15,23,36,0.06);padding:18px;display:flex;flex-direction:column;align-items:center;gap:10px;transition:transform .22s ease,box-shadow .22s ease;box-shadow:0 2px 12px rgba(12,14,20,0.06),0 1px 3px rgba(0,0,0,0.04);color:var(--text-900)}
+.alumni-item,.button.alumni-item,button.alumni-item{position:relative;overflow:hidden;background:#ffffff;border-radius:14px;border:1px solid rgba(15,23,36,0.06);padding:18px;display:flex;flex-direction:column;align-items:center;gap:10px;transition:transform .22s ease,box-shadow .22s ease;box-shadow:0 2px 12px rgba(12,14,20,0.06),0 1px 3px rgba(0,0,0,0.04);color:var(--text-900)}
+.alumni-item::before{content:'';position:absolute;left:-25%;top:0;width:25%;height:2px;background:linear-gradient(90deg,transparent,rgba(56,189,248,0.9),#38bdf8,#0ea5e9,rgba(56,189,248,0.9),transparent);box-shadow:0 0 8px rgba(56,189,248,0.5),0 0 12px rgba(14,165,233,0.25);z-index:1;pointer-events:none;animation:cardGlow 2.8s ease-in-out infinite}
+.alumni-item .alumni-thumb,.alumni-item .alumni-meta{position:relative;z-index:2}
 .alumni-item[tabindex],.alumni-item:focus,.alumni-item:focus-visible{outline:2px solid rgba(71, 85, 105, 0.4);outline-offset:4px}
 .alumni-item:hover,button.alumni-item:hover{background:#ffffff;transform:translateY(-4px);box-shadow:0 12px 28px rgba(71, 85, 105, 0.12),0 0 0 1px rgba(71, 85, 105, 0.08)}
 
@@ -62,6 +64,8 @@
 }
 
 @keyframes pop{0%{transform:scale(.98);opacity:0}100%{transform:scale(1);opacity:1}}
+
+@keyframes cardGlow{0%{transform:translateX(-100%)}100%{transform:translateX(500%)}}
 
 /* Fullscreen image viewer - square shape */
 .alumni-fullscreen{position:fixed;inset:0;background:rgba(0,0,0,0.88);display:flex;align-items:center;justify-content:center;z-index:1400;cursor:zoom-out;padding:20px;box-sizing:border-box}

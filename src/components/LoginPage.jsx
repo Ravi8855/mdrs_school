@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Login.css";
+
+const POPUP_DURATION = 3000;
 
 const LoginPage = ({ onLogin }) => {
   const adminUser = import.meta.env.VITE_ADMIN_USER ?? "admin";
@@ -8,26 +10,55 @@ const LoginPage = ({ onLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [focused, setFocused] = useState({ username: false, password: false });
-  const [error, setError] = useState("");
+  const [popup, setPopup] = useState({ show: false, type: "success", message: "" });
+
+  useEffect(() => {
+    if (!popup.show) return;
+    const timer = setTimeout(() => setPopup((p) => ({ ...p, show: false })), POPUP_DURATION);
+    return () => clearTimeout(timer);
+  }, [popup.show]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setError("");
     const user = username.trim();
     const pass = password.trim();
     if (!user || !pass) {
-      setError("Please enter user name and password.");
+      setPopup({ show: true, type: "error", message: "Please enter user name and password." });
       return;
     }
     if (user === adminUser && pass === adminPassword) {
+      setPopup({ show: true, type: "success", message: "Login successful! Welcome back." });
       onLogin?.();
     } else {
-      setError("Invalid user name or password.");
+      setPopup({ show: true, type: "error", message: "Invalid username or password." });
     }
   };
 
   return (
     <div className="login-page">
+      {popup.show && (
+        <div
+          className={`login-popup login-popup-${popup.type}`}
+          role="alert"
+          style={{
+            position: "fixed",
+            top: 0,
+            left: "50%",
+            transform: "translateX(-50%)",
+            zIndex: 10000,
+            padding: "14px 24px",
+            borderRadius: "0 0 8px 8px",
+            color: "#fff",
+            fontWeight: 600,
+            fontSize: "1rem",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+            maxWidth: "90vw",
+            textAlign: "center",
+          }}
+        >
+          {popup.message}
+        </div>
+      )}
       <div className="login-bg">
         <div className="login-bg-shape login-bg-shape-1" />
         <div className="login-bg-shape login-bg-shape-2" />
@@ -91,11 +122,6 @@ const LoginPage = ({ onLogin }) => {
                 <span className="login-input-border" />
               </div>
 
-              {error && (
-                <p className="login-error" role="alert">
-                  {error}
-                </p>
-              )}
               <div className="login-options">
                 <label className="login-remember">
                   <input type="checkbox" className="login-checkbox" />
