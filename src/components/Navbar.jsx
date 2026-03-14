@@ -1,194 +1,230 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 
 const Navbar = ({ onNavigate }) => {
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     useEffect(() => {
-        const handleScroll = () => {
-            setScrolled(window.scrollY > 50);
-        };
+        const handleScroll = () => setScrolled(window.scrollY > 50);
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    const navStyle = {
-        position: 'sticky',
-        top: 0,
-        zIndex: 1000,
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '12px 18px',
-        backgroundColor: scrolled ? 'rgba(255,255,255,0.72)' : 'rgba(255,255,255,0.6)',
-        backdropFilter: 'blur(8px)',
-        transition: 'all 0.28s ease',
-        borderBottom: '1px solid rgba(0,0,0,0.06)',
-        boxShadow: scrolled ? '0 6px 18px rgba(0,0,0,0.08)' : 'none',
-        flexWrap: 'nowrap',
-        width: '100%'
-    };
-
-    const linkStyle = {
-        margin: '0 10px',
-        textDecoration: 'none',
-        color: '#000',
-        fontWeight: '700',
-        fontFamily: "'Poppins', sans-serif",
-        fontSize: '1rem',
-        cursor: 'pointer',
-        position: 'relative',
-        transition: 'color 0.2s',
-        whiteSpace: 'nowrap'
-    };
+    useEffect(() => {
+        if (mobileMenuOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => { document.body.style.overflow = ''; };
+    }, [mobileMenuOpen]);
 
     const handleNavClick = (page) => {
         onNavigate(page);
         setMobileMenuOpen(false);
     };
 
+    const navItems = [
+        { id: 'home', label: 'Home' },
+        { id: 'classmates', label: 'Classmates' },
+        { id: 'teachers', label: 'Teachers' },
+        { id: 'workers', label: 'Workers' },
+        { id: 'alumni', label: 'Alumni' },
+        { id: 'gallery', label: 'Gallery' },
+        { id: 'bell-game', label: 'Bell Game' },
+    ];
+
     return (
         <>
-            <style>
-                {`
+            <style>{`
+                .mdrs-nav {
+                    position: sticky;
+                    top: 0;
+                    z-index: 1000;
+                    width: 100%;
+                    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+                    backdrop-filter: blur(12px);
+                    -webkit-backdrop-filter: blur(12px);
+                    border-bottom: 2px solid rgba(251, 191, 36, 0.35);
+                    box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+                    transition: box-shadow 0.25s ease, border-color 0.25s ease;
+                }
+                .mdrs-nav.scrolled {
+                    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+                    border-bottom-color: rgba(251, 191, 36, 0.5);
+                }
+                .mdrs-nav-inner {
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    padding: 12px 20px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 16px;
+                    width: 100%;
+                    box-sizing: border-box;
+                }
+                .mdrs-nav-brand {
+                    font-family: 'Poppins', sans-serif;
+                    font-size: 1.15rem;
+                    font-weight: 700;
+                    color: #fbbf24;
+                    letter-spacing: 0.02em;
+                    cursor: pointer;
+                    flex-shrink: 0;
+                    transition: color 0.2s ease, text-shadow 0.2s ease;
+                }
+                .mdrs-nav-brand:hover {
+                    color: #fcd34d;
+                    text-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
+                }
+                .mdrs-nav-links {
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-end;
+                    gap: 4px;
+                    flex-wrap: wrap;
+                }
+                .mdrs-nav-item {
+                    padding: 8px 14px;
+                    font-family: 'Poppins', sans-serif;
+                    font-size: 0.9rem;
+                    font-weight: 600;
+                    color: rgba(248, 250, 252, 0.9);
+                    cursor: pointer;
+                    border-radius: 8px;
+                    transition: color 0.2s, background 0.2s;
+                    white-space: nowrap;
+                    background: transparent;
+                    border: none;
+                }
+                .mdrs-nav-item:hover {
+                    background: rgba(251, 191, 36, 0.15);
+                    color: #fbbf24;
+                }
+                .mdrs-nav-item:focus-visible {
+                    outline: 2px solid #fbbf24;
+                    outline-offset: 2px;
+                }
+                .mdrs-nav-hamburger {
+                    display: none;
+                    align-items: center;
+                    justify-content: center;
+                    width: 44px;
+                    height: 44px;
+                    padding: 0;
+                    border: none;
+                    background: transparent;
+                    cursor: pointer;
+                    color: #f8fafc;
+                    font-size: 1.5rem;
+                    border-radius: 8px;
+                    flex-shrink: 0;
+                    transition: background 0.2s, color 0.2s;
+                }
+                .mdrs-nav-hamburger:hover {
+                    background: rgba(251, 191, 36, 0.2);
+                    color: #fbbf24;
+                }
+                .mdrs-nav-spacer { flex: 1; min-width: 0; }
+
+                /* Mobile menu overlay */
+                .mdrs-nav-dropdown {
+                    display: none;
+                    position: absolute;
+                    top: 100%;
+                    left: 0;
+                    right: 0;
+                    background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+                    border-bottom: 2px solid rgba(251, 191, 36, 0.35);
+                    box-shadow: 0 10px 40px rgba(0,0,0,0.35);
+                    padding: 12px 16px 20px;
+                    max-height: calc(100vh - 70px);
+                    overflow-y: auto;
+                    z-index: 999;
+                }
+                .mdrs-nav-dropdown.open {
+                    display: block;
+                }
+                .mdrs-nav-dropdown .mdrs-nav-item {
+                    display: block;
+                    width: 100%;
+                    padding: 14px 16px;
+                    text-align: left;
+                    font-size: 1rem;
+                    border-radius: 10px;
+                    margin-bottom: 4px;
+                    color: rgba(248, 250, 252, 0.95);
+                }
+                .mdrs-nav-dropdown .mdrs-nav-item:hover {
+                    background: rgba(251, 191, 36, 0.15);
+                    color: #fbbf24;
+                }
+
+                @media (max-width: 1024px) {
+                    .mdrs-nav-inner { padding: 12px 16px; }
+                    .mdrs-nav-links { gap: 4px; }
+                    .mdrs-nav-item { padding: 6px 10px; font-size: 0.85rem; }
+                }
+
                 @media (max-width: 768px) {
-                    .nav-links {
-                        display: ${mobileMenuOpen ? 'flex' : 'none'} !important;
-                        flex-direction: column;
-                        position: absolute;
-                        top: 100%;
-                        left: 0;
-                        right: 0;
-                        background: rgba(255, 255, 255, 0.98);
-                        backdrop-filter: blur(10px);
-                        padding: 20px;
-                        border-bottom: 3px solid #000;
-                        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-                        max-height: 70vh;
-                        overflow-y: auto;
-                    }
-                    
-                    .nav-links .nav-item {
-                        margin: 10px 0 !important;
-                        font-size: 1.1rem !important;
-                        padding: 15px;
-                        text-align: center;
-                        border-bottom: 1px solid rgba(0,0,0,0.1);
-                    }
-                    
-                    .mobile-menu-btn {
-                        display: block !important;
-                        background: none;
-                        border: none;
-                        font-size: 1.4rem;
-                        cursor: pointer;
-                        padding: 3px;
-                        z-index: 1001;
-                        color: #000;
-                        font-weight: bold;
-                        position: relative;
-                    }
-                    
-                    .school-name {
-                        font-size: 1.2rem !important;
-                    }
-                    
-                    /* Prevent scrolling when menu is open */
-                    ${mobileMenuOpen ? 'body { overflow: hidden; }' : ''}
+                    .mdrs-nav-inner { padding: 10px 16px; }
+                    .mdrs-nav-links { display: none; }
+                    .mdrs-nav-hamburger { display: flex; }
                 }
-                
-                @media (min-width: 769px) {
-                    .mobile-menu-btn {
-                        display: none !important;
-                    }
-                    
-                    .nav-links {
-                        display: flex !important;
-                        justify-content: center;
-                        flex-wrap: wrap;
-                    }
-                }
-                
+
                 @media (max-width: 480px) {
-                    .school-name {
-                        font-size: 1.1rem !important;
-                        letter-spacing: 1px !important;
-                    }
-                    
-                    .nav-links .nav-item {
-                        font-size: 1rem !important;
-                        padding: 12px;
-                    }
-                    
-                    .mobile-menu-btn {
-                        font-size: 1.5rem;
-                    }
+                    .mdrs-nav-inner { padding: 10px 12px; }
                 }
-                
-                @media (max-width: 360px) {
-                    .school-name {
-                        font-size: 1rem !important;
-                    }
-                    
-                    .nav-links .nav-item {
-                        font-size: 0.9rem !important;
-                        padding: 10px;
-                    }
-                }
-                `}
-            </style>
-            <nav style={navStyle}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+
+            `}</style>
+            <nav className={`mdrs-nav ${scrolled ? 'scrolled' : ''}`}>
+                <div className="mdrs-nav-inner">
+                    <div
+                        className="mdrs-nav-brand"
+                        onClick={() => handleNavClick('home')}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleNavClick('home'); }}
+                    >
+                        MDRS School
+                    </div>
+                    <span className="mdrs-nav-spacer" aria-hidden="true" />
                     <button
-                        className="mobile-menu-btn"
+                        type="button"
+                        className="mdrs-nav-hamburger"
                         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                        style={{
-                            display: 'none',
-                            background: 'none',
-                            border: 'none',
-                            fontSize: '1.4rem',
-                            cursor: 'pointer',
-                            padding: '3px',
-                            zIndex: 1001,
-                            color: '#000',
-                            fontWeight: 'bold'
-                        }}
+                        aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+                        aria-expanded={mobileMenuOpen}
                     >
                         {mobileMenuOpen ? '✕' : '☰'}
                     </button>
 
-                    <div
-                        className="school-name"
-                        style={{
-                            fontSize: '1.5rem',
-                            fontWeight: '900',
-                            letterSpacing: '2px',
-                            cursor: 'pointer',
-                            fontFamily: "'Poppins', sans-serif",
-                            whiteSpace: 'nowrap',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            flex: 1,
-                            textAlign: 'center'
-                        }}
-                        onClick={() => handleNavClick('home')}
-                    >
-                        WELCOME TO MDRS<span style={{ color: '#FFD700' }}></span>
+                    <div className="mdrs-nav-links">
+                        {navItems.map((item) => (
+                            <button
+                                key={item.id}
+                                type="button"
+                                className="mdrs-nav-item"
+                                onClick={() => handleNavClick(item.id)}
+                            >
+                                {item.label}
+                            </button>
+                        ))}
                     </div>
-
-                    <div style={{ width: '30px' }}></div>
                 </div>
 
-                <div className="nav-links" style={{ display: 'flex', width: '100%', marginTop: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
-                    <span style={linkStyle} className="nav-item" onClick={() => handleNavClick('home')}>Home</span>
-                    <span style={{ ...linkStyle, color: '#6C5CE7' }} className="nav-item" onClick={() => handleNavClick('classmates')}>Classmates 🎓</span>
-                    <span style={{ ...linkStyle, color: '#00cec9' }} className="nav-item" onClick={() => handleNavClick('teachers')}>Teachers 🍎</span>
-                    <span style={{ ...linkStyle, color: '#FF4757' }} className="nav-item" onClick={() => handleNavClick('bff')}>BFFs ❤️</span>
-                    <span style={{ ...linkStyle, color: '#fd79a8' }} className="nav-item" onClick={() => handleNavClick('workers')}>Workers 🛠️</span>
-                    <span style={{ ...linkStyle, color: '#2274A5' }} className="nav-item" onClick={() => handleNavClick('alumni')}>Alumni</span>
-                    <span style={{ ...linkStyle, color: '#e17055' }} className="nav-item" onClick={() => handleNavClick('gallery')}>Gallery 📸</span>
-                    <span style={{ ...linkStyle, color: '#a29bfe' }} className="nav-item" onClick={() => handleNavClick('spin-wheel')}>Spin Wheel 🌀</span>
+                <div className={`mdrs-nav-dropdown ${mobileMenuOpen ? 'open' : ''}`}>
+                    {navItems.map((item) => (
+                        <button
+                            key={item.id}
+                            type="button"
+                            className="mdrs-nav-item"
+                            onClick={() => handleNavClick(item.id)}
+                        >
+                            {item.label}
+                        </button>
+                    ))}
                 </div>
             </nav>
         </>

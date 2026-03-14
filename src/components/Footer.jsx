@@ -4,154 +4,293 @@ import {
   FaGithub,
   FaWhatsapp,
   FaInstagram,
+  FaEnvelope,
 } from "react-icons/fa";
+
+const QUICK_LINKS = [
+  { id: "home", label: "Home" },
+  { id: "classmates", label: "Classmates" },
+  { id: "teachers", label: "Teachers" },
+  { id: "workers", label: "Workers" },
+  { id: "alumni", label: "Alumni" },
+  { id: "gallery", label: "Gallery" },
+  { id: "bell-game", label: "Bell Game" },
+];
 
 const Footer = () => {
   return (
     <footer className="mdrs-footer">
       <style>{`
         .mdrs-footer {
-          background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-          padding: 50px 20px 40px;
+          background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+          color: #e2e8f0;
+          font-family: var(--font-body, 'Poppins', sans-serif);
+          box-shadow: 0 -4px 24px rgba(0,0,0,0.12);
+          padding: 12px clamp(16px, 4vw, 24px) clamp(20px, 4vw, 28px);
+        }
+
+        .footer-inner {
+          max-width: 1000px;
+          margin: 0 auto;
+          width: 100%;
+        }
+
+        .footer-grid {
+          display: grid;
+          grid-template-columns: 1fr auto 1fr;
+          gap: 40px 32px;
+          margin-bottom: 36px;
+          text-align: left;
+          align-items: start;
+        }
+
+        .footer-credit {
           text-align: center;
-          color: #ffffff;
-          font-family: 'Poppins', sans-serif;
+          padding: 0 16px;
+        }
+        .footer-credit .footer-title {
+          font-size: 1rem;
+          font-weight: 600;
+          margin: 0 0 8px 0;
+          color: #fbbf24;
+        }
+        .footer-credit .footer-copy {
+          font-size: 0.875rem;
+          color: #94a3b8;
+          margin: 0;
+          text-align: center;
+        }
+
+        .footer-block h4 {
+          font-size: 0.75rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.12em;
+          color: #fbbf24;
+          margin: 0 0 16px 0;
+        }
+
+        .footer-contact-list {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        .footer-contact-list a {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          color: #e2e8f0;
+          text-decoration: none;
+          font-size: clamp(0.9rem, 2vw, 0.95rem);
+          padding: 8px 0;
+          min-height: 44px;
+          transition: color 0.2s ease, transform 0.2s ease;
+        }
+
+        .footer-contact-list a:hover {
+          color: #fbbf24;
+          transform: translateX(4px);
+        }
+
+        .footer-contact-list a svg {
+          flex-shrink: 0;
+          font-size: 1.35rem;
+          width: 1.35rem;
+          height: 1.35rem;
+        }
+
+        .footer-contact-list a.contact-whatsapp svg {
+          color: #25d366;
+        }
+        .footer-contact-list a.contact-whatsapp:hover svg {
+          color: #2ee66b;
+        }
+
+        .footer-contact-list a.contact-email svg {
+          color: #e2e8f0;
+        }
+        .footer-contact-list a.contact-email:hover svg {
+          color: #fbbf24;
+        }
+
+        .footer-quick-links {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .footer-quick-links a {
+          color: #cbd5e1;
+          text-decoration: none;
+          font-size: clamp(0.9rem, 2vw, 0.95rem);
+          padding: 8px 0;
+          min-height: 44px;
+          display: inline-flex;
+          align-items: center;
+          transition: color 0.2s ease, padding-left 0.2s ease;
+        }
+
+        .footer-quick-links a:hover {
+          color: #fbbf24;
+          padding-left: 4px;
+        }
+
+        .footer-divider {
+          height: 1px;
+          background: rgba(251, 191, 36, 0.2);
+          margin-bottom: 28px;
         }
 
         .footer-title {
-          font-size: 1.4rem;
-          font-weight: 700;
-          margin-bottom: 20px;
-          color: #ffd700;
-          text-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
+          font-size: 1rem;
+          font-weight: 600;
+          margin-bottom: 16px;
+          color: #fbbf24;
+          text-align: center;
         }
 
         .footer-icons {
           display: flex;
           justify-content: center;
-          gap: 28px;
+          gap: 24px;
           flex-wrap: wrap;
-          margin-bottom: 20px;
+          margin-bottom: 24px;
         }
 
         .footer-icons a {
-          font-size: 2rem;
-          animation: floatIcon 3s ease-in-out infinite;
+          font-size: 1.5rem;
+          color: #94a3b8;
+          transition: transform 0.2s ease, color 0.2s ease;
         }
-
-        /* Slight delay for natural flow */
-        .footer-icons a:nth-child(1) { animation-delay: 0s; }
-        .footer-icons a:nth-child(2) { animation-delay: 0.3s; }
-        .footer-icons a:nth-child(3) { animation-delay: 0.6s; }
-        .footer-icons a:nth-child(4) { animation-delay: 0.9s; }
 
         .footer-icons a:hover {
-          transform: translateY(-6px) scale(1.1);
+          transform: translateY(-4px);
         }
 
-        @keyframes floatIcon {
-          0%   { transform: translateY(0); }
-          50%  { transform: translateY(-10px); }
-          100% { transform: translateY(0); }
-        }
-
-        /* 🔥 STRONG NEON GLOW (SVG SAFE) */
+        .linkedin:hover { color: #0a66c2 !important; }
         .linkedin svg {
-          color: #0a66c2;
-          filter:
-            drop-shadow(0 0 8px #0a66c2)
-            drop-shadow(0 0 16px #0a66c2)
-            drop-shadow(0 0 32px rgba(10, 102, 194, 0.9));
+          color: inherit;
+          filter: drop-shadow(0 0 6px currentColor);
         }
-
-        .github svg {
-          color: #ffffff;
-          filter:
-            drop-shadow(0 0 8px #ffffff)
-            drop-shadow(0 0 16px #ffffff)
-            drop-shadow(0 0 32px rgba(255, 255, 255, 0.9));
-        }
-
-        .whatsapp svg {
-          color: #25d366;
-          filter:
-            drop-shadow(0 0 8px #25d366)
-            drop-shadow(0 0 18px #25d366)
-            drop-shadow(0 0 36px rgba(37, 211, 102, 0.95));
-        }
-
-        .instagram svg {
-          color: #e1306c;
-          filter:
-            drop-shadow(0 0 8px #e1306c)
-            drop-shadow(0 0 18px #e1306c)
-            drop-shadow(0 0 36px rgba(225, 48, 108, 0.95));
-        }
+        .github:hover { color: #fff !important; }
+        .github svg { color: inherit; }
+        .whatsapp:hover { color: #25d366 !important; }
+        .whatsapp svg { color: inherit; }
+        .instagram:hover { color: #e1306c !important; }
+        .instagram svg { color: inherit; }
 
         .footer-copy {
-          font-size: 0.95rem;
-          opacity: 0.85;
+          font-size: 0.875rem;
+          text-align: center;
+          color: #94a3b8;
+          margin: 0;
         }
 
-        @media (max-width: 600px) {
-          .footer-title {
-            font-size: 1.2rem;
+        @media (max-width: 768px) {
+          .footer-grid {
+            grid-template-columns: 1fr;
+            grid-template-rows: auto auto auto;
           }
+          .footer-grid .footer-credit { order: 2; }
+          .footer-grid .footer-block:first-child { order: 1; }
+          .footer-grid .footer-block:last-child { order: 3; }
+        }
 
-          .footer-icons a {
-            font-size: 1.8rem;
+        @media (max-width: 640px) {
+          .mdrs-footer { padding: 36px 20px 24px; }
+          .footer-grid {
+            gap: 28px;
+            margin-bottom: 28px;
+            text-align: center;
           }
+          .footer-contact-list { align-items: center; }
+          .footer-quick-links { align-items: center; }
+          .footer-block h4 { text-align: center; }
         }
       `}</style>
 
-      <div className="footer-title">
-        Proudly built by SSLC 2015–2016 Batch Student's
-      </div>
+      <div className="footer-inner">
+        <div className="footer-grid">
+          <div className="footer-block">
+            <h4>Contact</h4>
+            <ul className="footer-contact-list">
+              <li>
+                <a href="https://wa.me/918855025560" target="_blank" rel="noopener noreferrer" className="contact-whatsapp" aria-label="WhatsApp 8855025560">
+                  <FaWhatsapp />
+                  <span>8855025560</span>
+                </a>
+              </li>
+              <li>
+                <a href="mailto:ravichalmar@gmail.com" className="contact-email" aria-label="Email ravichalmar@gmail.com">
+                  <FaEnvelope />
+                  <span>ravichalmar@gmail.com</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div className="footer-credit">
+            <p className="footer-title">Proudly built by SSLC 2015–2016 Batch Students</p>
+            <p className="footer-copy">© {new Date().getFullYear()} MDRS • Built with love and memories</p>
+          </div>
+          <div className="footer-block">
+            <h4>Quick Links</h4>
+            <ul className="footer-quick-links">
+              {QUICK_LINKS.map(({ id, label }) => (
+                <li key={id}>
+                  <a href={`#${id}`}>{label}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
 
-      <div className="footer-icons">
-        <a
-          href="https://www.linkedin.com/in/ravi-s-b7b86135a/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="linkedin"
-          aria-label="LinkedIn"
-        >
-          <FaLinkedin />
-        </a>
+        <div className="footer-divider" />
 
-        <a
-          href="https://github.com/Ravi8855"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="github"
-          aria-label="GitHub"
-        >
-          <FaGithub />
-        </a>
-
-        <a
-          href="https://wa.me/918855025560"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="whatsapp"
-          aria-label="WhatsApp"
-        >
-          <FaWhatsapp />
-        </a>
-
-        <a
-          href="https://www.instagram.com/ravi_____here?igsh=MXByZ3M3cWVnaWVoNg=="
-          target="_blank"
-          rel="noopener noreferrer"
-          className="instagram"
-          aria-label="Instagram"
-        >
-          <FaInstagram />
-        </a>
-      </div>
-
-      <div className="footer-copy">
-        © {new Date().getFullYear()} MDRS • Built with ❤️ and memories
+        <div className="footer-icons">
+          <a
+            href="https://www.linkedin.com/in/ravi-s-b7b86135a/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="linkedin"
+            aria-label="LinkedIn"
+          >
+            <FaLinkedin />
+          </a>
+          <a
+            href="https://github.com/Ravi8855"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="github"
+            aria-label="GitHub"
+          >
+            <FaGithub />
+          </a>
+          <a
+            href="https://wa.me/918855025560"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="whatsapp"
+            aria-label="WhatsApp"
+          >
+            <FaWhatsapp />
+          </a>
+          <a
+            href="https://www.instagram.com/ravi_____here?igsh=MXByZ3M3cWVnaWVoNg=="
+            target="_blank"
+            rel="noopener noreferrer"
+            className="instagram"
+            aria-label="Instagram"
+          >
+            <FaInstagram />
+          </a>
+        </div>
       </div>
     </footer>
   );

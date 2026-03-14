@@ -40,9 +40,9 @@ const studentsData = [
   { name: "Golallappa", qual: "M.Com (ongoing)" },
   { name: "Arun", qual: "Medical (BAMS) in Udapi" },
   { name: "Bhimu", qual: "Paramedical lab technician (working)" },
-  { nam: "Prema", qual: "BSc final year in Surapur" },
+  { name: "Prema", qual: "BSc final year in Surapur" },
   { name: "Chaitra", qual: "Paramedical and BSc CBZ Degree in Shahapur" },
-  { nam: "Umashree", qual: "BSc Final year in Surapur" },
+  { name: "Umashree", qual: "BSc Final year in Surapur" },
   { name: "Ganga", qual: "BSc nursing 3rd year in Raichur" },
   { name: "Roopa", qual: "2nd PUC" },
   { name: "Shweta", qual: "BSc nursing in Gulbarga" },
@@ -93,34 +93,35 @@ const galleryPaths = {
 
 export default function Alumni() {
   const [selected, setSelected] = useState(null);
-  const [showImgLarge, setShowImgLarge] = useState(false);
-  const [showFullscreen, setShowFullscreen] = useState(false);
-  const [lightboxSrc, setLightboxSrc] = useState(null);
+  const [lightbox, setLightbox] = useState(null); // { src, name } or null
 
   const openCard = (index) => {
     const student = studentsData[index];
     const img = galleryPaths[student.name] || "/react.svg";
     setSelected({ ...student, img });
-    setShowImgLarge(false);
   };
 
   const closeCard = () => setSelected(null);
 
-  const openFullscreen = () => setShowFullscreen(true);
-  const closeFullscreen = () => setShowFullscreen(false);
+  const openLightbox = (src, name) => {
+    setLightbox({ src, name });
+  };
+
+  const closeLightbox = () => setLightbox(null);
 
   return (
     <div className="alumni-section container">
-      <h2 className="page-title">Alumni</h2>
-      <p className="alumni-subtitle">
-        Passout Students of MDRS
-      </p>
+      <div className="section-title-wrap">
+        <h2 className="section-title">Alumni</h2>
+        <div className="section-title-accent" aria-hidden="true" />
+        <p className="section-subtitle alumni-subtitle">Passout students of MDRS — where they are now.</p>
+      </div>
 
       <div className="alumni-grid">
         {studentsData.map((s, i) => (
           <button
             key={s.name + i}
-            className="alumni-item glass-card"
+            className="alumni-item glass-card reveal-card"
             onClick={() => openCard(i)}
             aria-label={`Open details for ${s.name}`}
             tabIndex={0}
@@ -136,8 +137,7 @@ export default function Alumni() {
               loading="lazy"
               onClick={(e) => {
                 e.stopPropagation();
-                const imgSrc = galleryPaths[s.name] || "/react.svg";
-                setLightboxSrc(imgSrc);
+                openLightbox(galleryPaths[s.name] || "/react.svg", s.name);
               }}
             />
             <div className="alumni-meta">
@@ -147,35 +147,40 @@ export default function Alumni() {
         ))}
       </div>
 
+      {/* Profile modal: clicking the card opens this */}
       {selected && (
-        <div className="alumni-modal" role="dialog" aria-modal="true">
-          <div className="alumni-overlay" onClick={() => { closeCard(); setShowFullscreen(false); setLightboxSrc(null); }} />
+        <div className="alumni-modal" role="dialog" aria-modal="true" aria-label={`Details for ${selected.name}`}>
+          <div className="alumni-overlay" onClick={() => { closeCard(); closeLightbox(); }} />
           <div className="alumni-card">
             <img
               src={selected.img}
               alt={selected.name}
-              className={`alumni-avatar`}
+              className="alumni-avatar"
               onClick={(e) => {
                 e.stopPropagation();
-                setLightboxSrc(selected.img);
+                openLightbox(selected.img, selected.name);
               }}
             />
             <div className="alumni-card-body">
-              <h3>{selected.name}</h3>
-              <p className="alumni-qual">{selected.qual}</p>
+              <h3 className="alumni-card-name">{selected.name}</h3>
+              <div className="alumni-qual-badge">
+                <span className="alumni-qual">{selected.qual}</span>
+              </div>
               <div className="alumni-actions">
                 <button onClick={closeCard} className="button-full-width">Close</button>
               </div>
             </div>
           </div>
+        </div>
+      )}
 
-          {/* fullscreen/lightbox viewer should be sibling to the card so it can cover viewport */}
-          {lightboxSrc && (
-            <div className="alumni-fullscreen" onClick={() => setLightboxSrc(null)}>
-              <button className="lightbox-close" aria-label="Close image" onClick={(e)=>{e.stopPropagation(); setLightboxSrc(null);}}>✕</button>
-              <img src={lightboxSrc} alt={selected ? selected.name : 'Alumni'} />
-            </div>
-          )}
+      {/* Lightbox: image opens in square when clicked (from grid or from modal) */}
+      {lightbox && (
+        <div className="alumni-fullscreen" onClick={closeLightbox}>
+          <button className="lightbox-close" aria-label="Close image" onClick={(e) => { e.stopPropagation(); closeLightbox(); }}>✕</button>
+          <div className="alumni-fullscreen-square" onClick={(e) => e.stopPropagation()}>
+            <img src={lightbox.src} alt={lightbox.name} />
+          </div>
         </div>
       )}
     </div>

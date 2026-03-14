@@ -35,14 +35,13 @@ const WorkersPage = () => {
 
   return (
     <section className="workers-section">
+      <div className="section-inner">
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
 
         .workers-section {
           min-height: 10vh;
-          padding: 80px 20px;
-          font-family: 'Poppins', sans-serif;
-          background: linear-gradient(135deg, #eef2f7, #dbe6f6);
+          padding: 0 0 24px;
           display: flex;
           justify-content: center;
         }
@@ -52,32 +51,37 @@ const WorkersPage = () => {
           max-width: 1200px;
         }
 
+        .workers-section {
+          font-family: var(--font-body, 'Poppins', sans-serif);
+          background: var(--bg-section, #f1f5f9);
+        }
         .workers-title {
           text-align: center;
-          font-size: 3rem;
-          font-weight: 600;
-          margin-bottom: 14px;
-          background: linear-gradient(90deg, #1e3c72, #2a5298);
+          font-size: clamp(2rem, 4vw, 3rem);
+          font-weight: 700;
+          margin-bottom: 20px;
+          background: linear-gradient(135deg, #1e3c72, #2a5298);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
-          fontFamily: "Poppins, sans-serif",
+          background-clip: text;
+          font-family: 'Poppins', sans-serif;
+          letter-spacing: 0.02em;
         }
 
         .appreciation-ribbon {
           position: relative;
-          margin: 20px auto 50px;
-          padding: 18px 30px;
+          margin: 24px auto 48px;
+          padding: clamp(16px, 4vw, 24px) clamp(20px, 5vw, 28px);
           max-width: 780px;
           text-align: center;
           background: #ffffff;
-          color: #444;
+          color: #334155;
           font-weight: 600;
-          font-size: 1.05rem;
-          border-radius: 14px;
+          font-size: clamp(0.95rem, 2.2vw, 1.05rem);
+          border-radius: 16px;
           opacity: 0;
-          box-shadow:
-            inset 0 0 0 2px rgba(46, 204, 113, 0.6),
-            0 10px 30px rgba(0,0,0,0.08);
+          border: 1px solid rgba(46, 204, 113, 0.25);
+          box-shadow: 0 4px 20px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
           z-index: 1;
         }
 
@@ -138,16 +142,17 @@ const WorkersPage = () => {
         }
 
         .workers-names div {
-          background: rgba(243, 235, 235, 0.94);
-          padding: 18px 10px;
+          background: #ffffff;
+          padding: clamp(14px, 3vw, 18px) clamp(12px, 2.5vw, 14px);
           border-radius: 14px;
-          box-shadow: 0 12px 30px rgba(0,0,0,0.06);
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
+          border: 1px solid rgba(0,0,0,0.06);
+          box-shadow: 0 2px 12px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+          transition: transform 0.22s ease, box-shadow 0.22s ease;
         }
         
         .workers-names div:hover {
           transform: translateY(-3px);
-          box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+          box-shadow: 0 8px 24px rgba(0,0,0,0.08);
         }
 
         /* Keep same on all devices */
@@ -185,22 +190,26 @@ const WorkersPage = () => {
       `}</style>
 
       <div className="workers-container">
-        <h1 className="workers-title">The Helping Hands 🤝</h1>
+        <div className="section-title-wrap">
+          <h2 className="section-title">The Helping Hands</h2>
+          <div className="section-title-accent" aria-hidden="true" />
+          <p className="section-subtitle">Staff who keep our school running with care and dedication.</p>
+        </div>
 
         <div
           ref={ribbonRef}
-          className={`appreciation-ribbon ${showRibbon ? "show" : ""}`}
+          className={`appreciation-ribbon reveal-card ${showRibbon ? "show" : ""}`}
         >
           “The silent heroes who work tirelessly behind the scenes to keep our
           school running smoothly.
-          <span className="highlight-text"> We respect you</span>” 🤍
-        </div>
+          <span className="highlight-text"> We respect you</span>”         </div>
 
         <div className="workers-names">
           {workers.map((name, index) => (
-            <div key={index}>{name}</div>
+            <div key={index} className="reveal-card">{name}</div>
           ))}
         </div>
+      </div>
       </div>
     </section>
   );

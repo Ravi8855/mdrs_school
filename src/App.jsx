@@ -1,20 +1,26 @@
 import React, { useEffect, useState } from "react";
 import confetti from "canvas-confetti";
 
+import LoginPage from "./components/LoginPage";
 import Navbar from "./components/Navbar";
-import BestFriendsPage from "./components/BestFriendsPage";
+import AnimatedSection from "./components/AnimatedSection";
 import ClassmatesPage from "./components/ClassmatesPage";
 import TeachersPage from "./components/TeachersPage";
 import SchoolHome from "./components/SchoolHome";
 import WorkersPage from "./components/WorkersPage";
 import GalleryPage from "./components/GalleryPage";
-import SpinWheelPage from "./components/SpinWheelPage";
 import Alumni from "./components/Alumni";
-import Footer from "./components/Footer"; // ✅ added footer
-
+import BellRingMadness from "./components/BellRingMadness";
+import Footer from "./components/Footer";
 
 function App() {
-  // Latest deployment with all Alumni component fixes
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem("mdrs-school-logged-in") ?? "false");
+    } catch {
+      return false;
+    }
+  });
   const [randomJoke, setRandomJoke] = useState("");
 
   const jokes = [
@@ -35,9 +41,26 @@ function App() {
   };
 
   useEffect(() => {
-    handleConfetti();
-    setRandomJoke(jokes[Math.floor(Math.random() * jokes.length)]);
-  }, []);
+    if (isLoggedIn) {
+      handleConfetti();
+      setRandomJoke(jokes[Math.floor(Math.random() * jokes.length)]);
+    }
+  }, [isLoggedIn]);
+
+  const handleLogin = () => {
+    try {
+      localStorage.setItem("mdrs-school-logged-in", "true");
+      setIsLoggedIn(true);
+    } catch {
+      setIsLoggedIn(true);
+    }
+  };
+
+  if (!isLoggedIn) {
+    return <LoginPage onLogin={handleLogin} />;
+  }
+
+  const [showBackToTop, setShowBackToTop] = useState(false);
 
   const handleNavigate = (target) => {
     const element = document.getElementById(target);
@@ -46,46 +69,55 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    const onScroll = () => setShowBackToTop(window.scrollY > 400);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <div className="app-wrapper" style={{ width: '100%', overflowX: 'hidden' }}>
       <Navbar onNavigate={handleNavigate} />
 
       {/* All sections rendered on single page */}
       <section id="home">
-        <SchoolHome />
+        <SchoolHome onNavigate={handleNavigate} />
       </section>
 
-      <section id="classmates">
-        <ClassmatesPage />
+      <section id="teachers" className="page-section">
+        <AnimatedSection><TeachersPage /></AnimatedSection>
       </section>
 
-     <section id="teachers" className="page-section">
-  <TeachersPage />
-</section>
-
-
-      <section id="workers">
-        <WorkersPage />
+      <section id="classmates" className="page-section">
+        <AnimatedSection><ClassmatesPage /></AnimatedSection>
       </section>
 
-      <section id="alumni">
-        <Alumni />
+      <section id="workers" className="page-section">
+        <AnimatedSection><WorkersPage /></AnimatedSection>
       </section>
 
-      <section id="gallery">
-        <GalleryPage />
+      <section id="alumni" className="page-section">
+        <AnimatedSection><Alumni /></AnimatedSection>
       </section>
 
-      <section id="bff">
-        <BestFriendsPage />
+      <section id="gallery" className="page-section">
+        <AnimatedSection><GalleryPage /></AnimatedSection>
       </section>
 
-      <section id="spin-wheel">
-        <SpinWheelPage />
+      <section id="bell-game" className="page-section">
+        <AnimatedSection><BellRingMadness /></AnimatedSection>
       </section>
 
-      {/* ✅ PREMIUM FOOTER ADDED HERE */}
-      <Footer />
+      <AnimatedSection><Footer /></AnimatedSection>
+
+      <button
+        type="button"
+        className={`back-to-top ${showBackToTop ? "visible" : ""}`}
+        onClick={() => handleNavigate("home")}
+        aria-label="Back to top"
+      >
+        ↑
+      </button>
     </div>
   );
 }

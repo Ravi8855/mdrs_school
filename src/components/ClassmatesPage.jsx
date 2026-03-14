@@ -35,37 +35,19 @@ const ClassmatesPage = () => {
   };
 
   return (
-    <div
-      style={{
-        background: "#fff",
-        backgroundImage: "radial-gradient(#ddd 1px, transparent 1px)",
-        backgroundSize: "20px 20px",
-        paddingBottom: "24px",
-        fontFamily: "'Poppins', sans-serif",
-      }}
-      className="page-wrap"
-    >
-      <div style={{ textAlign: "center", padding: "20px 20px" }}>
-        <h1
-          style={{
-            fontSize: "2.8rem",
-            fontFamily: "'Cinzel', serif",
-            fontWeight: "80",
-            background: "linear-gradient(45deg, #FF416C, #FF4B2B)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-          }}
-        >
-          SSLC 2015–2016 Batch Student's 🎓
-        </h1>
-
-        {/* ✅ BUTTON WRAPPER FOR PERFECT CENTERING */}
+    <div className="page-wrap classmates-page">
+      <div className="section-inner">
+      <div className="section-title-wrap classmates-header">
+        <h2 className="section-title classmates-title">SSLC 2015–2016 Batch Students</h2>
+        <div className="section-title-accent" aria-hidden="true" />
+        <p className="section-subtitle">Our batch — the faces and names that made school memorable.</p>
         <div className="shuffle-btn-wrap">
           <button
             onClick={shuffleClassmates}
             className="shuffle-btn"
+            type="button"
           >
-            Click Me
+            Shuffle
           </button>
         </div>
       </div>
@@ -74,7 +56,7 @@ const ClassmatesPage = () => {
         {classmates.map((name, index) => (
           <div
             key={`${name}-${index}`}
-            className="classmate-card"
+            className="classmate-card reveal-card"
             style={{
               background: gradients[index % gradients.length],
               transform: isShuffling
@@ -91,20 +73,27 @@ const ClassmatesPage = () => {
         ))}
       </div>
 
-      <footer
-        style={{
-          textAlign: "center",
-          marginTop: "90px",
-          padding: "40px 20px",
-          background: "#000",
-        }}
-      >
-        <p className="batch-text">
-          The batch that teachers will never forget (for wrong reason) 😂
-        </p>
-      </footer>
+      </div>
 
       <style>{`
+        .classmates-page {
+          background: var(--bg-section, #f1f5f9);
+          padding-bottom: 24px;
+          font-family: var(--font-body, 'Poppins', sans-serif);
+        }
+        .classmates-header {
+          text-align: center;
+          padding: 24px 20px 28px;
+        }
+        .classmates-title {
+          font-size: clamp(1.75rem, 4vw, 2.25rem);
+          font-family: var(--font-heading, 'Poppins', sans-serif);
+          font-weight: 800;
+          color: var(--text, #0f172a);
+          margin: 0 0 8px;
+          letter-spacing: 0.02em;
+          line-height: 1.2;
+        }
         .shuffle-btn-wrap {
           display: flex;
           justify-content: center;
@@ -140,7 +129,13 @@ const ClassmatesPage = () => {
           gap: 16px;
           max-width: 100%;
           margin: 0 auto;
-          padding: 8px 16px 24px;
+          padding: 8px clamp(12px, 4vw, 24px) 24px;
+        }
+        @media (max-width: 480px) {
+          .classmates-grid { padding: 8px 12px 20px; gap: 12px; }
+        }
+        @media (max-width: 360px) {
+          .classmates-grid { padding: 6px 10px 16px; gap: 10px; }
         }
 
         @media (min-width: 900px) {
@@ -154,8 +149,9 @@ const ClassmatesPage = () => {
         .classmate-card {
           min-height: 72px;
           padding: 14px 12px;
-          border-radius: 12px;
-          box-shadow: 0 8px 24px rgba(16,24,40,0.08);
+          border-radius: var(--radius-lg, 16px);
+          box-shadow: var(--shadow, 0 2px 12px rgba(0,0,0,0.06));
+          border: 1px solid var(--border, rgba(0,0,0,0.06));
           display: flex;
           align-items: center;
           justify-content: center;
@@ -163,12 +159,12 @@ const ClassmatesPage = () => {
           color: #111827;
           font-size: clamp(0.95rem, 2.4vw, 1.05rem);
           text-align: center;
-          transition: transform 160ms ease, box-shadow 160ms ease;
+          transition: transform 0.22s ease, box-shadow 0.22s ease;
         }
 
         .classmate-card:hover {
-          transform: translateY(-6px) scale(1.02);
-          box-shadow: 0 20px 40px rgba(2,6,23,0.12);
+          transform: translateY(-4px);
+          box-shadow: 0 12px 28px rgba(0,0,0,0.1), 0 4px 8px rgba(0,0,0,0.06);
         }
 
         @media (max-width: 768px) {
@@ -198,13 +194,6 @@ const ClassmatesPage = () => {
           }
         }
 
-        .batch-text {
-          font-size: 1.4rem;
-          font-weight: 800;
-          color: #FFD700;
-          text-shadow: 0 0 10px rgba(255,215,0,0.6);
-          margin: 0;
-        }
 
         @keyframes float {
           from { transform: translateY(0); }
