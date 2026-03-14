@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 import confetti from "canvas-confetti";
 
 import LoginPage from "./components/LoginPage";
@@ -14,62 +15,16 @@ import Footer from "./components/Footer";
 
 const SESSION_KEY = "isLoggedIn";
 
-function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(() => {
-    try {
-      return sessionStorage.getItem(SESSION_KEY) === "true";
-    } catch {
-      return false;
-    }
-  });
-  const [randomJoke, setRandomJoke] = useState("");
+const jokes = [
+  "Teacher: Why are you talking? Me: I'm not talking, I'm just exchanging information.",
+  "My homework is like a customized car. It's unique and probably illegal.",
+  "Math: The only place where people buy 64 watermelons and no one wonders why.",
+  "I'm not sleeping in class, I'm just testing gravity with my eyelids.",
+  "Student: *drops pen* Class: *chaos ensues*",
+  "Teacher: 'I will wait until it is quiet.' Class: *Takes a nap*",
+];
 
-  const jokes = [
-    "Teacher: Why are you talking? Me: I'm not talking, I'm just exchanging information.",
-    "My homework is like a customized car. It's unique and probably illegal.",
-    "Math: The only place where people buy 64 watermelons and no one wonders why.",
-    "I'm not sleeping in class, I'm just testing gravity with my eyelids.",
-    "Student: *drops pen* Class: *chaos ensues*",
-    "Teacher: 'I will wait until it is quiet.' Class: *Takes a nap*",
-  ];
-
-  const handleConfetti = () => {
-    confetti({
-      particleCount: 100,
-      spread: 70,
-      origin: { y: 0.6 },
-    });
-  };
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      handleConfetti();
-      setRandomJoke(jokes[Math.floor(Math.random() * jokes.length)]);
-    }
-  }, [isLoggedIn]);
-
-  const handleLogin = () => {
-    try {
-      sessionStorage.setItem(SESSION_KEY, "true");
-      setIsLoggedIn(true);
-    } catch {
-      setIsLoggedIn(true);
-    }
-  };
-
-  const handleLogout = () => {
-    try {
-      sessionStorage.removeItem(SESSION_KEY);
-      setIsLoggedIn(false);
-    } catch {
-      setIsLoggedIn(false);
-    }
-  };
-
-  if (!isLoggedIn) {
-    return <LoginPage onLogin={handleLogin} />;
-  }
-
+function AppContent({ onLogout }) {
   const [showBackToTop, setShowBackToTop] = useState(false);
 
   const handleNavigate = (target) => {
@@ -80,16 +35,23 @@ function App() {
   };
 
   useEffect(() => {
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 },
+    });
+  }, []);
+
+  useEffect(() => {
     const onScroll = () => setShowBackToTop(window.scrollY > 400);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
-    <div className="app-wrapper" style={{ width: '100%', overflowX: 'hidden' }}>
-      <Navbar onNavigate={handleNavigate} onLogout={handleLogout} />
+    <div className="app-wrapper" style={{ width: "100%", overflowX: "hidden" }}>
+      <Navbar onNavigate={handleNavigate} onLogout={onLogout} />
 
-      {/* All sections rendered on single page */}
       <section id="home">
         <SchoolHome onNavigate={handleNavigate} />
       </section>
@@ -125,6 +87,59 @@ function App() {
         ↑
       </button>
     </div>
+  );
+}
+
+function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    try {
+      return sessionStorage.getItem(SESSION_KEY) === "true";
+    } catch {
+      return false;
+    }
+  });
+
+  const handleLogin = () => {
+    try {
+      sessionStorage.setItem(SESSION_KEY, "true");
+      setIsLoggedIn(true);
+    } catch {
+      setIsLoggedIn(true);
+    }
+  };
+
+  const handleLogout = () => {
+    try {
+      sessionStorage.removeItem(SESSION_KEY);
+      setIsLoggedIn(false);
+    } catch {
+      setIsLoggedIn(false);
+    }
+  };
+
+  return (
+    <Routes>
+      <Route
+        path="/login"
+        element={
+          isLoggedIn ? (
+            <Navigate to="/" replace />
+          ) : (
+            <LoginPage onLogin={handleLogin} />
+          )
+        }
+      />
+      <Route
+        path="/"
+        element={
+          (typeof sessionStorage !== "undefined" && sessionStorage.getItem(SESSION_KEY) === "true") ? (
+            <AppContent onLogout={handleLogout} />
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
+      />
+    </Routes>
   );
 }
 

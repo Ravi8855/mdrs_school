@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Login.css";
 
 const POPUP_DURATION = 3000;
+const SESSION_KEY = "isLoggedIn";
 
 const LoginPage = ({ onLogin }) => {
+  const navigate = useNavigate();
   const adminUser = import.meta.env.VITE_ADMIN_USER ?? "admin";
   const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD ?? "admin0511";
 
@@ -11,6 +14,12 @@ const LoginPage = ({ onLogin }) => {
   const [password, setPassword] = useState("");
   const [focused, setFocused] = useState({ username: false, password: false });
   const [popup, setPopup] = useState({ show: false, type: "success", message: "" });
+
+  useEffect(() => {
+    if (sessionStorage.getItem(SESSION_KEY) === "true") {
+      navigate("/", { replace: true });
+    }
+  }, [navigate]);
 
   useEffect(() => {
     if (!popup.show) return;
@@ -27,8 +36,10 @@ const LoginPage = ({ onLogin }) => {
       return;
     }
     if (user === adminUser && pass === adminPassword) {
-      setPopup({ show: true, type: "success", message: "Login successful! Welcome back." });
+      sessionStorage.setItem(SESSION_KEY, "true");
       onLogin?.();
+      setPopup({ show: true, type: "success", message: "Login successful! Welcome back." });
+      navigate("/", { replace: true });
     } else {
       setPopup({ show: true, type: "error", message: "Invalid username or password." });
     }
