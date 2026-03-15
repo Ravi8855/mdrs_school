@@ -61,6 +61,7 @@ export default function BellRingMadness() {
   const [leaderboard, setLeaderboard] = useState(getLeaderboard);
   const [finalRank, setFinalRank] = useState(null);
   const [nameError, setNameError] = useState("");
+  const [isMobile, setIsMobile] = useState(() => typeof window !== "undefined" && window.innerWidth <= 768);
 
   const gameAreaRef = useRef(null);
   const spawnTimerRef = useRef(null);
@@ -161,8 +162,16 @@ export default function BellRingMadness() {
     setFinalRank(null);
   };
 
-  const topTen = [...leaderboard].sort((a, b) => b.score - a.score).slice(0, 10);
-  const champion = topTen[0];
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const sortedLeaderboard = [...leaderboard].sort((a, b) => b.score - a.score);
+  const visiblePlayers = sortedLeaderboard.slice(0, isMobile ? 5 : 10);
+  const champion = sortedLeaderboard[0];
 
   return (
     <div className="bell-madness-page">
@@ -462,7 +471,7 @@ export default function BellRingMadness() {
           )}
           <h3>Leaderboard</h3>
           <ul className="bell-leaderboard-list">
-            {topTen.map((e, i) => {
+            {visiblePlayers.map((e, i) => {
               const rank = i + 1;
               const rankClass = rank <= 3 ? `rank-${rank}` : "";
               return (
