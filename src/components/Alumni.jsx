@@ -13,6 +13,7 @@ import ArunImg from "../assets/Arun.jpeg";
 import BhimuImg from "../assets/Bhimu.jpeg";
 import PremaImg from "../assets/Prema.jpeg";
 import ChaitraImg from "../assets/Chaitra.jpeg";
+import ParvatiImg from "../assets/Parvati.jpg";
 import UmashreeImg from "../assets/Umashree.jpg";
 import GangaImg from "../assets/Ganga.jpeg";
 import RoopaImg from "../assets/Roopa.jpeg";
@@ -42,6 +43,7 @@ const studentsData = [
   { name: "Bhimu", qual: "Paramedical lab technician (working)" },
   { name: "Prema", qual: "BSc final year in Surapur" },
   { name: "Chaitra", qual: "Paramedical and BSc CBZ Degree in Shahapur" },
+  { name: "Parvati", qual: "BA Final Year in Surapur" },
   { name: "Umashree", qual: "BSc Final year in Surapur" },
   { name: "Ganga", qual: "BSc nursing 3rd year in Raichur" },
   { name: "Roopa", qual: "2nd PUC" },
@@ -73,6 +75,7 @@ const galleryPaths = {
   Bhimu: BhimuImg,
   Prema: PremaImg,
   Chaitra: ChaitraImg,
+  Parvati: ParvatiImg,
   Umashree: UmashreeImg,
   Ganga: GangaImg,
   Roopa: RoopaImg,
