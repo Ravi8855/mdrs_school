@@ -14,10 +14,36 @@ const allowedStudents = [
   "Suvarna", "Umashree", "Mahesh", "Praveen", "Suchitra", "Shreedevi", "Mamtha", "Archana",
 ];
 
+/** Case-insensitive key; empty name → "anonymous" */
+function playerKeyFromName(name) {
+  const t = (name || "").trim();
+  return t ? t.toLowerCase() : "anonymous";
+}
+
+/** One row per player; keeps highest score; prefers display name from the best run */
+function dedupeAndSortLeaderboard(list) {
+  const map = new Map();
+  for (const e of list) {
+    if (!e || typeof e.score !== "number" || !Number.isFinite(e.score)) continue;
+    const key = playerKeyFromName(e.name);
+    const display = (e.name || "").trim() || "Anonymous";
+    const cur = map.get(key);
+    if (!cur) {
+      map.set(key, { name: display, score: e.score });
+    } else if (e.score > cur.score) {
+      map.set(key, { name: display, score: e.score });
+    } else if (e.score === cur.score) {
+      map.set(key, { name: display.length >= cur.name.length ? display : cur.name, score: cur.score });
+    }
+  }
+  return Array.from(map.values()).sort((a, b) => b.score - a.score);
+}
+
 function getLeaderboard() {
   try {
     const raw = localStorage.getItem(LEADERBOARD_KEY);
-    return raw ? JSON.parse(raw) : [];
+    const parsed = raw ? JSON.parse(raw) : [];
+    return dedupeAndSortLeaderboard(Array.isArray(parsed) ? parsed : []);
   } catch {
     return [];
   }
@@ -25,8 +51,15 @@ function getLeaderboard() {
 
 function saveLeaderboard(list) {
   try {
-    localStorage.setItem(LEADERBOARD_KEY, JSON.stringify(list.slice(0, 20)));
+    const top = dedupeAndSortLeaderboard(list).slice(0, 20);
+    localStorage.setItem(LEADERBOARD_KEY, JSON.stringify(top));
   } catch (_) {}
+}
+
+/** Add or update one player: merge by name (trim + case-insensitive), keep max score */
+function upsertLeaderboardScore(list, rawName, newScore) {
+  const name = (rawName || "").trim() || "Anonymous";
+  return dedupeAndSortLeaderboard([...list, { name, score: newScore }]);
 }
 
 
@@ -61,7 +94,6 @@ export default function BellRingMadness() {
   const [leaderboard, setLeaderboard] = useState(getLeaderboard);
   const [finalRank, setFinalRank] = useState(null);
   const [nameError, setNameError] = useState("");
-  const [isMobile, setIsMobile] = useState(() => typeof window !== "undefined" && window.innerWidth <= 768);
 
   const gameAreaRef = useRef(null);
   const spawnTimerRef = useRef(null);
@@ -103,8 +135,7 @@ export default function BellRingMadness() {
     if (!gameStarted || gameOver) return;
     if (timeLeft <= 0) {
       const name = playerName.trim() || "Anonymous";
-      const list = [...getLeaderboard(), { name, score }];
-      list.sort((a, b) => b.score - a.score);
+      const list = upsertLeaderboardScore(getLeaderboard(), name, score);
       const top = list.slice(0, 20);
       saveLeaderboard(top);
       setLeaderboard(top);
@@ -162,15 +193,8 @@ export default function BellRingMadness() {
     setFinalRank(null);
   };
 
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 768);
-    window.addEventListener("resize", handleResize);
-    handleResize();
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const sortedLeaderboard = [...leaderboard].sort((a, b) => b.score - a.score);
-  const visiblePlayers = sortedLeaderboard.slice(0, isMobile ? 5 : 10);
+  const sortedLeaderboard = dedupeAndSortLeaderboard(leaderboard);
+  const visiblePlayers = sortedLeaderboard.slice(0, 3);
   const champion = sortedLeaderboard[0];
 
   return (
