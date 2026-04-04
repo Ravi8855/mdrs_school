@@ -14,8 +14,10 @@ const GalleryPage = () => {
         "/gallery/img13.jpg",
         "/gallery/img14.jpg",
         "/gallery/33.jpg",
-        "/gallery/88.jpg",
-        "/gallery/99.jpg"
+        "/gallery/99.jpg",
+        "/gallery/21.jpg",
+        "/gallery/22.jpg",
+        "/gallery/23.jpg",
     ];
 
     const [selectedImage, setSelectedImage] = useState(null);
