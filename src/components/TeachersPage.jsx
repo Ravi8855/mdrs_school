@@ -99,9 +99,9 @@ const TeachersPage = () => {
 
         .teachers-grid {
           display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
+          grid-template-columns: repeat(3, minmax(0, 1fr));
           gap: clamp(14px, 3vw, 22px);
-          max-width: 900px;
+          max-width: 1000px;
           margin: 0 auto;
           justify-items: center;
           padding: 0 clamp(12px, 4vw, 20px);

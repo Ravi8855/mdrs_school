@@ -121,7 +121,7 @@ const ClassmatesPage = () => {
 
         .classmates-grid {
           display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
+          grid-template-columns: repeat(3, minmax(0, 1fr));
           gap: clamp(14px, 3vw, 22px);
           max-width: 100%;
           margin: 0 auto;
@@ -136,7 +136,6 @@ const ClassmatesPage = () => {
 
         @media (min-width: 900px) {
           .classmates-grid {
-            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 20px;
             max-width: 920px;
           }
