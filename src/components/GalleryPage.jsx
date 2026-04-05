@@ -18,7 +18,7 @@ const GalleryPage = () => {
         "/gallery/21.jpg",
         "/gallery/22.jpg",
         "/gallery/23.jpg",
-        "/gallery/1.jpg",
+       // "/gallery/1.jpg",//
         "/gallery/2.jpg",
     ];
 
