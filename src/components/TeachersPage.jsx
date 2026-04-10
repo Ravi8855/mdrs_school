@@ -8,7 +8,7 @@ import malluImg from "../assets/Mallu sir.jpg";
 import rajkumarImg from "../assets/Rajkumar sir.jpg";
 import shantalingappaImg from "../assets/Shantalingappa sir.jpg";
 import sumanthImg from "../assets/Sumanth sir.jpg";
-import SubhasImg from "../assets/Subhas sir.jpg";
+import subhasImg from "../assets/Subhas sir.jpg";
 
 
 const TeachersPage = () => {
@@ -34,7 +34,7 @@ const TeachersPage = () => {
     { name: "Rajkumar Sir", img: rajkumarImg },
     { name: "Shantalingappa Sir", img: shantalingappaImg },
     { name: "Sumanth Sir", img: sumanthImg },
-    { name: "Subhas Sir", img: SubhasImg },
+    { name: "Subhas Sir", img: subhasImg },
   ];
 
   return (
