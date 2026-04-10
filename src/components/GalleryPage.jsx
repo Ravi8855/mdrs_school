@@ -18,8 +18,11 @@ const GalleryPage = () => {
         "/gallery/21.jpg",
         "/gallery/22.jpg",
         "/gallery/23.jpg",
+        "/gallery/78.jpg",
         "/gallery/2.jpg",
         "/gallery/00.jpg",
+        "/gallery/friends.jpg",
+       
     ];
 
     const [selectedImage, setSelectedImage] = useState(null);
@@ -149,6 +152,39 @@ const GalleryPage = () => {
                     transform: scale(1.02);
                 }
 
+                .memory-share-text {
+                    text-align: center;
+                    color: #00d4ff;
+                    font-weight: 700;
+                    padding: 20px;
+                    letter-spacing: 0.5px;
+                    line-height: 1.4;
+                }
+
+                /* Mobile (max-width: 600px) */
+                @media (max-width: 600px) {
+                    .memory-share-text {
+                        font-size: 0.9rem;
+                        padding: 15px;
+                    }
+                }
+
+                /* Tablet (601px - 1024px) */
+                @media (min-width: 601px) and (max-width: 1024px) {
+                    .memory-share-text {
+                        font-size: 1.1rem;
+                        padding: 18px;
+                    }
+                }
+
+                /* Desktop (1025px+) */
+                @media (min-width: 1025px) {
+                    .memory-share-text {
+                        font-size: 1.5rem;
+                        padding: 20px;
+                    }
+                }
+
                 /* Mobile always visible */
                 @media (max-width: 768px) {
                     .overlay {
@@ -253,21 +289,10 @@ const GalleryPage = () => {
                     justifyContent: 'center',
                     cursor: 'pointer',
                     transition: 'all 0.4s ease',
-                    hover: {
-                        backgroundColor: '#16213e',
-                        borderColor: '#00f0ff'
-                    }
                 }} className="memory-share-card">
-                    <div style={{
-                        textAlign: 'center',
-                        color: '#00d4ff',
-                        fontSize: '1.5rem',
-                        fontWeight: '700',
-                        padding: '20px',
-                        letterSpacing: '0.5px'
-                    }}>
-                        Share your favorite school 
-                        memories with us<br />
+                    <div className="memory-share-text">
+                        Share your favorite school<br />
+                        memories 
                     </div>
                 </div>
             </div>
