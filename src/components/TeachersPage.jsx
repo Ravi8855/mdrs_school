@@ -133,7 +133,7 @@ const TeachersPage = () => {
         /* Teachers Grid */
         .teachers-grid {
           display: grid;
-          grid-template-columns: repeat(3, 1fr);
+          grid-template-columns: repeat(2, 1fr);
           gap: 20px;
           max-width: 1000px;
           margin: 0 auto;
@@ -205,7 +205,7 @@ const TeachersPage = () => {
 
         @media (max-width: 480px) {
           .teachers-grid {
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(2, 1fr);
             gap: 10px;
             padding: 0 8px;
           }
@@ -260,6 +260,7 @@ const TeachersPage = () => {
         /* Extra small devices */
         @media (max-width: 360px) {
           .teachers-grid {
+            grid-template-columns: repeat(2, 1fr);
             gap: 8px;
             padding: 0 4px;
           }
