@@ -1,7 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
+
+// ✅ IMPORT IMAGES (ONLY AVAILABLE TEACHER FILES)
+import jattappaImg from "../assets/Jattappa.jpeg";
+import principalImg from "../assets/principal.jpg";
+import madivalappaImg from "../assets/Madivalappa sir.jpg";
+import malluImg from "../assets/Mallu sir.jpg";
+import rajkumarImg from "../assets/Rajkumar sir.jpg";
+import shantalingappaImg from "../assets/Shantalingappa sir.jpg";
+import sumanthImg from "../assets/Sumanth sir.jpg";
+
 
 const TeachersPage = () => {
-  const principal = "Eranna Arkera Sir";
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const principal = {
+    name: "Eranna Arkera Sir",
+    img: principalImg,
+  };
 
   const teacherGradients = [
     "linear-gradient(145deg, #e7f5ff 0%, #a5d8ff 100%)",
@@ -9,202 +24,335 @@ const TeachersPage = () => {
     "linear-gradient(145deg, #e5dbff 0%, #d0bfff 100%)",
     "linear-gradient(145deg, #fff9db 0%, #ffe066 100%)",
     "linear-gradient(145deg, #fff4e6 0%, #ffd8a8 100%)",
-    "linear-gradient(145deg, #e7f5ff 0%, #a5d8ff 100%)",
-    "linear-gradient(145deg, #d3f9d8 0%, #b2f2bb 100%)",
-    "linear-gradient(145deg, #e5dbff 0%, #d0bfff 100%)",
-    "linear-gradient(145deg, #fff9db 0%, #ffe066 100%)",
-    "linear-gradient(145deg, #fff4e6 0%, #ffd8a8 100%)",
   ];
 
+  // ✅ UPDATED TEACHER DATA WITH AVAILABLE IMAGES
   const teachers = [
-    "Jattappa Sir",
-    "Bhagamma Mam",
-    "Subhas Sir",
-    "Somangowda Sir",
-    "Chandru Sir",
-    "Madivalappa Sir",
-    "Rajakumar Sir",
-    "Ramesh Sir",
-    "Renuka Mam",
-    "Shantlingappa Sir",
-    "Basavaraja Sir",
-    "Ashwini Mam",
-    "Mallappa Malikeri Sir",
-    "Shilpa Mam",
-    "Yamuna Mam",
-    "Revan Siddappa Sir",
-    "Mamtha Mam",
-    "Sharanu Naykodi Sir",
+    { name: "Madivalappa Sir", img: madivalappaImg },
+    { name: "Mallu Sir", img: malluImg },
+    { name: "Rajkumar Sir", img: rajkumarImg },
+    { name: "Shantalingappa Sir", img: shantalingappaImg },
+    { name: "Sumanth Sir", img: sumanthImg },
   ];
 
   return (
     <div className="page-wrap teachers-page">
       <div className="section-inner">
+
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
-
-        .teachers-page {
-          font-family: var(--font-body, 'Poppins', sans-serif);
-          background: var(--bg-section, #f1f5f9);
+        .page-wrap.teachers-page {
+          width: 100%;
+          padding: var(--space-6);
+          background: var(--bg);
         }
-        .appreciation-card {
-          max-width: 830px;
-          margin: 0 auto 28px;
-          padding: 28px 32px;
+
+        .section-inner {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 var(--space-4);
+        }
+
+        .section-title-wrap {
           text-align: center;
-          font-weight: 700;
-          color: #2d3436;
-          border-radius: 16px;
-          background: linear-gradient(145deg, #fff9db 0%, #fff4e6 50%, #fff9db 100%);
-          border: 1px solid rgba(255, 224, 102, 0.5);
-          box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-          font-size: 1.5rem;
+          margin-bottom: var(--space-8);
+        }
+
+        .section-title {
+          font-family: var(--font-heading);
+          font-size: clamp(1.75rem, 3.5vw, 2.25rem);
+          font-weight: 800;
+          color: var(--text);
+          margin: 0 0 var(--space-2);
+          line-height: 1.2;
+        }
+
+        .section-title-accent {
+          display: inline-block;
+          width: 56px;
+          height: 4px;
+          background: linear-gradient(90deg, var(--primary), var(--accent));
+          border-radius: 2px;
+          margin: var(--space-2) 0;
+        }
+
+        .section-subtitle {
+          font-size: 1rem;
+          color: var(--text-muted);
+          margin-top: var(--space-3);
+          max-width: 560px;
+          margin-left: auto;
+          margin-right: auto;
           line-height: 1.5;
-          transition: box-shadow 0.3s ease, transform 0.3s ease;
-        }
-        .appreciation-card:hover {
-          box-shadow: 0 10px 24px rgba(0,0,0,0.1);
         }
 
+        /* Principal Card */
         .principal-card {
-          max-width: 400px;
-          margin: 0 auto 50px;
-          padding: 20px 24px;
-          border-radius: 16px;
           text-align: center;
-          background: linear-gradient(145deg, #fff9db 0%, #ffe066 100%);
-          border: 2px solid rgba(245, 158, 11, 0.5);
-          box-shadow: 0 8px 24px rgba(0,0,0,0.1), 0 0 0 1px rgba(251, 191, 36, 0.2);
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .principal-card:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 12px 32px rgba(0,0,0,0.12), 0 0 20px rgba(251, 191, 36, 0.25);
+          background: linear-gradient(135deg, #ffe66d 0%, #ffb347 100%);
+          border-radius: 20px;
+          padding: 40px 30px;
+          margin: var(--space-8) 0;
+          box-shadow: 0 12px 36px rgba(0,0,0,0.12);
         }
 
         .principal-title {
-          font-size: 0.9rem;
-          font-weight: 800;
-          color: #92400e;
-          letter-spacing: 1px;
-          margin-bottom: 8px;
+          font-size: 0.95rem;
+          font-weight: 700;
+          color: #8B4513;
           text-transform: uppercase;
+          letter-spacing: 1.2px;
+          margin: 0 0 var(--space-2);
         }
 
         .principal-name {
-          font-size: 1.6rem;
-          font-weight: 700;
-          color: #1f2937;
+          font-family: var(--font-heading);
+          font-size: 1.75rem;
+          font-weight: 800;
+          color: #2c2c2c;
+          margin: var(--space-2) 0;
         }
 
+        .principal-card img {
+          width: 120px;
+          height: 120px;
+          border-radius: 50%;
+          margin-top: var(--space-4);
+          border: 4px solid white;
+          object-fit: cover;
+          box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+          cursor: pointer;
+          transition: transform 0.2s ease;
+        }
+
+        .principal-card img:hover {
+          transform: scale(1.08);
+        }
+
+        /* Teachers Grid */
         .teachers-grid {
           display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: clamp(14px, 3vw, 22px);
-          max-width: 900px;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 20px;
+          max-width: 1000px;
           margin: 0 auto;
-          justify-items: center;
-          padding: 0 clamp(12px, 4vw, 20px);
         }
 
         .teacher-pill {
-          width: 100%;
-          max-width: 320px;
-          min-height: 68px;
           border-radius: 16px;
-          border: 1px solid rgba(255,255,255,0.7);
-          box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-          display: flex;
-          align-items: center;
-          justify-content: center;
+          padding: 20px;
           text-align: center;
-          font-weight: 600;
-          color: #1f2937;
-          font-family: 'Poppins', sans-serif;
-          font-size: clamp(0.95rem, 2.4vw, 1.1rem);
-          line-height: 1.3;
-          padding: 16px 14px;
-          white-space: normal;
-          word-break: break-word;
-          overflow-wrap: anywhere;
-          transition: all 0.3s ease;
-        }
-        .teacher-pill:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 10px 24px rgba(0,0,0,0.15);
+          box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+          background: white;
         }
 
-        .teachers-title {
-          text-align: center;
-          font-size: clamp(1.5rem, 3.5vw, 2rem);
-          font-weight: 700;
-          margin-bottom: 24px;
-          color: var(--text, #0f172a);
-          font-family: var(--font-heading, 'Poppins', sans-serif);
-          letter-spacing: 0.02em;
+        .teacher-pill:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 12px 28px rgba(0,0,0,0.15);
         }
+
+        .teacher-pill div {
+          font-weight: 700;
+          font-size: 1rem;
+          color: var(--text);
+          margin-bottom: var(--space-3);
+        }
+
+        .teacher-img {
+          width: 80px;
+          height: 80px;
+          border-radius: 50%;
+          object-fit: cover;
+          margin: 0 auto;
+          border: 3px solid white;
+          box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+          display: block;
+          cursor: pointer;
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .teacher-img:hover {
+          transform: scale(1.1);
+          box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
-          .appreciation-card {
-            padding: 24px 20px;
-            font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+          .teachers-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
           }
+
           .principal-card {
-            padding: 18px 20px;
+            padding: 30px 20px;
           }
-          .principal-name { font-size: 1.4rem; }
-          .teachers-grid { gap: 16px; }
+
+          .section-title {
+            font-size: 1.75rem;
+          }
         }
 
         @media (max-width: 480px) {
+          .teachers-grid {
+            grid-template-columns: 1fr;
+            gap: 12px;
+          }
+
           .teacher-pill {
-            max-width: 260px;
-            min-height: 62px;
-            padding: 14px 12px;
-            font-size: clamp(0.9rem, 3.5vw, 1.05rem);
+            padding: 15px;
           }
-          .appreciation-card {
-            padding: 20px 16px;
-            font-size: clamp(1rem, 4vw, 1.2rem);
+
+          .principal-card {
+            padding: 25px 15px;
           }
-          .principal-card { padding: 18px 14px; }
-          .principal-name { font-size: 1.25rem; }
+
+          .principal-name {
+            font-size: 1.5rem;
+          }
         }
 
-        @media (max-width: 360px) {
-          .teachers-grid { gap: 12px; }
-          .appreciation-card { padding: 16px 12px; }
+        /* Principal Image Modal */
+        .principal-image-modal {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.9);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 2000;
+          animation: fadeIn 0.3s ease;
+        }
+
+        .principal-image-modal-content {
+          position: relative;
+          max-width: 90vw;
+          max-height: 90vh;
+          animation: slideUp 0.3s ease;
+        }
+
+        .principal-image-modal img {
+          width: 100%;
+          height: auto;
+          max-width: 600px;
+          max-height: 600px;
+          object-fit: contain;
+          border-radius: 12px;
+        }
+
+        .principal-close-btn {
+          position: absolute;
+          top: -50px;
+          right: 0;
+          background: white;
+          color: #000;
+          border: none;
+          width: 45px;
+          height: 45px;
+          border-radius: 50%;
+          font-size: 28px;
+          cursor: pointer;
+          font-weight: bold;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .principal-close-btn:hover {
+          transform: scale(1.1);
+          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        .principal-card img {
+          cursor: pointer;
+          transition: transform 0.2s ease;
+        }
+
+        .principal-card img:hover {
+          transform: scale(1.05);
+        }
+
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
+        @keyframes slideUp {
+          from {
+            transform: translateY(20px);
+            opacity: 0;
+          }
+          to {
+            transform: translateY(0);
+            opacity: 1;
+          }
         }
       `}</style>
 
+      {/* TITLE */}
       <div className="section-title-wrap">
         <h2 className="section-title">Our Respected Teachers</h2>
-        <div className="section-title-accent" aria-hidden="true" />
-        <p className="section-subtitle">The people who shaped our batch with dedication and care.</p>
+        <p className="section-subtitle">
+          The people who shaped our batch with dedication and care.
+        </p>
       </div>
 
-      <div className="appreciation-card reveal-card">
-        "You saw potential in us when we saw nothing."
-        <span style={{ color: "#b88700", fontWeight: 900 }}>
-          {" "}We truly appreciate you.
-        </span>
-      </div>
-
-      <div className="principal-card reveal-card">
+      {/* PRINCIPAL */}
+      <div className="principal-card">
         <div className="principal-title">Principal</div>
-        <div className="principal-name">{principal}</div>
+        <div className="principal-name">{principal.name}</div>
+        <img 
+          src={principal.img} 
+          alt="Principal" 
+          onClick={() => setSelectedImage(principal.img)}
+        />
       </div>
 
+      {/* TEACHERS GRID */}
       <div className="teachers-grid">
-        {teachers.map((name, index) => (
+        {teachers.map((t, index) => (
           <div
             key={index}
-            className="teacher-pill reveal-card"
+            className="teacher-pill"
             style={{ background: teacherGradients[index % teacherGradients.length] }}
           >
-            {name}
+            <div>{t.name}</div>
+
+            {/* ✅ IMAGE BELOW NAME */}
+            <img 
+              src={t.img} 
+              alt={t.name} 
+              className="teacher-img"
+              onClick={() => setSelectedImage(t.img)}
+            />
           </div>
         ))}
       </div>
+
+      {/* IMAGE MODAL - For Principal and Teachers */}
+      {selectedImage && (
+        <div className="principal-image-modal" onClick={() => setSelectedImage(null)}>
+          <div className="principal-image-modal-content" onClick={(e) => e.stopPropagation()}>
+            <button 
+              className="principal-close-btn" 
+              onClick={() => setSelectedImage(null)}
+              title="Close"
+            >
+              ✕
+            </button>
+            <img src={selectedImage} alt="Full view" />
+          </div>
+        </div>
+      )}
+
       </div>
     </div>
   );

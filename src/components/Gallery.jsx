@@ -3,10 +3,10 @@ import React from 'react';
 const memes = [
     { color: '#FFCDD2', caption: "Me explaining why I didn't do homework", icon: "🤯" },
     { color: '#F8BBD0', caption: "Future engineer sleeping in math class", icon: "😴" },
-    { color: '#E1BEE7', caption: "When the teacher says 'Get out' and you were already packing", icon: "🚶‍♂️" },
-    { color: '#D1C4E9', caption: "The face you make when the topper asks for extra sheet", icon: "😒" },
+    { color: '#E1BEE7', caption: "When the teacher says 'Get out' and you were already packing", icon: "�‍♂️" },
+    { color: '#D1C4E9', caption: "The face you make when the topper asks for extra sheet", icon: "�" },
     { color: '#C5CAE9', caption: "Vibe matching with the backbench gang", icon: "🤜🤛" },
-    { color: '#B3E5FC', caption: "Trying to understand Physics 5 mins before exam", icon: "😵‍💫" }
+    { color: '#B3E5FC', caption: "Trying to understand Physics 5 mins before exam", icon: "😵‍�" }
 ];
 
 const Gallery = () => {
