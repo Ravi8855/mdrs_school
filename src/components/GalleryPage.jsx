@@ -136,6 +136,19 @@ const GalleryPage = () => {
                     opacity: 1;
                 }
 
+                /* Memory Share Card Styling */
+                .memory-share-card {
+                    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+                    border: 2px dashed #00d4ff;
+                }
+
+                .memory-share-card:hover {
+                    background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
+                    border-color: #00f0ff;
+                    box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+                    transform: scale(1.02);
+                }
+
                 /* Mobile always visible */
                 @media (max-width: 768px) {
                     .overlay {
@@ -226,6 +239,37 @@ const GalleryPage = () => {
                         </div>
                     </div>
                 ))}
+                
+                {/* Memory Share Card */}
+                <div style={{
+                    position: 'relative',
+                    aspectRatio: '1/1',
+                    overflow: 'hidden',
+                    borderRadius: '12px',
+                    backgroundColor: '#1a1a2e',
+                    border: '2px dashed #00d4ff',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    transition: 'all 0.4s ease',
+                    hover: {
+                        backgroundColor: '#16213e',
+                        borderColor: '#00f0ff'
+                    }
+                }} className="memory-share-card">
+                    <div style={{
+                        textAlign: 'center',
+                        color: '#00d4ff',
+                        fontSize: '1.5rem',
+                        fontWeight: '700',
+                        padding: '20px',
+                        letterSpacing: '0.5px'
+                    }}>
+                        Share your favorite school 
+                        memories with us<br />
+                    </div>
+                </div>
             </div>
 
             {selectedImage && (

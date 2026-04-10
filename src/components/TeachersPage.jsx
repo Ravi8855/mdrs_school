@@ -1,15 +1,19 @@
 import React, { useState } from "react";
 
 // ✅ IMPORT IMAGES (ONLY AVAILABLE TEACHER FILES)
-import jattappaImg from "../assets/Jattappa.jpeg";
+import subhasImg from "../assets/Subhas sir.jpg";
+import bhagamma from "../assets/Bhagamma mam.jpg";
+import sumanthImg from "../assets/Sumanth sir.jpg";
 import principalImg from "../assets/principal.jpg";
 import madivalappaImg from "../assets/Madivalappa sir.jpg";
 import malluImg from "../assets/Mallu sir.jpg";
 import rajkumarImg from "../assets/Rajkumar sir.jpg";
 import shantalingappaImg from "../assets/Shantalingappa sir.jpg";
-import sumanthImg from "../assets/Sumanth sir.jpg";
-import subhasImg from "../assets/Subhas sir.jpg";
 import chandruImg from "../assets/Chandru sir.jpg";
+import RenukaImg from "../assets/Renuka mam.jpg";
+import AshwiniImg from "../assets/Ashwini mam.jpg";
+
+
 
 
 const TeachersPage = () => {
@@ -30,13 +34,17 @@ const TeachersPage = () => {
 
   // ✅ UPDATED TEACHER DATA WITH AVAILABLE IMAGES
   const teachers = [
+    { name: "Subhas Sir", img: subhasImg },
+    { name: "Bhagamma Mam", img: bhagamma },
+     { name: "Sumanth Sir", img: sumanthImg },
     { name: "Madivalappa Sir", img: madivalappaImg },
     { name: "Mallu Sir", img: malluImg },
     { name: "Rajkumar Sir", img: rajkumarImg },
     { name: "Shantalingappa Sir", img: shantalingappaImg },
-    { name: "Sumanth Sir", img: sumanthImg },
-    { name: "Subhas Sir", img: subhasImg },
     { name: "Chandru Sir", img: chandruImg },
+    { name: "Renuka Mam", img: RenukaImg },
+    { name: "Ashwini Mam", img: AshwiniImg },
+   
   ];
 
   return (
