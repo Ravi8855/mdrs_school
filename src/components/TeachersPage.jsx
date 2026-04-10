@@ -9,6 +9,7 @@ import rajkumarImg from "../assets/Rajkumar sir.jpg";
 import shantalingappaImg from "../assets/Shantalingappa sir.jpg";
 import sumanthImg from "../assets/Sumanth sir.jpg";
 import subhasImg from "../assets/Subhas sir.jpg";
+import chandruImg from "../assets/Chandru sir.jpg";
 
 
 const TeachersPage = () => {
@@ -35,6 +36,7 @@ const TeachersPage = () => {
     { name: "Shantalingappa Sir", img: shantalingappaImg },
     { name: "Sumanth Sir", img: sumanthImg },
     { name: "Subhas Sir", img: subhasImg },
+    { name: "Chandru Sir", img: chandruImg },
   ];
 
   return (
@@ -313,31 +315,36 @@ const TeachersPage = () => {
 
         .principal-image-modal-content {
           position: relative;
-          max-width: 90vw;
-          max-height: 90vh;
+          max-width: 480px;
+          max-height: 480px;
+          width: 85%;
           animation: slideUp 0.3s ease;
+          background: white;
+          border-radius: 16px;
+          padding: 8px;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
 
         .principal-image-modal img {
           width: 100%;
           height: auto;
-          max-width: 600px;
-          max-height: 600px;
+          max-width: 480px;
+          max-height: 480px;
           object-fit: contain;
           border-radius: 12px;
         }
 
         .principal-close-btn {
           position: absolute;
-          top: -50px;
-          right: 0;
-          background: white;
-          color: #000;
+          top: 8px;
+          right: 8px;
+          background: rgba(0, 0, 0, 0.7);
+          color: white;
           border: none;
-          width: 45px;
-          height: 45px;
+          width: 40px;
+          height: 40px;
           border-radius: 50%;
-          font-size: 28px;
+          font-size: 24px;
           cursor: pointer;
           font-weight: bold;
           display: flex;
@@ -345,11 +352,13 @@ const TeachersPage = () => {
           justify-content: center;
           transition: transform 0.2s ease, box-shadow 0.2s ease;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+          z-index: 2001;
         }
 
         .principal-close-btn:hover {
           transform: scale(1.1);
           box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+          background: rgba(0, 0, 0, 0.9);
         }
 
         .principal-card img {
