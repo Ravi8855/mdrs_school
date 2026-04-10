@@ -8,6 +8,7 @@ import malluImg from "../assets/Mallu sir.jpg";
 import rajkumarImg from "../assets/Rajkumar sir.jpg";
 import shantalingappaImg from "../assets/Shantalingappa sir.jpg";
 import sumanthImg from "../assets/Sumanth sir.jpg";
+import SubhasImg from "../assets/Subhas sir.jpg";
 
 
 const TeachersPage = () => {
@@ -33,6 +34,7 @@ const TeachersPage = () => {
     { name: "Rajkumar Sir", img: rajkumarImg },
     { name: "Shantalingappa Sir", img: shantalingappaImg },
     { name: "Sumanth Sir", img: sumanthImg },
+    { name: "Subhas Sir", img: SubhasImg },
   ];
 
   return (
@@ -190,24 +192,106 @@ const TeachersPage = () => {
           .section-title {
             font-size: 1.75rem;
           }
+
+          .teacher-pill {
+            padding: 16px 12px;
+          }
+
+          .teacher-img {
+            width: 70px;
+            height: 70px;
+          }
         }
 
         @media (max-width: 480px) {
           .teachers-grid {
             grid-template-columns: 1fr;
-            gap: 12px;
+            gap: 10px;
+            padding: 0 8px;
           }
 
           .teacher-pill {
-            padding: 15px;
+            padding: 12px 10px;
+            border-radius: 14px;
+          }
+
+          .teacher-pill div {
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+          }
+
+          .teacher-img {
+            width: 65px;
+            height: 65px;
+            border: 2px solid white;
           }
 
           .principal-card {
-            padding: 25px 15px;
+            padding: 20px 15px;
+            margin: 15px 0;
+          }
+
+          .principal-title {
+            font-size: 0.85rem;
           }
 
           .principal-name {
+            font-size: 1.3rem;
+            margin: 8px 0;
+          }
+
+          .principal-card img {
+            width: 100px;
+            height: 100px;
+            margin-top: 12px;
+            border: 3px solid white;
+          }
+
+          .section-title {
             font-size: 1.5rem;
+          }
+
+          .section-subtitle {
+            font-size: 0.9rem;
+          }
+        }
+
+        /* Extra small devices */
+        @media (max-width: 360px) {
+          .teachers-grid {
+            gap: 8px;
+            padding: 0 4px;
+          }
+
+          .teacher-pill {
+            padding: 10px 8px;
+          }
+
+          .teacher-pill div {
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+          }
+
+          .teacher-img {
+            width: 60px;
+            height: 60px;
+          }
+
+          .principal-card {
+            padding: 15px 12px;
+            margin: 12px 0;
+          }
+
+          .principal-name {
+            font-size: 1.15rem;
+            margin: 6px 0;
+          }
+
+          .principal-card img {
+            width: 90px;
+            height: 90px;
+            margin-top: 10px;
           }
         }
 
