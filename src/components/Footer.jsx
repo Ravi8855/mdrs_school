@@ -240,10 +240,6 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="footer-mobile-info">
-          <p className="footer-mobile-info-text">For extra information feel free to reach out</p>
-          <a href="mailto:ravichalmar@gmail.com" className="footer-mobile-email">ravichalmar@gmail.com</a>
-        </div>
       </div>
     </footer>
   );
