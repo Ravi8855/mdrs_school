@@ -544,6 +544,7 @@ const TeachersPage = () => {
           align-items: center;
           justify-content: center;
           overflow: auto;
+          z-index: 2100;
         }
 
         .principal-image-modal img {
@@ -617,13 +618,14 @@ const TeachersPage = () => {
           left: 0;
           right: 0;
           bottom: 0;
-          background: rgba(0, 0, 0, 0.85);
+          background: rgba(0, 0, 0, 0.88);
           display: flex;
           align-items: center;
           justify-content: center;
-          z-index: 3000;
+          z-index: 3500;
           animation: fadeIn 0.3s ease;
           padding: 20px;
+          overflow: auto;
         }
 
         .expanded-image-content {
@@ -638,6 +640,8 @@ const TeachersPage = () => {
           align-items: center;
           justify-content: center;
           background: white;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+          z-index: 3510;
         }
 
         .expanded-image-modal img {
@@ -666,7 +670,7 @@ const TeachersPage = () => {
           justify-content: center;
           transition: all 0.2s ease;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-          z-index: 3001;
+          z-index: 3520;
         }
 
         .expanded-image-close-btn:hover {
@@ -677,6 +681,10 @@ const TeachersPage = () => {
 
         /* Expanded Image Responsive */
         @media (max-width: 1024px) {
+          .expanded-image-modal {
+            padding: 20px;
+          }
+
           .expanded-image-content {
             max-width: 550px;
             height: 550px;
@@ -1068,12 +1076,17 @@ const TeachersPage = () => {
             <img 
               src={selectedTeacher.img} 
               alt={selectedTeacher.name}
-              onClick={() => setExpandedImage(selectedTeacher.img)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setExpandedImage(selectedTeacher.img);
+              }}
               style={{ cursor: "pointer" }}
               title="Click to view larger"
             />
             <div className="modal-teacher-name">{selectedTeacher.name}</div>
-            <div className="modal-teacher-subject">Sub: {selectedTeacher.subject}</div>
+            {selectedTeacher.subject !== "Principal" && (
+              <div className="modal-teacher-subject">Sub: {selectedTeacher.subject}</div>
+            )}
           </div>
         </div>
       )}

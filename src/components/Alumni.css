@@ -19,17 +19,17 @@
 .alumni-qual-short{display:none}
 
 /* Modal & card */
-.alumni-modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:1200}
-.alumni-overlay{position:absolute;inset:0;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px)}
-.alumni-card{position:relative;width:420px;max-width:calc(100vw - 40px);background:#fff;border-radius:16px;padding:clamp(24px, 5vw, 30px) clamp(16px, 4vw, 20px);border:1px solid rgba(0,0,0,0.06);box-shadow:0 20px 50px rgba(0,0,0,0.15);z-index:1300;animation:pop .2s ease both;display:flex;flex-direction:column;align-items:center;box-sizing:border-box}
+.alumni-modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:2000}
+.alumni-overlay{position:absolute;inset:0;background:rgba(15,23,42,0.8);backdrop-filter:blur(6px)}
+.alumni-card{position:relative;width:420px;max-width:calc(100vw - 40px);background:#fff;border-radius:20px;padding:clamp(24px, 5vw, 40px) clamp(16px, 4vw, 30px);border:0;box-shadow:0 20px 60px rgba(0,0,0,0.35);z-index:2100;animation:slideUp 0.3s ease both;display:flex;flex-direction:column;align-items:center;box-sizing:border-box}
 
-.alumni-avatar-wrap{position:relative;width:126px;height:126px;border-radius:50%;margin-bottom:20px;flex-shrink:0}
+.alumni-avatar-wrap{position:relative;width:140px;height:140px;border-radius:50%;margin-bottom:25px;flex-shrink:0}
 .alumni-avatar-wrap::before{content:'';position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,#fbbf24,#facc15,#fde68a,#fbbf24);animation:rotateRing 4s linear infinite;z-index:0}
 .alumni-avatar-inner{position:absolute;inset:3px;border-radius:50%;overflow:hidden;background:#fff;z-index:1}
-.alumni-avatar-wrap .alumni-avatar{width:100%;height:100%;object-fit:cover;display:block;border-radius:50%;box-shadow:0 8px 24px rgba(12,14,20,0.15);cursor:pointer;transition:transform .18s}
+.alumni-avatar-wrap .alumni-avatar{width:100%;height:100%;object-fit:cover;display:block;border-radius:50%;box-shadow:0 8px 24px rgba(12,14,20,0.2);cursor:pointer;transition:transform .18s ease}
 
 .alumni-card-body{text-align:center;display:flex;flex-direction:column;align-items:center;width:100%}
-.alumni-card-name{margin:0 0 16px 0;font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:var(--text-900);line-height:1.2}
+.alumni-card-name{margin:0 0 16px 0;font-family:var(--font-display);font-size:1.6rem;font-weight:800;color:#1a1a1a;line-height:1.2}
 
 /* Qualification badge — highlighted, professional */
 .alumni-qual-badge{
@@ -53,9 +53,23 @@
 }
 .alumni-actions{display:flex;gap:10px;justify-content:center}
 
-@media (max-width:900px){.alumni-grid{grid-template-columns:repeat(3,minmax(180px,1fr));gap:20px}}
+@media (max-width:900px){.alumni-grid{grid-template-columns:repeat(3,minmax(180px,1fr));gap:20px}
+	
+	.alumni-card{padding:35px 25px;border-radius:18px}
+	.alumni-avatar-wrap{width:130px;height:130px;margin-bottom:22px}
+	.alumni-card-name{font-size:1.45rem;margin-bottom:14px}
+	.alumni-qual-badge{padding:11px 15px;margin-bottom:18px}
+	.alumni-qual{font-size:1rem}
+}
 @media (min-width: 1200px){.alumni-grid{grid-template-columns:repeat(3,minmax(240px,1fr));gap:24px}}
-@media (max-width:768px){.alumni-subtitle{font-size:1.1rem;margin-bottom:25px}.alumni-section{padding:20px 16px 20px}.alumni-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;padding:0}}
+@media (max-width:768px){.alumni-subtitle{font-size:1.1rem;margin-bottom:25px}.alumni-section{padding:20px 16px 20px}.alumni-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;padding:0}
+	
+	.alumni-card{padding:30px 20px;border-radius:16px}
+	.alumni-avatar-wrap{width:120px;height:120px;margin-bottom:20px}
+	.alumni-card-name{font-size:1.3rem;margin-bottom:12px}
+	.alumni-qual-badge{padding:10px 14px;margin-bottom:16px;border-radius:11px}
+	.alumni-qual{font-size:0.95rem}
+}
 
 @media (max-width:480px){
   .alumni-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:0}
@@ -64,14 +78,34 @@
   .alumni-section{padding:16px 8px 20px}
   .alumni-thumb-wrap{width:70px;height:70px}
   .alumni-name{font-size:0.85rem;font-weight:700;word-break:break-word}
-  .alumni-card{padding:25px 15px}
-  .alumni-avatar-wrap{width:106px;height:106px;margin-bottom:15px}
-  .alumni-card-name{font-size:1.3rem;margin:0 0 12px 0}
-  .alumni-qual-badge{padding:10px 12px;margin:0 0 16px 0;border-radius:10px;border-left-width:3px}
-  .alumni-qual{font-size:0.95rem}
+  
+  .alumni-card{padding:25px 16px;border-radius:14px}
+  .alumni-avatar-wrap{width:110px;height:110px;margin-bottom:16px}
+  .alumni-card-name{font-size:1.1rem;margin-bottom:12px}
+  .alumni-qual-badge{padding:10px 12px;margin-bottom:15px;border-radius:10px;border-left-width:3px}
+  .alumni-qual{font-size:0.9rem}
 }
 
-@keyframes pop{0%{transform:scale(.98);opacity:0}100%{transform:scale(1);opacity:1}}
+@media (max-width:380px){
+	.alumni-card{padding:20px 12px;border-radius:12px}
+	.alumni-avatar-wrap{width:100px;height:100px;margin-bottom:14px}
+	.alumni-card-name{font-size:0.95rem;margin-bottom:10px}
+	.alumni-qual-badge{padding:8px 10px;margin-bottom:12px}
+	.alumni-qual{font-size:0.85rem}
+}
+
+@media (max-width:360px){
+	.alumni-card{padding:16px 10px;border-radius:10px}
+	.alumni-avatar-wrap{width:95px;height:95px;margin-bottom:12px}
+	.alumni-card-name{font-size:0.9rem;margin-bottom:8px;line-height:1.3}
+	.alumni-qual-badge{padding:8px 10px;margin-bottom:10px;border-radius:8px}
+	.alumni-qual{font-size:0.8rem}
+}
+
+@keyframes slideUp{
+	0%{transform:translateY(20px);opacity:0}
+	100%{transform:translateY(0);opacity:1}
+}
 
 @keyframes cardGlow{0%{transform:translateX(-100%)}100%{transform:translateX(500%)}}
 @keyframes rotateRing{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
@@ -80,32 +114,155 @@
 }
 
 /* Fullscreen image viewer - square shape */
-.alumni-fullscreen{position:fixed;inset:0;background:rgba(0,0,0,0.88);display:flex;align-items:center;justify-content:center;z-index:1400;cursor:zoom-out;padding:20px;box-sizing:border-box}
-.alumni-fullscreen-square{width:min(85vmin,420px);height:min(85vmin,420px);min-width:240px;min-height:240px;aspect-ratio:1/1;background:#1a1a1a;border-radius:12px;overflow:hidden;display:flex;align-items:center;justify-content:center;box-shadow:0 24px 60px rgba(0,0,0,0.6)}
+.alumni-fullscreen{position:fixed;inset:0;background:rgba(0,0,0,0.88);display:flex;align-items:center;justify-content:center;z-index:3500;cursor:zoom-out;padding:20px;box-sizing:border-box;animation:fadeIn 0.3s ease;overflow:auto}
+.alumni-fullscreen-square{width:min(85vmin,600px);height:min(85vmin,600px);min-width:280px;min-height:280px;max-width:600px;max-height:600px;background:#ffffff;border-radius:12px;overflow:hidden;display:flex;align-items:center;justify-content:center;box-shadow:0 24px 60px rgba(0,0,0,0.6);animation:slideUp 0.3s ease;position:relative;z-index:3510}
 .alumni-fullscreen-square img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;object-position:center center}
 
 /* lightbox close button */
 .alumni-fullscreen .lightbox-close{
 	position:absolute;
-	top:20px;
-	right:20px;
-	z-index:1450;
-	background:rgba(255,255,255,0.92);
-	color:var(--text-900);
-	border:0;
+	top:10px;
+	right:10px;
+	z-index:3520;
+	background:rgba(0,0,0,0.7);
+	color:#ffffff;
+	border:none;
 	width:40px;
 	height:40px;
-	border-radius:999px;
+	border-radius:50%;
 	display:flex;
 	align-items:center;
 	justify-content:center;
-	font-size:20px;
+	font-size:24px;
 	cursor:pointer;
-	box-shadow:0 6px 18px rgba(12,14,20,0.15);
+	box-shadow:0 4px 12px rgba(0,0,0,0.3);
+	transition:all 0.2s ease;
+	font-weight:bold;
 }
 
-.alumni-fullscreen .lightbox-close:hover{transform:translateY(-2px)}
+.alumni-fullscreen .lightbox-close:hover{
+	background:rgba(0,0,0,0.9);
+	transform:scale(1.15);
+	box-shadow:0 6px 16px rgba(0,0,0,0.4);
+}
 
-@media (max-width:480px){.alumni-fullscreen-square{width:min(90vmin,320px);height:min(90vmin,320px);min-width:200px;min-height:200px}}
+/* Responsive expanded image */
+@media (max-width:1024px){
+	.alumni-fullscreen-square{
+		width:min(85vmin,550px);
+		height:min(85vmin,550px);
+		max-width:550px;
+		max-height:550px;
+	}
+	.alumni-fullscreen .lightbox-close{
+		width:38px;
+		height:38px;
+		font-size:22px;
+		top:8px;
+		right:8px;
+	}
+}
+
+@media (max-width:768px){
+	.alumni-fullscreen{
+		padding:15px;
+	}
+	.alumni-fullscreen-square{
+		width:min(85vmin,500px);
+		height:min(85vmin,500px);
+		max-width:500px;
+		max-height:500px;
+	}
+	.alumni-fullscreen .lightbox-close{
+		width:36px;
+		height:36px;
+		font-size:20px;
+		top:8px;
+		right:8px;
+	}
+}
+
+@media (max-width:600px){
+	.alumni-fullscreen{
+		padding:12px;
+	}
+	.alumni-fullscreen-square{
+		width:95%;
+		height:450px;
+		max-height:450px;
+		border-radius:10px;
+	}
+	.alumni-fullscreen-square img{
+		border-radius:10px;
+	}
+	.alumni-fullscreen .lightbox-close{
+		width:34px;
+		height:34px;
+		font-size:18px;
+		top:8px;
+		right:8px;
+	}
+}
+
+@media (max-width:480px){
+	.alumni-fullscreen{
+		padding:10px;
+	}
+	.alumni-fullscreen-square{
+		width:100%;
+		height:400px;
+		max-height:400px;
+		border-radius:8px;
+	}
+	.alumni-fullscreen-square img{
+		border-radius:8px;
+	}
+	.alumni-fullscreen .lightbox-close{
+		width:32px;
+		height:32px;
+		font-size:16px;
+		top:6px;
+		right:6px;
+	}
+}
+
+@media (max-width:360px){
+	.alumni-fullscreen{
+		padding:8px;
+	}
+	.alumni-fullscreen-square{
+		width:100%;
+		height:350px;
+		max-height:350px;
+		border-radius:8px;
+	}
+	.alumni-fullscreen .lightbox-close{
+		width:30px;
+		height:30px;
+		font-size:14px;
+		top:5px;
+		right:5px;
+	}
+}
+
+@keyframes slideUp {
+	from {
+		transform: translateY(20px);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
 
 
