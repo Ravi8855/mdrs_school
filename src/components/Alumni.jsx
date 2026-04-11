@@ -142,7 +142,7 @@ export default function Alumni() {
                   loading="lazy"
                   onClick={(e) => {
                     e.stopPropagation();
-                    openLightbox(galleryPaths[s.name] || "/react.svg", s.name);
+                    openCard(i);
                   }}
                 />
               </div>

@@ -631,8 +631,9 @@ const TeachersPage = () => {
         .expanded-image-content {
           position: relative;
           max-width: 600px;
-          width: auto;
-          height: 600px;
+          max-height: 700px;
+          width: 100%;
+          height: auto;
           animation: slideUp 0.3s ease;
           border-radius: 12px;
           overflow: hidden;
@@ -642,14 +643,18 @@ const TeachersPage = () => {
           background: white;
           box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
           z-index: 3510;
+          box-sizing: border-box;
+          padding: 0;
         }
 
         .expanded-image-modal img {
-          width: auto;
-          height: 100%;
+          width: 100%;
+          height: auto;
           max-width: 100%;
+          max-height: 700px;
           object-fit: contain;
           border-radius: 12px;
+          display: block;
         }
 
         .expanded-image-close-btn {
@@ -687,7 +692,11 @@ const TeachersPage = () => {
 
           .expanded-image-content {
             max-width: 550px;
-            height: 550px;
+            max-height: 650px;
+          }
+
+          .expanded-image-modal img {
+            max-height: 650px;
           }
 
           .expanded-image-close-btn {
@@ -706,7 +715,11 @@ const TeachersPage = () => {
 
           .expanded-image-content {
             max-width: 500px;
-            height: 500px;
+            max-height: 600px;
+          }
+
+          .expanded-image-modal img {
+            max-height: 600px;
           }
 
           .expanded-image-close-btn {
@@ -725,12 +738,12 @@ const TeachersPage = () => {
 
           .expanded-image-content {
             max-width: 95%;
-            width: 95%;
-            height: 450px;
+            max-height: 500px;
             border-radius: 10px;
           }
 
           .expanded-image-modal img {
+            max-height: 500px;
             border-radius: 10px;
           }
 
@@ -750,12 +763,12 @@ const TeachersPage = () => {
 
           .expanded-image-content {
             max-width: 100%;
-            width: 100%;
-            height: 400px;
+            max-height: 450px;
             border-radius: 8px;
           }
 
           .expanded-image-modal img {
+            max-height: 450px;
             border-radius: 8px;
           }
 
@@ -775,9 +788,12 @@ const TeachersPage = () => {
 
           .expanded-image-content {
             max-width: 100%;
-            width: 100%;
-            height: 350px;
+            max-height: 400px;
             border-radius: 8px;
+          }
+
+          .expanded-image-modal img {
+            max-height: 400px;
           }
 
           .expanded-image-close-btn {
