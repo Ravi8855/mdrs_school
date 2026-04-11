@@ -136,9 +136,12 @@ const Footer = () => {
         }
 
         .footer-divider {
-          height: 1px;
-          background: rgba(251, 191, 36, 0.2);
-          margin-bottom: 28px;
+          display: none;
+        }
+
+        /* Hide first footer-block (contact) on desktop */
+        .footer-grid .footer-block:first-child {
+          display: none;
         }
 
         .footer-title {
@@ -159,11 +162,7 @@ const Footer = () => {
         @media (max-width: 768px) {
           .footer-grid {
             grid-template-columns: 1fr;
-            grid-template-rows: auto auto auto;
           }
-          .footer-grid .footer-credit { order: 2; }
-          .footer-grid .footer-block:first-child { order: 1; }
-          .footer-grid .footer-block:last-child { order: 3; }
         }
 
         @media (max-width: 640px) {
@@ -176,30 +175,58 @@ const Footer = () => {
           .footer-contact-list { align-items: center; }
           .footer-quick-links { align-items: center; }
           .footer-block h4 { text-align: center; }
+          .footer-grid .footer-block:first-child {
+            display: block;
+          }
+          .footer-divider {
+            display: block;
+            height: 1px;
+            background: rgba(251, 191, 36, 0.2);
+            margin-bottom: 28px;
+          }
+        }
+
+        /* Mobile Bottom Section */
+        .footer-mobile-info {
+          display: none;
+        }
+
+        @media (max-width: 640px) {
+          .footer-mobile-info {
+            display: block;
+            text-align: center;
+            padding-top: 20px;
+          }
+
+          .footer-mobile-info-text {
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            margin: 0 0 12px 0;
+            font-weight: 500;
+          }
+
+          .footer-mobile-email {
+            font-size: 0.95rem;
+            color: #fbbf24;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s ease;
+          }
+
+          .footer-mobile-email:hover {
+            color: #ffe066;
+            text-decoration: underline;
+          }
         }
       `}</style>
 
       <div className="footer-inner">
         <div className="footer-grid">
           <div className="footer-block">
-            <h4>Contact</h4>
-            <ul className="footer-contact-list">
-              <li>
-                <a href="https://wa.me/918855025560" target="_blank" rel="noopener noreferrer" className="contact-whatsapp" aria-label="WhatsApp 8855025560">
-                  <FaWhatsapp />
-                  <span>8855025560</span>
-                </a>
-              </li>
-              <li>
-                <a href="mailto:ravichalmar@gmail.com" className="contact-email" aria-label="Email ravichalmar@gmail.com">
-                  <FaEnvelope />
-                  <span>ravichalmar@gmail.com</span>
-                </a>
-              </li>
-            </ul>
+           
           </div>
           <div className="footer-credit">
-            <p className="footer-title">Proudly built by SSLC 2015–2016 Batch Students</p>
+            <p className="footer-title"> Built by SSLC 2015–2016 Batch Students</p>
           </div>
           <div className="footer-block">
             <h4>Quick Links</h4>
@@ -213,7 +240,10 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="footer-divider" />
+        <div className="footer-mobile-info">
+          <p className="footer-mobile-info-text">For extra information feel free to reach out</p>
+          <a href="mailto:ravichalmar@gmail.com" className="footer-mobile-email">ravichalmar@gmail.com</a>
+        </div>
       </div>
     </footer>
   );

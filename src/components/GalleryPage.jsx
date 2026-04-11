@@ -291,8 +291,9 @@ const GalleryPage = () => {
                     transition: 'all 0.4s ease',
                 }} className="memory-share-card">
                     <div className="memory-share-text">
-                        Share your favorite school<br />
-                        memories 
+                        Share your favorite memories  <br />
+                        with us
+                        
                     </div>
                 </div>
             </div>

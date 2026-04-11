@@ -19,7 +19,7 @@ const SchoolHome = ({ onNavigate }) => {
               rgba(15, 23, 42, 0.5) 45%,
               rgba(15, 23, 42, 0.82) 100%
             ),
-            url(/school-building.jpg);
+            url(/gallery/img12.jpg);
           background-size: cover;
           background-position: center center;
           background-repeat: no-repeat;

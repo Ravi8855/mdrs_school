@@ -143,9 +143,9 @@ const TeachersPage = () => {
         /* Teachers Grid */
         .teachers-grid {
           display: grid;
-          grid-template-columns: repeat(2, 1fr);
+          grid-template-columns: repeat(3, 1fr);
           gap: 20px;
-          max-width: 1000px;
+          width: 100%;
           margin: 0 auto;
         }
 
@@ -189,9 +189,24 @@ const TeachersPage = () => {
         }
 
         /* Responsive */
-        @media (max-width: 768px) {
+        @media (max-width: 1200px) {
           .teachers-grid {
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .page-wrap.teachers-page {
+            padding: var(--space-5);
+          }
+
+          .section-inner {
+            padding: 0;
+          }
+
+          .teachers-grid {
+            grid-template-columns: repeat(3, 1fr);
             gap: 15px;
           }
 
@@ -204,7 +219,7 @@ const TeachersPage = () => {
           }
 
           .teacher-pill {
-            padding: 16px 12px;
+            padding: 14px 10px;
           }
 
           .teacher-img {
@@ -214,26 +229,36 @@ const TeachersPage = () => {
         }
 
         @media (max-width: 480px) {
+          .page-wrap.teachers-page {
+            padding: var(--space-4);
+          }
+
+          .section-inner {
+            padding: 0;
+          }
+
           .teachers-grid {
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 10px;
-            padding: 0 8px;
+            width: 100%;
+            padding: 0;
           }
 
           .teacher-pill {
-            padding: 12px 10px;
+            padding: 12px 8px;
             border-radius: 14px;
           }
 
           .teacher-pill div {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 700;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
+            word-break: break-word;
           }
 
           .teacher-img {
-            width: 65px;
-            height: 65px;
+            width: 60px;
+            height: 60px;
             border: 2px solid white;
           }
 
@@ -269,24 +294,34 @@ const TeachersPage = () => {
 
         /* Extra small devices */
         @media (max-width: 360px) {
+          .page-wrap.teachers-page {
+            padding: var(--space-3);
+          }
+
+          .section-inner {
+            padding: 0;
+          }
+
           .teachers-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-            padding: 0 4px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            padding: 0;
           }
 
           .teacher-pill {
-            padding: 10px 8px;
+            padding: 8px 6px;
+            border-radius: 12px;
           }
 
           .teacher-pill div {
-            font-size: 0.85rem;
-            margin-bottom: 8px;
+            font-size: 0.75rem;
+            margin-bottom: 6px;
+            word-break: break-word;
           }
 
           .teacher-img {
-            width: 60px;
-            height: 60px;
+            width: 55px;
+            height: 55px;
           }
 
           .principal-card {
