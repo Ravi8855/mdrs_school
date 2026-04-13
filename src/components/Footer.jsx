@@ -1,5 +1,5 @@
 import React from "react";
-import { FaEnvelope, FaWhatsapp } from "react-icons/fa";
+import FloatingBubbles from "./FloatingBubbles";
 
 const QUICK_LINKS = [
   { id: "home", label: "Home" },
@@ -16,14 +16,18 @@ const Footer = () => {
     <footer className="mdrs-footer">
       <style>{`
         .mdrs-footer {
-          background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
-          color: #e2e8f0;
+          position: relative;
+          overflow: hidden;
+          background: linear-gradient(to top, #e0f7ff 0%, #eef4ff 42%, #f3e8ff 100%);
+          color: #1e293b;
           font-family: var(--font-body, 'Poppins', sans-serif);
-          box-shadow: 0 -4px 24px rgba(0,0,0,0.12);
+          box-shadow: 0 -6px 28px rgba(99, 102, 241, 0.1);
           padding: 12px clamp(16px, 4vw, 24px) clamp(20px, 4vw, 28px);
         }
 
         .footer-inner {
+          position: relative;
+          z-index: 10;
           max-width: 1000px;
           margin: 0 auto;
           width: 100%;
@@ -46,11 +50,11 @@ const Footer = () => {
           font-size: 1rem;
           font-weight: 600;
           margin: 0 0 8px 0;
-          color: #fbbf24;
+          color: #5b21b6;
         }
         .footer-credit .footer-copy {
           font-size: 0.875rem;
-          color: #94a3b8;
+          color: #475569;
           margin: 0;
           text-align: center;
         }
@@ -60,7 +64,7 @@ const Footer = () => {
           font-weight: 700;
           text-transform: uppercase;
           letter-spacing: 0.12em;
-          color: #fbbf24;
+          color: #6d28d9;
           margin: 0 0 16px 0;
         }
 
@@ -77,7 +81,7 @@ const Footer = () => {
           display: inline-flex;
           align-items: center;
           gap: 10px;
-          color: #e2e8f0;
+          color: #334155;
           text-decoration: none;
           font-size: clamp(0.9rem, 2vw, 0.95rem);
           padding: 8px 0;
@@ -86,7 +90,7 @@ const Footer = () => {
         }
 
         .footer-contact-list a:hover {
-          color: #fbbf24;
+          color: #7c3aed;
           transform: translateX(4px);
         }
 
@@ -105,10 +109,10 @@ const Footer = () => {
         }
 
         .footer-contact-list a.contact-email svg {
-          color: #e2e8f0;
+          color: #64748b;
         }
         .footer-contact-list a.contact-email:hover svg {
-          color: #fbbf24;
+          color: #7c3aed;
         }
 
         .footer-quick-links {
@@ -121,7 +125,7 @@ const Footer = () => {
         }
 
         .footer-quick-links a {
-          color: #cbd5e1;
+          color: #334155;
           text-decoration: none;
           font-size: clamp(0.9rem, 2vw, 0.95rem);
           padding: 8px 0;
@@ -132,7 +136,7 @@ const Footer = () => {
         }
 
         .footer-quick-links a:hover {
-          color: #fbbf24;
+          color: #7c3aed;
           padding-left: 4px;
         }
 
@@ -149,14 +153,14 @@ const Footer = () => {
           font-size: 1rem;
           font-weight: 600;
           margin-bottom: 16px;
-          color: #fbbf24;
+          color: #5b21b6;
           text-align: center;
         }
 
         .footer-copy {
           font-size: 0.875rem;
           text-align: center;
-          color: #94a3b8;
+          color: #475569;
           margin: 0;
         }
 
@@ -182,7 +186,7 @@ const Footer = () => {
           .footer-divider {
             display: block;
             height: 1px;
-            background: rgba(251, 191, 36, 0.2);
+            background: rgba(109, 40, 217, 0.18);
             margin-bottom: 28px;
           }
         }
@@ -201,25 +205,27 @@ const Footer = () => {
 
           .footer-mobile-info-text {
             font-size: 0.9rem;
-            color: #e2e8f0;
+            color: #334155;
             margin: 0 0 12px 0;
             font-weight: 500;
           }
 
           .footer-mobile-email {
             font-size: 0.95rem;
-            color: #fbbf24;
+            color: #6d28d9;
             font-weight: 600;
             text-decoration: none;
             transition: color 0.2s ease;
           }
 
           .footer-mobile-email:hover {
-            color: #ffe066;
+            color: #7c3aed;
             text-decoration: underline;
           }
         }
       `}</style>
+
+      <FloatingBubbles />
 
       <div className="footer-inner">
         <div className="footer-grid">

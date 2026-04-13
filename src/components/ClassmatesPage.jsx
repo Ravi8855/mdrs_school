@@ -47,7 +47,7 @@ const ClassmatesPage = () => {
             className="shuffle-btn"
             type="button"
           >
-            Shuffle
+            click me
           </button>
         </div>
       </div>

@@ -5,14 +5,14 @@ export const boysHouses = [
     name: "Krishna House",
     houseMaster: "Subhas Sir",
     houseLeader: "Ambadas",
-    roommates: ["Marilinga", "Ningappa", "Viresh", "Golallappa", "Ambadas"],
+    roommates: ["Marilinga", "Ningappa",  "Golallappa", "Ambadas"],
   },
   {
     id: "bhima",
     name: "Bhima House",
-    houseMaster: "Ramesh Sir",
+    houseMaster: "Madivalappa sir ",
     houseLeader: "Arun",
-    roommates: ["Sunil","Praveen" , "Arun"],
+    roommates: ["Sunil","Praveen" ,"Chandrashekar", "Arun"],
   },
   {
     id: "sindhu",
@@ -26,7 +26,7 @@ export const boysHouses = [
     name: "Godhawari House",
     houseMaster: "Rajkumar Sir",
     houseLeader: "Hrutik",
-    roommates: ["Jatteppa", "Mallikarjun", "Praveen", "Mahesh", "Hrutik"],
+    roommates: ["Jatteppa", "Mallikarjun", "Praveen","Viresh", "Mahesh", "Hrutik"],
   },
 ];
 
