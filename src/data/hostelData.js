@@ -30,7 +30,7 @@ export const boysHouses = [
   },
 ];
 
-/** Girls hostel — Kaveri houses */
+/** Girls hostel — Kaveri & Yamuna houses */
 export const girlsHouses = [
   {
     id: "kaveri-1",
@@ -45,6 +45,20 @@ export const girlsHouses = [
     houseMaster: "Renuka Mam",
     houseLeader: "Chaitra",
     roommates: ["Shweta", "Umashree", "Chaitra"],
+  },
+  {
+    id: "yamuna-1",
+    name: "Yamuna House-1",
+    houseMaster: "Shilpa Mam",
+    houseLeader: "Suchitra",
+    roommates: ["Mamtha", "Suchitra"],
+  },
+  {
+    id: "yamuna-2",
+    name: "Yamuna House-2",
+    houseMaster: "Shilpa Mam",
+    houseLeader: "Savita",
+    roommates: ["Savita", "Roopa"],
   },
 ];
 
