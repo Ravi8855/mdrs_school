@@ -30,8 +30,23 @@ export const boysHouses = [
   },
 ];
 
-/** Girls hostel — placeholder until data is available */
-export const girlsHouses = [];
+/** Girls hostel — Kaveri houses */
+export const girlsHouses = [
+  {
+    id: "kaveri-1",
+    name: "Kaveri House-1",
+    houseMaster: "Renuka Mam",
+    houseLeader: "Parvati",
+    roommates: ["Parvati", "Ambika"],
+  },
+  {
+    id: "kaveri-2",
+    name: "Kaveri House-2",
+    houseMaster: "Renuka Mam",
+    houseLeader: "Chaitra",
+    roommates: ["Shweta", "Umashree", "Chaitra"],
+  },
+];
 
 export function getHousesForGender(gender) {
   return gender === "boys" ? boysHouses : girlsHouses;
