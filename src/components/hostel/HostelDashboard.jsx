@@ -1,0 +1,45 @@
+import React from "react";
+import { Link } from "react-router-dom";
+import { FaFemale, FaMale } from "react-icons/fa";
+import "./Hostel.css";
+
+export default function HostelDashboard() {
+  return (
+    <div className="hostel-page">
+      <div className="hostel-inner">
+        <Link to="/" className="hostel-back" aria-label="Back to school home">
+          ← Back to home
+        </Link>
+        <h1 className="hostel-title">Our Hostel</h1>
+        <p className="hostel-subtitle">
+          Explore boys and girls hostel houses, house masters, leaders, and roommates in one
+          place.
+        </p>
+
+        <div className="hostel-dashboard-grid">
+          <Link to="/hostel/boys" className="hostel-dash-card hostel-dash-card--boys">
+            <span className="hostel-dash-card-icon" aria-hidden>
+              <FaMale />
+            </span>
+            <h2>Boys Hostel</h2>
+            <p>View all houses, masters, leaders, and students.</p>
+            <span className="hostel-dash-cta">
+              Open rooms <span aria-hidden>→</span>
+            </span>
+          </Link>
+
+          <Link to="/hostel/girls" className="hostel-dash-card hostel-dash-card--girls">
+            <span className="hostel-dash-card-icon" aria-hidden>
+              <FaFemale />
+            </span>
+            <h2>Girls Hostel</h2>
+            <p>Same layout — details will be added soon.</p>
+            <span className="hostel-dash-cta">
+              Open rooms <span aria-hidden>→</span>
+            </span>
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}

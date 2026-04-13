@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const Navbar = ({ onNavigate, onLogout }) => {
+    const location = useLocation();
+    const navigate = useNavigate();
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -19,18 +22,29 @@ const Navbar = ({ onNavigate, onLogout }) => {
         return () => { document.body.style.overflow = ''; };
     }, [mobileMenuOpen]);
 
+    const scrollToSection = (page) => {
+        const el = document.getElementById(page);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
     const handleNavClick = (page) => {
-        onNavigate(page);
+        if (location.pathname === '/') {
+            onNavigate(page);
+        } else {
+            navigate('/');
+            setTimeout(() => scrollToSection(page), 80);
+        }
         setMobileMenuOpen(false);
     };
 
     const navItems = [
-        { id: 'home', label: 'Home' },
-        { id: 'classmates', label: 'Classmates' },
-        { id: 'teachers', label: 'Teachers' },
-        { id: 'alumni', label: 'Alumni' },
-        { id: 'gallery', label: 'Gallery' },
-        { id: 'bell-game', label: 'Bell Game' },
+        { kind: 'scroll', id: 'home', label: 'Home' },
+        { kind: 'scroll', id: 'classmates', label: 'Classmates' },
+        { kind: 'scroll', id: 'teachers', label: 'Teachers' },
+        { kind: 'scroll', id: 'alumni', label: 'Alumni' },
+        { kind: 'link', to: '/hostel', label: 'Our Hostel' },
+        { kind: 'scroll', id: 'gallery', label: 'Gallery' },
+        { kind: 'scroll', id: 'bell-game', label: 'Bell Game' },
     ];
 
     return (
@@ -96,6 +110,11 @@ const Navbar = ({ onNavigate, onLogout }) => {
                     white-space: nowrap;
                     background: transparent;
                     border: none;
+                }
+                a.mdrs-nav-item {
+                    text-decoration: none;
+                    display: inline-block;
+                    box-sizing: border-box;
                 }
                 .mdrs-nav-item:hover {
                     background: rgba(251, 191, 36, 0.15);
@@ -196,7 +215,7 @@ const Navbar = ({ onNavigate, onLogout }) => {
                         onClick={() => handleNavClick('home')}
                         role="button"
                         tabIndex={0}
-                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleNavClick('home'); }}
+                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleNavClick('home'); } }}
                     >
                         MDRS School
                     </div>
@@ -212,16 +231,27 @@ const Navbar = ({ onNavigate, onLogout }) => {
                     </button>
 
                     <div className="mdrs-nav-links">
-                        {navItems.map((item) => (
-                            <button
-                                key={item.id}
-                                type="button"
-                                className="mdrs-nav-item"
-                                onClick={() => handleNavClick(item.id)}
-                            >
-                                {item.label}
-                            </button>
-                        ))}
+                        {navItems.map((item) =>
+                            item.kind === 'link' ? (
+                                <Link
+                                    key={item.to}
+                                    to={item.to}
+                                    className="mdrs-nav-item"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                >
+                                    {item.label}
+                                </Link>
+                            ) : (
+                                <button
+                                    key={item.id}
+                                    type="button"
+                                    className="mdrs-nav-item"
+                                    onClick={() => handleNavClick(item.id)}
+                                >
+                                    {item.label}
+                                </button>
+                            )
+                        )}
                         {onLogout && (
                             <button
                                 type="button"
@@ -235,16 +265,27 @@ const Navbar = ({ onNavigate, onLogout }) => {
                 </div>
 
                 <div className={`mdrs-nav-dropdown ${mobileMenuOpen ? 'open' : ''}`}>
-                    {navItems.map((item) => (
-                        <button
-                            key={item.id}
-                            type="button"
-                            className="mdrs-nav-item"
-                            onClick={() => handleNavClick(item.id)}
-                        >
-                            {item.label}
-                        </button>
-                    ))}
+                    {navItems.map((item) =>
+                        item.kind === 'link' ? (
+                            <Link
+                                key={item.to}
+                                to={item.to}
+                                className="mdrs-nav-item"
+                                onClick={() => setMobileMenuOpen(false)}
+                            >
+                                {item.label}
+                            </Link>
+                        ) : (
+                            <button
+                                key={item.id}
+                                type="button"
+                                className="mdrs-nav-item"
+                                onClick={() => handleNavClick(item.id)}
+                            >
+                                {item.label}
+                            </button>
+                        )
+                    )}
                     {onLogout && (
                         <button
                             type="button"

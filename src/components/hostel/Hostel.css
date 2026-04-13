@@ -1,0 +1,498 @@
+.hostel-page {
+  --hostel-blue: #2563eb;
+  --hostel-blue-dark: #1d4ed8;
+  --hostel-blue-soft: #dbeafe;
+  --hostel-pink: #db2777;
+  --hostel-purple: #7c3aed;
+  --hostel-pink-soft: #fce7f3;
+  --hostel-purple-soft: #ede9fe;
+  min-height: 60vh;
+  padding: clamp(24px, 5vw, 48px) clamp(16px, 4vw, 28px) clamp(40px, 6vw, 64px);
+  font-family: var(--font-body, "Poppins", sans-serif);
+  background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+  box-sizing: border-box;
+}
+
+.hostel-page[data-gender="boys"] {
+  --accent: var(--hostel-blue);
+  --accent-dark: var(--hostel-blue-dark);
+  --accent-soft: var(--hostel-blue-soft);
+}
+
+.hostel-page[data-gender="girls"] {
+  --accent: var(--hostel-pink);
+  --accent-dark: var(--hostel-purple);
+  --accent-soft: linear-gradient(135deg, #fce7f3 0%, #ede9fe 100%);
+}
+
+.hostel-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.hostel-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #475569;
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease,
+    box-shadow 0.2s ease;
+  text-decoration: none;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+}
+
+.hostel-back:hover {
+  color: var(--accent, var(--hostel-blue));
+  border-color: rgba(37, 99, 235, 0.25);
+  transform: translateX(-2px);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.12);
+}
+
+.hostel-page[data-gender="girls"] .hostel-back:hover {
+  border-color: rgba(219, 39, 119, 0.3);
+  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.12);
+}
+
+.hostel-title {
+  font-family: var(--font-display, "Poppins", sans-serif);
+  font-size: clamp(1.65rem, 4vw, 2.25rem);
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 8px;
+  letter-spacing: -0.02em;
+}
+
+.hostel-subtitle {
+  margin: 0 0 28px;
+  font-size: 1rem;
+  color: #64748b;
+  max-width: 560px;
+  line-height: 1.55;
+}
+
+.hostel-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: clamp(20px, 4vw, 28px);
+}
+
+.hostel-dash-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding: clamp(28px, 5vw, 36px);
+  border-radius: 20px;
+  text-decoration: none;
+  color: inherit;
+  overflow: hidden;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.hostel-dash-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
+}
+
+.hostel-dash-card--boys {
+  background: linear-gradient(145deg, #eff6ff 0%, #ffffff 50%, #dbeafe 100%);
+  border-color: rgba(37, 99, 235, 0.15);
+}
+
+.hostel-dash-card--boys:hover {
+  border-color: rgba(37, 99, 235, 0.35);
+  box-shadow: 0 20px 48px rgba(37, 99, 235, 0.18);
+}
+
+.hostel-dash-card--girls {
+  background: linear-gradient(145deg, #fdf2f8 0%, #ffffff 45%, #fae8ff 100%);
+  border-color: rgba(219, 39, 119, 0.12);
+}
+
+.hostel-dash-card--girls:hover {
+  border-color: rgba(124, 58, 237, 0.28);
+  box-shadow: 0 20px 48px rgba(219, 39, 119, 0.15);
+}
+
+.hostel-dash-card-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.hostel-dash-card--boys .hostel-dash-card-icon {
+  background: rgba(37, 99, 235, 0.12);
+  color: #1d4ed8;
+}
+
+.hostel-dash-card--girls .hostel-dash-card-icon {
+  background: rgba(219, 39, 119, 0.12);
+  color: #be185d;
+}
+
+.hostel-dash-card h2 {
+  margin: 0;
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.hostel-dash-card p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.hostel-dash-cta {
+  margin-top: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hostel-dash-card--boys .hostel-dash-cta {
+  color: #1d4ed8;
+}
+
+.hostel-dash-card--girls .hostel-dash-cta {
+  color: #a21caf;
+}
+
+.hostel-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+@media (min-width: 640px) {
+  .hostel-toolbar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.hostel-search-wrap {
+  flex: 1;
+  max-width: 400px;
+}
+
+.hostel-search {
+  width: 100%;
+  padding: 12px 16px 12px 44px;
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  font-size: 0.95rem;
+  font-family: inherit;
+  background: #fff;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hostel-search:focus {
+  outline: none;
+  border-color: var(--accent, #2563eb);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.hostel-page[data-gender="girls"] .hostel-search:focus {
+  border-color: #db2777;
+  box-shadow: 0 0 0 3px rgba(219, 39, 119, 0.12);
+}
+
+.hostel-search-icon {
+  position: relative;
+}
+
+.hostel-search-icon svg {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  font-size: 1rem;
+  pointer-events: none;
+}
+
+.hostel-meta-pill {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+  background: #fff;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  white-space: nowrap;
+}
+
+.hostel-room-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+  gap: 20px;
+}
+
+.hostel-room-card {
+  display: block;
+  padding: 22px 20px;
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.06);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.hostel-room-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.1);
+  border-color: rgba(37, 99, 235, 0.2);
+}
+
+.hostel-page[data-gender="girls"] .hostel-room-card:hover {
+  border-color: rgba(219, 39, 119, 0.22);
+}
+
+.hostel-room-card-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.hostel-room-card-icon {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  background: var(--accent-soft, #dbeafe);
+  color: var(--accent, #2563eb);
+}
+
+.hostel-page[data-gender="girls"] .hostel-room-card-icon {
+  background: linear-gradient(135deg, #fce7f3, #ede9fe);
+  color: #a21caf;
+}
+
+.hostel-room-card h3 {
+  margin: 0 0 4px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.hostel-room-card-meta {
+  font-size: 0.82rem;
+  color: #64748b;
+  line-height: 1.45;
+}
+
+.hostel-room-card-meta span {
+  display: block;
+}
+
+.hostel-room-count {
+  margin-top: 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent, #2563eb);
+  letter-spacing: 0.02em;
+}
+
+.hostel-page[data-gender="girls"] .hostel-room-count {
+  color: #be185d;
+}
+
+.hostel-empty {
+  text-align: center;
+  padding: 48px 24px;
+  background: #fff;
+  border-radius: 16px;
+  border: 1px dashed rgba(15, 23, 42, 0.12);
+  color: #64748b;
+}
+
+.hostel-empty h3 {
+  margin: 0 0 8px;
+  color: #334155;
+}
+
+.hostel-details-hero {
+  background: #fff;
+  border-radius: 20px;
+  padding: clamp(22px, 4vw, 32px);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
+  margin-bottom: 28px;
+}
+
+.hostel-details-hero h1 {
+  margin: 0 0 20px;
+  font-size: clamp(1.4rem, 3.5vw, 1.85rem);
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.hostel-details-row {
+  display: grid;
+  gap: 16px;
+}
+
+@media (min-width: 560px) {
+  .hostel-details-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.hostel-detail-block {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: var(--accent-soft, #f1f5f9);
+}
+
+.hostel-page[data-gender="girls"] .hostel-detail-block {
+  background: linear-gradient(135deg, #fdf2f8, #faf5ff);
+}
+
+.hostel-detail-block svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  font-size: 1.15rem;
+  color: var(--accent, #2563eb);
+}
+
+.hostel-page[data-gender="girls"] .hostel-detail-block svg {
+  color: #be185d;
+}
+
+.hostel-detail-block label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #64748b;
+  margin-bottom: 4px;
+}
+
+.hostel-detail-block strong {
+  font-size: 1rem;
+  color: #0f172a;
+}
+
+.hostel-students {
+  background: #fff;
+  border-radius: 20px;
+  padding: clamp(20px, 4vw, 28px);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  box-shadow: 0 2px 16px rgba(15, 23, 42, 0.05);
+}
+
+.hostel-students h2 {
+  margin: 0 0 18px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.hostel-student-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hostel-student-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid transparent;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.hostel-student-item--leader {
+  background: linear-gradient(90deg, rgba(251, 191, 36, 0.12), transparent);
+  border-color: rgba(251, 191, 36, 0.35);
+}
+
+.hostel-page[data-gender="boys"] .hostel-student-item--leader {
+  background: linear-gradient(90deg, rgba(37, 99, 235, 0.1), transparent);
+  border-color: rgba(37, 99, 235, 0.2);
+}
+
+.hostel-page[data-gender="girls"] .hostel-student-item--leader {
+  background: linear-gradient(90deg, rgba(219, 39, 119, 0.1), transparent);
+  border-color: rgba(219, 39, 119, 0.2);
+}
+
+.hostel-student-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e2e8f0;
+  color: #475569;
+  flex-shrink: 0;
+}
+
+.hostel-student-item--leader .hostel-student-icon {
+  background: rgba(251, 191, 36, 0.35);
+}
+
+.hostel-student-name {
+  font-weight: 600;
+  color: #1e293b;
+  flex: 1;
+}
+
+.hostel-star {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.hostel-not-found {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.hostel-not-found p {
+  color: #64748b;
+  margin-bottom: 20px;
+}
+
+.hostel-route-main {
+  min-height: 40vh;
+}

@@ -6,6 +6,7 @@ const QUICK_LINKS = [
   { id: "classmates", label: "Classmates" },
   { id: "teachers", label: "Teachers" },
   { id: "alumni", label: "Alumni" },
+  { id: "hostel", label: "Our Hostel", href: "/hostel" },
   { id: "gallery", label: "Gallery" },
   { id: "bell-game", label: "Bell Game" },
 ];
@@ -231,9 +232,9 @@ const Footer = () => {
           <div className="footer-block">
             <h4>Quick Links</h4>
             <ul className="footer-quick-links">
-              {QUICK_LINKS.map(({ id, label }) => (
+              {QUICK_LINKS.map(({ id, label, href }) => (
                 <li key={id}>
-                  <a href={`#${id}`}>{label}</a>
+                  <a href={href ?? `/#${id}`}>{label}</a>
                 </li>
               ))}
             </ul>

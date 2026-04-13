@@ -10,6 +10,11 @@ import TeachersPage from "./components/TeachersPage";
 import SchoolHome from "./components/SchoolHome";
 import GalleryPage from "./components/GalleryPage";
 import Alumni from "./components/Alumni";
+import HostelLayout from "./components/hostel/HostelLayout";
+import HostelDashboard from "./components/hostel/HostelDashboard";
+import RoomList from "./components/hostel/RoomList";
+import RoomDetails from "./components/hostel/RoomDetails";
+import HostelTeaser from "./components/hostel/HostelTeaser";
 import BellRingMadness from "./components/BellRingMadness";
 import Footer from "./components/Footer";
 
@@ -68,6 +73,10 @@ function AppContent({ onLogout }) {
         <AnimatedSection><Alumni /></AnimatedSection>
       </section>
 
+      <section id="hostel" className="page-section">
+        <AnimatedSection><HostelTeaser /></AnimatedSection>
+      </section>
+
       <section id="gallery" className="page-section">
         <AnimatedSection><GalleryPage /></AnimatedSection>
       </section>
@@ -117,6 +126,9 @@ function App() {
     }
   };
 
+  const authed =
+    typeof sessionStorage !== "undefined" && sessionStorage.getItem(SESSION_KEY) === "true";
+
   return (
     <Routes>
       <Route
@@ -132,13 +144,23 @@ function App() {
       <Route
         path="/"
         element={
-          (typeof sessionStorage !== "undefined" && sessionStorage.getItem(SESSION_KEY) === "true") ? (
+          authed ? (
             <AppContent onLogout={handleLogout} />
           ) : (
             <Navigate to="/login" replace />
           )
         }
       />
+      <Route
+        path="/hostel"
+        element={authed ? <HostelLayout onLogout={handleLogout} /> : <Navigate to="/login" replace />}
+      >
+        <Route index element={<HostelDashboard />} />
+        <Route path="boys" element={<RoomList gender="boys" />} />
+        <Route path="girls" element={<RoomList gender="girls" />} />
+        <Route path="boys/:roomId" element={<RoomDetails gender="boys" />} />
+        <Route path="girls/:roomId" element={<RoomDetails gender="girls" />} />
+      </Route>
     </Routes>
   );
 }
