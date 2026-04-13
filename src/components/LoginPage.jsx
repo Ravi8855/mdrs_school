@@ -1,17 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "./Login.css";
 
-const POPUP_DURATION = 3000;
+const POPUP_DURATION = 3500;
+const SUCCESS_NAV_DELAY_MS = 2800;
 const SESSION_KEY = "isLoggedIn";
 
 const LoginPage = ({ onLogin }) => {
   const navigate = useNavigate();
+  const navigateAfterLoginRef = useRef(null);
   const adminUser = import.meta.env.VITE_ADMIN_USER ?? "admin";
   const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD ?? "admin0511";
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [focused, setFocused] = useState({ username: false, password: false });
   const [popup, setPopup] = useState({ show: false, type: "success", message: "" });
 
@@ -22,10 +26,19 @@ const LoginPage = ({ onLogin }) => {
   }, [navigate]);
 
   useEffect(() => {
-    if (!popup.show) return;
+    return () => {
+      if (navigateAfterLoginRef.current) {
+        clearTimeout(navigateAfterLoginRef.current);
+        navigateAfterLoginRef.current = null;
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!popup.show || popup.type !== "error") return;
     const timer = setTimeout(() => setPopup((p) => ({ ...p, show: false })), POPUP_DURATION);
     return () => clearTimeout(timer);
-  }, [popup.show]);
+  }, [popup.show, popup.type]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -36,10 +49,21 @@ const LoginPage = ({ onLogin }) => {
       return;
     }
     if (user === adminUser && pass === adminPassword) {
+      /* Session first so "/" can authenticate; defer onLogin() until after popup —
+         immediate onLogin() sets App isLoggedIn and swaps this route for <Navigate />,
+         which unmounts LoginPage before the success popup can paint. */
       sessionStorage.setItem(SESSION_KEY, "true");
-      onLogin?.();
-      setPopup({ show: true, type: "success", message: "Login successful! Welcome back." });
-      navigate("/", { replace: true });
+      setPopup({
+        show: true,
+        type: "success",
+        message: "You are signed in. Taking you to the school home…",
+      });
+      if (navigateAfterLoginRef.current) clearTimeout(navigateAfterLoginRef.current);
+      navigateAfterLoginRef.current = setTimeout(() => {
+        navigateAfterLoginRef.current = null;
+        onLogin?.();
+        navigate("/", { replace: true });
+      }, SUCCESS_NAV_DELAY_MS);
     } else {
       setPopup({ show: true, type: "error", message: "Invalid username or password." });
     }
@@ -48,26 +72,41 @@ const LoginPage = ({ onLogin }) => {
   return (
     <div className="login-page">
       {popup.show && (
-        <div
-          className={`login-popup login-popup-${popup.type}`}
-          role="alert"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: "50%",
-            transform: "translateX(-50%)",
-            zIndex: 10000,
-            padding: "14px 24px",
-            borderRadius: "0 0 8px 8px",
-            color: "#fff",
-            fontWeight: 600,
-            fontSize: "1rem",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-            maxWidth: "90vw",
-            textAlign: "center",
-          }}
-        >
-          {popup.message}
+        <div className={`login-popup-backdrop login-popup-backdrop--${popup.type}`} aria-live="polite">
+          <div
+            className="login-popup-dialog"
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="login-popup-title"
+          >
+            {popup.type === "success" ? (
+              <div className="login-popup-icon login-popup-icon--success" aria-hidden>
+                <svg viewBox="0 0 24 24" width="28" height="24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+            ) : (
+              <div className="login-popup-icon login-popup-icon--error" aria-hidden>
+                !
+              </div>
+            )}
+            <h2 id="login-popup-title" className="login-popup-title">
+              {popup.type === "success" ? "Login successful" : "Sign in failed"}
+            </h2>
+            <p className="login-popup-message">{popup.message}</p>
+            {popup.type === "error" && (
+              <button
+                type="button"
+                className="login-popup-dismiss"
+                onClick={() => setPopup((p) => ({ ...p, show: false }))}
+              >
+                OK
+              </button>
+            )}
+            {popup.type === "success" && (
+              <p className="login-popup-hint">Redirecting in a moment…</p>
+            )}
+          </div>
         </div>
       )}
       <div className="login-bg">
@@ -118,19 +157,31 @@ const LoginPage = ({ onLogin }) => {
                 >
                   Password
                 </label>
-                <input
-                  id="login-password"
-                  type="password"
-                  className="login-input"
-                  placeholder="Enter password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  onFocus={() => setFocused((f) => ({ ...f, password: true }))}
-                  onBlur={() => setFocused((f) => ({ ...f, password: false }))}
-                  autoComplete="current-password"
-                  required
-                />
-                <span className="login-input-border" />
+                <div className="login-input-wrap">
+                  <input
+                    id="login-password"
+                    type={showPassword ? "text" : "password"}
+                    className="login-input login-input--password-toggle"
+                    placeholder="Enter password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    onFocus={() => setFocused((f) => ({ ...f, password: true }))}
+                    onBlur={() => setFocused((f) => ({ ...f, password: false }))}
+                    autoComplete="current-password"
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="login-password-toggle"
+                    onClick={() => setShowPassword((v) => !v)}
+                    onMouseDown={(e) => e.preventDefault()}
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    aria-pressed={showPassword}
+                  >
+                    {showPassword ? <FaEyeSlash aria-hidden /> : <FaEye aria-hidden />}
+                  </button>
+                  <span className="login-input-border" />
+                </div>
               </div>
 
               <div className="login-options">
