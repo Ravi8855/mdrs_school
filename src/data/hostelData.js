@@ -26,7 +26,7 @@ export const boysHouses = [
     name: "Godhawari House",
     houseMaster: "Rajkumar Sir",
     houseLeader: "Hrutik",
-    roommates: ["Jettappa", "Mallikarjun", "Mahesh", "Hrutik"],
+    roommates: ["Jatteppa", "Mallikarjun", "Praveen", "Mahesh", "Hrutik"],
   },
 ];
 

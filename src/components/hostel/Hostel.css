@@ -369,8 +369,8 @@
 
 .hostel-detail-block {
   display: flex;
-  align-items: flex-start;
-  gap: 12px;
+  align-items: center;
+  gap: 14px;
   padding: 14px 16px;
   border-radius: 14px;
   background: var(--accent-soft, #f1f5f9);
@@ -380,15 +380,8 @@
   background: linear-gradient(135deg, #fdf2f8, #faf5ff);
 }
 
-.hostel-detail-block svg {
+.hostel-detail-block .hostel-avatar {
   flex-shrink: 0;
-  margin-top: 2px;
-  font-size: 1.15rem;
-  color: var(--accent, #2563eb);
-}
-
-.hostel-page[data-gender="girls"] .hostel-detail-block svg {
-  color: #be185d;
 }
 
 .hostel-detail-block label {
@@ -456,20 +449,21 @@
   border-color: rgba(219, 39, 119, 0.2);
 }
 
-.hostel-student-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #e2e8f0;
-  color: #475569;
+.hostel-student-avatar {
   flex-shrink: 0;
+  box-shadow: 0 0 0 2px #fff;
 }
 
-.hostel-student-item--leader .hostel-student-icon {
-  background: rgba(251, 191, 36, 0.35);
+.hostel-student-item--leader .hostel-student-avatar {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(251, 191, 36, 0.65);
+}
+
+.hostel-page[data-gender="boys"] .hostel-student-item--leader .hostel-student-avatar {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(37, 99, 235, 0.35);
+}
+
+.hostel-page[data-gender="girls"] .hostel-student-item--leader .hostel-student-avatar {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(219, 39, 119, 0.35);
 }
 
 .hostel-student-name {
@@ -495,4 +489,110 @@
 
 .hostel-route-main {
   min-height: 40vh;
+}
+
+/* Circular profile photos (teachers + students) */
+.hostel-avatar {
+  display: block;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center top;
+  flex-shrink: 0;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12);
+}
+
+.hostel-avatar--placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  background: linear-gradient(145deg, #e2e8f0, #cbd5e1);
+  color: #475569;
+  font-weight: 800;
+  font-family: var(--font-display, "Poppins", sans-serif);
+  line-height: 1;
+  user-select: none;
+}
+
+.hostel-avatar--xs.hostel-avatar--placeholder {
+  font-size: 0.7rem;
+}
+
+.hostel-avatar--sm.hostel-avatar--placeholder {
+  font-size: 0.85rem;
+}
+
+.hostel-avatar--md.hostel-avatar--placeholder {
+  font-size: 1rem;
+}
+
+.hostel-avatar--lg.hostel-avatar--placeholder {
+  font-size: 1.35rem;
+}
+
+.hostel-avatar--xs {
+  width: 30px;
+  height: 30px;
+}
+
+.hostel-avatar--sm {
+  width: 42px;
+  height: 42px;
+}
+
+.hostel-avatar--md {
+  width: 48px;
+  height: 48px;
+}
+
+.hostel-avatar--lg {
+  width: 72px;
+  height: 72px;
+}
+
+@media (max-width: 480px) {
+  .hostel-avatar--lg {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+.hostel-room-faces {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(15, 23, 42, 0.06);
+  gap: 0;
+}
+
+.hostel-room-faces .hostel-avatar {
+  margin-left: 0;
+  border-width: 2px;
+}
+
+.hostel-room-faces .hostel-avatar:not(:first-child) {
+  margin-left: -10px;
+}
+
+.hostel-room-faces .hostel-avatar:first-child {
+  z-index: 5;
+}
+
+.hostel-room-faces .hostel-avatar:nth-child(2) {
+  z-index: 4;
+}
+
+.hostel-room-faces .hostel-avatar:nth-child(3) {
+  z-index: 3;
+}
+
+.hostel-room-faces .hostel-avatar:nth-child(4) {
+  z-index: 2;
+}
+
+.hostel-room-faces .hostel-avatar:nth-child(n + 5) {
+  z-index: 1;
 }

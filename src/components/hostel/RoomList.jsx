@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaArrowLeft, FaHome, FaSearch } from "react-icons/fa";
 import { getHousesForGender } from "../../data/hostelData";
+import HostelAvatar from "./HostelAvatar";
 import "./Hostel.css";
 
 const storageKey = (gender) => `mdrs_hostel_search_${gender}`;
@@ -100,6 +101,15 @@ export default function RoomList({ gender }) {
                           <span>Leader: {h.houseLeader}</span>
                         </div>
                       </div>
+                    </div>
+                    <div
+                      className="hostel-room-faces"
+                      aria-label={`Photos: house master and students for ${h.name}`}
+                    >
+                      <HostelAvatar name={h.houseMaster} size="sm" title={`Master ${h.houseMaster}`} />
+                      {(h.roommates || []).map((n) => (
+                        <HostelAvatar key={n} name={n} size="xs" title={n} />
+                      ))}
                     </div>
                     <div className="hostel-room-count">
                       {(h.roommates || []).length} student

@@ -1,7 +1,8 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
-import { FaArrowLeft, FaHome, FaUserGraduate, FaUserTie } from "react-icons/fa";
+import { FaArrowLeft, FaHome } from "react-icons/fa";
 import { getHouseById } from "../../data/hostelData";
+import HostelAvatar from "./HostelAvatar";
 import "./Hostel.css";
 
 function normalizeName(n) {
@@ -48,14 +49,14 @@ export default function RoomDetails({ gender }) {
           </h1>
           <div className="hostel-details-row">
             <div className="hostel-detail-block">
-              <FaUserTie aria-hidden />
+              <HostelAvatar name={house.houseMaster} size="lg" title={house.houseMaster} />
               <div>
                 <label>House Master</label>
                 <strong>{house.houseMaster}</strong>
               </div>
             </div>
             <div className="hostel-detail-block">
-              <FaUserGraduate aria-hidden />
+              <HostelAvatar name={house.houseLeader} size="lg" title={house.houseLeader} />
               <div>
                 <label>House Leader</label>
                 <strong>{house.houseLeader}</strong>
@@ -74,9 +75,7 @@ export default function RoomDetails({ gender }) {
                   key={name}
                   className={`hostel-student-item ${isLeader ? "hostel-student-item--leader" : ""}`}
                 >
-                  <span className="hostel-student-icon" aria-hidden>
-                    <FaUserGraduate />
-                  </span>
+                  <HostelAvatar name={name} size="md" className="hostel-student-avatar" title={name} />
                   <span className="hostel-student-name">{name}</span>
                   {isLeader && (
                     <span className="hostel-star" title="House leader">
