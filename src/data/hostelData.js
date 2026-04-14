@@ -33,32 +33,18 @@ export const boysHouses = [
 /** Girls hostel — Kaveri & Yamuna houses */
 export const girlsHouses = [
   {
-    id: "kaveri-1",
-    name: "Kaveri House-1",
-    houseMaster: "Renuka Mam",
-    houseLeader: "Parvati",
-    roommates: ["Parvati", "Ambika"],
-  },
-  {
-    id: "kaveri-2",
-    name: "Kaveri House-2",
+    id: "kaveri",
+    name: "Kaveri House",
     houseMaster: "Renuka Mam",
     houseLeader: "Chaitra",
-    roommates: ["Shweta", "Umashree", "Chaitra"],
+    roommates: ["Shweta", "Umashree","Parvati", "Ambika", "Chaitra"],
   },
   {
-    id: "yamuna-1",
-    name: "Yamuna House-1",
+    id: "yamuna",
+    name: "Yamuna House",
     houseMaster: "Shilpa Mam",
     houseLeader: "Suchitra",
-    roommates: ["Mamtha", "Suchitra"],
-  },
-  {
-    id: "yamuna-2",
-    name: "Yamuna House-2",
-    houseMaster: "Shilpa Mam",
-    houseLeader: "Savita",
-    roommates: ["Savita", "Roopa"],
+    roommates: ["Mamtha","Savita", "Roopa", "Suchitra"],
   },
 ];
 
