@@ -1,7 +1,10 @@
 /**
- * Supabase via fetch when VITE_SUPABASE_URL + VITE_SUPABASE_ANON_KEY are set.
- * If they are missing, feedback is stored only in the browser (localStorage).
+ * Supabase: browser client from env + fetch helpers for feedback.
+ * Bell Ring leaderboard uses @supabase/supabase-js when configured.
  */
+import { createClient } from "@supabase/supabase-js";
+
+let supabaseBrowserClient = null;
 
 function getConfig() {
   const rawUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -15,6 +18,25 @@ function getConfig() {
 
 export function isSupabaseConfigured() {
   return getConfig() !== null;
+}
+
+/**
+ * Shared Supabase client (singleton). Null if env vars are missing.
+ * @returns {import("@supabase/supabase-js").SupabaseClient | null}
+ */
+export function getSupabaseClient() {
+  const cfg = getConfig();
+  if (!cfg) return null;
+  if (!supabaseBrowserClient) {
+    supabaseBrowserClient = createClient(cfg.baseUrl, cfg.anonKey, {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+        detectSessionInUrl: false,
+      },
+    });
+  }
+  return supabaseBrowserClient;
 }
 
 const LOCAL_STORAGE_KEY = "mdrs_school_feedback_submissions";
@@ -77,9 +99,52 @@ export async function insertFeedbackSubmission(row) {
 }
 
 /**
- * @param {Record<string, unknown>} body
+ * Bell Ring Madness: top rows from `bell_ring_leaderboard` as { name, score }.
+ * @param {{ limit?: number }} [opts] — default limit 10 (API); use higher limit after a score update if needed for rank.
+ * @returns {Promise<{ data: Array<{ name: string, score: number }> | null, error: Error | null }>}
+ */
+export async function fetchBellRingLeaderboard(opts = {}) {
+  const limit = typeof opts.limit === "number" && opts.limit > 0 ? opts.limit : 10;
+  const sb = getSupabaseClient();
+  if (!sb) {
+    return { data: null, error: new Error("not configured") };
+  }
+  const { data: rows, error } = await sb
+    .from("bell_ring_leaderboard")
+    .select("display_name,score")
+    .order("score", { ascending: false })
+    .limit(limit);
+  if (error) {
+    return { data: null, error: new Error(error.message) };
+  }
+  const data = (Array.isArray(rows) ? rows : []).map((r) => ({
+    name: String(r.display_name ?? "Anonymous"),
+    score: Number(r.score),
+  }));
+  return { data, error: null };
+}
+
+/**
+ * Atomically add a session score (RPC `add_bell_ring_score`).
+ * Args match Postgres parameters: p_player_key, p_display_name, p_delta.
  * @returns {Promise<{ error: Error | null }>}
  */
+export async function addBellRingScore(playerKey, displayName, delta) {
+  const sb = getSupabaseClient();
+  if (!sb) {
+    return { error: new Error("not configured") };
+  }
+  const { error } = await sb.rpc("add_bell_ring_score", {
+    p_player_key: playerKey,
+    p_display_name: displayName,
+    p_delta: delta,
+  });
+  if (error) {
+    return { error: new Error(error.message) };
+  }
+  return { error: null };
+}
+
 export async function invokeSendFeedbackSms(body) {
   const cfg = getConfig();
   if (!cfg) {

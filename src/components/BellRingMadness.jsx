@@ -1,6 +1,13 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import {
+  isSupabaseConfigured,
+  fetchBellRingLeaderboard,
+  addBellRingScore,
+} from "../lib/supabaseClient";
 
 const LEADERBOARD_KEY = "bell-ring-madness-leaderboard";
+const LEADERBOARD_DISPLAY_TOP = 10;
+const LEADERBOARD_STORAGE_MAX = 100;
 const GAME_DURATION = 15;
 const BELL_VISIBLE_MIN = 1200;
 const BELL_VISIBLE_MAX = 1800;
@@ -20,8 +27,8 @@ function playerKeyFromName(name) {
   return t ? t.toLowerCase() : "anonymous";
 }
 
-/** One row per player; keeps highest score; prefers display name from the best run */
-function dedupeAndSortLeaderboard(list) {
+/** One row per player; sums scores for the same name (case-insensitive); prefers longer display name */
+function mergeCumulativeLeaderboard(list) {
   const map = new Map();
   for (const e of list) {
     if (!e || typeof e.score !== "number" || !Number.isFinite(e.score)) continue;
@@ -30,10 +37,11 @@ function dedupeAndSortLeaderboard(list) {
     const cur = map.get(key);
     if (!cur) {
       map.set(key, { name: display, score: e.score });
-    } else if (e.score > cur.score) {
-      map.set(key, { name: display, score: e.score });
-    } else if (e.score === cur.score) {
-      map.set(key, { name: display.length >= cur.name.length ? display : cur.name, score: cur.score });
+    } else {
+      map.set(key, {
+        name: display.length >= cur.name.length ? display : cur.name,
+        score: cur.score + e.score,
+      });
     }
   }
   return Array.from(map.values()).sort((a, b) => b.score - a.score);
@@ -43,7 +51,7 @@ function getLeaderboard() {
   try {
     const raw = localStorage.getItem(LEADERBOARD_KEY);
     const parsed = raw ? JSON.parse(raw) : [];
-    return dedupeAndSortLeaderboard(Array.isArray(parsed) ? parsed : []);
+    return mergeCumulativeLeaderboard(Array.isArray(parsed) ? parsed : []);
   } catch {
     return [];
   }
@@ -51,15 +59,34 @@ function getLeaderboard() {
 
 function saveLeaderboard(list) {
   try {
-    const top = dedupeAndSortLeaderboard(list).slice(0, 20);
-    localStorage.setItem(LEADERBOARD_KEY, JSON.stringify(top));
-  } catch (_) {}
+    const full = mergeCumulativeLeaderboard(Array.isArray(list) ? list : []).slice(
+      0,
+      LEADERBOARD_STORAGE_MAX
+    );
+    localStorage.setItem(LEADERBOARD_KEY, JSON.stringify(full));
+  } catch {
+    /* ignore quota / private mode */
+  }
 }
 
-/** Add or update one player: merge by name (trim + case-insensitive), keep max score */
-function upsertLeaderboardScore(list, rawName, newScore) {
+/** Add session score to existing player total, or create a new entry; returns sorted list */
+function upsertLeaderboardScore(list, rawName, sessionScore) {
   const name = (rawName || "").trim() || "Anonymous";
-  return dedupeAndSortLeaderboard([...list, { name, score: newScore }]);
+  const add =
+    typeof sessionScore === "number" && Number.isFinite(sessionScore) ? sessionScore : 0;
+  const key = playerKeyFromName(name);
+  const merged = mergeCumulativeLeaderboard(Array.isArray(list) ? list : []);
+  const idx = merged.findIndex((e) => playerKeyFromName(e.name) === key);
+  if (idx === -1) {
+    return [...merged, { name, score: add }].sort((a, b) => b.score - a.score);
+  }
+  const next = [...merged];
+  const prev = next[idx];
+  next[idx] = {
+    name: name.length >= (prev.name || "").length ? name : prev.name,
+    score: prev.score + add,
+  };
+  return next.sort((a, b) => b.score - a.score);
 }
 
 
@@ -99,6 +126,11 @@ export default function BellRingMadness() {
   const spawnTimerRef = useRef(null);
   const hideBellTimerRef = useRef(null);
   const gameTimerRef = useRef(null);
+  /** Prevents duplicate end-game save (e.g. React Strict Mode double effect). */
+  const endGameHandledRef = useRef(false);
+  /** Sync guard so bell taps stop as soon as time hits 0 (before gameOver state flushes). */
+  const gameEndedRef = useRef(false);
+  const scheduleNextBellRef = useRef(null);
 
   const hideBell = useCallback(() => {
     if (hideBellTimerRef.current) clearTimeout(hideBellTimerRef.current);
@@ -127,21 +159,76 @@ export default function BellRingMadness() {
     const delay = SPAWN_INTERVAL_MIN + Math.random() * (SPAWN_INTERVAL_MAX - SPAWN_INTERVAL_MIN);
     spawnTimerRef.current = setTimeout(() => {
       showBell();
-      scheduleNextBell();
+      scheduleNextBellRef.current?.();
     }, delay);
   }, [gameStarted, gameOver, showBell]);
 
   useEffect(() => {
+    scheduleNextBellRef.current = scheduleNextBell;
+  }, [scheduleNextBell]);
+
+  useEffect(() => {
+    if (!isSupabaseConfigured()) return undefined;
+    let cancelled = false;
+    (async () => {
+      const { data, error } = await fetchBellRingLeaderboard();
+      if (cancelled) return;
+      if (!error && data != null) {
+        const merged = mergeCumulativeLeaderboard(data);
+        setLeaderboard(merged);
+        saveLeaderboard(merged);
+      } else {
+        setLeaderboard(getLeaderboard());
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
     if (!gameStarted || gameOver) return;
     if (timeLeft <= 0) {
+      if (endGameHandledRef.current) return;
+      endGameHandledRef.current = true;
+      gameEndedRef.current = true;
+
       const name = playerName.trim() || "Anonymous";
-      const list = upsertLeaderboardScore(getLeaderboard(), name, score);
-      const top = list.slice(0, 20);
-      saveLeaderboard(top);
-      setLeaderboard(top);
-      const rank = 1 + top.filter((e) => e.score > score).length;
-      setFinalRank(rank);
+      const key = playerKeyFromName(name);
+      const sessionScore =
+        typeof score === "number" && Number.isFinite(score) ? score : 0;
+
       setGameOver(true);
+
+      const finalizeBoard = (list) => {
+        const merged = mergeCumulativeLeaderboard(list);
+        saveLeaderboard(merged);
+        setLeaderboard(merged);
+        const entry = merged.find((e) => playerKeyFromName(e.name) === key);
+        const totalScore = entry ? entry.score : sessionScore;
+        const rank = 1 + merged.filter((e) => e.score > totalScore).length;
+        setFinalRank(rank);
+      };
+
+      if (isSupabaseConfigured()) {
+        (async () => {
+          const { error: rpcErr } = await addBellRingScore(key, name, sessionScore);
+          if (!rpcErr) {
+            const { data, error: fetchErr } = await fetchBellRingLeaderboard({
+              limit: LEADERBOARD_STORAGE_MAX,
+            });
+            if (!fetchErr && data != null) {
+              finalizeBoard(data);
+              return;
+            }
+          }
+          const list = upsertLeaderboardScore(getLeaderboard(), name, sessionScore);
+          finalizeBoard(list);
+        })();
+      } else {
+        const list = upsertLeaderboardScore(getLeaderboard(), name, sessionScore);
+        finalizeBoard(list);
+      }
       return;
     }
     gameTimerRef.current = setInterval(() => setTimeLeft((t) => t - 1), 1000);
@@ -168,6 +255,8 @@ export default function BellRingMadness() {
       return;
     }
     setNameError("");
+    endGameHandledRef.current = false;
+    gameEndedRef.current = false;
     setGameStarted(true);
     setTimeLeft(GAME_DURATION);
     setScore(0);
@@ -177,24 +266,39 @@ export default function BellRingMadness() {
   };
 
   const handleBellClick = () => {
-    if (!bellShownAt || bellHiding) return;
+    if (gameEndedRef.current || !bellShownAt || bellHiding) return;
     const points = getPointsForSpeed(Date.now() - bellShownAt);
     setScore((s) => s + points);
     hideBell();
   };
 
   const handlePlayAgain = () => {
+    endGameHandledRef.current = false;
+    gameEndedRef.current = false;
     setGameStarted(false);
     setGameOver(false);
     setTimeLeft(GAME_DURATION);
     setScore(0);
     setBellVisible(false);
-    setLeaderboard(getLeaderboard());
     setFinalRank(null);
+    if (isSupabaseConfigured()) {
+      (async () => {
+        const { data, error } = await fetchBellRingLeaderboard();
+        if (!error && data != null) {
+          const merged = mergeCumulativeLeaderboard(data);
+          setLeaderboard(merged);
+          saveLeaderboard(merged);
+        } else {
+          setLeaderboard(getLeaderboard());
+        }
+      })();
+    } else {
+      setLeaderboard(getLeaderboard());
+    }
   };
 
-  const sortedLeaderboard = dedupeAndSortLeaderboard(leaderboard);
-  const visiblePlayers = sortedLeaderboard.slice(0, 3);
+  const sortedLeaderboard = mergeCumulativeLeaderboard(leaderboard);
+  const visiblePlayers = sortedLeaderboard.slice(0, LEADERBOARD_DISPLAY_TOP);
   const champion = sortedLeaderboard[0];
 
   return (
@@ -268,6 +372,12 @@ export default function BellRingMadness() {
           margin: 0 0 8px 0;
           font-weight: 700;
         }
+        .bell-leaderboard-source {
+          font-size: clamp(0.7rem, 1.5vw, 0.78rem);
+          color: #a16207;
+          margin: -4px 0 8px 0;
+          font-weight: 600;
+        }
         .bell-leaderboard-list {
           list-style: none;
           margin: 0;
@@ -301,6 +411,10 @@ export default function BellRingMadness() {
           font-size: 0.98rem;
           padding: 7px 10px;
           font-weight: 700;
+        }
+        .bell-leaderboard-row.rank-rest {
+          background: rgba(255, 255, 255, 0.55);
+          font-weight: 600;
         }
         .bell-leaderboard-rank {
           flex-shrink: 0;
@@ -494,12 +608,19 @@ export default function BellRingMadness() {
             </p>
           )}
           <h3>Leaderboard</h3>
+          <p className="bell-leaderboard-source">
+            {isSupabaseConfigured() ? "Global Leaderboard" : "Local Leaderboard"}
+          </p>
           <ul className="bell-leaderboard-list">
             {visiblePlayers.map((e, i) => {
               const rank = i + 1;
-              const rankClass = rank <= 3 ? `rank-${rank}` : "";
+              const rankClass =
+                rank <= 3 ? `rank-${rank}` : rank <= LEADERBOARD_DISPLAY_TOP ? "rank-rest" : "";
               return (
-                <li key={`${e.name}-${e.score}-${i}`} className={`bell-leaderboard-row ${rankClass}`}>
+                <li
+                  key={playerKeyFromName(e.name)}
+                  className={`bell-leaderboard-row ${rankClass}`}
+                >
                   <span className="bell-leaderboard-rank">
                     {rank === 1 && "👑 "}
                     {getOrdinal(rank)}.
