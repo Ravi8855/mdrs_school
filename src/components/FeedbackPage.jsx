@@ -12,8 +12,8 @@ import {
 } from "../lib/supabaseClient";
 
 const ROLE_OPTIONS = [
-  { value: "", label: "Select your role" },
-  { value: "parents", label: "Parents" },
+  { value: "", label: "Choose your role" },
+  { value: "parents", label: "Parent" },
   { value: "student", label: "Student" },
   { value: "teacher", label: "Teacher" },
 ];
@@ -292,8 +292,7 @@ export default function FeedbackPage({ onLogout }) {
           margin-bottom: 0.35rem;
         }
         .feedback-field input,
-        .feedback-field textarea,
-        .feedback-field select {
+        .feedback-field textarea {
           width: 100%;
           box-sizing: border-box;
           font-family: inherit;
@@ -305,14 +304,69 @@ export default function FeedbackPage({ onLogout }) {
           color: #0f172a;
           min-height: 44px;
         }
+        .feedback-field--role {
+          margin-bottom: 1.125rem;
+        }
+        .feedback-select-wrap {
+          position: relative;
+          border-radius: 12px;
+          box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+        }
+        .feedback-field select.feedback-select {
+          width: 100%;
+          box-sizing: border-box;
+          display: block;
+          font-family: inherit;
+          font-size: max(16px, 1rem);
+          font-weight: 500;
+          line-height: 1.45;
+          padding: clamp(0.8rem, 2.2vw, 0.95rem) clamp(2.65rem, 9vw, 3rem) clamp(0.8rem, 2.2vw, 0.95rem)
+            clamp(1rem, 3vw, 1.15rem);
+          min-height: clamp(50px, 12vw, 54px);
+          border-radius: 12px;
+          border: 1.5px solid #e2e8f0;
+          background-color: #ffffff;
+          color: #0f172a;
+          cursor: pointer;
+          color-scheme: light;
+          touch-action: manipulation;
+          -webkit-tap-highlight-color: transparent;
+          transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+          appearance: none;
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='%234338ca' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+          background-repeat: no-repeat;
+          background-position: right clamp(0.75rem, 3vw, 1rem) center;
+          background-size: clamp(1.1rem, 3.5vw, 1.25rem);
+        }
+        @media (min-width: 900px) {
+          .feedback-field select.feedback-select {
+            min-height: 50px;
+            padding-top: 0.8rem;
+            padding-bottom: 0.8rem;
+          }
+        }
+        .feedback-field select.feedback-select:hover {
+          border-color: #c7d2fe;
+          background-color: #fafbff;
+        }
+        .feedback-field select.feedback-select:active {
+          background-color: #f5f7ff;
+        }
+        .feedback-field select.feedback-select.feedback-select--placeholder {
+          color: #64748b;
+          font-weight: 400;
+        }
+        .feedback-field select.feedback-select:not(.feedback-select--placeholder) {
+          color: #0f172a;
+          font-weight: 600;
+        }
         .feedback-field input.feedback-input-error,
         .feedback-field textarea.feedback-input-error,
-        .feedback-field select.feedback-input-error {
+        .feedback-field select.feedback-select.feedback-input-error {
           border-color: #dc2626;
           box-shadow: 0 0 0 1px rgba(220, 38, 38, 0.2);
-        }
-        .feedback-field select {
-          cursor: pointer;
         }
         .feedback-field textarea {
           min-height: 140px;
@@ -320,14 +374,14 @@ export default function FeedbackPage({ onLogout }) {
         }
         .feedback-field input:focus,
         .feedback-field textarea:focus,
-        .feedback-field select:focus {
+        .feedback-field select.feedback-select:focus {
           outline: none;
           border-color: #6366f1;
-          box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+          box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.22);
         }
         .feedback-field input.feedback-input-error:focus,
         .feedback-field textarea.feedback-input-error:focus,
-        .feedback-field select.feedback-input-error:focus {
+        .feedback-field select.feedback-select.feedback-input-error:focus {
           border-color: #dc2626;
           box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
         }
@@ -570,26 +624,31 @@ export default function FeedbackPage({ onLogout }) {
               ) : null}
             </div>
 
-            <div className="feedback-field">
+            <div className="feedback-field feedback-field--role">
               <label htmlFor="feedback-role">Role</label>
-              <select
-                id="feedback-role"
-                name="role"
-                className={errCls("role")}
-                aria-invalid={Boolean(fieldErrors.role)}
-                aria-describedby={fieldErrors.role ? "feedback-error-role" : undefined}
-                value={role}
-                onChange={(ev) => {
-                  setRole(ev.target.value);
-                  if (fieldErrors.role) setFieldErrors((f) => ({ ...f, role: undefined }));
-                }}
-              >
-                {ROLE_OPTIONS.map((opt) => (
-                  <option key={opt.value || "placeholder"} value={opt.value} disabled={opt.value === ""}>
-                    {opt.label}
-                  </option>
-                ))}
-              </select>
+              <div className="feedback-select-wrap">
+                <select
+                  id="feedback-role"
+                  name="role"
+                  className={["feedback-select", errCls("role"), !role && "feedback-select--placeholder"]
+                    .filter(Boolean)
+                    .join(" ")}
+                  aria-label="Your role"
+                  aria-invalid={Boolean(fieldErrors.role)}
+                  aria-describedby={fieldErrors.role ? "feedback-error-role" : undefined}
+                  value={role}
+                  onChange={(ev) => {
+                    setRole(ev.target.value);
+                    if (fieldErrors.role) setFieldErrors((f) => ({ ...f, role: undefined }));
+                  }}
+                >
+                  {ROLE_OPTIONS.map((opt) => (
+                    <option key={opt.value || "placeholder"} value={opt.value} disabled={opt.value === ""}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
               {fieldErrors.role ? (
                 <p id="feedback-error-role" className="feedback-field-error" role="alert">
                   {fieldErrors.role}
