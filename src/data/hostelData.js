@@ -7,6 +7,7 @@ export const boysHouses = [
     houseLeader: "Ambadas",
     roommates: ["Marilinga", "Ningappa",  "Golallappa", "Ambadas"],
   },
+
   {
     id: "bhima",
     name: "Bhima House",
@@ -14,6 +15,7 @@ export const boysHouses = [
     houseLeader: "Arun",
     roommates: ["Sunil","Praveen" ,"Chandrashekar", "Arun"],
   },
+
   {
     id: "sindhu",
     name: "Sindhu House",
@@ -21,6 +23,7 @@ export const boysHouses = [
     houseLeader: "Ravi",
     roommates: ["Bhimashankar", "Bhimu", "Vinod", "Ravi"],
   },
+
   {
     id: "godhawari",
     name: "Godhawari House",
@@ -28,7 +31,9 @@ export const boysHouses = [
     houseLeader: "Hrutik",
     roommates: ["Jatteppa", "Mallikarjun","Viresh", "Mahesh", "Hrutik"],
   },
+  
 ];
+
 
 /** Girls hostel — Kaveri & Yamuna houses */
 export const girlsHouses = [
@@ -39,6 +44,7 @@ export const girlsHouses = [
     houseLeader: "Chaitra",
     roommates: ["Shweta", "Umashree","Parvati", "Ambika", "Chaitra"],
   },
+
   {
     id: "yamuna",
     name: "Yamuna House",

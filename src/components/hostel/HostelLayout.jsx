@@ -2,6 +2,7 @@ import React from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import Navbar from "../Navbar";
 import Footer from "../Footer";
+import FeedbackCTA from "../FeedbackCTA";
 import AnimatedSection from "../AnimatedSection";
 
 export default function HostelLayout({ onLogout }) {
@@ -30,6 +31,9 @@ export default function HostelLayout({ onLogout }) {
       <main className="hostel-route-main">
         <Outlet />
       </main>
+      <AnimatedSection>
+        <FeedbackCTA />
+      </AnimatedSection>
       <AnimatedSection>
         <Footer />
       </AnimatedSection>

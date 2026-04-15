@@ -17,6 +17,8 @@ import RoomDetails from "./components/hostel/RoomDetails";
 import HostelTeaser from "./components/hostel/HostelTeaser";
 import BellRingMadness from "./components/BellRingMadness";
 import Footer from "./components/Footer";
+import FeedbackCTA from "./components/FeedbackCTA";
+import FeedbackPage from "./components/FeedbackPage";
 
 const SESSION_KEY = "isLoggedIn";
 
@@ -85,7 +87,12 @@ function AppContent({ onLogout }) {
         <AnimatedSection><BellRingMadness /></AnimatedSection>
       </section>
 
-      <AnimatedSection><Footer /></AnimatedSection>
+      <AnimatedSection>
+        <FeedbackCTA />
+      </AnimatedSection>
+      <AnimatedSection>
+        <Footer />
+      </AnimatedSection>
 
       <button
         type="button"
@@ -149,6 +156,12 @@ function App() {
           ) : (
             <Navigate to="/login" replace />
           )
+        }
+      />
+      <Route
+        path="/feedback"
+        element={
+          authed ? <FeedbackPage onLogout={handleLogout} /> : <Navigate to="/login" replace />
         }
       />
       <Route
