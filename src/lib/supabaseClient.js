@@ -5,6 +5,18 @@
 import { createClient } from "@supabase/supabase-js";
 
 let supabaseBrowserClient = null;
+let supabaseMissingEnvLogged = false;
+let supabasePlaceholderEnvLogged = false;
+
+/** Reject .env.example placeholders so we do not treat fake values as "configured". */
+function isPlaceholderSupabaseEnv(baseUrl, anonKey) {
+  const u = baseUrl.toLowerCase();
+  const k = anonKey.toLowerCase();
+  if (/your-project-id|example\.com|localhost:54321/i.test(u)) return true;
+  if (/your-anon-public-key|^changeme|^replace/i.test(k)) return true;
+  if (anonKey.length < 30) return true;
+  return false;
+}
 
 function getConfig() {
   const rawUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -12,7 +24,27 @@ function getConfig() {
   const baseUrl =
     typeof rawUrl === "string" && rawUrl.trim() ? rawUrl.trim().replace(/\/$/, "") : "";
   const anonKey = typeof rawKey === "string" && rawKey.trim() ? rawKey.trim() : "";
-  if (!baseUrl || !anonKey) return null;
+  if (!baseUrl || !anonKey) {
+    if (typeof window !== "undefined" && !supabaseMissingEnvLogged) {
+      supabaseMissingEnvLogged = true;
+      console.info(
+        "[mdrs-school] Supabase is not configured: set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY " +
+          "(Vite injects them at build time — add them in Vercel Project → Settings → Environment Variables for production). " +
+          "Bell Ring leaderboard and feedback will use browser-only fallback until then."
+      );
+    }
+    return null;
+  }
+  if (isPlaceholderSupabaseEnv(baseUrl, anonKey)) {
+    if (typeof window !== "undefined" && !supabasePlaceholderEnvLogged) {
+      supabasePlaceholderEnvLogged = true;
+      console.info(
+        "[mdrs-school] Supabase env vars look like placeholders or are invalid. " +
+          "Use your real project URL and anon key from the Supabase dashboard (API settings)."
+      );
+    }
+    return null;
+  }
   return { baseUrl, anonKey };
 }
 
@@ -26,7 +58,10 @@ export function isSupabaseConfigured() {
  */
 export function getSupabaseClient() {
   const cfg = getConfig();
-  if (!cfg) return null;
+  if (!cfg) {
+    supabaseBrowserClient = null;
+    return null;
+  }
   if (!supabaseBrowserClient) {
     supabaseBrowserClient = createClient(cfg.baseUrl, cfg.anonKey, {
       auth: {

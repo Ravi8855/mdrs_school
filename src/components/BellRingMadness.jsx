@@ -118,7 +118,11 @@ export default function BellRingMadness() {
   const [bellPosition, setBellPosition] = useState({ x: 50, y: 50 });
   const [bellShownAt, setBellShownAt] = useState(null);
   const [gameOver, setGameOver] = useState(false);
-  const [leaderboard, setLeaderboard] = useState(getLeaderboard);
+  const [leaderboard, setLeaderboard] = useState(() =>
+    isSupabaseConfigured() ? [] : getLeaderboard()
+  );
+  const [leaderboardLoading, setLeaderboardLoading] = useState(() => isSupabaseConfigured());
+  const [leaderboardFetchFailed, setLeaderboardFetchFailed] = useState(false);
   const [finalRank, setFinalRank] = useState(null);
   const [nameError, setNameError] = useState("");
 
@@ -170,15 +174,23 @@ export default function BellRingMadness() {
   useEffect(() => {
     if (!isSupabaseConfigured()) return undefined;
     let cancelled = false;
+    setLeaderboardLoading(true);
     (async () => {
       const { data, error } = await fetchBellRingLeaderboard();
       if (cancelled) return;
+      setLeaderboardLoading(false);
       if (!error && data != null) {
         const merged = mergeCumulativeLeaderboard(data);
         setLeaderboard(merged);
         saveLeaderboard(merged);
+        setLeaderboardFetchFailed(false);
       } else {
-        setLeaderboard(getLeaderboard());
+        console.warn(
+          "[Bell Ring] Global leaderboard fetch failed:",
+          error?.message ?? error ?? "unknown error"
+        );
+        setLeaderboard([]);
+        setLeaderboardFetchFailed(true);
       }
     })();
     return () => {
@@ -272,20 +284,24 @@ export default function BellRingMadness() {
   };
 
   const refreshBellLeaderboard = useCallback(() => {
-    if (isSupabaseConfigured()) {
-      (async () => {
-        const { data, error } = await fetchBellRingLeaderboard();
-        if (!error && data != null) {
-          const merged = mergeCumulativeLeaderboard(data);
-          setLeaderboard(merged);
-          saveLeaderboard(merged);
-        } else {
-          setLeaderboard(getLeaderboard());
-        }
-      })();
-    } else {
+    if (!isSupabaseConfigured()) {
       setLeaderboard(getLeaderboard());
+      return;
     }
+    (async () => {
+      const { data, error } = await fetchBellRingLeaderboard();
+      if (!error && data != null) {
+        const merged = mergeCumulativeLeaderboard(data);
+        setLeaderboard(merged);
+        saveLeaderboard(merged);
+        setLeaderboardFetchFailed(false);
+      } else {
+        console.warn(
+          "[Bell Ring] Leaderboard refresh failed:",
+          error?.message ?? error ?? "unknown error"
+        );
+      }
+    })();
   }, []);
 
   const exitGameOverToMenu = useCallback(() => {
@@ -322,6 +338,7 @@ export default function BellRingMadness() {
   const sortedLeaderboard = mergeCumulativeLeaderboard(leaderboard);
   const visiblePlayers = sortedLeaderboard.slice(0, LEADERBOARD_DISPLAY_TOP);
   const champion = sortedLeaderboard[0];
+  const showLeaderboardPanel = isSupabaseConfigured() || leaderboard.length > 0;
 
   return (
     <div className="bell-madness-page">
@@ -400,6 +417,16 @@ export default function BellRingMadness() {
           margin: -4px 0 8px 0;
           font-weight: 600;
         }
+        .bell-leaderboard-loading,
+        .bell-leaderboard-empty,
+        .bell-leaderboard-warn {
+          font-size: clamp(0.78rem, 1.7vw, 0.88rem);
+          color: #92400e;
+          margin: 0 0 10px 0;
+          font-weight: 600;
+          line-height: 1.45;
+        }
+        .bell-leaderboard-warn { color: #b45309; }
         .bell-leaderboard-list {
           list-style: none;
           margin: 0;
@@ -621,6 +648,7 @@ export default function BellRingMadness() {
             position: static;
             margin: 0 auto clamp(16px, 3vw, 20px);
             max-width: min(320px, 100%);
+            z-index: 2;
           }
           .bell-game-header { gap: 12px; }
           .bell-icon-btn {
@@ -666,9 +694,9 @@ export default function BellRingMadness() {
         </div>
       )}
 
-      {leaderboard.length > 0 && (
+      {showLeaderboardPanel && (
         <div className="bell-leaderboard">
-          {champion && (
+          {champion && !leaderboardLoading && leaderboard.length > 0 && (
             <p className="bell-leaderboard-champion">
               🏆 Current Champion: {champion.name}
             </p>
@@ -677,26 +705,44 @@ export default function BellRingMadness() {
           <p className="bell-leaderboard-source">
             {isSupabaseConfigured() ? "Global Leaderboard" : "Local Leaderboard"}
           </p>
-          <ul className="bell-leaderboard-list">
-            {visiblePlayers.map((e, i) => {
-              const rank = i + 1;
-              const rankClass =
-                rank <= 3 ? `rank-${rank}` : rank <= LEADERBOARD_DISPLAY_TOP ? "rank-rest" : "";
-              return (
-                <li
-                  key={playerKeyFromName(e.name)}
-                  className={`bell-leaderboard-row ${rankClass}`}
-                >
-                  <span className="bell-leaderboard-rank">
-                    {rank === 1 && "👑 "}
-                    {getOrdinal(rank)}.
-                  </span>
-                  <span className="bell-leaderboard-name" title={e.name}>{e.name}</span>
-                  <span className="bell-leaderboard-score">— {e.score}</span>
-                </li>
-              );
-            })}
-          </ul>
+          {leaderboardFetchFailed && isSupabaseConfigured() && (
+            <p className="bell-leaderboard-warn" role="status">
+              Could not load live scores. Check the browser console and that this deployment has
+              VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY set at build time.
+            </p>
+          )}
+          {leaderboardLoading ? (
+            <p className="bell-leaderboard-loading" aria-live="polite">
+              Loading scores…
+            </p>
+          ) : leaderboard.length === 0 ? (
+            !leaderboardFetchFailed && (
+              <p className="bell-leaderboard-empty">
+                No scores yet. Play a round to appear on the board.
+              </p>
+            )
+          ) : (
+            <ul className="bell-leaderboard-list">
+              {visiblePlayers.map((e, i) => {
+                const rank = i + 1;
+                const rankClass =
+                  rank <= 3 ? `rank-${rank}` : rank <= LEADERBOARD_DISPLAY_TOP ? "rank-rest" : "";
+                return (
+                  <li
+                    key={playerKeyFromName(e.name)}
+                    className={`bell-leaderboard-row ${rankClass}`}
+                  >
+                    <span className="bell-leaderboard-rank">
+                      {rank === 1 && "👑 "}
+                      {getOrdinal(rank)}.
+                    </span>
+                    <span className="bell-leaderboard-name" title={e.name}>{e.name}</span>
+                    <span className="bell-leaderboard-score">— {e.score}</span>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
         </div>
       )}
 
