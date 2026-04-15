@@ -246,13 +246,14 @@ export default function BellRingMadness() {
     };
   }, [gameStarted, gameOver, scheduleNextBell]);
 
-  const handleStartGame = () => {
+  /** Returns true if a new round starts (name allowed). */
+  const beginGameIfValid = useCallback(() => {
     const name = playerName.trim();
-    if (!name) return;
+    if (!name) return false;
     const allowedLower = allowedStudents.map((s) => s.toLowerCase());
     if (!allowedLower.includes(name.toLowerCase())) {
       setNameError("Enter your original name.");
-      return;
+      return false;
     }
     setNameError("");
     endGameHandledRef.current = false;
@@ -263,24 +264,14 @@ export default function BellRingMadness() {
     setGameOver(false);
     setBellVisible(false);
     setFinalRank(null);
+    return true;
+  }, [playerName]);
+
+  const handleStartGame = () => {
+    beginGameIfValid();
   };
 
-  const handleBellClick = () => {
-    if (gameEndedRef.current || !bellShownAt || bellHiding) return;
-    const points = getPointsForSpeed(Date.now() - bellShownAt);
-    setScore((s) => s + points);
-    hideBell();
-  };
-
-  const handlePlayAgain = () => {
-    endGameHandledRef.current = false;
-    gameEndedRef.current = false;
-    setGameStarted(false);
-    setGameOver(false);
-    setTimeLeft(GAME_DURATION);
-    setScore(0);
-    setBellVisible(false);
-    setFinalRank(null);
+  const refreshBellLeaderboard = useCallback(() => {
     if (isSupabaseConfigured()) {
       (async () => {
         const { data, error } = await fetchBellRingLeaderboard();
@@ -295,7 +286,38 @@ export default function BellRingMadness() {
     } else {
       setLeaderboard(getLeaderboard());
     }
+  }, []);
+
+  const exitGameOverToMenu = useCallback(() => {
+    endGameHandledRef.current = false;
+    gameEndedRef.current = false;
+    setGameStarted(false);
+    setGameOver(false);
+    setTimeLeft(GAME_DURATION);
+    setScore(0);
+    setBellVisible(false);
+    setFinalRank(null);
+  }, []);
+
+  const handleBellClick = () => {
+    if (gameEndedRef.current || !bellShownAt || bellHiding) return;
+    const points = getPointsForSpeed(Date.now() - bellShownAt);
+    setScore((s) => s + points);
+    hideBell();
   };
+
+  /** Return to the name screen without starting a new round. */
+  const handleCancelAfterGame = useCallback(() => {
+    exitGameOverToMenu();
+    refreshBellLeaderboard();
+  }, [exitGameOverToMenu, refreshBellLeaderboard]);
+
+  /** Same player: immediate rematch (falls back to menu if name is invalid). */
+  const handlePlayAgain = useCallback(() => {
+    exitGameOverToMenu();
+    refreshBellLeaderboard();
+    beginGameIfValid();
+  }, [beginGameIfValid, exitGameOverToMenu, refreshBellLeaderboard]);
 
   const sortedLeaderboard = mergeCumulativeLeaderboard(leaderboard);
   const visiblePlayers = sortedLeaderboard.slice(0, LEADERBOARD_DISPLAY_TOP);
@@ -531,20 +553,50 @@ export default function BellRingMadness() {
           margin: 0 0 14px 0;
         }
         .bell-game-over .final-score { font-size: clamp(1.75rem, 5vw, 2rem); font-weight: 800; color: #b45309; margin: 8px 0; }
-        .bell-game-over .final-rank { font-size: clamp(1rem, 2.2vw, 1.1rem); color: #78350f; margin-bottom: 20px; }
-        .bell-play-again {
+        .bell-game-over .final-rank { font-size: clamp(1rem, 2.2vw, 1.1rem); color: #78350f; margin: 0 0 22px 0; }
+        .bell-game-over-actions {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: clamp(10px, 2.5vw, 14px);
+          width: 100%;
+          max-width: 100%;
+          box-sizing: border-box;
+          margin: 0 auto;
+        }
+        .bell-game-over-actions button {
           min-height: 52px;
-          padding: clamp(14px, 3vw, 16px) clamp(24px, 5vw, 32px);
+          padding: clamp(14px, 3vw, 16px) clamp(16px, 4vw, 24px);
+          border-radius: 12px;
+          font-size: clamp(0.95rem, 2.4vw, 1.05rem);
+          font-weight: 700;
+          cursor: pointer;
+          transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s, background 0.2s;
+          box-sizing: border-box;
+          width: 100%;
+        }
+        .bell-play-again {
           background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
           color: #fff;
           border: none;
-          border-radius: 12px;
-          font-size: clamp(1.05rem, 2.5vw, 1.1rem);
-          font-weight: 700;
-          cursor: pointer;
-          transition: transform 0.2s, box-shadow 0.2s;
+          box-shadow: 0 2px 8px rgba(217, 119, 6, 0.25);
         }
-        .bell-play-again:hover { transform: scale(1.03); box-shadow: 0 6px 20px rgba(217, 119, 6, 0.4); }
+        .bell-play-again:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 6px 20px rgba(217, 119, 6, 0.35);
+        }
+        .bell-play-again:active { transform: translateY(0); }
+        .bell-cancel-game {
+          background: rgba(255, 255, 255, 0.95);
+          color: #78350f;
+          border: 2px solid rgba(217, 119, 6, 0.55);
+        }
+        .bell-cancel-game:hover {
+          transform: translateY(-1px);
+          border-color: #d97706;
+          background: #fffbeb;
+          box-shadow: 0 4px 14px rgba(146, 64, 14, 0.12);
+        }
+        .bell-cancel-game:active { transform: translateY(0); }
 
         /* 320px - small phones */
         @media (max-width: 380px) {
@@ -552,10 +604,19 @@ export default function BellRingMadness() {
           .bell-leaderboard { min-width: 0; padding: 10px 12px; }
           .bell-leaderboard-row { font-size: 0.78rem; padding: 5px 8px; }
           .bell-stat { padding: 10px 14px; font-size: 1rem; }
+          .bell-game-over { padding: clamp(20px, 5vw, 24px) clamp(14px, 4vw, 18px); }
+          .bell-game-over-actions {
+            grid-template-columns: 1fr;
+            max-width: 280px;
+            margin-left: auto;
+            margin-right: auto;
+          }
         }
 
         /* 768px - tablets: leaderboard below title, compact */
         @media (max-width: 768px) {
+          .bell-game-over { max-width: min(400px, calc(100% - 8px)); }
+          .bell-game-over-actions { gap: 12px; }
           .bell-leaderboard {
             position: static;
             margin: 0 auto clamp(16px, 3vw, 20px);
@@ -587,6 +648,11 @@ export default function BellRingMadness() {
         /* 1200px+ desktop: ensure leaderboard stays top-right */
         @media (min-width: 769px) {
           .bell-leaderboard { position: absolute; }
+          .bell-game-over-actions {
+            max-width: 360px;
+            margin-left: auto;
+            margin-right: auto;
+          }
         }
       `}</style>
 
@@ -693,9 +759,14 @@ export default function BellRingMadness() {
               ? `You ranked #${finalRank} on the leaderboard!`
               : "Your score has been saved."}
           </p>
-          <button type="button" className="bell-play-again" onClick={handlePlayAgain}>
-            Play Again
-          </button>
+          <div className="bell-game-over-actions" role="group" aria-label="Game over actions">
+            <button type="button" className="bell-play-again" onClick={handlePlayAgain}>
+              Play Again
+            </button>
+            <button type="button" className="bell-cancel-game" onClick={handleCancelAfterGame}>
+              Cancel
+            </button>
+          </div>
         </div>
       )}
     </div>
