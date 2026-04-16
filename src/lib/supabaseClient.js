@@ -128,7 +128,32 @@ export async function insertFeedbackSubmission(row) {
   });
   if (!res.ok) {
     const text = await res.text();
-    return { error: new Error(text || `HTTP ${res.status}`) };
+    let code;
+    let msg = text;
+    try {
+      const j = JSON.parse(text);
+      if (j && typeof j === "object") {
+        if (typeof j.code === "string") code = j.code;
+        if (typeof j.message === "string") msg = j.message;
+      }
+    } catch {
+      /* keep msg as raw text */
+    }
+    const missingFeedbackTable =
+      code === "PGRST205" ||
+      /could not find the table.*feedback_submissions/i.test(msg) ||
+      /relation\s+["']?public\.feedback_submissions["']?\s+does not exist/i.test(msg);
+
+    if (missingFeedbackTable) {
+      if (typeof window !== "undefined") {
+        console.warn(
+          "[mdrs-school] public.feedback_submissions is missing in Supabase. Saving this submission in the browser only. " +
+            "Create the table by running supabase/migrations/20260415120000_feedback_submissions.sql in the SQL Editor (Dashboard → SQL)."
+        );
+      }
+      return saveFeedbackLocally(row);
+    }
+    return { error: new Error(msg || text || `HTTP ${res.status}`) };
   }
   return { error: null };
 }

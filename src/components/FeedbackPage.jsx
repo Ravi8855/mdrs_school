@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { useNavigate, useLocation } from "react-router-dom";
-import { FaArrowLeft } from "react-icons/fa";
+import emailjs from "@emailjs/browser";
+import { FaArrowLeft, FaCheckCircle, FaExclamationCircle } from "react-icons/fa";
 import Navbar from "./Navbar";
 import AnimatedSection from "./AnimatedSection";
 import Footer from "./Footer";
@@ -15,45 +17,57 @@ import {
 const REQUIRED = "This field is required";
 const NOTIFY_PHONE = "8855025560";
 
-/** School WhatsApp (personal). Pre-filled chat: `https://wa.me/<digits>?text=…` */
-const FEEDBACK_WHATSAPP_DEFAULT_LINK = "https://wa.me/918855025560";
-
-function digitsFromWaMeUrl(url) {
-  const m = String(url).match(/wa\.me\/(\d{10,15})/i);
-  return m ? m[1] : null;
+function escapeHtmlForEmail(s) {
+  return String(s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 }
 
-/** International digits only (no +). Env overrides default link above. */
-function getWhatsAppRecipientDigits() {
-  const envLink = import.meta.env.VITE_FEEDBACK_WHATSAPP_LINK;
-  if (typeof envLink === "string" && envLink.trim()) {
-    const fromWa = digitsFromWaMeUrl(envLink.trim());
-    if (fromWa) return fromWa;
-    const api = envLink.trim().match(/[?&]phone=(\d{10,15})/i);
-    if (api) return api[1];
-  }
-  const raw = import.meta.env.VITE_FEEDBACK_WHATSAPP_NUMBER;
-  if (typeof raw === "string" && raw.replace(/\D/g, "").length >= 10) {
-    return raw.replace(/\D/g, "");
-  }
-  return digitsFromWaMeUrl(FEEDBACK_WHATSAPP_DEFAULT_LINK) ?? "918855025560";
+function memoriesDisplay(v) {
+  if (v === "yes") return "Yes";
+  if (v === "no") return "No";
+  return String(v);
 }
 
-/** Opens WhatsApp to the configured number with the feedback text in the compose box. */
-function buildWhatsAppUrl(payload) {
-  const digits = getWhatsAppRecipientDigits();
-  const text = [
-    "*MDRS School — Website feedback*",
+/**
+ * Extra fields for EmailJS so Gmail shows Name / Role / Message on separate lines.
+ * In your EmailJS template, use either {{{details_html}}} (HTML) or <pre style="white-space:pre-wrap;font:inherit">{{details_plain}}</pre>.
+ */
+function buildEmailJsParams(formData) {
+  const mem = memoriesDisplay(formData.memories);
+  const details_plain = [
+    `Name: ${formData.name}`,
     "",
-    `Name: ${payload.name}`,
-    `Role: ${payload.role}`,
-    `More memories: ${payload.moreMemories}`,
+    `Role: ${formData.role}`,
     "",
     "Message:",
-    payload.message,
+    formData.message,
+    "",
+    `More memories: ${mem}`,
   ].join("\n");
-  const safe = text.length > 3800 ? `${text.slice(0, 3797)}...` : text;
-  return `https://wa.me/${digits}?text=${encodeURIComponent(safe)}`;
+
+  const safeName = escapeHtmlForEmail(formData.name);
+  const safeRole = escapeHtmlForEmail(formData.role);
+  const safeMsg = escapeHtmlForEmail(formData.message).replace(/\r\n|\n|\r/g, "<br/>");
+  const safeMem = escapeHtmlForEmail(mem);
+
+  const details_html = [
+    "<strong>Name:</strong> " + safeName,
+    "<strong>Role:</strong> " + safeRole,
+    "<strong>Message:</strong><br/>" + safeMsg,
+    "<strong>More memories:</strong> " + safeMem,
+  ].join("<br/><br/>");
+
+  return {
+    name: formData.name,
+    role: formData.role,
+    message: formData.message,
+    memories: mem,
+    details_plain,
+    details_html,
+  };
 }
 
 /**
@@ -63,18 +77,18 @@ function buildWhatsAppUrl(payload) {
 export default function FeedbackPage({ onLogout }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const thanksCloseRef = useRef(null);
-  /** Snapshot of last successful submit for the WhatsApp “send copy” action. */
-  const lastSubmissionRef = useRef(null);
+  const thanksDialogRef = useRef(null);
 
   const [name, setName] = useState("");
   const [role, setRole] = useState("");
   const [message, setMessage] = useState("");
   const [moreMemories, setMoreMemories] = useState("");
   const [thanksOpen, setThanksOpen] = useState(false);
+  const [emailFailOpen, setEmailFailOpen] = useState(false);
   const [fieldErrors, setFieldErrors] = useState({});
   const [submitError, setSubmitError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const emailFailCloseRef = useRef(null);
 
   const scrollFormIntoView = useCallback(() => {
     const el = document.getElementById("feedback-form");
@@ -116,19 +130,39 @@ export default function FeedbackPage({ onLogout }) {
     setThanksOpen(false);
   }, []);
 
+  const closeEmailFail = useCallback(() => {
+    setEmailFailOpen(false);
+  }, []);
+
   useEffect(() => {
-    if (!thanksOpen) return;
+    if (!thanksOpen && !emailFailOpen) return;
     const onKey = (e) => {
-      if (e.key === "Escape") closeThanks();
+      if (e.key !== "Escape") return;
+      if (thanksOpen) closeThanks();
+      if (emailFailOpen) closeEmailFail();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [thanksOpen, closeThanks]);
+  }, [thanksOpen, emailFailOpen, closeThanks, closeEmailFail]);
 
   useEffect(() => {
     if (!thanksOpen) return;
-    thanksCloseRef.current?.focus?.();
+    thanksDialogRef.current?.focus?.();
   }, [thanksOpen]);
+
+  useEffect(() => {
+    if (!emailFailOpen) return;
+    emailFailCloseRef.current?.focus?.();
+  }, [emailFailOpen]);
+
+  useEffect(() => {
+    if (!thanksOpen && !emailFailOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [thanksOpen, emailFailOpen]);
 
   const scrollToFirstError = (errs) => {
     const order = ["name", "role", "message", "moreMemories"];
@@ -162,8 +196,47 @@ export default function FeedbackPage({ onLogout }) {
       return;
     }
 
+    const formData = {
+      name: name.trim(),
+      role,
+      message: trimmed,
+      memories: moreMemories,
+    };
+
+    const serviceId = String(import.meta.env.VITE_EMAILJS_SERVICE_ID ?? "").trim();
+    const templateId = String(import.meta.env.VITE_EMAILJS_TEMPLATE_ID ?? "").trim();
+    const publicKey = String(import.meta.env.VITE_EMAILJS_PUBLIC_KEY ?? "").trim();
+
+    if (!serviceId || !templateId || !publicKey) {
+      console.error(
+        "EmailJS: missing VITE_EMAILJS_SERVICE_ID, VITE_EMAILJS_TEMPLATE_ID, or VITE_EMAILJS_PUBLIC_KEY. Add them to .env and restart the dev server."
+      );
+      setEmailFailOpen(true);
+      return;
+    }
+
     setSubmitting(true);
     try {
+      try {
+        const response = await emailjs.send(serviceId, templateId, buildEmailJsParams(formData), { publicKey });
+        console.log(response);
+      } catch (error) {
+        console.error(error);
+        if (error && typeof error === "object" && "status" in error && "text" in error) {
+          console.error("EmailJS:", error.status, error.text);
+        }
+        setEmailFailOpen(true);
+        return;
+      }
+
+      // Email delivered — show thank-you immediately (DB/local is best-effort backup).
+      setThanksOpen(true);
+      setName("");
+      setRole("");
+      setMessage("");
+      setMoreMemories("");
+      setFieldErrors({});
+
       if (isSupabaseConfigured()) {
         const { error: insertError } = await insertFeedbackSubmission({
           name: name.trim(),
@@ -174,18 +247,17 @@ export default function FeedbackPage({ onLogout }) {
         });
 
         if (insertError) {
-          setSubmitError(insertError.message || "Could not save your feedback. Please try again.");
-          return;
-        }
-
-        const { error: smsFnError } = await invokeSendFeedbackSms({
-          name: name.trim(),
-          role,
-          message: trimmed,
-          more_memories: moreMemories,
-        });
-        if (smsFnError) {
-          console.warn("send-feedback-sms:", smsFnError.message);
+          console.warn("[feedback] Supabase save failed after email was sent:", insertError.message);
+        } else {
+          const { error: smsFnError } = await invokeSendFeedbackSms({
+            name: name.trim(),
+            role,
+            message: trimmed,
+            more_memories: moreMemories,
+          });
+          if (smsFnError) {
+            console.warn("send-feedback-sms:", smsFnError.message);
+          }
         }
       } else {
         const { error: localErr } = saveFeedbackLocally({
@@ -196,23 +268,9 @@ export default function FeedbackPage({ onLogout }) {
           notify_phone: NOTIFY_PHONE,
         });
         if (localErr) {
-          setSubmitError("Could not save feedback in this browser. Check storage permissions and try again.");
-          return;
+          console.warn("[feedback] Local save failed after email was sent:", localErr.message);
         }
       }
-
-      lastSubmissionRef.current = {
-        name: name.trim(),
-        role,
-        message: trimmed,
-        moreMemories,
-      };
-      setThanksOpen(true);
-      setName("");
-      setRole("");
-      setMessage("");
-      setMoreMemories("");
-      setFieldErrors({});
     } finally {
       setSubmitting(false);
     }
@@ -404,120 +462,217 @@ export default function FeedbackPage({ onLogout }) {
         .feedback-thanks-backdrop {
           position: fixed;
           inset: 0;
-          z-index: 10050;
+          z-index: 99990;
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 1.25rem;
-          background: rgba(15, 23, 42, 0.45);
-          backdrop-filter: blur(4px);
+          padding: max(1rem, env(safe-area-inset-top, 0px)) max(1rem, env(safe-area-inset-right, 0px))
+            max(1rem, env(safe-area-inset-bottom, 0px)) max(1rem, env(safe-area-inset-left, 0px));
+          box-sizing: border-box;
+          background: rgba(15, 23, 42, 0.52);
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
+          animation: feedback-thanks-fade-in 0.22s ease-out;
+        }
+        @keyframes feedback-thanks-fade-in {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+        @keyframes feedback-thanks-pop-in {
+          from {
+            opacity: 0;
+            transform: scale(0.96) translateY(8px);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+          }
         }
         .feedback-thanks-dialog {
           width: 100%;
-          max-width: 400px;
-          background: #fff;
-          border-radius: 16px;
-          padding: 1.5rem 1.35rem 1.25rem;
-          box-shadow: 0 20px 50px rgba(15, 23, 42, 0.2);
+          max-width: min(420px, 100vw - 2rem);
+          max-height: min(90dvh, 640px);
+          overflow-x: hidden;
+          overflow-y: auto;
+          -webkit-overflow-scrolling: touch;
+          overscroll-behavior: contain;
+          background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+          border-radius: clamp(16px, 4vw, 20px);
+          padding: clamp(1.5rem, 5vw, 2.25rem) clamp(1.25rem, 4vw, 2rem);
+          box-shadow:
+            0 0 0 1px rgba(148, 163, 184, 0.12),
+            0 24px 48px rgba(15, 23, 42, 0.18);
           text-align: center;
           font-family: var(--font-body, "Poppins", sans-serif);
+          animation: feedback-thanks-pop-in 0.28s cubic-bezier(0.22, 1, 0.36, 1);
         }
-        .feedback-thanks-dialog h2 {
-          margin: 0 0 0.65rem;
-          font-size: 1.35rem;
-          color: #0f172a;
-        }
-        .feedback-thanks-dialog p {
-          margin: 0 0 1.25rem;
-          line-height: 1.55;
-          color: #475569;
-          font-size: 0.95rem;
-        }
-        .feedback-thanks-ok {
-          min-height: 44px;
-          min-width: 120px;
-          padding: 0.5rem 1.25rem;
-          font-size: 1rem;
-          font-weight: 600;
-          font-family: inherit;
-          color: #fff;
-          background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%);
-          border: none;
-          border-radius: 10px;
-          cursor: pointer;
-        }
-        .feedback-thanks-ok:focus-visible {
-          outline: 3px solid #4338ca;
-          outline-offset: 2px;
-        }
-        .feedback-thanks-wa-hint {
-          margin: 0 0 0.75rem;
-          font-size: 0.875rem;
-          line-height: 1.45;
-          color: #64748b;
-        }
-        .feedback-thanks-wa {
-          width: 100%;
-          min-height: 48px;
-          margin-bottom: 0.65rem;
-          padding: 0.55rem 1rem;
-          font-size: 1rem;
-          font-weight: 600;
-          font-family: inherit;
-          color: #fff;
-          background: #25d366;
-          border: none;
-          border-radius: 10px;
-          cursor: pointer;
-          display: inline-flex;
+        .feedback-thanks-icon-wrap {
+          display: flex;
           align-items: center;
           justify-content: center;
-          gap: 0.4rem;
-          transition: filter 0.2s ease, transform 0.15s ease;
+          width: 4.5rem;
+          height: 4.5rem;
+          margin: 0 auto 1.25rem;
+          border-radius: 50%;
+          background: linear-gradient(145deg, #ecfdf5 0%, #d1fae5 100%);
+          border: 1px solid rgba(16, 185, 129, 0.25);
         }
-        .feedback-thanks-wa:hover {
-          filter: brightness(1.05);
+        .feedback-thanks-icon {
+          width: 2.35rem;
+          height: 2.35rem;
+          color: #059669;
+        }
+        .feedback-thanks-dialog h2 {
+          margin: 0;
+          font-size: clamp(1.25rem, 4vw, 1.45rem);
+          font-weight: 700;
+          letter-spacing: -0.02em;
+          color: #0f172a;
+        }
+        .feedback-thanks-dialog:focus {
+          outline: none;
+        }
+        .feedback-thanks-dialog:focus-visible {
+          outline: 3px solid #6366f1;
+          outline-offset: 3px;
+        }
+        .feedback-email-fail-backdrop {
+          position: fixed;
+          inset: 0;
+          z-index: 99990;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: max(1rem, env(safe-area-inset-top, 0px)) max(1rem, env(safe-area-inset-right, 0px))
+            max(1rem, env(safe-area-inset-bottom, 0px)) max(1rem, env(safe-area-inset-left, 0px));
+          box-sizing: border-box;
+          background: rgba(15, 23, 42, 0.52);
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
+          animation: feedback-thanks-fade-in 0.22s ease-out;
+        }
+        .feedback-email-fail-dialog {
+          width: 100%;
+          max-width: min(400px, 100vw - 2rem);
+          max-height: min(88dvh, 520px);
+          overflow-y: auto;
+          -webkit-overflow-scrolling: touch;
+          overscroll-behavior: contain;
+          background: linear-gradient(180deg, #ffffff 0%, #fef2f2 100%);
+          border-radius: clamp(16px, 4vw, 20px);
+          padding: clamp(1.35rem, 4vw, 1.75rem) clamp(1.15rem, 4vw, 1.5rem) clamp(1.15rem, 3vw, 1.5rem);
+          box-shadow:
+            0 0 0 1px rgba(248, 113, 113, 0.2),
+            0 24px 48px rgba(15, 23, 42, 0.16);
+          text-align: center;
+          font-family: var(--font-body, "Poppins", sans-serif);
+          animation: feedback-thanks-pop-in 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .feedback-email-fail-icon-wrap {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 4.25rem;
+          height: 4.25rem;
+          margin: 0 auto 1rem;
+          border-radius: 50%;
+          background: linear-gradient(145deg, #fef2f2 0%, #fee2e2 100%);
+          border: 1px solid rgba(248, 113, 113, 0.35);
+        }
+        .feedback-email-fail-icon {
+          width: 2.1rem;
+          height: 2.1rem;
+          color: #dc2626;
+        }
+        .feedback-email-fail-dialog h2 {
+          margin: 0 0 0.65rem;
+          font-size: clamp(1.15rem, 3.8vw, 1.35rem);
+          font-weight: 700;
+          color: #991b1b;
+        }
+        .feedback-email-fail-dialog p {
+          margin: 0 0 1.35rem;
+          line-height: 1.55;
+          color: #64748b;
+          font-size: 0.95rem;
+        }
+        .feedback-email-fail-ok {
+          width: 100%;
+          min-height: 48px;
+          padding: 0.55rem 1.25rem;
+          font-size: 1rem;
+          font-weight: 600;
+          font-family: inherit;
+          color: #fff;
+          background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+          border: none;
+          border-radius: 12px;
+          cursor: pointer;
+          box-shadow: 0 4px 14px rgba(185, 28, 28, 0.3);
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .feedback-email-fail-ok:hover {
           transform: translateY(-1px);
+          box-shadow: 0 6px 18px rgba(185, 28, 28, 0.35);
         }
-        .feedback-thanks-wa:focus-visible {
-          outline: 3px solid #128c7e;
+        .feedback-email-fail-ok:focus-visible {
+          outline: 3px solid #dc2626;
           outline-offset: 2px;
         }
       `}</style>
 
-      {thanksOpen && (
-        <div className="feedback-thanks-backdrop" role="presentation" onClick={closeThanks}>
-          <div
-            className="feedback-thanks-dialog"
-            role="alertdialog"
-            aria-modal="true"
-            aria-labelledby="feedback-thanks-title"
-            onClick={(ev) => ev.stopPropagation()}
-          >
-            <h2 id="feedback-thanks-title">Thank you!</h2>
-            <p>Thanks — we’ve received your feedback.</p>
-            <p className="feedback-thanks-wa-hint">
-              Tap below to open WhatsApp with this text, then tap <strong>Send</strong>.
-            </p>
-            <button
-              type="button"
-              className="feedback-thanks-wa"
-              aria-label="Open WhatsApp with your feedback message ready to send"
-              onClick={() => {
-                const p = lastSubmissionRef.current;
-                if (!p) return;
-                const url = buildWhatsAppUrl(p);
-                window.open(url, "_blank", "noopener,noreferrer");
-              }}
+      {typeof document !== "undefined" &&
+        thanksOpen &&
+        createPortal(
+          <div className="feedback-thanks-backdrop" role="presentation" onClick={closeThanks}>
+            <div
+              ref={thanksDialogRef}
+              className="feedback-thanks-dialog"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="feedback-thanks-title"
+              tabIndex={-1}
+              onClick={(ev) => ev.stopPropagation()}
             >
-              Send on WhatsApp
-            </button>
-            <button ref={thanksCloseRef} type="button" className="feedback-thanks-ok" onClick={closeThanks}>
-              OK
-            </button>
-          </div>
-        </div>
-      )}
+              <div className="feedback-thanks-icon-wrap" aria-hidden>
+                <FaCheckCircle className="feedback-thanks-icon" />
+              </div>
+              <h2 id="feedback-thanks-title">Thank you for your feedback</h2>
+            </div>
+          </div>,
+          document.body
+        )}
+
+      {typeof document !== "undefined" &&
+        emailFailOpen &&
+        createPortal(
+          <div className="feedback-email-fail-backdrop" role="presentation" onClick={closeEmailFail}>
+            <div
+              className="feedback-email-fail-dialog"
+              role="alertdialog"
+              aria-modal="true"
+              aria-labelledby="feedback-email-fail-title"
+              onClick={(ev) => ev.stopPropagation()}
+            >
+              <div className="feedback-email-fail-icon-wrap" aria-hidden>
+                <FaExclamationCircle className="feedback-email-fail-icon" />
+              </div>
+              <h2 id="feedback-email-fail-title">Failed to send email</h2>
+              <p>
+                We could not send your feedback by email. Please check your internet connection and try again. If the
+                problem continues, contact the school.
+              </p>
+              <button ref={emailFailCloseRef} type="button" className="feedback-email-fail-ok" onClick={closeEmailFail}>
+                OK
+              </button>
+            </div>
+          </div>,
+          document.body
+        )}
 
       <Navbar onNavigate={handleNavigate} onLogout={onLogout} />
       <main className="page-section feedback-page-main">
