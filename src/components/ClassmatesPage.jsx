@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
-const ClassmatesPage = () => {
+const PREVIEW_COUNT = 6;
+
+const ClassmatesPage = ({ variant = "full" }) => {
   const initialClassmates = [
     "Ambadas", "Arun", "Bhimu", "Bhimashankar",
     "Hrutik", "Jattappa", "Ningappa", "Mallikarjun", "Marilinga",
@@ -26,6 +29,11 @@ const ClassmatesPage = () => {
   const [classmates, setClassmates] = useState(initialClassmates);
   const [isShuffling, setIsShuffling] = useState(false);
 
+  const isPreview = variant === "preview";
+  const displayedClassmates = isPreview
+    ? initialClassmates.slice(0, PREVIEW_COUNT)
+    : classmates;
+
   const shuffleClassmates = () => {
     setIsShuffling(true);
     setTimeout(() => {
@@ -41,19 +49,21 @@ const ClassmatesPage = () => {
         <h2 className="section-title classmates-title">SSLC 2015–2016 Batch Students</h2>
         <div className="section-title-accent" aria-hidden="true" />
         <p className="section-subtitle">Our batch — the faces and names that made school memorable.</p>
-        <div className="shuffle-btn-wrap">
-          <button
-            onClick={shuffleClassmates}
-            className="shuffle-btn"
-            type="button"
-          >
-            click me
-          </button>
-        </div>
+        {!isPreview ? (
+          <div className="shuffle-btn-wrap">
+            <button
+              onClick={shuffleClassmates}
+              className="shuffle-btn"
+              type="button"
+            >
+              click me
+            </button>
+          </div>
+        ) : null}
       </div>
 
-      <div className="classmates-grid">
-        {classmates.map((name, index) => (
+      <div className={`classmates-grid${isPreview ? " classmates-grid--preview" : ""}`}>
+        {displayedClassmates.map((name, index) => (
           <div
             key={`${name}-${index}`}
             className="classmate-card reveal-card"
@@ -68,6 +78,14 @@ const ClassmatesPage = () => {
           </div>
         ))}
       </div>
+
+      {isPreview ? (
+        <div className="shuffle-btn-wrap shuffle-btn-wrap--after-grid">
+          <Link to="/batch-students" className="shuffle-btn">
+            View all students
+          </Link>
+        </div>
+      ) : null}
 
       </div>
 
@@ -93,7 +111,29 @@ const ClassmatesPage = () => {
         .shuffle-btn-wrap {
           display: flex;
           justify-content: center;
+          align-items: center;
           margin-top: 16px;
+          width: 100%;
+          box-sizing: border-box;
+        }
+
+        .shuffle-btn-wrap--after-grid {
+          margin-top: clamp(18px, 4vw, 28px);
+          margin-bottom: 4px;
+          padding-left: clamp(12px, 4vw, 24px);
+          padding-right: clamp(12px, 4vw, 24px);
+        }
+        @media (max-width: 480px) {
+          .shuffle-btn-wrap--after-grid {
+            padding-left: 12px;
+            padding-right: 12px;
+          }
+        }
+        @media (max-width: 360px) {
+          .shuffle-btn-wrap--after-grid {
+            padding-left: 10px;
+            padding-right: 10px;
+          }
         }
 
         .shuffle-btn {
@@ -108,6 +148,9 @@ const ClassmatesPage = () => {
           min-width: 110px;
           width: auto;
           display: inline-block;
+          text-align: center;
+          text-decoration: none;
+          box-sizing: border-box;
         }
         
         @media (min-width: 1200px) {
@@ -124,14 +167,22 @@ const ClassmatesPage = () => {
           grid-template-columns: repeat(3, minmax(0, 1fr));
           gap: clamp(14px, 3vw, 22px);
           max-width: 100%;
+          width: 100%;
           margin: 0 auto;
           padding: 8px clamp(12px, 4vw, 24px) 24px;
+          box-sizing: border-box;
+          align-items: stretch;
+        }
+        .classmates-grid--preview {
+          padding-bottom: 8px;
         }
         @media (max-width: 480px) {
-          .classmates-grid { padding: 8px 12px 20px; gap: 14px; }
+          .classmates-grid { padding: 8px 12px 24px; gap: 14px; }
+          .classmates-grid--preview { padding-bottom: 8px; }
         }
         @media (max-width: 360px) {
-          .classmates-grid { padding: 6px 10px 16px; gap: 12px; }
+          .classmates-grid { padding: 6px 10px 24px; gap: 12px; }
+          .classmates-grid--preview { padding-bottom: 6px; }
         }
 
         @media (min-width: 900px) {
@@ -143,6 +194,7 @@ const ClassmatesPage = () => {
 
         .classmate-card {
           min-height: 76px;
+          min-width: 0;
           padding: 18px;
           border-radius: 16px;
           box-shadow: 0 8px 20px rgba(0,0,0,0.08);
@@ -156,6 +208,9 @@ const ClassmatesPage = () => {
           color: #1f2937;
           text-align: center;
           transition: all 0.3s ease;
+          overflow-wrap: break-word;
+          word-break: break-word;
+          box-sizing: border-box;
         }
 
         .classmate-card:hover {

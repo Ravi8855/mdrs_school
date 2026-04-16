@@ -6,6 +6,7 @@ import LoginPage from "./components/LoginPage";
 import Navbar from "./components/Navbar";
 import AnimatedSection from "./components/AnimatedSection";
 import ClassmatesPage from "./components/ClassmatesPage";
+import BatchStudentsPage from "./components/BatchStudentsPage";
 import TeachersPage from "./components/TeachersPage";
 import SchoolHome from "./components/SchoolHome";
 import GalleryPage from "./components/GalleryPage";
@@ -68,7 +69,7 @@ function AppContent({ onLogout }) {
       </section>
 
       <section id="classmates" className="page-section">
-        <AnimatedSection><ClassmatesPage /></AnimatedSection>
+        <AnimatedSection><ClassmatesPage variant="preview" /></AnimatedSection>
       </section>
 
       <section id="alumni" className="page-section">
@@ -162,6 +163,16 @@ function App() {
         path="/feedback"
         element={
           authed ? <FeedbackPage onLogout={handleLogout} /> : <Navigate to="/login" replace />
+        }
+      />
+      <Route
+        path="/batch-students"
+        element={
+          authed ? (
+            <BatchStudentsPage onLogout={handleLogout} />
+          ) : (
+            <Navigate to="/login" replace />
+          )
         }
       />
       <Route
