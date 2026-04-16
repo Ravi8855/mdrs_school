@@ -26,8 +26,21 @@ const GalleryPage = () => {
     ];
 
     const [selectedImage, setSelectedImage] = useState(null);
+    const [revealedImages, setRevealedImages] = useState(() => new Set());
 
     const closeLightbox = () => setSelectedImage(null);
+
+    const handleCancelLightbox = () => {
+        const src = selectedImage;
+        setSelectedImage(null);
+        if (src != null) {
+            setRevealedImages((prev) => {
+                const next = new Set(prev);
+                next.delete(src);
+                return next;
+            });
+        }
+    };
 
     const downloadImage = (src) => {
         const link = document.createElement('a');
@@ -255,6 +268,95 @@ const GalleryPage = () => {
                     from { opacity: 0; }
                     to { opacity: 1; }
                 }
+
+                .memory-card {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                }
+
+                .memory-locked-layer {
+                    position: absolute;
+                    inset: 0;
+                    z-index: 4;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    box-sizing: border-box;
+                    padding: 14px;
+                    overflow: hidden;
+
+                    background: linear-gradient(
+                        155deg,
+                        rgba(30, 58, 95, 0.92) 0%,
+                        rgba(21, 94, 117, 0.9) 48%,
+                        rgba(14, 116, 144, 0.88) 100%
+                    );
+                    backdrop-filter: blur(10px) saturate(140%);
+                    -webkit-backdrop-filter: blur(10px) saturate(140%);
+
+                    border: 1px solid rgba(103, 232, 249, 0.35);
+                    box-shadow:
+                        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                        inset 0 -1px 0 rgba(0, 0, 0, 0.15),
+                        0 10px 32px rgba(8, 47, 73, 0.35);
+
+                    text-align: center;
+
+                    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                        visibility 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                        box-shadow 0.35s ease;
+                    opacity: 1;
+                    visibility: visible;
+                }
+
+                .memory-locked-layer--revealed {
+                    opacity: 0;
+                    visibility: hidden;
+                    pointer-events: none;
+                }
+
+                .memory-locked-title {
+                    position: relative;
+                    z-index: 1;
+                    display: block;
+                    max-width: 92%;
+                    margin: 0 auto;
+                    padding: 0 6px;
+                    font-weight: 600;
+                    font-size: 14px;
+                    line-height: 1.4;
+                    letter-spacing: 0.01em;
+                    color: rgba(240, 253, 255, 0.98);
+                    text-shadow: 0 1px 3px rgba(8, 47, 73, 0.45);
+                    word-wrap: break-word;
+                    overflow-wrap: break-word;
+                }
+
+                @media (hover: hover) {
+                    .gallery-card:hover .memory-locked-layer {
+                        box-shadow:
+                            inset 0 1px 0 rgba(255, 255, 255, 0.25),
+                            inset 0 -1px 0 rgba(0, 0, 0, 0.12),
+                            0 12px 40px rgba(6, 78, 117, 0.45),
+                            0 0 0 1px rgba(34, 211, 238, 0.2);
+                    }
+                }
+
+                @media (min-width: 769px) and (max-width: 1024px) {
+                    .memory-locked-title {
+                        font-size: 13px;
+                    }
+                }
+
+                @media (max-width: 768px) {
+                    .memory-locked-layer {
+                        padding: 10px;
+                    }
+                    .memory-locked-title {
+                        font-size: 12px;
+                    }
+                }
             `}</style>
 
             <h2 className="gallery-title">School Memories</h2>
@@ -264,13 +366,18 @@ const GalleryPage = () => {
                     <div
                         key={index}
                         className="gallery-card"
-                        onClick={() => setSelectedImage(src)}
+                        onClick={() => {
+                            setRevealedImages((prev) => new Set(prev).add(src));
+                            setSelectedImage(src);
+                        }}
                     >
-                        <img src={src} alt={`img-${index}`} />
-
-                        <div className="overlay">
-                            <div className="overlay-text">
-                                Click to see your memory
+                        <div className="memory-card">
+                            <img src={src} alt={`img-${index}`} />
+                            <div
+                                className={`memory-locked-layer${revealedImages.has(src) ? " memory-locked-layer--revealed" : ""}`}
+                                aria-hidden={revealedImages.has(src)}
+                            >
+                                <span className="memory-locked-title">Click to see your memory</span>
                             </div>
                         </div>
                     </div>
@@ -308,7 +415,7 @@ const GalleryPage = () => {
                     />
 
                     <div className="buttons" onClick={(e) => e.stopPropagation()}>
-                        <button className="btn cancel-btn" onClick={closeLightbox}>
+                        <button className="btn cancel-btn" onClick={handleCancelLightbox}>
                             Cancel
                         </button>
 
