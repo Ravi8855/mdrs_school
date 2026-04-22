@@ -16,6 +16,8 @@ import HostelDashboard from "./components/hostel/HostelDashboard";
 import RoomList from "./components/hostel/RoomList";
 import RoomDetails from "./components/hostel/RoomDetails";
 import HostelTeaser from "./components/hostel/HostelTeaser";
+import VotingPreview from "./components/VotingPreview";
+import VotingPage from "./components/VotingPage";
 import BellRingMadness from "./components/BellRingMadness";
 import Footer from "./components/Footer";
 import FeedbackCTA from "./components/FeedbackCTA";
@@ -91,6 +93,10 @@ function AppContent({ onLogout }) {
       <AnimatedSection>
         <FeedbackCTA />
       </AnimatedSection>
+      {/* No AnimatedSection here: reveal uses opacity:0 until in-view, which can block taps on short CTAs above the footer */}
+      <section className="page-section" id="voting-teaser" aria-labelledby="voting-preview-title">
+        <VotingPreview />
+      </section>
       <AnimatedSection>
         <Footer />
       </AnimatedSection>
@@ -185,6 +191,12 @@ function App() {
         <Route path="boys/:roomId" element={<RoomDetails gender="boys" />} />
         <Route path="girls/:roomId" element={<RoomDetails gender="girls" />} />
       </Route>
+      <Route
+        path="/voting"
+        element={
+          authed ? <VotingPage onLogout={handleLogout} /> : <Navigate to="/login" replace />
+        }
+      />
     </Routes>
   );
 }

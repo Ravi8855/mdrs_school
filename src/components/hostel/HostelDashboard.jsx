@@ -7,14 +7,21 @@ export default function HostelDashboard() {
   return (
     <div className="hostel-page">
       <div className="hostel-inner">
-        <Link to="/" className="hostel-back" aria-label="Back to school home">
-          ← Back to home
-        </Link>
-        <h1 className="hostel-title">Our Hostel</h1>
-        <p className="hostel-subtitle">
-          Explore boys and girls hostel houses, house masters, leaders, and roommates in one
-          place.
-        </p>
+        <header className="hostel-hero hostel-hero--dashboard">
+          <Link to="/" className="hostel-back" aria-label="Back to school home">
+            ← Back to home
+          </Link>
+          <div className="hostel-hero-text">
+            <h1 className="hostel-title hostel-title--hero">
+              <span className="hostel-title-word">Our</span>{" "}
+              <span className="hostel-title-word">Hostel</span>
+            </h1>
+            <p className="hostel-subtitle">
+              Explore boys and girls hostel houses, house masters, leaders, and roommates in one
+              place.
+            </p>
+          </div>
+        </header>
 
         <div className="hostel-dashboard-grid">
           <Link to="/hostel/boys" className="hostel-dash-card hostel-dash-card--boys">

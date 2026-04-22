@@ -9,6 +9,7 @@ const QUICK_LINKS = [
   { id: "hostel", label: "Our Hostel", href: "/hostel" },
   { id: "gallery", label: "Gallery" },
   { id: "bell-game", label: "Bell Game" },
+  { id: "voting", label: "Class Voting", href: "/voting" },
 ];
 
 const Footer = () => {
