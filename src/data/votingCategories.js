@@ -11,7 +11,7 @@ export const VOTING_CATEGORIES = [
     nominees: [
       { id: "c_viresh", name: "Viresh" },
       { id: "c_mallamma", name: "Mallamma" },
-      { id: "c_golallappa", name: "golallappa" },
+      { id: "c_gollalappa", name: "Gollalappa" },
       { id: "c_chaitra", name: "Chaitra" },
     ],
   },
@@ -33,7 +33,7 @@ export const VOTING_CATEGORIES = [
     title: "Non-Stop Talker",
     subtitle: "Who could talk for hours?",
     nominees: [
-      { id: "t_mallikarjun", name: "Mallikarjun" },
+      { id: "t_shweta", name: "Shweta" },
       { id: "t_prema", name: "Prema" },
       { id: "t_suchitra", name: "Suchitra" },
       { id: "t_Bhimu", name: "Bhimu" },
@@ -48,7 +48,7 @@ export const VOTING_CATEGORIES = [
       { id: "cc_ganga", name: "Ganga" },
       { id: "cc_ambika", name: "Ambika" },
       { id: "cc_ambadas", name: "Ambadas" },
-      { id: "cc_hrutik", name: "Hrutik" },
+      { id: "cc_umashree", name: "Umashree" },
     ],
   },
   {
@@ -79,7 +79,7 @@ export const VOTING_CATEGORIES = [
     id: "debate_champion",
     emoji: "🏆",
     title: "Debate Champion (Always Wins Arguments)",
-    subtitle: "Who could talk you into anything?",
+    subtitle: "Who talks like a lawyer?",
     nominees: [
       { id: "dc_mallamma", name: "Mallamma" },
       { id: "dc_roopa", name: "Roopa" },

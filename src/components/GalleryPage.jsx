@@ -152,52 +152,6 @@ const GalleryPage = () => {
                     opacity: 1;
                 }
 
-                /* Memory Share Card Styling */
-                .memory-share-card {
-                    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-                    border: 2px dashed #00d4ff;
-                }
-
-                .memory-share-card:hover {
-                    background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
-                    border-color: #00f0ff;
-                    box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
-                    transform: scale(1.02);
-                }
-
-                .memory-share-text {
-                    text-align: center;
-                    color: #00d4ff;
-                    font-weight: 700;
-                    padding: 20px;
-                    letter-spacing: 0.5px;
-                    line-height: 1.4;
-                }
-
-                /* Mobile (max-width: 600px) */
-                @media (max-width: 600px) {
-                    .memory-share-text {
-                        font-size: 0.9rem;
-                        padding: 15px;
-                    }
-                }
-
-                /* Tablet (601px - 1024px) */
-                @media (min-width: 601px) and (max-width: 1024px) {
-                    .memory-share-text {
-                        font-size: 1.1rem;
-                        padding: 18px;
-                    }
-                }
-
-                /* Desktop (1025px+) */
-                @media (min-width: 1025px) {
-                    .memory-share-text {
-                        font-size: 1.5rem;
-                        padding: 20px;
-                    }
-                }
-
                 /* Mobile always visible */
                 @media (max-width: 768px) {
                     .overlay {
@@ -382,27 +336,6 @@ const GalleryPage = () => {
                         </div>
                     </div>
                 ))}
-                
-                {/* Memory Share Card */}
-                <div style={{
-                    position: 'relative',
-                    aspectRatio: '1/1',
-                    overflow: 'hidden',
-                    borderRadius: '12px',
-                    backgroundColor: '#1a1a2e',
-                    border: '2px dashed #00d4ff',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer',
-                    transition: 'all 0.4s ease',
-                }} className="memory-share-card">
-                    <div className="memory-share-text">
-                        Share your favorite memories  <br />
-                        with us
-                        
-                    </div>
-                </div>
             </div>
 
             {selectedImage && (

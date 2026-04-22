@@ -234,6 +234,29 @@
   animation: hostel-hero-gradient-shift 14s ease-in-out 0.8s infinite alternate;
 }
 
+/*
+ * Mobile WebKit often fails to paint background-clip:text + transparent fill,
+ * leaving "Our Hostel" invisible. Use solid text on narrow viewports.
+ */
+@media (max-width: 767.98px) {
+  .hostel-title--hero {
+    background: none;
+    background-size: auto;
+    background-position: unset;
+    -webkit-background-clip: unset;
+    background-clip: unset;
+    color: #0f172a;
+    -webkit-text-fill-color: #0f172a;
+    animation: none;
+  }
+
+  .hostel-title-word {
+    opacity: 1;
+    animation: none;
+    transform: none;
+  }
+}
+
 .hostel-title-word {
   display: inline-block;
   opacity: 0;
