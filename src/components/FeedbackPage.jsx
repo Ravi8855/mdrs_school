@@ -5,7 +5,6 @@ import emailjs from "@emailjs/browser";
 import { FaArrowLeft, FaCheckCircle, FaExclamationCircle } from "react-icons/fa";
 import Navbar from "./Navbar";
 import AnimatedSection from "./AnimatedSection";
-import Footer from "./Footer";
 import FeedbackRoleSelect from "./FeedbackRoleSelect";
 import {
   insertFeedbackSubmission,
@@ -71,7 +70,7 @@ function buildEmailJsParams(formData) {
 }
 
 /**
- * Dedicated feedback page (route /feedback). Keeps Navbar + footer shell consistent with the rest of the site.
+ * Dedicated feedback page (route /feedback). Navbar shell matches the rest of the site.
  * The feedback CTA banner is not shown here to avoid duplicating the entry form.
  */
 export default function FeedbackPage({ onLogout }) {
@@ -283,7 +282,7 @@ export default function FeedbackPage({ onLogout }) {
       <style>{`
         .feedback-page-main {
           padding-top: 1rem;
-          padding-bottom: 2rem;
+          padding-bottom: max(2.5rem, calc(env(safe-area-inset-bottom, 0px) + 1.5rem));
           font-family: var(--font-body, "Poppins", sans-serif);
         }
         .feedback-page-inner {
@@ -811,9 +810,6 @@ export default function FeedbackPage({ onLogout }) {
           </form>
         </div>
       </main>
-      <AnimatedSection>
-        <Footer />
-      </AnimatedSection>
     </div>
   );
 }

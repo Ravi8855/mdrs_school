@@ -19,7 +19,6 @@ import HostelTeaser from "./components/hostel/HostelTeaser";
 import VotingPreview from "./components/VotingPreview";
 import VotingPage from "./components/VotingPage";
 import BellRingMadness from "./components/BellRingMadness";
-import Footer from "./components/Footer";
 import FeedbackCTA from "./components/FeedbackCTA";
 import FeedbackPage from "./components/FeedbackPage";
 
@@ -78,10 +77,6 @@ function AppContent({ onLogout }) {
         <AnimatedSection><Alumni /></AnimatedSection>
       </section>
 
-      <section id="hostel" className="page-section">
-        <AnimatedSection><HostelTeaser /></AnimatedSection>
-      </section>
-
       <section id="gallery" className="page-section">
         <AnimatedSection><GalleryPage /></AnimatedSection>
       </section>
@@ -90,15 +85,17 @@ function AppContent({ onLogout }) {
         <AnimatedSection><BellRingMadness /></AnimatedSection>
       </section>
 
-      <AnimatedSection>
-        <FeedbackCTA />
-      </AnimatedSection>
-      {/* No AnimatedSection here: reveal uses opacity:0 until in-view, which can block taps on short CTAs above the footer */}
+      <section id="hostel" className="page-section">
+        <AnimatedSection><HostelTeaser /></AnimatedSection>
+      </section>
+
+      {/* No AnimatedSection: scroll-reveal opacity can block taps on the voting teaser link */}
       <section className="page-section" id="voting-teaser" aria-labelledby="voting-preview-title">
         <VotingPreview />
       </section>
+
       <AnimatedSection>
-        <Footer />
+        <FeedbackCTA />
       </AnimatedSection>
 
       <button

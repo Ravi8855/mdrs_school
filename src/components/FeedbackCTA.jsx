@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 const FEEDBACK_HASH = "#feedback-form";
 
 /**
- * Responsive feedback call-to-action placed above the site footer.
+ * Responsive feedback call-to-action at the end of the homepage.
  */
 const FeedbackCTA = () => {
   const navigate = useNavigate();
@@ -41,7 +41,7 @@ const FeedbackCTA = () => {
           max-width: 1000px;
           margin: 0 auto;
           width: 100%;
-          padding: 0 clamp(16px, 4vw, 24px);
+          padding: 0 clamp(16px, 4vw, 24px) max(28px, calc(env(safe-area-inset-bottom, 0px) + 16px));
           box-sizing: border-box;
         }
 

@@ -3,7 +3,6 @@ import confetti from "canvas-confetti";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 import Navbar from "./Navbar";
-import Footer from "./Footer";
 import { VOTING_CATEGORIES } from "../data/votingCategories";
 import { pickNominee, readSelections, selectionCountForNominee } from "../lib/votingStorage";
 import "./VotingPage.css";
@@ -211,8 +210,6 @@ export default function VotingPage({ onLogout }) {
           </p>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }

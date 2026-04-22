@@ -3,10 +3,10 @@
   z-index: 20;
   isolation: isolate;
   width: 100%;
-  max-width: var(--content-width, 1200px);
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 0 max(var(--space-4, 16px), env(safe-area-inset-left, 0px))
-    max(var(--space-4, 16px), env(safe-area-inset-right, 0px)) var(--space-6, 24px);
+  padding-left: max(clamp(16px, 4vw, 24px), env(safe-area-inset-left, 0px));
+  padding-right: max(clamp(16px, 4vw, 24px), env(safe-area-inset-right, 0px));
   box-sizing: border-box;
 }
 

@@ -144,7 +144,7 @@ section[id]:not(#home) {
   position: relative;
   background: var(--bg);
 }
-/* Tight stacking: gallery → game → footer */
+/* Tight stacking: gallery → game → hostel → class voting → feedback */
 #gallery.page-section {
   padding-top: var(--space-4);
   padding-bottom: 0;
@@ -154,6 +154,16 @@ section[id]:not(#home) {
   padding-bottom: 0;
   margin-top: 0;
   margin-bottom: 0;
+}
+#voting-teaser.page-section {
+  padding-top: var(--space-4);
+  padding-bottom: var(--space-3);
+}
+@media (max-width: 768px) {
+  #voting-teaser.page-section {
+    padding-top: var(--space-3);
+    padding-bottom: var(--space-2);
+  }
 }
 @media (max-width: 768px) {
   .page-section, section[id]:not(#home) {
@@ -331,7 +341,6 @@ section[id]:not(#home) {
 
 /* App layout */
 .app-wrapper { display: flex; flex-direction: column; min-height: 100vh; }
-.app-wrapper > footer { margin-top: auto; }
 section { margin: 0; padding: 0; width: 100%; box-sizing: border-box; }
 section + section { margin-top: 0; padding-top: 0; }
 #home { margin-bottom: 0; padding-bottom: 0; min-height: 100vh; }

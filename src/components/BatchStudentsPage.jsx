@@ -4,7 +4,6 @@ import { FaArrowLeft } from "react-icons/fa";
 import Navbar from "./Navbar";
 import AnimatedSection from "./AnimatedSection";
 import ClassmatesPage from "./ClassmatesPage";
-import Footer from "./Footer";
 
 /**
  * Full SSLC batch student list at /batch-students (same UI as the former homepage section).
@@ -38,7 +37,7 @@ export default function BatchStudentsPage({ onLogout }) {
       <style>{`
         .batch-students-page-main {
           padding-top: 0.75rem;
-          padding-bottom: 0;
+          padding-bottom: max(1.5rem, calc(env(safe-area-inset-bottom, 0px) + 1rem));
           font-family: var(--font-body, "Poppins", sans-serif);
         }
         .batch-students-back-row {
@@ -86,9 +85,6 @@ export default function BatchStudentsPage({ onLogout }) {
           <ClassmatesPage variant="full" />
         </AnimatedSection>
       </main>
-      <AnimatedSection>
-        <Footer />
-      </AnimatedSection>
     </div>
   );
 }
