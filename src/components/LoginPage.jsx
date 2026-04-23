@@ -56,7 +56,7 @@ const LoginPage = ({ onLogin }) => {
       setPopup({
         show: true,
         type: "success",
-        message: "You are signed in. Taking you to the school home…",
+       
       });
       if (navigateAfterLoginRef.current) clearTimeout(navigateAfterLoginRef.current);
       navigateAfterLoginRef.current = setTimeout(() => {
@@ -198,10 +198,6 @@ const LoginPage = ({ onLogin }) => {
                 <span className="login-btn-shine" />
               </button>
             </form>
-
-            <p className="login-footer-text">
-              By signing in, you agree to our terms and privacy policy.
-            </p>
           </div>
         </div>
       </div>
