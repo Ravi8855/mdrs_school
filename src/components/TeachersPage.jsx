@@ -153,6 +153,7 @@ const TeachersPage = () => {
         }
 
         .teacher-pill {
+          cursor: pointer;
           border-radius: 16px;
           padding: 16px 12px;
           text-align: center;
@@ -174,6 +175,11 @@ const TeachersPage = () => {
         .teacher-pill:hover {
           transform: translateY(-5px);
           box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+        }
+
+        .teacher-pill:focus-visible {
+          outline: 2px solid rgba(71, 85, 105, 0.45);
+          outline-offset: 3px;
         }
 
         .teacher-pill .teacher-img {
@@ -1134,6 +1140,16 @@ const TeachersPage = () => {
             key={index}
             className="teacher-pill"
             style={{ background: teacherGradients[index % teacherGradients.length] }}
+            role="button"
+            tabIndex={0}
+            aria-label={`Open details for ${t.name}`}
+            onClick={() => setSelectedTeacher(t)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                setSelectedTeacher(t);
+              }
+            }}
           >
             <div>{t.name}</div>
 
@@ -1142,7 +1158,6 @@ const TeachersPage = () => {
               src={t.img} 
               alt={t.name} 
               className="teacher-img"
-              onClick={() => setSelectedTeacher(t)}
             />
           </div>
         ))}
