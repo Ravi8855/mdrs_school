@@ -62,7 +62,7 @@ function AppContent({ onLogout }) {
       <Navbar onNavigate={handleNavigate} onLogout={onLogout} />
 
       <section id="home">
-        <SchoolHome onNavigate={handleNavigate} />
+        <SchoolHome />
       </section>
 
       <section id="teachers" className="page-section">

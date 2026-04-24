@@ -142,22 +142,33 @@ const TeachersPage = () => {
           transform: scale(1.08);
         }
 
-        /* Teachers Grid */
+        /* Teachers Grid — uniform square cards, 3 per row */
         .teachers-grid {
           display: grid;
-          grid-template-columns: repeat(3, 1fr);
+          grid-template-columns: repeat(3, minmax(0, 1fr));
           gap: 20px;
           width: 100%;
           margin: 0 auto;
+          align-items: stretch;
         }
 
         .teacher-pill {
           border-radius: 16px;
-          padding: 20px;
+          padding: 16px 12px;
           text-align: center;
           box-shadow: 0 6px 18px rgba(0,0,0,0.1);
           transition: transform 0.3s ease, box-shadow 0.3s ease;
           background: white;
+          aspect-ratio: 1 / 1;
+          width: 100%;
+          min-width: 0;
+          min-height: 0;
+          box-sizing: border-box;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
         }
 
         .teacher-pill:hover {
@@ -165,16 +176,33 @@ const TeachersPage = () => {
           box-shadow: 0 12px 28px rgba(0,0,0,0.15);
         }
 
+        .teacher-pill .teacher-img {
+          order: -1;
+          flex-shrink: 0;
+        }
+
         .teacher-pill div {
           font-weight: 700;
           font-size: 1rem;
           color: var(--text);
-          margin-bottom: var(--space-3);
+          margin: 0;
+          width: 100%;
+          min-width: 0;
+          max-width: 100%;
+          text-align: center;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          line-clamp: 2;
+          word-break: break-word;
+          line-height: 1.25;
         }
 
         .teacher-img {
-          width: 80px;
-          height: 80px;
+          width: clamp(56px, 32%, 80px);
+          height: clamp(56px, 32%, 80px);
           border-radius: 50%;
           object-fit: cover;
           margin: 0 auto;
@@ -183,6 +211,7 @@ const TeachersPage = () => {
           display: block;
           cursor: pointer;
           transition: transform 0.2s ease, box-shadow 0.2s ease;
+          flex-shrink: 0;
         }
 
         .teacher-img:hover {
@@ -193,14 +222,14 @@ const TeachersPage = () => {
         /* Responsive */
         @media (max-width: 1400px) {
           .teachers-grid {
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 20px;
           }
         }
 
         @media (max-width: 1200px) {
           .teachers-grid {
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 18px;
           }
         }
@@ -215,17 +244,18 @@ const TeachersPage = () => {
           }
 
           .teachers-grid {
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 16px;
           }
 
           .teacher-pill {
-            padding: 18px;
+            padding: 14px 10px;
+            gap: 8px;
           }
 
           .teacher-img {
-            width: 75px;
-            height: 75px;
+            width: clamp(52px, 30%, 76px);
+            height: clamp(52px, 30%, 76px);
           }
         }
 
@@ -239,7 +269,7 @@ const TeachersPage = () => {
           }
 
           .teachers-grid {
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 15px;
           }
 
@@ -252,17 +282,19 @@ const TeachersPage = () => {
           }
 
           .teacher-pill {
-            padding: 14px 10px;
+            padding: 12px 8px;
+            gap: 8px;
           }
 
           .teacher-img {
-            width: 70px;
-            height: 70px;
+            width: clamp(48px, 28%, 70px);
+            height: clamp(48px, 28%, 70px);
           }
 
           .teacher-pill div {
             font-size: 0.9rem;
-            margin-bottom: 10px;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
           }
         }
 
@@ -276,24 +308,25 @@ const TeachersPage = () => {
           }
 
           .teachers-grid {
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 12px;
           }
 
           .teacher-pill {
-            padding: 12px;
+            padding: 10px 6px;
             border-radius: 12px;
+            gap: 6px;
           }
 
           .teacher-pill div {
             font-size: 0.85rem;
-            margin-bottom: 8px;
-            word-break: break-word;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
           }
 
           .teacher-img {
-            width: 65px;
-            height: 65px;
+            width: clamp(44px, 26%, 64px);
+            height: clamp(44px, 26%, 64px);
             border: 2px solid white;
           }
 
@@ -337,27 +370,28 @@ const TeachersPage = () => {
           }
 
           .teachers-grid {
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 10px;
             width: 100%;
             padding: 0;
           }
 
           .teacher-pill {
-            padding: 10px 8px;
+            padding: 8px 5px;
             border-radius: 12px;
+            gap: 6px;
           }
 
           .teacher-pill div {
             font-size: 0.8rem;
             font-weight: 700;
-            margin-bottom: 8px;
-            word-break: break-word;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
           }
 
           .teacher-img {
-            width: 60px;
-            height: 60px;
+            width: clamp(40px, 24%, 58px);
+            height: clamp(40px, 24%, 58px);
             border: 2px solid white;
           }
 
@@ -402,25 +436,26 @@ const TeachersPage = () => {
           }
 
           .teachers-grid {
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 8px;
             padding: 0;
           }
 
           .teacher-pill {
-            padding: 8px 6px;
+            padding: 7px 4px;
             border-radius: 10px;
+            gap: 5px;
           }
 
           .teacher-pill div {
             font-size: 0.75rem;
-            margin-bottom: 6px;
-            word-break: break-word;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
           }
 
           .teacher-img {
-            width: 55px;
-            height: 55px;
+            width: clamp(38px, 22%, 54px);
+            height: clamp(38px, 22%, 54px);
             border: 2px solid white;
           }
 
@@ -459,26 +494,27 @@ const TeachersPage = () => {
           }
 
           .teachers-grid {
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 6px;
             padding: 0;
           }
 
           .teacher-pill {
-            padding: 8px 6px;
+            padding: 6px 3px;
             border-radius: 10px;
+            gap: 4px;
           }
 
           .teacher-pill div {
             font-size: 0.7rem;
-            margin-bottom: 5px;
-            word-break: break-word;
             line-height: 1.2;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
           }
 
           .teacher-img {
-            width: 52px;
-            height: 52px;
+            width: clamp(36px, 21%, 50px);
+            height: clamp(36px, 21%, 50px);
             border: 2px solid white;
           }
 
@@ -531,48 +567,78 @@ const TeachersPage = () => {
 
         .principal-image-modal-content {
           position: relative;
-          max-width: 90vw;
-          max-height: 90vh;
-          width: auto;
+          --modal-size: min(280px, 90vw, 86dvh);
+          width: var(--modal-size);
+          height: var(--modal-size);
+          max-width: var(--modal-size);
+          max-height: var(--modal-size);
+          aspect-ratio: 1 / 1;
+          box-sizing: border-box;
           animation: slideUp 0.3s ease;
           background: white;
           border-radius: 20px;
-          padding: 40px 30px;
+          padding: clamp(10px, 3.5vw, 20px) clamp(10px, 3vw, 18px);
+          padding-top: clamp(40px, 11%, 48px);
           box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          overflow: auto;
+          gap: clamp(8px, 2.2vw, 12px);
+          overflow: hidden;
           z-index: 2100;
         }
 
         .principal-image-modal img {
-          width: 180px;
-          height: 180px;
+          flex: 0 0 auto;
+          align-self: center;
+          width: clamp(100px, 42%, 132px);
+          height: clamp(100px, 42%, 132px);
+          aspect-ratio: 1 / 1;
           object-fit: cover;
+          object-position: center;
           border-radius: 50%;
-          border: 5px solid #fff;
-          margin-bottom: 25px;
-          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+          border: 4px solid #fff;
+          margin: 0;
+          box-sizing: border-box;
+          box-shadow:
+            0 12px 32px rgba(0, 0, 0, 0.2),
+            0 4px 12px rgba(0, 0, 0, 0.1),
+            0 0 0 1px rgba(0, 0, 0, 0.06);
         }
 
         .modal-teacher-name {
           font-size: 1.6rem;
           font-weight: 800;
           color: #1a1a1a;
-          margin-bottom: 10px;
+          margin: 0;
+          width: 100%;
+          max-width: 100%;
+          padding: 0 clamp(36px, 12%, 44px);
+          box-sizing: border-box;
           text-align: center;
           font-family: var(--font-heading);
+          line-height: 1.2;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
 
         .modal-teacher-subject {
           font-size: 1.1rem;
           color: #555;
           text-align: center;
-          margin-bottom: 0;
+          margin: 0;
           font-weight: 600;
           letter-spacing: 0.3px;
+          width: 100%;
+          max-width: 100%;
+          padding: 0 clamp(10px, 4vw, 16px);
+          box-sizing: border-box;
+          line-height: 1.25;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
 
         .principal-close-btn {
@@ -825,25 +891,26 @@ const TeachersPage = () => {
           }
         }
 
-        /* Modal Responsive Styles */
+        /* Modal Responsive Styles — square card, laptop / tablet / mobile */
         @media (max-width: 1024px) {
           .principal-image-modal-content {
-            max-width: 85vw;
-            max-height: 85vh;
-            padding: 35px 25px;
+            --modal-size: min(280px, 88vw, 84dvh);
+            width: var(--modal-size);
+            height: var(--modal-size);
+            max-width: var(--modal-size);
+            max-height: var(--modal-size);
             border-radius: 18px;
+            padding-top: clamp(38px, 10%, 46px);
           }
 
           .principal-image-modal img {
-            width: 160px;
-            height: 160px;
-            margin-bottom: 22px;
+            width: clamp(96px, 41%, 128px);
+            height: clamp(96px, 41%, 128px);
             border: 4px solid #fff;
           }
 
           .modal-teacher-name {
             font-size: 1.45rem;
-            margin-bottom: 8px;
           }
 
           .modal-teacher-subject {
@@ -861,22 +928,23 @@ const TeachersPage = () => {
 
         @media (max-width: 768px) {
           .principal-image-modal-content {
-            max-width: 88vw;
-            max-height: 88vh;
-            padding: 30px 20px;
+            --modal-size: min(268px, 90vw, 82dvh);
+            width: var(--modal-size);
+            height: var(--modal-size);
+            max-width: var(--modal-size);
+            max-height: var(--modal-size);
             border-radius: 16px;
+            padding-top: clamp(36px, 10%, 44px);
           }
 
           .principal-image-modal img {
-            width: 140px;
-            height: 140px;
-            margin-bottom: 20px;
+            width: clamp(92px, 40%, 122px);
+            height: clamp(92px, 40%, 122px);
             border: 4px solid #fff;
           }
 
           .modal-teacher-name {
             font-size: 1.3rem;
-            margin-bottom: 7px;
           }
 
           .modal-teacher-subject {
@@ -898,28 +966,28 @@ const TeachersPage = () => {
           }
 
           .principal-image-modal-content {
-            max-width: 95vw;
-            max-height: 85vh;
-            padding: 25px 18px;
+            --modal-size: min(252px, 90vw, 82dvh);
+            width: var(--modal-size);
+            height: var(--modal-size);
+            max-width: var(--modal-size);
+            max-height: var(--modal-size);
             border-radius: 14px;
+            padding-top: clamp(34px, 10%, 42px);
           }
 
           .principal-image-modal img {
-            width: 120px;
-            height: 120px;
-            margin-bottom: 18px;
+            width: clamp(88px, 39%, 116px);
+            height: clamp(88px, 39%, 116px);
             border: 3.5px solid #fff;
           }
 
           .modal-teacher-name {
             font-size: 1.15rem;
-            margin-bottom: 6px;
-            word-break: break-word;
+            padding: 0 clamp(32px, 11%, 40px);
           }
 
           .modal-teacher-subject {
             font-size: 0.95rem;
-            word-break: break-word;
           }
 
           .principal-close-btn {
@@ -937,29 +1005,29 @@ const TeachersPage = () => {
           }
 
           .principal-image-modal-content {
-            max-width: 96vw;
-            max-height: 82vh;
-            padding: 20px 14px;
+            --modal-size: min(240px, 92vw, 80dvh);
+            width: var(--modal-size);
+            height: var(--modal-size);
+            max-width: var(--modal-size);
+            max-height: var(--modal-size);
             border-radius: 12px;
+            padding-top: clamp(32px, 10%, 40px);
           }
 
           .principal-image-modal img {
-            width: 110px;
-            height: 110px;
-            margin-bottom: 16px;
+            width: clamp(84px, 38%, 110px);
+            height: clamp(84px, 38%, 110px);
             border: 3px solid #fff;
           }
 
           .modal-teacher-name {
             font-size: 1.05rem;
-            margin-bottom: 5px;
-            word-break: break-word;
+            padding: 0 clamp(30px, 10%, 38px);
           }
 
           .modal-teacher-subject {
             font-size: 0.9rem;
-            word-break: break-word;
-            padding: 0 8px;
+            padding: 0 clamp(8px, 3vw, 12px);
           }
 
           .principal-close-btn {
@@ -973,26 +1041,27 @@ const TeachersPage = () => {
 
         @media (max-width: 380px) {
           .principal-image-modal-content {
-            max-width: 97vw;
-            padding: 18px 12px;
+            --modal-size: min(220px, 94vw, 78dvh);
+            width: var(--modal-size);
+            height: var(--modal-size);
+            max-width: var(--modal-size);
+            max-height: var(--modal-size);
             border-radius: 12px;
+            padding-top: clamp(30px, 10%, 38px);
           }
 
           .principal-image-modal img {
-            width: 100px;
-            height: 100px;
-            margin-bottom: 14px;
+            width: clamp(78px, 37%, 104px);
+            height: clamp(78px, 37%, 104px);
             border: 3px solid #fff;
           }
 
           .modal-teacher-name {
             font-size: 0.98rem;
-            margin-bottom: 4px;
           }
 
           .modal-teacher-subject {
             font-size: 0.85rem;
-            padding: 0 6px;
           }
 
           .principal-close-btn {
@@ -1004,27 +1073,28 @@ const TeachersPage = () => {
 
         @media (max-width: 360px) {
           .principal-image-modal-content {
-            max-width: 98vw;
-            padding: 16px 10px;
+            --modal-size: min(208px, 95vw, 76dvh);
+            width: var(--modal-size);
+            height: var(--modal-size);
+            max-width: var(--modal-size);
+            max-height: var(--modal-size);
             border-radius: 10px;
+            padding-top: clamp(28px, 9%, 36px);
           }
 
           .principal-image-modal img {
-            width: 95px;
-            height: 95px;
-            margin-bottom: 12px;
+            width: clamp(72px, 36%, 98px);
+            height: clamp(72px, 36%, 98px);
             border: 2.5px solid #fff;
           }
 
           .modal-teacher-name {
             font-size: 0.9rem;
-            margin-bottom: 3px;
             line-height: 1.3;
           }
 
           .modal-teacher-subject {
             font-size: 0.8rem;
-            padding: 0 4px;
             line-height: 1.2;
           }
 
