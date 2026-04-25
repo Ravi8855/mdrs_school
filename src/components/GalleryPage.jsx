@@ -22,6 +22,7 @@ const GalleryPage = () => {
         "/gallery/2.jpg",
         "/gallery/00.jpg",
         "/gallery/friends.jpg",
+        "/gallery/image.jpg",
        
     ];
 
