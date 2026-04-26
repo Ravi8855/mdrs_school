@@ -124,7 +124,6 @@ const LoginPage = ({ onLogin }) => {
                 <img src="/gallery/desai.jpg" alt="MDRS School" className="login-logo-img" />
               </div>
               <h1 className="login-title">MDRS School</h1>
-              <p className="login-subtitle login-welcome-text">Welcome back to MDRS School</p>
             </div>
 
             <form className="login-form" onSubmit={handleSubmit}>
