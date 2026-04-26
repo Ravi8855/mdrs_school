@@ -8,7 +8,9 @@ import {
 const LEADERBOARD_KEY = "bell-ring-madness-leaderboard";
 const LEADERBOARD_DISPLAY_TOP = 10;
 const LEADERBOARD_STORAGE_MAX = 100;
-const GAME_DURATION = 15;
+const GAME_DURATION = 10;
+/** Points added for each successful bell tap (flat; reaction time is not used). */
+const BELL_CLICK_POINTS = 10;
 const BELL_VISIBLE_MIN = 1200;
 const BELL_VISIBLE_MAX = 1800;
 const SPAWN_INTERVAL_MIN = 1000;
@@ -89,13 +91,6 @@ function upsertLeaderboardScore(list, rawName, sessionScore) {
   return next.sort((a, b) => b.score - a.score);
 }
 
-
-function getPointsForSpeed(msSinceShow) {
-  if (msSinceShow <= 300) return 150;
-  if (msSinceShow <= 600) return 100;
-  if (msSinceShow <= 1200) return 75;
-  return 50;
-}
 
 function getOrdinal(n) {
   const v = n % 100;
@@ -317,8 +312,7 @@ export default function BellRingMadness() {
 
   const handleBellClick = () => {
     if (gameEndedRef.current || !bellShownAt || bellHiding) return;
-    const points = getPointsForSpeed(Date.now() - bellShownAt);
-    setScore((s) => s + points);
+    setScore((s) => s + BELL_CLICK_POINTS);
     hideBell();
   };
 
