@@ -25,3 +25,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Android / TWA signing (never commit keys)
+*.keystore
+*.jks

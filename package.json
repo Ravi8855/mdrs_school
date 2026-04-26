@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "generate:pwa-assets": "node scripts/generate-pwa-assets.mjs"
+    "generate:pwa-assets": "node scripts/generate-pwa-assets.mjs",
+    "verify:pwa-publish": "node scripts/verify-pwa-publish.mjs"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",

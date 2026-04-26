@@ -162,43 +162,495 @@
         }
       }
 
-      #pwa-update-toast {
+      /* Premium welcome (once per session, non-blocking) */
+      #pwa-welcome {
         position: fixed;
-        z-index: 2147483646;
-        left: 50%;
-        bottom: max(20px, env(safe-area-inset-bottom, 20px));
-        transform: translateX(-50%) translateY(120%);
-        max-width: min(420px, calc(100vw - 32px));
-        padding: 12px 14px;
+        inset: 0;
+        z-index: 2147483640;
         display: flex;
         align-items: center;
-        gap: 12px;
+        justify-content: center;
+        padding: max(24px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right))
+          max(24px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left));
+        box-sizing: border-box;
+        background: #121212;
+        pointer-events: none;
+        visibility: hidden;
+        opacity: 0;
+      }
+
+      #pwa-welcome.pwa-welcome--on {
+        visibility: visible;
+        opacity: 1;
+        transition: opacity 0.45s ease;
+      }
+
+      #pwa-welcome.pwa-welcome--out {
+        opacity: 0;
+        transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      #pwa-welcome .pwa-welcome__inner {
+        max-width: 22rem;
+        width: 100%;
+        text-align: center;
+        padding: 2rem 1.75rem;
+        border-radius: 1.5rem;
+        background: rgba(30, 30, 32, 0.55);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow:
+          0 24px 64px rgba(0, 0, 0, 0.45),
+          0 0 0 1px rgba(251, 191, 36, 0.12) inset;
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        transform: scale(0.96);
+        opacity: 0;
+      }
+
+      #pwa-welcome.pwa-welcome--play .pwa-welcome__inner {
+        animation: pwaWelcomeInner 3.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      }
+
+      #pwa-welcome .pwa-welcome__logo {
+        width: clamp(88px, 22vw, 120px);
+        height: auto;
+        margin: 0 auto 1.25rem;
+        display: block;
+        object-fit: contain;
+        border-radius: 22%;
+        filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.4));
+      }
+
+      #pwa-welcome .pwa-welcome__title {
+        margin: 0 0 0.65rem;
         font-family:
           system-ui,
           -apple-system,
           'Segoe UI',
           Roboto,
+          'Helvetica Neue',
           sans-serif;
-        font-size: 14px;
-        line-height: 1.35;
-        color: rgba(255, 255, 255, 0.92);
-        background: rgba(24, 24, 27, 0.92);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 14px;
-        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
+        font-size: clamp(1.15rem, 4vw, 1.35rem);
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        color: rgba(255, 255, 255, 0.96);
+        line-height: 1.3;
+      }
+
+      #pwa-welcome .pwa-welcome__sub {
+        margin: 0;
+        font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        font-size: 0.8125rem;
+        font-weight: 500;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #fbbf24;
+        opacity: 0.95;
+      }
+
+      @keyframes pwaWelcomeInner {
+        0% {
+          opacity: 0;
+          transform: scale(0.94) translateY(10px);
+        }
+        14% {
+          opacity: 1;
+          transform: scale(1) translateY(0);
+        }
+        78% {
+          opacity: 1;
+          transform: scale(1) translateY(0);
+        }
+        100% {
+          opacity: 0;
+          transform: scale(1.03) translateY(-6px);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        #pwa-welcome .pwa-welcome__inner {
+          animation: none !important;
+        }
+
+        #pwa-welcome.pwa-welcome--play .pwa-welcome__inner {
+          opacity: 0;
+          transform: none;
+        }
+      }
+
+      /* —— PWA “Play Store” chrome (install / offline / global feel) —— */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+      }
+
+      body,
+      body *:not(input):not(textarea):not(select):not([contenteditable='true']):not(option) {
+        -webkit-user-select: none;
+        user-select: none;
+      }
+
+      input,
+      textarea,
+      select,
+      [contenteditable='true'],
+      .pwa-allow-select {
+        -webkit-user-select: text;
+        user-select: text;
+      }
+
+      html {
+        -webkit-tap-highlight-color: rgba(251, 191, 36, 0.15);
+      }
+
+      a,
+      button,
+      [role='button'],
+      input[type='submit'],
+      input[type='button'],
+      input[type='reset'],
+      label {
+        transition: transform 0.14s ease, opacity 0.14s ease;
+      }
+
+      @media (hover: none) and (pointer: coarse) {
+        a:active,
+        button:active,
+        [role='button']:active,
+        input[type='submit']:active,
+        input[type='button']:active,
+        input[type='reset']:active {
+          transform: scale(0.98);
+          filter: brightness(1.07);
+        }
+      }
+
+      #root.pwa-root--mounted {
+        animation: pwaRootFadeIn 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+
+      @keyframes pwaRootFadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Haptic visual fallback (class toggled from JS) */
+      html.pwa-chrome-haptic-flash::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        z-index: 2147483645;
+        pointer-events: none;
+        background: radial-gradient(circle at 50% 80%, rgba(251, 191, 36, 0.14), transparent 55%);
+        opacity: 1;
+        animation: pwaHapticFlash 0.14s ease-out forwards;
+      }
+
+      @keyframes pwaHapticFlash {
+        to {
+          opacity: 0;
+        }
+      }
+
+      /* Offline top bar */
+      #pwa-offline-bar {
+        position: fixed;
+        z-index: 2147483630;
+        top: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 10px max(16px, env(safe-area-inset-right)) 10px max(16px, env(safe-area-inset-left));
+        padding-top: max(10px, env(safe-area-inset-top));
+        font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        color: rgba(255, 255, 255, 0.95);
+        background: rgba(18, 18, 18, 0.88);
+        border-bottom: 1px solid rgba(251, 191, 36, 0.28);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.38);
+        transform: translateY(-110%);
         opacity: 0;
         pointer-events: none;
         transition:
           transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-          opacity 0.35s ease;
+          opacity 0.32s ease;
+      }
+
+      #pwa-offline-bar .pwa-offline-bar__icon {
+        font-size: 1.05rem;
+        line-height: 1;
+        opacity: 0.9;
+      }
+
+      #pwa-offline-bar .pwa-offline-bar__text {
+        flex: 0 1 auto;
+      }
+
+      #pwa-offline-bar.pwa-chrome--visible {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: none;
+      }
+
+      /* Install bottom banner — slide up + fade */
+      #pwa-install-banner {
+        position: fixed;
+        z-index: 2147483635;
+        left: 50%;
+        bottom: max(16px, env(safe-area-inset-bottom, 16px));
+        transform: translateX(-50%) translateY(calc(100% + 32px));
+        width: min(440px, calc(100vw - 28px));
+        font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        opacity: 0;
+        filter: blur(6px);
+        pointer-events: none;
+        transition:
+          transform 0.48s cubic-bezier(0.22, 1, 0.36, 1),
+          opacity 0.42s ease,
+          filter 0.45s ease;
+      }
+
+      #pwa-install-banner.pwa-chrome--visible {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+        filter: blur(0);
+        pointer-events: auto;
+      }
+
+      #pwa-install-banner .pwa-chrome-install__inner {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px 14px;
+        padding: 14px 16px;
+        border-radius: 16px;
+        background: rgba(28, 28, 30, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow:
+          0 16px 48px rgba(0, 0, 0, 0.45),
+          0 0 0 1px rgba(251, 191, 36, 0.1) inset;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+      }
+
+      #pwa-install-banner .pwa-chrome-install__icon {
+        flex-shrink: 0;
+        width: 40px;
+        height: 40px;
+        border-radius: 22%;
+        object-fit: cover;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+      }
+
+      #pwa-install-banner .pwa-chrome-install__text {
+        flex: 1 1 140px;
+        min-width: 0;
+        font-size: 13px;
+        line-height: 1.4;
+        color: rgba(255, 255, 255, 0.88);
+      }
+
+      #pwa-install-banner .pwa-chrome-install__btn {
+        position: relative;
+        overflow: hidden;
+        flex-shrink: 0;
+        cursor: pointer;
+        border: none;
+        border-radius: 12px;
+        padding: 10px 18px;
+        font-size: 14px;
+        font-weight: 700;
+        color: #121212;
+        background: linear-gradient(180deg, #fde68a 0%, #fbbf24 48%, #d97706 100%);
+        box-shadow: 0 1px 0 rgba(255, 255, 255, 0.35) inset;
+        animation: pwaInstallBtnPulse 2.2s ease-in-out infinite;
+      }
+
+      #pwa-install-banner .pwa-chrome-install__btn::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 120%;
+        height: 120%;
+        margin: -60% 0 0 -60%;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.35);
+        opacity: 0;
+        transform: scale(0);
+        pointer-events: none;
+      }
+
+      #pwa-install-banner .pwa-chrome-install__btn:active {
+        transform: scale(0.97);
+        filter: brightness(1.08);
+      }
+
+      #pwa-install-banner .pwa-chrome-install__btn:active::after {
+        animation: pwaRipple 0.5s ease-out;
+      }
+
+      #pwa-install-banner .pwa-chrome-install__dismiss {
+        position: relative;
+        overflow: hidden;
+        flex-shrink: 0;
+        cursor: pointer;
+        border: none;
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        font-size: 20px;
+        line-height: 1;
+        color: rgba(255, 255, 255, 0.65);
+        background: rgba(255, 255, 255, 0.06);
+        transition: transform 0.12s ease, filter 0.12s ease, background 0.12s ease;
+      }
+
+      #pwa-install-banner .pwa-chrome-install__dismiss:active {
+        transform: scale(0.95);
+        filter: brightness(1.15);
+      }
+
+      @keyframes pwaInstallBtnPulse {
+        0%,
+        100% {
+          box-shadow:
+            0 1px 0 rgba(255, 255, 255, 0.35) inset,
+            0 0 0 0 rgba(251, 191, 36, 0.35);
+        }
+        50% {
+          box-shadow:
+            0 1px 0 rgba(255, 255, 255, 0.35) inset,
+            0 0 0 6px rgba(251, 191, 36, 0);
+        }
+      }
+
+      @keyframes pwaRipple {
+        0% {
+          transform: scale(0);
+          opacity: 0.45;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 0;
+        }
+      }
+
+      /* Offline / status flash toasts */
+      #pwa-offline-flash {
+        position: fixed;
+        z-index: 2147483633;
+        left: 50%;
+        bottom: max(100px, calc(env(safe-area-inset-bottom, 16px) + 84px));
+        transform: translateX(-50%) translateY(16px);
+        max-width: min(360px, calc(100vw - 32px));
+        padding: 12px 18px;
+        font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.95);
+        background: rgba(30, 30, 32, 0.92);
+        border: 1px solid rgba(251, 191, 36, 0.35);
+        border-radius: 14px;
+        box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        opacity: 0;
+        pointer-events: none;
+        transition:
+          transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+          opacity 0.28s ease;
+      }
+
+      #pwa-offline-flash.pwa-chrome--visible {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+      }
+
+      #pwa-offline-flash.pwa-chrome--success {
+        border-color: rgba(52, 211, 153, 0.45);
+      }
+
+      /* Update toast — premium slide + blur */
+      #pwa-update-toast {
+        position: fixed;
+        z-index: 2147483646;
+        left: 50%;
+        bottom: max(96px, calc(env(safe-area-inset-bottom, 16px) + 80px));
+        transform: translateX(-50%) translateY(calc(100% + 40px));
+        max-width: min(420px, calc(100vw - 32px));
+        padding: 14px 16px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        font-size: 14px;
+        line-height: 1.35;
+        color: rgba(255, 255, 255, 0.94);
+        background: rgba(28, 28, 30, 0.94);
+        border: 1px solid rgba(251, 191, 36, 0.22);
+        border-radius: 16px;
+        box-shadow:
+          0 16px 48px rgba(0, 0, 0, 0.42),
+          0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+        backdrop-filter: blur(22px);
+        -webkit-backdrop-filter: blur(22px);
+        opacity: 0;
+        filter: blur(8px);
+        pointer-events: none;
+        transition:
+          transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+          opacity 0.4s ease,
+          filter 0.45s ease;
       }
 
       #pwa-update-toast.pwa-update-toast--visible {
         transform: translateX(-50%) translateY(0);
         opacity: 1;
+        filter: blur(0);
         pointer-events: auto;
+      }
+
+      #pwa-update-toast .pwa-update-toast__spin {
+        display: inline-block;
+        flex-shrink: 0;
+        width: 20px;
+        height: 20px;
+        border: 2px solid rgba(255, 255, 255, 0.12);
+        border-top-color: #fbbf24;
+        border-radius: 50%;
+        vertical-align: middle;
+        animation: pwaUpdateSpin 0.75s linear infinite;
+      }
+
+      #pwa-update-toast.pwa-update-toast--ready .pwa-update-toast__spin {
+        opacity: 0.35;
+        animation-duration: 1.4s;
+      }
+
+      @keyframes pwaUpdateSpin {
+        to {
+          transform: rotate(360deg);
+        }
       }
 
       #pwa-update-toast .pwa-update-toast__msg {
@@ -206,21 +658,108 @@
         min-width: 0;
       }
 
-      #pwa-update-toast button {
+      #pwa-update-toast-refresh {
+        position: relative;
+        overflow: hidden;
         flex-shrink: 0;
         cursor: pointer;
         border: none;
-        border-radius: 10px;
-        padding: 8px 14px;
+        border-radius: 12px;
+        padding: 9px 16px;
         font-size: 13px;
-        font-weight: 600;
-        color: #0f172a;
-        background: linear-gradient(180deg, #f4d03f 0%, #ebb325 100%);
-        box-shadow: 0 1px 0 rgba(255, 255, 255, 0.25) inset;
+        font-weight: 700;
+        color: #121212;
+        background: linear-gradient(180deg, #fde68a 0%, #fbbf24 50%, #d97706 100%);
+        box-shadow: 0 1px 0 rgba(255, 255, 255, 0.28) inset;
+        transition: transform 0.12s ease, filter 0.12s ease;
       }
 
-      #pwa-update-toast button:active {
-        transform: scale(0.98);
+      #pwa-update-toast-refresh:active {
+        transform: scale(0.97);
+        filter: brightness(1.08);
+      }
+
+      #pwa-update-toast-refresh::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 100%;
+        height: 100%;
+        margin: -50% 0 0 -50%;
+        border-radius: inherit;
+        background: rgba(255, 255, 255, 0.35);
+        opacity: 0;
+        transform: scale(0);
+        pointer-events: none;
+      }
+
+      #pwa-update-toast-refresh:active::after {
+        animation: pwaRipple 0.48s ease-out;
+      }
+
+      #pwa-update-toast-dismiss {
+        flex-shrink: 0;
+        cursor: pointer;
+        border: none;
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        font-size: 18px;
+        line-height: 1;
+        color: rgba(255, 255, 255, 0.55);
+        background: rgba(255, 255, 255, 0.06);
+        transition: transform 0.12s ease, filter 0.12s ease, color 0.12s ease;
+      }
+
+      #pwa-update-toast-dismiss:hover {
+        color: rgba(255, 255, 255, 0.85);
+      }
+
+      #pwa-update-toast-dismiss:active {
+        transform: scale(0.94);
+        filter: brightness(1.12);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        #pwa-install-banner,
+        #pwa-install-banner.pwa-chrome--visible,
+        #pwa-offline-bar,
+        #pwa-offline-bar.pwa-chrome--visible,
+        #pwa-offline-flash,
+        #pwa-update-toast,
+        #pwa-update-toast.pwa-update-toast--visible {
+          transition: none !important;
+          filter: none !important;
+        }
+
+        #pwa-install-banner {
+          transform: translateX(-50%) translateY(calc(100% + 32px));
+        }
+
+        #pwa-install-banner.pwa-chrome--visible {
+          transform: translateX(-50%) translateY(0);
+        }
+
+        #pwa-install-banner .pwa-chrome-install__btn {
+          animation: none !important;
+        }
+
+        #pwa-update-toast .pwa-update-toast__spin {
+          animation: none !important;
+          opacity: 0.5;
+        }
+
+        #root.pwa-root--mounted {
+          animation: none !important;
+          opacity: 1;
+          transform: none;
+        }
+
+        html.pwa-chrome-haptic-flash::before {
+          animation: none !important;
+          opacity: 0 !important;
+        }
       }
     </style>
   </head>
@@ -228,16 +767,52 @@
     <div id="pwa-boot" aria-hidden="true">
       <div class="pwa-boot__inner">
         <div class="pwa-boot__logo-wrap">
-          <img src="/icon-192.png" alt="" width="192" height="192" decoding="async" fetchpriority="high" />
+          <img src="/icon-192-v2.png" alt="" width="192" height="192" decoding="async" fetchpriority="high" />
         </div>
         <div class="pwa-boot__spinner"></div>
       </div>
     </div>
+
+    <div id="pwa-welcome" hidden aria-hidden="true">
+      <div class="pwa-welcome__inner">
+        <img class="pwa-welcome__logo" src="/icon-192-v2.png" alt="" width="120" height="120" decoding="async" />
+        <p class="pwa-welcome__title">Welcome back to MDRS School</p>
+        <p class="pwa-welcome__sub">Excellence • Discipline • Success</p>
+      </div>
+    </div>
+
     <div id="root"></div>
 
+    <div id="pwa-offline-bar" class="pwa-chrome-offline" hidden aria-live="polite">
+      <span class="pwa-offline-bar__icon" aria-hidden="true">☁</span>
+      <span class="pwa-offline-bar__text">You're offline</span>
+    </div>
+
+    <div id="pwa-install-banner" class="pwa-chrome-install" hidden aria-hidden="true">
+      <div class="pwa-chrome-install__inner">
+        <img
+          class="pwa-chrome-install__icon"
+          src="/icon-192-v2.png"
+          alt=""
+          width="40"
+          height="40"
+          decoding="async"
+        />
+        <span class="pwa-chrome-install__text">Install for quick access and a full-screen experience.</span>
+        <button type="button" id="pwa-install-btn" class="pwa-chrome-install__btn">Install App</button>
+        <button type="button" id="pwa-install-dismiss" class="pwa-chrome-install__dismiss" aria-label="Dismiss">
+          ×
+        </button>
+      </div>
+    </div>
+
+    <div id="pwa-offline-flash" class="pwa-chrome-offline-flash" hidden role="status" aria-live="polite"></div>
+
     <div id="pwa-update-toast" role="status" aria-live="polite" aria-atomic="true" hidden>
-      <span class="pwa-update-toast__msg">New version available — refresh to update.</span>
-      <button type="button" id="pwa-update-toast-refresh">Refresh</button>
+      <span class="pwa-update-toast__spin" aria-hidden="true"></span>
+      <span class="pwa-update-toast__msg">New version available 🚀</span>
+      <button type="button" id="pwa-update-toast-refresh">Update Now</button>
+      <button type="button" id="pwa-update-toast-dismiss" aria-label="Dismiss update">×</button>
     </div>
 
     <script>
@@ -256,6 +831,9 @@
           boot.classList.add('pwa-boot--hide')
           setTimeout(function () {
             boot.remove()
+            try {
+              window.dispatchEvent(new Event('pwa-boot-dismissed'))
+            } catch (e) {}
           }, hideDelayMs)
         }
 
@@ -287,61 +865,58 @@
         failsafe = setTimeout(hide, 12000)
       })()
     </script>
-    <script type="module" src="/src/main.jsx"></script>
     <script>
       ;(function () {
-        window.addEventListener('load', function () {
-          if (!('serviceWorker' in navigator)) return
+        var SESSION_KEY = 'mdrs_pwa_welcome_once_v2'
+        function dismissWelcome(el) {
+          el.classList.remove('pwa-welcome--on', 'pwa-welcome--play')
+          el.classList.add('pwa-welcome--out')
+          setTimeout(function () {
+            el.remove()
+          }, 580)
+        }
+        function runWelcome() {
+          var el = document.getElementById('pwa-welcome')
+          if (!el) return
+          if (sessionStorage.getItem(SESSION_KEY)) return
+          if (el.dataset.welcomeStarted === '1') return
+          el.dataset.welcomeStarted = '1'
 
-          var toast = document.getElementById('pwa-update-toast')
-          var btn = document.getElementById('pwa-update-toast-refresh')
-          if (!toast || !btn) return
-
-          var bound = false
-
-          function showToast() {
-            toast.hidden = false
-            toast.offsetHeight
-            toast.classList.add('pwa-update-toast--visible')
+          var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+          if (reduce) {
+            sessionStorage.setItem(SESSION_KEY, '1')
+            el.remove()
+            return
           }
 
-          function wire(reg) {
-            if (bound) return
-            bound = true
-            btn.addEventListener('click', function () {
-              if (reg.waiting) {
-                reg.waiting.postMessage({ type: 'SKIP_WAITING' })
-              }
-              var reloaded = false
-              function reloadOnce() {
-                if (reloaded) return
-                reloaded = true
-                window.location.reload()
-              }
-              navigator.serviceWorker.addEventListener('controllerchange', reloadOnce)
-              setTimeout(reloadOnce, 2000)
-            })
-          }
+          el.removeAttribute('hidden')
+          el.setAttribute('aria-hidden', 'false')
 
-          function onWaiting(reg) {
-            if (!reg.waiting || !navigator.serviceWorker.controller) return
-            showToast()
-            wire(reg)
-          }
-
-          navigator.serviceWorker.getRegistration().then(function (reg) {
-            if (!reg) return
-            onWaiting(reg)
-            reg.addEventListener('updatefound', function () {
-              var iw = reg.installing
-              if (!iw) return
-              iw.addEventListener('statechange', function () {
-                if (iw.state === 'installed') onWaiting(reg)
-              })
+          requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+              el.classList.add('pwa-welcome--on')
+              el.classList.add('pwa-welcome--play')
+              var inner = el.querySelector('.pwa-welcome__inner')
+              if (!inner) return
+              inner.addEventListener(
+                'animationend',
+                function onEnd() {
+                  inner.removeEventListener('animationend', onEnd)
+                  try {
+                    sessionStorage.setItem(SESSION_KEY, '1')
+                  } catch (e) {}
+                  dismissWelcome(el)
+                },
+                { once: true },
+              )
             })
           })
-        })
+        }
+
+        window.addEventListener('pwa-boot-dismissed', runWelcome)
       })()
     </script>
+    <script defer src="/pwa-chrome.js"></script>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

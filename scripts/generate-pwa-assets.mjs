@@ -120,8 +120,8 @@ async function splash(w, h, outRel) {
 const splashDir = path.join(publicDir, 'splash')
 fs.mkdirSync(splashDir, { recursive: true })
 
-await squareIcon(192, 'icon-192.png')
-await squareIcon(512, 'icon-512.png')
+await squareIcon(192, 'icon-192-v2.png')
+await squareIcon(512, 'icon-512-v2.png')
 await squareIcon(180, 'apple-touch-icon.png')
 
 const splashes = [
