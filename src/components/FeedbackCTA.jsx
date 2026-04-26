@@ -183,8 +183,8 @@ const FeedbackCTA = () => {
         <div className="feedback-cta__inner">
           <div className="feedback-cta__text">
             <h2 id="feedback-cta-title" className="feedback-cta__title">
-              <span aria-hidden="true">💬 </span>
-              Help us improve our school website!
+              <span aria-hidden="true"> </span>
+              Help us improve our school app!
             </h2>
             <p className="feedback-cta__subtitle">
               Share your valuable feedback or ideas with us.
