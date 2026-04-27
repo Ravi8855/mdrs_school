@@ -82,7 +82,7 @@
 .mobile-home-hero__vignette {
   position: absolute;
   inset: 0;
-  box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.28);
+  box-shadow: inset 0 0 90px rgba(0, 0, 0, 0.18);
   pointer-events: none;
   z-index: 1;
 }
@@ -96,30 +96,41 @@
   justify-content: flex-end;
   text-align: center;
   min-height: min(58dvh, 520px);
-  padding: 18px 14px max(20px, env(safe-area-inset-bottom, 0px));
+  padding: 22px 18px max(24px, env(safe-area-inset-bottom, 0px));
   box-sizing: border-box;
 }
 
-.mobile-home-hero__glass {
+/* Soft lift behind copy — no frosted card / blur */
+.mobile-home-hero__stack::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 140%;
+  max-width: 520px;
+  height: 52%;
+  background: radial-gradient(
+    ellipse 75% 95% at 50% 100%,
+    rgba(15, 23, 42, 0.62) 0%,
+    rgba(15, 23, 42, 0.22) 52%,
+    transparent 72%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.mobile-home-hero__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
   max-width: min(360px, 100%);
   margin: 0 auto;
-  padding: 22px 18px 24px;
-  border-radius: 22px;
-  background: rgba(15, 23, 42, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  box-shadow:
-    0 20px 50px rgba(0, 0, 0, 0.38),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  padding: 0 4px;
   box-sizing: border-box;
-}
-
-@supports not ((-webkit-backdrop-filter: blur(18px)) or (backdrop-filter: blur(18px))) {
-  .mobile-home-hero__glass {
-    background: rgba(15, 23, 42, 0.82);
-  }
 }
 
 .mobile-home-hero__avatar-ring {
@@ -154,41 +165,53 @@
 }
 
 .mobile-home-hero__headline {
-  margin: 20px auto 0;
-  padding: 0 8px;
+  margin: 22px auto 0;
+  padding: 0 10px;
   font-family: var(--font-heading, "Poppins", sans-serif);
   font-weight: 800;
-  font-size: clamp(1.28rem, 5.2vw, 1.58rem);
-  letter-spacing: 0.02em;
-  line-height: 1.18;
-  color: #fff;
+  font-size: clamp(1.32rem, 5.4vw, 1.62rem);
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  color: #fafafa;
   text-transform: none;
-  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.45);
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.35),
+    0 4px 24px rgba(0, 0, 0, 0.4);
   max-width: 19rem;
 }
 
 .mobile-home-hero__headline-sub {
   display: block;
-  margin-top: 8px;
-  font-size: 0.52em;
+  margin-top: 10px;
+  font-size: 0.5em;
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #fcd34d;
-  line-height: 1.35;
+  color: #fde68a;
+  line-height: 1.4;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
+}
+
+.mobile-home-hero__rule {
+  width: 56px;
+  height: 3px;
+  margin: 18px auto 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.95), rgba(250, 204, 21, 0.85), transparent);
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.35);
 }
 
 .mobile-home-hero__tagline {
-  margin: 14px auto 0;
-  padding: 0 6px;
+  margin: 16px auto 0;
+  padding: 0 8px;
   font-style: normal;
   font-family: var(--font-body, "Inter", sans-serif);
-  font-size: clamp(0.8rem, 3.2vw, 0.9rem);
+  font-size: clamp(0.8rem, 3.2vw, 0.92rem);
   font-weight: 500;
-  color: rgba(248, 250, 252, 0.92);
+  color: rgba(248, 250, 252, 0.94);
   line-height: 1.55;
-  letter-spacing: 0.01em;
-  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.4);
+  letter-spacing: 0.015em;
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.42);
   max-width: 21rem;
 }
 

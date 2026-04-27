@@ -19,7 +19,7 @@ export default function MobileHomeMenu() {
         <div className="mobile-home-hero__scrim" aria-hidden />
         <div className="mobile-home-hero__vignette" aria-hidden />
         <div className="mobile-home-hero__stack">
-          <div className="mobile-home-hero__glass">
+          <div className="mobile-home-hero__content">
             <div className="mobile-home-hero__avatar-ring">
               <img
                 src={desaiImg}
@@ -34,6 +34,7 @@ export default function MobileHomeMenu() {
               Morarji Desai
               <span className="mobile-home-hero__headline-sub">Residential School</span>
             </h1>
+            <div className="mobile-home-hero__rule" aria-hidden />
             <address className="mobile-home-hero__tagline">
               Dorigudda Ukkemala, Shahapur, Yadgir Dist — 585309
             </address>

@@ -8,7 +8,7 @@ import {
 const LEADERBOARD_KEY = "bell-ring-madness-leaderboard";
 const LEADERBOARD_DISPLAY_TOP = 10;
 const LEADERBOARD_STORAGE_MAX = 100;
-const GAME_DURATION = 10;
+const GAME_DURATION = 20;
 /** Points added for each successful bell tap (flat; reaction time is not used). */
 const BELL_CLICK_POINTS = 10;
 const BELL_VISIBLE_MIN = 1200;
