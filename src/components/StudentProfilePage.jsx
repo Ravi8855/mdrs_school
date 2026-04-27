@@ -1,31 +1,21 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { FaUserCircle, FaCheckCircle } from "react-icons/fa";
-import { getProfileKey, setProfileKeyFromLogin } from "../lib/profileSession";
+import { getProfileKey } from "../lib/profileSession";
 import {
   fetchProfileByUserKey,
-  createStudentProfileAccount,
   updateStudentProfileDetails,
   insertProfileWithoutPassword,
-  verifyStudentSignIn,
   uploadProfileImage,
   isSupabaseConfigured,
 } from "../lib/profilesSupabase";
 import { isProfilesTableMissingError, profilesTableSetupHint } from "../lib/profileErrors";
 import "./StudentProfilePage.css";
 
-function normalizeAccountUsername(raw) {
-  return String(raw || "")
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, "");
-}
-
 export default function StudentProfilePage() {
+  const routeLocation = useLocation();
   const [sessionKey, setSessionKey] = useState(() => getProfileKey());
   const userKey = sessionKey;
-
-  const [gateScreen, setGateScreen] = useState("gate");
 
   const [loading, setLoading] = useState(true);
   const [row, setRow] = useState(null);
@@ -43,30 +33,17 @@ export default function StudentProfilePage() {
   const [saving, setSaving] = useState(false);
   const [showSaveSuccess, setShowSaveSuccess] = useState(false);
 
-  const [regUsername, setRegUsername] = useState("");
-  const [regPassword, setRegPassword] = useState("");
-  const [regConfirm, setRegConfirm] = useState("");
-  const [regName, setRegName] = useState("");
-  const [regQual, setRegQual] = useState("");
-  const [regCollege, setRegCollege] = useState("");
-  const [regLocation, setRegLocation] = useState("");
-  const [regBio, setRegBio] = useState("");
-  const [regFile, setRegFile] = useState(null);
-  const [regPreview, setRegPreview] = useState("");
-  const [regSaving, setRegSaving] = useState(false);
-  const [regError, setRegError] = useState("");
-
-  const [siUsername, setSiUsername] = useState("");
-  const [siPassword, setSiPassword] = useState("");
-  const [siSaving, setSiSaving] = useState(false);
-  const [siError, setSiError] = useState("");
-
   const showEditorRef = useRef(false);
   const loadRequestIdRef = useRef(0);
 
   useEffect(() => {
     showEditorRef.current = showEditor;
   }, [showEditor]);
+
+  /** Profile key is written on the login page; re-read when opening /profile so state stays in sync. */
+  useEffect(() => {
+    setSessionKey(getProfileKey());
+  }, [routeLocation.pathname]);
 
   useEffect(() => {
     setShowEditor(false);
@@ -140,16 +117,6 @@ export default function StudentProfilePage() {
     setPreview(u);
     return () => URL.revokeObjectURL(u);
   }, [file]);
-
-  useEffect(() => {
-    if (!regFile) {
-      setRegPreview("");
-      return;
-    }
-    const u = URL.createObjectURL(regFile);
-    setRegPreview(u);
-    return () => URL.revokeObjectURL(u);
-  }, [regFile]);
 
   const openEditor = () => {
     setShowEditor(true);
@@ -230,89 +197,6 @@ export default function StudentProfilePage() {
     if (wasExistingRow) {
       setShowSaveSuccess(true);
     }
-  };
-
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    setRegError("");
-    const u = normalizeAccountUsername(regUsername);
-    if (!/^[a-z0-9_]{2,40}$/.test(u)) {
-      setRegError("Username: 2–40 characters, letters, numbers, or underscore only.");
-      return;
-    }
-    if (regPassword.length < 6) {
-      setRegError("Password must be at least 6 characters.");
-      return;
-    }
-    if (regPassword !== regConfirm) {
-      setRegError("Passwords do not match.");
-      return;
-    }
-    const n = regName.trim();
-    if (!n) {
-      setRegError("Name is required.");
-      return;
-    }
-    setRegSaving(true);
-    let imgUrl = "";
-    if (regFile) {
-      const { publicUrl, error: upErr } = await uploadProfileImage(regFile, u);
-      if (upErr) {
-        setRegError(upErr.message);
-        setRegSaving(false);
-        return;
-      }
-      imgUrl = publicUrl || "";
-    }
-    const { error: ce } = await createStudentProfileAccount({
-      user_key: u,
-      password: regPassword,
-      name: n,
-      qualification: regQual,
-      college: regCollege,
-      location: regLocation,
-      bio: regBio,
-      image_url: imgUrl,
-    });
-    setRegSaving(false);
-    if (ce) {
-      setRegError(ce.message);
-      return;
-    }
-    setProfileKeyFromLogin(u);
-    setSessionKey(u);
-    setGateScreen("gate");
-    setRegUsername("");
-    setRegPassword("");
-    setRegConfirm("");
-    setRegName("");
-    setRegQual("");
-    setRegCollege("");
-    setRegLocation("");
-    setRegBio("");
-    setRegFile(null);
-  };
-
-  const handleStudentSignIn = async (e) => {
-    e.preventDefault();
-    setSiError("");
-    const u = normalizeAccountUsername(siUsername);
-    if (!u) {
-      setSiError("Enter your account username.");
-      return;
-    }
-    setSiSaving(true);
-    const { ok, error: ve } = await verifyStudentSignIn(u, siPassword);
-    setSiSaving(false);
-    if (!ok || ve) {
-      setSiError(ve?.message || "Sign in failed.");
-      return;
-    }
-    setProfileKeyFromLogin(u);
-    setSessionKey(u);
-    setSiUsername("");
-    setSiPassword("");
-    setGateScreen("gate");
   };
 
   const avatarSrc = preview || (imageUrl && imageUrl.trim()) || undefined;
@@ -529,220 +413,6 @@ export default function StudentProfilePage() {
   }
 
   if (!userKey) {
-    if (gateScreen === "register") {
-      return (
-        <div className="student-profile-page student-profile-root">
-          <div className="student-profile-inner">
-            <button
-              type="button"
-              className="student-profile-back student-profile-back--btn"
-              onClick={() => {
-                setGateScreen("gate");
-                setRegError("");
-              }}
-            >
-              ← Back
-            </button>
-            <article className="student-profile-card glass-card student-profile-card--forms">
-              <p className="student-profile-eyebrow">Create account</p>
-              <h1 className="student-profile-title">New student profile</h1>
-              <p className="student-profile-muted">
-                Choose a username and password, then add your details. You can edit everything later.
-              </p>
-              {regError ? (
-                isProfilesTableMissingError(regError) ? (
-                  <div className="student-profile-setup-callout student-profile-setup-callout--compact" role="status">
-                    <p className="student-profile-setup-title">Database setup needed</p>
-                    <p className="student-profile-setup-text">{profilesTableSetupHint()}</p>
-                  </div>
-                ) : (
-                  <p className="student-profile-error" role="alert">
-                    {regError}
-                  </p>
-                )
-              ) : null}
-              <form className="student-profile-form student-profile-form-root" onSubmit={handleRegister} autoComplete="off">
-                <label className="student-profile-label">
-                  Account username
-                  <input
-                    className="student-profile-input"
-                    value={regUsername}
-                    onChange={(e) => setRegUsername(e.target.value)}
-                    autoComplete="username"
-                    placeholder="e.g. priya_sharma"
-                    required
-                  />
-                </label>
-                <label className="student-profile-label">
-                  Password
-                  <input
-                    className="student-profile-input"
-                    type="password"
-                    value={regPassword}
-                    onChange={(e) => setRegPassword(e.target.value)}
-                    autoComplete="new-password"
-                    minLength={6}
-                    required
-                  />
-                </label>
-                <label className="student-profile-label">
-                  Confirm password
-                  <input
-                    className="student-profile-input"
-                    type="password"
-                    value={regConfirm}
-                    onChange={(e) => setRegConfirm(e.target.value)}
-                    autoComplete="new-password"
-                    required
-                  />
-                </label>
-                <hr className="student-profile-divider" />
-                <label className="student-profile-label">
-                  Name
-                  <input
-                    className="student-profile-input"
-                    value={regName}
-                    onChange={(e) => setRegName(e.target.value)}
-                    autoComplete="name"
-                    required
-                  />
-                </label>
-                <label className="student-profile-label">
-                  Qualification
-                  <input
-                    className="student-profile-input"
-                    value={regQual}
-                    onChange={(e) => setRegQual(e.target.value)}
-                  />
-                </label>
-                <label className="student-profile-label">
-                  College / University
-                  <input
-                    className="student-profile-input"
-                    value={regCollege}
-                    onChange={(e) => setRegCollege(e.target.value)}
-                  />
-                </label>
-                <label className="student-profile-label">
-                  Location
-                  <input
-                    className="student-profile-input"
-                    value={regLocation}
-                    onChange={(e) => setRegLocation(e.target.value)}
-                  />
-                </label>
-                <label className="student-profile-label">
-                  Bio
-                  <textarea
-                    className="student-profile-textarea"
-                    value={regBio}
-                    onChange={(e) => setRegBio(e.target.value)}
-                    rows={4}
-                    placeholder="A few lines about you…"
-                  />
-                </label>
-                <label className="student-profile-label">
-                  Profile photo (optional)
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="student-profile-file"
-                    onChange={(ev) => setRegFile(ev.target.files?.[0] || null)}
-                  />
-                </label>
-                {regPreview ? (
-                  <div className="student-profile-reg-preview">
-                    <img src={regPreview} alt="" className="student-profile-reg-preview-img" />
-                  </div>
-                ) : null}
-                <div className="student-profile-actions">
-                  <button
-                    type="button"
-                    className="student-profile-btn"
-                    onClick={() => {
-                      setGateScreen("gate");
-                      setRegError("");
-                    }}
-                    disabled={regSaving}
-                  >
-                    Cancel
-                  </button>
-                  <button type="submit" className="student-profile-btn student-profile-btn--primary" disabled={regSaving}>
-                    {regSaving ? "Creating…" : "Create account"}
-                  </button>
-                </div>
-              </form>
-            </article>
-          </div>
-        </div>
-      );
-    }
-
-    if (gateScreen === "signin") {
-      return (
-        <div className="student-profile-page student-profile-root">
-          <div className="student-profile-inner">
-            <button
-              type="button"
-              className="student-profile-back student-profile-back--btn"
-              onClick={() => {
-                setGateScreen("gate");
-                setSiError("");
-              }}
-            >
-              ← Back
-            </button>
-            <article className="student-profile-card glass-card">
-              <p className="student-profile-eyebrow">Sign in</p>
-              <h1 className="student-profile-title">Student sign in</h1>
-              <p className="student-profile-muted">
-                Use the username you chose at registration. If your account has no password yet, leave password blank.
-              </p>
-              {siError ? (
-                isProfilesTableMissingError(siError) ? (
-                  <div className="student-profile-setup-callout student-profile-setup-callout--compact" role="status">
-                    <p className="student-profile-setup-title">Database setup needed</p>
-                    <p className="student-profile-setup-text">{profilesTableSetupHint()}</p>
-                  </div>
-                ) : (
-                  <p className="student-profile-error" role="alert">
-                    {siError}
-                  </p>
-                )
-              ) : null}
-              <form className="student-profile-form student-profile-form-root" onSubmit={handleStudentSignIn} autoComplete="off">
-                <label className="student-profile-label">
-                  Account username
-                  <input
-                    className="student-profile-input"
-                    value={siUsername}
-                    onChange={(e) => setSiUsername(e.target.value)}
-                    autoComplete="username"
-                    required
-                  />
-                </label>
-                <label className="student-profile-label">
-                  Password
-                  <input
-                    className="student-profile-input"
-                    type="password"
-                    value={siPassword}
-                    onChange={(e) => setSiPassword(e.target.value)}
-                    autoComplete="current-password"
-                  />
-                </label>
-                <div className="student-profile-actions">
-                  <button type="submit" className="student-profile-btn student-profile-btn--primary" disabled={siSaving}>
-                    {siSaving ? "Signing in…" : "Sign in"}
-                  </button>
-                </div>
-              </form>
-            </article>
-          </div>
-        </div>
-      );
-    }
-
     return (
       <div className="student-profile-page student-profile-page--centered student-profile-root">
         <div className="student-profile-inner student-profile-inner--hub">
@@ -754,24 +424,13 @@ export default function StudentProfilePage() {
               <FaUserCircle />
             </div>
             <h1 className="student-profile-title student-profile-title--hub">Profile</h1>
-            <p className="student-profile-muted student-profile-muted--hub">Create an account or sign in to manage your student profile.</p>
-            <div className="student-profile-gate-actions">
-              <button
-                type="button"
-                className="student-profile-btn student-profile-btn--primary student-profile-gate-primary"
-                onClick={() => setGateScreen("register")}
-              >
-                Create Account
-              </button>
-              <button type="button" className="student-profile-btn student-profile-btn--outline" onClick={() => setGateScreen("signin")}>
-                Sign In
-              </button>
-            </div>
-            <p className="student-profile-gate-footer">
-              <Link to="/login" className="student-profile-link">
-                Staff login
-              </Link>
+            <p className="student-profile-muted student-profile-muted--hub">
+              Your profile is linked to the username you used on the login page. Sign out from the menu, then sign in
+              again so your profile key is saved to this session.
             </p>
+            <Link to="/home" className="student-profile-link">
+              Back to home
+            </Link>
           </article>
         </div>
       </div>
