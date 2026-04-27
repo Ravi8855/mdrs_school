@@ -220,7 +220,7 @@ const SchoolHome = () => {
             MORARJI DESAI RESIDENTIAL SCHOOL
           </h1>
           <div className="school-subtitle hero-subtitle">
-            Dorigudda Ukkenala, Shahapur, Yadgir Dist – 585309
+            Dorigudda Ukkinala, Shahapur, Yadgir Dist – 585309
           </div>
         </div>
       </div>

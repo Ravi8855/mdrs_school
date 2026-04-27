@@ -1,10 +1,10 @@
 import React from "react";
-import { Outlet, useNavigate, useLocation } from "react-router-dom";
-import { FaArrowLeft } from "react-icons/fa";
+import { Outlet, useNavigate, useLocation, Link } from "react-router-dom";
+import { FaArrowLeft, FaUserCircle } from "react-icons/fa";
 import BottomNav from "../components/BottomNav";
 import "./MainLayout.css";
 
-export default function MainLayout({ onLogout }) {
+export default function MainLayout() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const showBack = pathname !== "/home";
@@ -30,11 +30,16 @@ export default function MainLayout({ onLogout }) {
             ) : null}
             <span className="main-app-shell__brand">MDRS School</span>
           </div>
-          {onLogout ? (
-            <button type="button" className="main-app-shell__logout" onClick={onLogout}>
-              Logout
-            </button>
-          ) : null}
+          <div className="main-app-shell__header-actions">
+            <Link
+              to="/profile"
+              className="main-app-shell__profile"
+              aria-label="Your profile"
+              title="Profile"
+            >
+              <FaUserCircle aria-hidden />
+            </Link>
+          </div>
         </header>
         <main className="main-app-shell__main">
           <Outlet />

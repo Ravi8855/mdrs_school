@@ -17,17 +17,19 @@ import VotingPage from "./components/VotingPage";
 import BellRingMadness from "./components/BellRingMadness";
 import FeedbackPage from "./components/FeedbackPage";
 import MainLayout from "./layouts/MainLayout";
+import StudentProfilePage from "./components/StudentProfilePage";
 import MobileHomeMenu from "./pages/MobileHomeMenu";
 import MobileFeaturesMenu from "./pages/MobileFeaturesMenu";
 import MobilePeopleMenu from "./pages/MobilePeopleMenu";
+import { clearProfileSession } from "./lib/profileSession";
 
 const SESSION_KEY = "isLoggedIn";
 
-function ProtectedShell({ authed, onLogout }) {
+function ProtectedShell({ authed }) {
   if (!authed) {
     return <Navigate to="/login" replace />;
   }
-  return <MainLayout onLogout={onLogout} />;
+  return <MainLayout />;
 }
 
 function App() {
@@ -51,8 +53,10 @@ function App() {
   const handleLogout = () => {
     try {
       sessionStorage.removeItem(SESSION_KEY);
+      clearProfileSession();
       setIsLoggedIn(false);
     } catch {
+      clearProfileSession();
       setIsLoggedIn(false);
     }
   };
@@ -73,11 +77,12 @@ function App() {
         }
       />
 
-      <Route element={<ProtectedShell authed={authed} onLogout={handleLogout} />}>
+      <Route element={<ProtectedShell authed={authed} />}>
         <Route path="/home" element={<MobileHomeMenu />} />
         <Route path="/people" element={<MobilePeopleMenu />} />
         <Route path="/features" element={<MobileFeaturesMenu />} />
         <Route path="/feedback" element={<FeedbackPage onLogout={handleLogout} />} />
+        <Route path="/profile" element={<StudentProfilePage />} />
         <Route
           path="/classmates"
           element={

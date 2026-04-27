@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft, FaEye, FaEyeSlash } from "react-icons/fa";
 import "./Login.css";
+import { setProfileKeyFromLogin } from "../lib/profileSession";
 
 const POPUP_DURATION = 3500;
 const SUCCESS_NAV_DELAY_MS = 2800;
@@ -53,10 +54,11 @@ const LoginPage = ({ onLogin }) => {
          immediate onLogin() sets App isLoggedIn and swaps this route for <Navigate />,
          which unmounts LoginPage before the success popup can paint. */
       sessionStorage.setItem(SESSION_KEY, "true");
+      setProfileKeyFromLogin(user);
       setPopup({
         show: true,
         type: "success",
-       
+        message: "Welcome back.",
       });
       if (navigateAfterLoginRef.current) clearTimeout(navigateAfterLoginRef.current);
       navigateAfterLoginRef.current = setTimeout(() => {

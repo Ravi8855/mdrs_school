@@ -30,13 +30,9 @@ export default function MobileHomeMenu() {
                 decoding="async"
               />
             </div>
-            <h1 className="mobile-home-hero__headline">
-              Morarji Desai
-              <span className="mobile-home-hero__headline-sub">Residential School</span>
-            </h1>
-            <div className="mobile-home-hero__rule" aria-hidden />
+            <h1 className="mobile-home-hero__headline">MORARJI DESAI RESIDENTIAL SCHOOL</h1>
             <address className="mobile-home-hero__tagline">
-              Dorigudda Ukkemala, Shahapur, Yadgir Dist — 585309
+              Dorigudda Ukkenala, Shahapur, Yadgir Dist – 585309
             </address>
           </div>
         </div>

@@ -168,3 +168,100 @@ export function getAlumniBySlug(slug) {
   const decoded = decodeURIComponent(slug).toLowerCase();
   return ALUMNI_STUDENTS.find((s) => alumniSlug(s.name) === decoded) || null;
 }
+
+/**
+ * Overlay Supabase profile rows when `profiles.name` slug matches the static alum slug.
+ * @param {AlumniStudent[]} staticStudents
+ * @param {Array<Record<string, unknown>> | null | undefined} dbProfiles
+ */
+export function mergeAlumniWithProfiles(staticStudents, dbProfiles) {
+  const list = Array.isArray(dbProfiles) ? dbProfiles : [];
+  const bySlug = new Map();
+  for (const p of list) {
+    const n = p.name != null ? String(p.name).trim() : "";
+    if (!n) continue;
+    const slug = alumniSlug(n);
+    if (slug) bySlug.set(slug, p);
+  }
+  return staticStudents.map((s) => {
+    const slug = alumniSlug(s.name);
+    const db = bySlug.get(slug);
+    const fallbackPhoto = getAlumniPhoto(s.name);
+    const url = db?.image_url && String(db.image_url).trim() ? String(db.image_url).trim() : "";
+    const displayImage = url || fallbackPhoto;
+    const parsed = parseAlumniFields(s.qual);
+    const qualFromDb =
+      db?.qualification != null && String(db.qualification).trim()
+        ? String(db.qualification).trim()
+        : "";
+    const displayQualification = qualFromDb || s.qualification || parsed.qualification;
+    const userKey = db?.user_key != null ? String(db.user_key).trim() : "";
+    return {
+      ...s,
+      displayImage,
+      displayQualification,
+      image_url: url || undefined,
+      ...(userKey ? { user_key: userKey } : {}),
+    };
+  });
+}
+
+/**
+ * Full alumni grid: static passout list (photos + qual) merged with DB, then any
+ * profile-only signups not already matched by name slug.
+ * @param {Array<Record<string, unknown>> | null | undefined} dbProfiles
+ */
+export function mergeProfilesIntoStaticGrid(dbProfiles) {
+  const mergedStatic = mergeAlumniWithProfiles(ALUMNI_STUDENTS, dbProfiles);
+  const seenSlugs = new Set(mergedStatic.map((s) => alumniSlug(s.name)));
+  const list = Array.isArray(dbProfiles) ? dbProfiles : [];
+  const extras = [];
+  for (const p of list) {
+    const name = p.name != null ? String(p.name).trim() : "";
+    if (!name) continue;
+    const slug = alumniSlug(name);
+    if (seenSlugs.has(slug)) continue;
+    seenSlugs.add(slug);
+    const url = p.image_url && String(p.image_url).trim() ? String(p.image_url).trim() : "";
+    const qual = p.qualification != null ? String(p.qualification).trim() : "";
+    extras.push({
+      user_key: String(p.user_key || ""),
+      name: name || "—",
+      qual: qual || "—",
+      displayImage: url || "/react.svg",
+      displayQualification: qual || "—",
+      image_url: url || undefined,
+    });
+  }
+  return [...mergedStatic, ...extras];
+}
+
+/** Find a profile row whose name slug matches the alumni URL slug. */
+export function findProfileForAlumniSlug(slug, dbProfiles) {
+  if (!slug || !Array.isArray(dbProfiles)) return null;
+  const dec = decodeURIComponent(slug).toLowerCase();
+  for (const p of dbProfiles) {
+    const n = p.name != null ? String(p.name).trim() : "";
+    if (n && alumniSlug(n) === dec) return p;
+  }
+  return null;
+}
+
+/**
+ * Map Supabase `profiles` rows to the shape used by the Alumni grid (same fields as merge output).
+ * @param {Array<Record<string, unknown>> | null | undefined} profiles
+ */
+export function mapProfilesToAlumniCards(profiles) {
+  const list = Array.isArray(profiles) ? profiles : [];
+  return list.map((p) => {
+    const name = p.name != null ? String(p.name).trim() : "";
+    const url = p.image_url && String(p.image_url).trim() ? String(p.image_url).trim() : "";
+    const qual = p.qualification != null ? String(p.qualification).trim() : "";
+    return {
+      user_key: String(p.user_key || ""),
+      name: name || "—",
+      displayImage: url || "/react.svg",
+      displayQualification: qual || "—",
+    };
+  });
+}

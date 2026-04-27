@@ -1,9 +1,59 @@
-import React from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Alumni.css";
-import { ALUMNI_STUDENTS, alumniSlug, getAlumniPhoto } from "../data/alumniData";
+import {
+  ALUMNI_STUDENTS,
+  alumniSlug,
+  mergeAlumniWithProfiles,
+  mergeProfilesIntoStaticGrid,
+} from "../data/alumniData";
+import { getProfileKey } from "../lib/profileSession";
+import { getSupabaseClient } from "../lib/supabaseClient";
+import { fetchAllProfiles, isSupabaseConfigured } from "../lib/profilesSupabase";
 
 export default function Alumni() {
+  const [profiles, setProfiles] = useState(() => (isSupabaseConfigured() ? undefined : []));
+
+  const loadProfiles = useCallback(async () => {
+    if (!isSupabaseConfigured()) {
+      setProfiles([]);
+      return;
+    }
+    const { data, error } = await fetchAllProfiles();
+    setProfiles(error ? [] : data || []);
+  }, []);
+
+  useEffect(() => {
+    loadProfiles();
+  }, [loadProfiles]);
+
+  useEffect(() => {
+    if (!isSupabaseConfigured()) return undefined;
+    const sb = getSupabaseClient();
+    if (!sb) return undefined;
+    const ch = sb
+      .channel("profiles-alumni-list")
+      .on("postgres_changes", { event: "*", schema: "public", table: "profiles" }, () => {
+        loadProfiles();
+      })
+      .subscribe();
+    return () => {
+      sb.removeChannel(ch);
+    };
+  }, [loadProfiles]);
+
+  const list = useMemo(() => {
+    if (!isSupabaseConfigured()) {
+      return mergeAlumniWithProfiles(ALUMNI_STUDENTS, []);
+    }
+    if (profiles === undefined) {
+      return mergeAlumniWithProfiles(ALUMNI_STUDENTS, []);
+    }
+    return mergeProfilesIntoStaticGrid(profiles);
+  }, [profiles]);
+
+  const profileKey = getProfileKey();
+
   return (
     <div className="alumni-section container">
       <div className="section-title-wrap">
@@ -12,10 +62,24 @@ export default function Alumni() {
         <p className="section-subtitle alumni-subtitle">Passout students of MDRS — where they are now.</p>
       </div>
 
+      {profileKey ? (
+        <div className="alumni-profile-cta" role="region" aria-label="Your alumni profile">
+          <div className="alumni-profile-cta-inner">
+            <p className="alumni-profile-cta-title">Edit your profile</p>
+            <p className="alumni-profile-cta-text">
+              Keep your photo and qualification up to date so you appear correctly here.
+            </p>
+            <Link to="/profile" className="alumni-profile-cta-link">
+              Open profile editor
+            </Link>
+          </div>
+        </div>
+      ) : null}
+
       <div className="alumni-grid">
-        {ALUMNI_STUDENTS.map((s, i) => (
+        {list.map((s, i) => (
           <Link
-            key={s.name + i}
+            key={(s.user_key ? String(s.user_key) : s.name) + i}
             to={`/alumni/${alumniSlug(s.name)}`}
             className="alumni-item glass-card reveal-card"
             aria-label={`Open profile for ${s.name}`}
@@ -24,7 +88,7 @@ export default function Alumni() {
             <div className="alumni-thumb-wrap">
               <div className="alumni-thumb-inner">
                 <img
-                  src={getAlumniPhoto(s.name)}
+                  src={s.displayImage}
                   alt={s.name}
                   className="alumni-thumb"
                   loading="lazy"
@@ -33,6 +97,9 @@ export default function Alumni() {
             </div>
             <div className="alumni-meta">
               <span className="alumni-name">{s.name}</span>
+              {s.displayQualification ? (
+                <span className="alumni-qual-short">{s.displayQualification}</span>
+              ) : null}
             </div>
           </Link>
         ))}

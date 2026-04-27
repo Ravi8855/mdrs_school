@@ -1,19 +1,96 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
-import { getAlumniBySlug, getAlumniPhoto, getAlumniDetailFields } from "../data/alumniData";
+import {
+  getAlumniBySlug,
+  getAlumniPhoto,
+  getAlumniDetailFields,
+  findProfileForAlumniSlug,
+} from "../data/alumniData";
+import { getSupabaseClient } from "../lib/supabaseClient";
+import { fetchAllProfiles, isSupabaseConfigured } from "../lib/profilesSupabase";
 import "./Alumni.css";
 
 export default function AlumniProfile() {
   const { slug } = useParams();
   const student = slug ? getAlumniBySlug(slug) : null;
   const [lightbox, setLightbox] = useState(null);
+  const [dbRow, setDbRow] = useState(null);
+  const [ready, setReady] = useState(false);
 
-  if (!student) {
+  const loadProfileRow = useCallback(async () => {
+    if (!slug) {
+      setDbRow(null);
+      setReady(true);
+      return;
+    }
+    if (!isSupabaseConfigured()) {
+      setDbRow(null);
+      setReady(true);
+      return;
+    }
+    const { data, error } = await fetchAllProfiles();
+    if (error || !data) {
+      setDbRow(null);
+    } else {
+      setDbRow(findProfileForAlumniSlug(slug, data));
+    }
+    setReady(true);
+  }, [slug]);
+
+  useEffect(() => {
+    setReady(false);
+    loadProfileRow();
+  }, [loadProfileRow]);
+
+  useEffect(() => {
+    if (!slug || !isSupabaseConfigured()) return undefined;
+    const sb = getSupabaseClient();
+    if (!sb) return undefined;
+    const ch = sb
+      .channel(`profiles-alumni-detail-${slug}`)
+      .on("postgres_changes", { event: "*", schema: "public", table: "profiles" }, () => {
+        loadProfileRow();
+      })
+      .subscribe();
+    return () => {
+      sb.removeChannel(ch);
+    };
+  }, [slug, loadProfileRow]);
+
+  if (!ready) {
+    return (
+      <div className="alumni-profile-page">
+        <div className="alumni-profile-inner">
+          <Link to="/alumni" className="alumni-profile-back">
+            ← All alumni
+          </Link>
+          <article className="alumni-profile-card">
+            <p className="alumni-profile-eyebrow">Alumni</p>
+            <p className="alumni-profile-hint">Loading…</p>
+          </article>
+        </div>
+      </div>
+    );
+  }
+
+  if (!student && !dbRow) {
     return <Navigate to="/alumni" replace />;
   }
 
-  const img = getAlumniPhoto(student.name);
-  const fields = getAlumniDetailFields(student);
+  const displayName = student?.name ?? String(dbRow?.name ?? "");
+  const baseFields = student
+    ? getAlumniDetailFields(student)
+    : { qualification: "—", collegeUniversity: "—", location: "—" };
+  const q = dbRow?.qualification != null ? String(dbRow.qualification).trim() : "";
+  const c = dbRow?.college != null ? String(dbRow.college).trim() : "";
+  const l = dbRow?.location != null ? String(dbRow.location).trim() : "";
+  const fields = {
+    qualification: q || baseFields.qualification,
+    collegeUniversity: c || baseFields.collegeUniversity,
+    location: l || baseFields.location,
+  };
+  const url = dbRow?.image_url != null ? String(dbRow.image_url).trim() : "";
+  const img = url || (student ? getAlumniPhoto(student.name) : "/react.svg");
 
   return (
     <div className="alumni-profile-page">
@@ -24,15 +101,15 @@ export default function AlumniProfile() {
 
         <article className="alumni-profile-card">
           <p className="alumni-profile-eyebrow">Alumni</p>
-          <h1 className="alumni-profile-title">{student.name}</h1>
+          <h1 className="alumni-profile-title">{displayName}</h1>
 
           <div className="alumni-profile-avatar-wrap">
             <div className="alumni-profile-avatar-inner">
               <button
                 type="button"
                 className="alumni-profile-avatar-btn"
-                onClick={() => setLightbox({ src: img, name: student.name })}
-                aria-label={`View larger photo of ${student.name}`}
+                onClick={() => setLightbox({ src: img, name: displayName })}
+                aria-label={`View larger photo of ${displayName}`}
               >
                 <img src={img} alt="" className="alumni-profile-avatar" />
               </button>
