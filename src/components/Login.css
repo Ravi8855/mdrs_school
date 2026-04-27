@@ -29,6 +29,39 @@
   font-family: var(--login-font);
 }
 
+.login-page__back {
+  position: fixed;
+  top: max(12px, env(safe-area-inset-top, 0px));
+  left: max(12px, env(safe-area-inset-left, 0px));
+  z-index: 20;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--login-primary);
+  cursor: pointer;
+  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.08);
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  touch-action: manipulation;
+}
+
+.login-page__back:hover {
+  background: #fff;
+  border-color: rgba(37, 99, 235, 0.35);
+  color: var(--login-primary-hover);
+}
+
+.login-page__back:focus-visible {
+  outline: 3px solid var(--login-primary);
+  outline-offset: 2px;
+}
+
 /* Animated background */
 .login-bg {
   position: absolute;

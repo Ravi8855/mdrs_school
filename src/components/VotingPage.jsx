@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import confetti from "canvas-confetti";
 import { useLocation, useNavigate } from "react-router-dom";
-import { FaArrowLeft } from "react-icons/fa";
 import Navbar from "./Navbar";
 import { VOTING_CATEGORIES } from "../data/votingCategories";
 import {
@@ -203,16 +202,12 @@ export default function VotingPage({ onLogout }) {
       }
     };
 
-    if (location.pathname !== "/") {
-      navigate("/");
+    if (location.pathname !== "/home") {
+      navigate("/home");
       window.setTimeout(scrollToTarget, 80);
       return;
     }
     scrollToTarget();
-  };
-
-  const goBack = () => {
-    navigate(-1);
   };
 
   const onVote = async (categoryId, nomineeId) => {
@@ -272,15 +267,12 @@ export default function VotingPage({ onLogout }) {
   };
 
   return (
-    <div className="app-wrapper" style={{ width: "100%", overflowX: "hidden" }}>
+    <div
+      className="app-wrapper voting-page-cq"
+      style={{ width: "100%", overflowX: "hidden" }}
+    >
       <Navbar onNavigate={handleNavigate} onLogout={onLogout} />
       <main className="page-section voting-page-main">
-        <div className="section-inner voting-page-back-row">
-          <button type="button" className="voting-page-back" onClick={goBack} aria-label="Go back">
-            <FaArrowLeft aria-hidden />
-          </button>
-        </div>
-
         <div className="section-inner voting-page-body">
           <div className="voting-page-intro">
             <h1>🗳️ Class Voting</h1>

@@ -56,14 +56,20 @@ const TeachersPage = () => {
       <style>{`
         .page-wrap.teachers-page {
           width: 100%;
+          max-width: 100%;
           padding: var(--space-6);
           background: var(--bg);
+          box-sizing: border-box;
+          overflow-x: hidden;
         }
 
         .section-inner {
           max-width: 1200px;
           margin: 0 auto;
           padding: 0 var(--space-4);
+          width: 100%;
+          max-width: 100%;
+          box-sizing: border-box;
         }
 
         .section-title-wrap {
@@ -142,14 +148,16 @@ const TeachersPage = () => {
           transform: scale(1.08);
         }
 
-        /* Teachers Grid — uniform square cards, 3 per row */
+        /* Teachers Grid — two cards per row (readable on narrow shells) */
         .teachers-grid {
           display: grid;
-          grid-template-columns: repeat(3, minmax(0, 1fr));
+          grid-template-columns: repeat(2, minmax(0, 1fr));
           gap: 20px;
           width: 100%;
+          max-width: 100%;
           margin: 0 auto;
           align-items: stretch;
+          box-sizing: border-box;
         }
 
         .teacher-pill {
@@ -160,7 +168,6 @@ const TeachersPage = () => {
           box-shadow: 0 6px 18px rgba(0,0,0,0.1);
           transition: transform 0.3s ease, box-shadow 0.3s ease;
           background: white;
-          aspect-ratio: 1 / 1;
           width: 100%;
           min-width: 0;
           min-height: 0;
@@ -168,7 +175,7 @@ const TeachersPage = () => {
           display: flex;
           flex-direction: column;
           align-items: center;
-          justify-content: center;
+          justify-content: flex-start;
           gap: 10px;
         }
 
@@ -183,11 +190,10 @@ const TeachersPage = () => {
         }
 
         .teacher-pill .teacher-img {
-          order: -1;
           flex-shrink: 0;
         }
 
-        .teacher-pill div {
+        .teacher-pill__name {
           font-weight: 700;
           font-size: 1rem;
           color: var(--text);
@@ -195,6 +201,7 @@ const TeachersPage = () => {
           width: 100%;
           min-width: 0;
           max-width: 100%;
+          flex-shrink: 0;
           text-align: center;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -228,14 +235,14 @@ const TeachersPage = () => {
         /* Responsive */
         @media (max-width: 1400px) {
           .teachers-grid {
-            grid-template-columns: repeat(3, minmax(0, 1fr));
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 20px;
           }
         }
 
         @media (max-width: 1200px) {
           .teachers-grid {
-            grid-template-columns: repeat(3, minmax(0, 1fr));
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 18px;
           }
         }
@@ -250,7 +257,7 @@ const TeachersPage = () => {
           }
 
           .teachers-grid {
-            grid-template-columns: repeat(3, minmax(0, 1fr));
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 16px;
           }
 
@@ -275,7 +282,7 @@ const TeachersPage = () => {
           }
 
           .teachers-grid {
-            grid-template-columns: repeat(3, minmax(0, 1fr));
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 15px;
           }
 
@@ -297,7 +304,7 @@ const TeachersPage = () => {
             height: clamp(48px, 28%, 70px);
           }
 
-          .teacher-pill div {
+          .teacher-pill__name {
             font-size: 0.9rem;
             -webkit-line-clamp: 2;
             line-clamp: 2;
@@ -314,7 +321,7 @@ const TeachersPage = () => {
           }
 
           .teachers-grid {
-            grid-template-columns: repeat(3, minmax(0, 1fr));
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 12px;
           }
 
@@ -324,7 +331,7 @@ const TeachersPage = () => {
             gap: 6px;
           }
 
-          .teacher-pill div {
+          .teacher-pill__name {
             font-size: 0.85rem;
             -webkit-line-clamp: 2;
             line-clamp: 2;
@@ -376,7 +383,7 @@ const TeachersPage = () => {
           }
 
           .teachers-grid {
-            grid-template-columns: repeat(3, minmax(0, 1fr));
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 10px;
             width: 100%;
             padding: 0;
@@ -388,7 +395,7 @@ const TeachersPage = () => {
             gap: 6px;
           }
 
-          .teacher-pill div {
+          .teacher-pill__name {
             font-size: 0.8rem;
             font-weight: 700;
             -webkit-line-clamp: 2;
@@ -442,7 +449,7 @@ const TeachersPage = () => {
           }
 
           .teachers-grid {
-            grid-template-columns: repeat(3, minmax(0, 1fr));
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 8px;
             padding: 0;
           }
@@ -453,7 +460,7 @@ const TeachersPage = () => {
             gap: 5px;
           }
 
-          .teacher-pill div {
+          .teacher-pill__name {
             font-size: 0.75rem;
             -webkit-line-clamp: 2;
             line-clamp: 2;
@@ -500,7 +507,7 @@ const TeachersPage = () => {
           }
 
           .teachers-grid {
-            grid-template-columns: repeat(3, minmax(0, 1fr));
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 6px;
             padding: 0;
           }
@@ -511,7 +518,7 @@ const TeachersPage = () => {
             gap: 4px;
           }
 
-          .teacher-pill div {
+          .teacher-pill__name {
             font-size: 0.7rem;
             line-height: 1.2;
             -webkit-line-clamp: 2;
@@ -1073,14 +1080,12 @@ const TeachersPage = () => {
               }
             }}
           >
-            <div>{t.name}</div>
-
-            {/* ✅ IMAGE BELOW NAME */}
-            <img 
-              src={t.img} 
-              alt={t.name} 
+            <img
+              src={t.img}
+              alt={t.name}
               className="teacher-img"
             />
+            <div className="teacher-pill__name">{t.name}</div>
           </div>
         ))}
       </div>

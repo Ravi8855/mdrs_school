@@ -65,6 +65,11 @@ const GalleryPage = () => {
                     padding: 12px;
                     background: #0a0a0a;
                     min-height: 100vh;
+                    container-type: inline-size;
+                    container-name: gallery;
+                    width: 100%;
+                    max-width: 100%;
+                    box-sizing: border-box;
                 }
 
                 .gallery-title {
@@ -78,25 +83,9 @@ const GalleryPage = () => {
 
                 .gallery-grid {
                     display: grid;
-                    gap: 8px;
-                }
-
-                @media (max-width: 600px) {
-                    .gallery-grid {
-                        grid-template-columns: repeat(3, 1fr);
-                    }
-                }
-
-                @media (min-width: 601px) and (max-width: 1024px) {
-                    .gallery-grid {
-                        grid-template-columns: repeat(4, 1fr);
-                    }
-                }
-
-                @media (min-width: 1025px) {
-                    .gallery-grid {
-                        grid-template-columns: repeat(5, 1fr);
-                    }
+                    gap: 10px;
+                    grid-template-columns: repeat(3, minmax(0, 1fr));
+                    width: 100%;
                 }
 
                 .gallery-card {

@@ -1,117 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
+import { Link } from "react-router-dom";
 import "./Alumni.css";
-
-import JattappaImg from "../assets/Jattappa.jpeg";
-import ChandrashekarImg from "../assets/Chandrashekar.jpeg";
-import VireshImg from "../assets/Viresh.jpg";
-import AmbadasImg from "../assets/Ambadas.jpeg";
-import HrutikImg from "../assets/Hrutik.jpeg";
-import BhimashankarImg from "../assets/Bhimashankar.jpeg";
-import MarilingaImg from "../assets/Marilinga.jpeg";
-import GolallappaImg from "../assets/Golallappa.jpeg";
-import ArunImg from "../assets/Arun.jpeg";
-import BhimuImg from "../assets/Bhimu.jpeg";
-import PremaImg from "../assets/Prema.jpeg";
-import ChaitraImg from "../assets/Chaitra.jpeg";
-import ParvatiImg from "../assets/Parvati.jpg";
-import UmashreeImg from "../assets/Umashree.jpg";
-import GangaImg from "../assets/Ganga.jpeg";
-import RoopaImg from "../assets/Roopa.jpeg";
-import ShwetaImg from "../assets/Shweta.jpg";
-import AmbikaImg from "../assets/Ambika.jpeg";
-import VinodImg from "../assets/Vinod.jpg";
-import MaheshImg from "../assets/Mahesh.jpeg";
-import PraveenImg from "../assets/Praveen.jpeg";
-import SunilImg from "../assets/Sunil.jpeg";
-import BheembaiImg from "../assets/Bheembai.jpeg";
-import SuvarnaImg from "../assets/Suvarna.jpeg";
-import SuchitraImg from "../assets/Suchitra.jpeg";
-import SavitaImg from "../assets/Savita.jpeg";
-import MallammaImg from "../assets/Mallamma.jpeg";
-import RaviImg from "../assets/Ravi.png";
-
-const studentsData = [
-  {name:"Jattappa",qual:"2nd PUC (working)"},
-  { name: "Chandrashekar", qual: "B.A in Yadagir" },
-  { name: "Viresh", qual: "Medical (MBBS) in Russia" },
-  { name: "Ambadas", qual: "Medical (BAMS) in Bidar" },
-  { name: "Hrutik", qual: "Medical (BHMS) in Dharawada" },
-  { name: "Bhimashankar", qual: "PU Science (working) in Bangalore" },
-  { name: "Marilinga", qual: "B.Com in Bangalore" },
-  { name: "Golallappa", qual: "M.Com (ongoing)" },
-  { name: "Arun", qual: "Medical (BAMS) in Udapi" },
-  { name: "Bhimu", qual: "Paramedical lab technician (working)" },
-  { name: "Prema", qual: "BSc final year in Surapur" },
-  { name: "Chaitra", qual: "Paramedical and BSc CBZ Degree in Shahapur" },
-  { name: "Parvati", qual: "BA Final Year in Surapur" },
-  { name: "Umashree", qual: "BSc Final year in Surapur" },
-  { name: "Ganga", qual: "BSc nursing 3rd year in Raichur" },
-  { name: "Roopa", qual: "2nd PUC" },
-  { name: "Shweta", qual: "BSc nursing in Gulbarga" },
-  { name: "Ambika", qual: "Masters in Forensic Science in Bangalore" },
-  {name: "Vinod",qual:"BA in Vijayapur"},
-  {name:"Mahesh",qual:"BA in Shahapur"},
- { name: "Praveen", qual: "PUC(working) in Shahapur" },
-  {name:"Sunil",qual:"Paramedical (working)"},
-  {name:"Bheembai",qual:"BA in Gulabarga"},
-  {name:"Suvarna",qual:"BSc Nursing"},
-  {name:"Suchitra",qual:"Nursing"},
-  {name:"Savita",qual:"BSc(CBZ)"},
-  {name:"Mallamma", qual: "Diploma Nursing" },
-  { name: "Ravi", qual: "Engineering (CSE) in Mysore" },
-];
-
-// Use images from public/gallery if available; fallback to react.svg
-const galleryPaths = {
-  Jattappa:JattappaImg,
-  Chandrashekar: ChandrashekarImg,
-  Viresh: VireshImg,
-  Ambadas: AmbadasImg,
-  Hrutik: HrutikImg,
-  Bhimashankar: BhimashankarImg,
-  Marilinga: MarilingaImg,
-  Golallappa: GolallappaImg,
-   Arun: ArunImg,
-  Bhimu: BhimuImg,
-  Prema: PremaImg,
-  Chaitra: ChaitraImg,
-  Parvati: ParvatiImg,
-  Umashree: UmashreeImg,
-  Ganga: GangaImg,
-  Roopa: RoopaImg,
-  Shweta: ShwetaImg,
-  Ambika: AmbikaImg,
-  Vinod:VinodImg,
-  Mahesh:MaheshImg,
-  Praveen: PraveenImg,
-  Sunil:SunilImg,
-  Bheembai:BheembaiImg,
-  Suvarna:SuvarnaImg,
-  Suchitra:SuchitraImg,
-  Savita:SavitaImg,
-  Mallamma:MallammaImg,
-  Ravi: RaviImg,
-
-};
+import { ALUMNI_STUDENTS, alumniSlug, getAlumniPhoto } from "../data/alumniData";
 
 export default function Alumni() {
-  const [selected, setSelected] = useState(null);
-  const [lightbox, setLightbox] = useState(null); // { src, name } or null
-
-  const openCard = (index) => {
-    const student = studentsData[index];
-    const img = galleryPaths[student.name] || "/react.svg";
-    setSelected({ ...student, img });
-  };
-
-  const closeCard = () => setSelected(null);
-
-  const openLightbox = (src, name) => {
-    setLightbox({ src, name });
-  };
-
-  const closeLightbox = () => setLightbox(null);
-
   return (
     <div className="alumni-section container">
       <div className="section-title-wrap">
@@ -121,79 +13,30 @@ export default function Alumni() {
       </div>
 
       <div className="alumni-grid">
-        {studentsData.map((s, i) => (
-          <button
+        {ALUMNI_STUDENTS.map((s, i) => (
+          <Link
             key={s.name + i}
+            to={`/alumni/${alumniSlug(s.name)}`}
             className="alumni-item glass-card reveal-card"
-            onClick={() => openCard(i)}
-            aria-label={`Open details for ${s.name}`}
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") openCard(i);
-            }}
+            aria-label={`Open profile for ${s.name}`}
             style={{ animationDelay: `${i * 40}ms` }}
           >
             <div className="alumni-thumb-wrap">
               <div className="alumni-thumb-inner">
                 <img
-                  src={galleryPaths[s.name] || "/react.svg"}
+                  src={getAlumniPhoto(s.name)}
                   alt={s.name}
                   className="alumni-thumb"
                   loading="lazy"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    openCard(i);
-                  }}
                 />
               </div>
             </div>
             <div className="alumni-meta">
               <span className="alumni-name">{s.name}</span>
             </div>
-          </button>
+          </Link>
         ))}
       </div>
-
-      {/* Profile modal: clicking the card opens this */}
-      {selected && (
-        <div className="alumni-modal" role="dialog" aria-modal="true" aria-label={`Details for ${selected.name}`}>
-          <div className="alumni-overlay" onClick={() => { closeCard(); closeLightbox(); }} />
-          <div className="alumni-card">
-            <div className="alumni-avatar-wrap">
-              <div className="alumni-avatar-inner">
-                <img
-                  src={selected.img}
-                  alt={selected.name}
-                  className="alumni-avatar"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    openLightbox(selected.img, selected.name);
-                  }}
-                />
-              </div>
-            </div>
-            <div className="alumni-card-body">
-              <h3 className="alumni-card-name">{selected.name}</h3>
-              <div className="alumni-qual-badge">
-                <span className="alumni-qual">{selected.qual}</span>
-              </div>
-              <div className="alumni-actions">
-                <button onClick={closeCard} className="button-full-width">Close</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Lightbox: image opens in square when clicked (from grid or from modal) */}
-      {lightbox && (
-        <div className="alumni-fullscreen" onClick={closeLightbox}>
-          <button className="lightbox-close" aria-label="Close image" onClick={(e) => { e.stopPropagation(); closeLightbox(); }}>✕</button>
-          <div className="alumni-fullscreen-square" onClick={(e) => e.stopPropagation()}>
-            <img src={lightbox.src} alt={lightbox.name} />
-          </div>
-        </div>
-      )}
     </div>
   );
 }

@@ -347,6 +347,8 @@ export default function BellRingMadness() {
           display: flex;
           flex-direction: column;
           align-items: stretch;
+          container-type: inline-size;
+          container-name: bell;
         }
         .bell-madness-page h2 {
           text-align: center;
@@ -380,16 +382,19 @@ export default function BellRingMadness() {
           font-size: clamp(1.1rem, 2.5vw, 1.25rem);
           color: #78350f;
         }
+        /* In-flow by default so narrow app shells (e.g. 428px) are not covered by a viewport-based float */
         .bell-leaderboard {
-          position: absolute;
-          top: clamp(12px, 2vw, 20px);
-          right: clamp(12px, 2vw, 20px);
+          position: static;
+          align-self: center;
+          width: 100%;
+          max-width: min(360px, 100%);
+          margin: 0 auto clamp(14px, 3vw, 20px);
           background: rgba(255,255,255,0.98);
           border-radius: 16px;
           padding: clamp(10px, 2vw, 14px) clamp(12px, 2vw, 18px);
           box-shadow: 0 6px 24px rgba(146, 64, 14, 0.28);
-          min-width: 180px;
-          max-width: 260px;
+          min-width: 0;
+          box-sizing: border-box;
         }
         .bell-leaderboard-champion {
           font-size: clamp(0.8rem, 1.8vw, 0.85rem);
@@ -634,16 +639,24 @@ export default function BellRingMadness() {
           }
         }
 
-        /* 768px - tablets: leaderboard below title, compact */
+        /* Wide play area only: pin leaderboard (container width, not viewport) */
+        @container bell (min-width: 720px) {
+          .bell-leaderboard {
+            position: absolute;
+            top: clamp(12px, 2vw, 20px);
+            right: clamp(12px, 2vw, 20px);
+            left: auto;
+            width: auto;
+            min-width: 180px;
+            max-width: 260px;
+            margin: 0;
+            align-self: stretch;
+          }
+        }
+
         @media (max-width: 768px) {
           .bell-game-over { max-width: min(400px, calc(100% - 8px)); }
           .bell-game-over-actions { gap: 12px; }
-          .bell-leaderboard {
-            position: static;
-            margin: 0 auto clamp(16px, 3vw, 20px);
-            max-width: min(320px, 100%);
-            z-index: 2;
-          }
           .bell-game-header { gap: 12px; }
           .bell-icon-btn {
             width: 72px;
@@ -667,9 +680,7 @@ export default function BellRingMadness() {
           .bell-game-area { min-height: min(42vh, 260px); }
         }
 
-        /* 1200px+ desktop: ensure leaderboard stays top-right */
         @media (min-width: 769px) {
-          .bell-leaderboard { position: absolute; }
           .bell-game-over-actions {
             max-width: 360px;
             margin-left: auto;

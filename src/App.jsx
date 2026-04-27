@@ -1,113 +1,33 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import confetti from "canvas-confetti";
 
 import LoginPage from "./components/LoginPage";
-import Navbar from "./components/Navbar";
 import AnimatedSection from "./components/AnimatedSection";
 import ClassmatesPage from "./components/ClassmatesPage";
 import BatchStudentsPage from "./components/BatchStudentsPage";
 import TeachersPage from "./components/TeachersPage";
-import SchoolHome from "./components/SchoolHome";
 import GalleryPage from "./components/GalleryPage";
 import Alumni from "./components/Alumni";
+import AlumniProfile from "./components/AlumniProfile";
 import HostelLayout from "./components/hostel/HostelLayout";
 import HostelDashboard from "./components/hostel/HostelDashboard";
 import RoomList from "./components/hostel/RoomList";
 import RoomDetails from "./components/hostel/RoomDetails";
-import HostelTeaser from "./components/hostel/HostelTeaser";
-import VotingPreview from "./components/VotingPreview";
 import VotingPage from "./components/VotingPage";
 import BellRingMadness from "./components/BellRingMadness";
-import FeedbackCTA from "./components/FeedbackCTA";
 import FeedbackPage from "./components/FeedbackPage";
+import MainLayout from "./layouts/MainLayout";
+import MobileHomeMenu from "./pages/MobileHomeMenu";
+import MobileFeaturesMenu from "./pages/MobileFeaturesMenu";
+import MobilePeopleMenu from "./pages/MobilePeopleMenu";
 
 const SESSION_KEY = "isLoggedIn";
 
-const jokes = [
-  "Teacher: Why are you talking? Me: I'm not talking, I'm just exchanging information.",
-  "My homework is like a customized car. It's unique and probably illegal.",
-  "Math: The only place where people buy 64 watermelons and no one wonders why.",
-  "I'm not sleeping in class, I'm just testing gravity with my eyelids.",
-  "Student: *drops pen* Class: *chaos ensues*",
-  "Teacher: 'I will wait until it is quiet.' Class: *Takes a nap*",
-];
-
-function AppContent({ onLogout }) {
-  const [showBackToTop, setShowBackToTop] = useState(false);
-
-  const handleNavigate = (target) => {
-    const element = document.getElementById(target);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  };
-
-  useEffect(() => {
-    confetti({
-      particleCount: 100,
-      spread: 70,
-      origin: { y: 0.6 },
-    });
-  }, []);
-
-  useEffect(() => {
-    const onScroll = () => setShowBackToTop(window.scrollY > 400);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  return (
-    <div className="app-wrapper" style={{ width: "100%", overflowX: "hidden" }}>
-      <Navbar onNavigate={handleNavigate} onLogout={onLogout} />
-
-      <section id="home">
-        <SchoolHome />
-      </section>
-
-      <section id="teachers" className="page-section">
-        <AnimatedSection><TeachersPage /></AnimatedSection>
-      </section>
-
-      <section id="classmates" className="page-section">
-        <AnimatedSection><ClassmatesPage variant="preview" /></AnimatedSection>
-      </section>
-
-      <section id="alumni" className="page-section">
-        <AnimatedSection><Alumni /></AnimatedSection>
-      </section>
-
-      <section id="gallery" className="page-section">
-        <AnimatedSection><GalleryPage /></AnimatedSection>
-      </section>
-
-      <section id="bell-game" className="page-section">
-        <AnimatedSection><BellRingMadness /></AnimatedSection>
-      </section>
-
-      <section id="hostel" className="page-section">
-        <AnimatedSection><HostelTeaser /></AnimatedSection>
-      </section>
-
-      {/* No AnimatedSection: scroll-reveal opacity can block taps on the voting teaser link */}
-      <section className="page-section" id="voting-teaser" aria-labelledby="voting-preview-title">
-        <VotingPreview />
-      </section>
-
-      <AnimatedSection>
-        <FeedbackCTA />
-      </AnimatedSection>
-
-      <button
-        type="button"
-        className={`back-to-top ${showBackToTop ? "visible" : ""}`}
-        onClick={() => handleNavigate("home")}
-        aria-label="Back to top"
-      >
-        ↑
-      </button>
-    </div>
-  );
+function ProtectedShell({ authed, onLogout }) {
+  if (!authed) {
+    return <Navigate to="/login" replace />;
+  }
+  return <MainLayout onLogout={onLogout} />;
 }
 
 function App() {
@@ -146,54 +66,80 @@ function App() {
         path="/login"
         element={
           isLoggedIn ? (
-            <Navigate to="/" replace />
+            <Navigate to="/home" replace />
           ) : (
             <LoginPage onLogin={handleLogin} />
           )
         }
       />
-      <Route
-        path="/"
-        element={
-          authed ? (
-            <AppContent onLogout={handleLogout} />
-          ) : (
-            <Navigate to="/login" replace />
-          )
-        }
-      />
-      <Route
-        path="/feedback"
-        element={
-          authed ? <FeedbackPage onLogout={handleLogout} /> : <Navigate to="/login" replace />
-        }
-      />
-      <Route
-        path="/batch-students"
-        element={
-          authed ? (
-            <BatchStudentsPage onLogout={handleLogout} />
-          ) : (
-            <Navigate to="/login" replace />
-          )
-        }
-      />
-      <Route
-        path="/hostel"
-        element={authed ? <HostelLayout onLogout={handleLogout} /> : <Navigate to="/login" replace />}
-      >
-        <Route index element={<HostelDashboard />} />
-        <Route path="boys" element={<RoomList gender="boys" />} />
-        <Route path="girls" element={<RoomList gender="girls" />} />
-        <Route path="boys/:roomId" element={<RoomDetails gender="boys" />} />
-        <Route path="girls/:roomId" element={<RoomDetails gender="girls" />} />
+
+      <Route element={<ProtectedShell authed={authed} onLogout={handleLogout} />}>
+        <Route path="/home" element={<MobileHomeMenu />} />
+        <Route path="/people" element={<MobilePeopleMenu />} />
+        <Route path="/features" element={<MobileFeaturesMenu />} />
+        <Route path="/feedback" element={<FeedbackPage onLogout={handleLogout} />} />
+        <Route
+          path="/classmates"
+          element={
+            <AnimatedSection>
+              <ClassmatesPage variant="full" />
+            </AnimatedSection>
+          }
+        />
+        <Route
+          path="/teachers"
+          element={
+            <AnimatedSection>
+              <TeachersPage />
+            </AnimatedSection>
+          }
+        />
+        <Route
+          path="/alumni"
+          element={
+            <AnimatedSection>
+              <Alumni />
+            </AnimatedSection>
+          }
+        />
+        <Route
+          path="/alumni/:slug"
+          element={
+            <AnimatedSection>
+              <AlumniProfile />
+            </AnimatedSection>
+          }
+        />
+        <Route
+          path="/gallery"
+          element={
+            <AnimatedSection>
+              <GalleryPage />
+            </AnimatedSection>
+          }
+        />
+        <Route
+          path="/bell-game"
+          element={
+            <AnimatedSection>
+              <BellRingMadness />
+            </AnimatedSection>
+          }
+        />
+        <Route path="/batch-students" element={<BatchStudentsPage onLogout={handleLogout} />} />
+        <Route path="/hostel" element={<HostelLayout onLogout={handleLogout} />}>
+          <Route index element={<HostelDashboard />} />
+          <Route path="boys" element={<RoomList gender="boys" />} />
+          <Route path="girls" element={<RoomList gender="girls" />} />
+          <Route path="boys/:roomId" element={<RoomDetails gender="boys" />} />
+          <Route path="girls/:roomId" element={<RoomDetails gender="girls" />} />
+        </Route>
+        <Route path="/voting" element={<VotingPage onLogout={handleLogout} />} />
       </Route>
-      <Route
-        path="/voting"
-        element={
-          authed ? <VotingPage onLogout={handleLogout} /> : <Navigate to="/login" replace />
-        }
-      />
+
+      <Route path="/" element={<Navigate to={authed ? "/home" : "/login"} replace />} />
+
+      <Route path="*" element={<Navigate to={authed ? "/home" : "/login"} replace />} />
     </Routes>
   );
 }

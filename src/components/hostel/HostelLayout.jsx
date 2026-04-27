@@ -1,8 +1,6 @@
 import React from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import Navbar from "../Navbar";
-import FeedbackCTA from "../FeedbackCTA";
-import AnimatedSection from "../AnimatedSection";
 
 export default function HostelLayout({ onLogout }) {
   const navigate = useNavigate();
@@ -16,8 +14,8 @@ export default function HostelLayout({ onLogout }) {
       }
     };
 
-    if (location.pathname !== "/") {
-      navigate("/");
+    if (location.pathname !== "/home") {
+      navigate("/home");
       setTimeout(scrollToTarget, 80);
       return;
     }
@@ -30,9 +28,6 @@ export default function HostelLayout({ onLogout }) {
       <main className="hostel-route-main">
         <Outlet />
       </main>
-      <AnimatedSection>
-        <FeedbackCTA />
-      </AnimatedSection>
     </div>
   );
 }

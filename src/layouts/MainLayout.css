@@ -1,0 +1,149 @@
+/* Shell for tab-based mobile app: top bar + scrollable main + fixed bottom nav */
+
+.main-app-shell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100dvh;
+  min-height: 100vh;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  background: var(--bg, #f8fafc);
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+/* One-column “phone” shell: looks correct on real phones and in desktop browser */
+.main-app-shell__frame {
+  width: 100%;
+  max-width: 428px;
+  min-height: 100dvh;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg, #f8fafc);
+  position: relative;
+}
+
+@media (min-width: 440px) {
+  .main-app-shell {
+    background: linear-gradient(165deg, #cbd5e1 0%, #e2e8f0 45%, #f1f5f9 100%);
+  }
+
+  .main-app-shell__frame {
+    box-shadow:
+      0 0 0 1px rgba(15, 23, 42, 0.07),
+      0 20px 50px rgba(15, 23, 42, 0.14);
+  }
+}
+
+/* Pages that still mount <Navbar /> hide it here so only bottom tabs show */
+.main-app-shell .mdrs-nav {
+  display: none !important;
+}
+
+.main-app-shell__header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px 10px 10px;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  border-bottom: 2px solid rgba(251, 191, 36, 0.35);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.12);
+}
+
+.main-app-shell__header-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  flex: 1;
+}
+
+.main-app-shell__back {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid rgba(248, 250, 252, 0.35);
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.45);
+  color: #fbbf24;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  touch-action: manipulation;
+}
+
+.main-app-shell__back:hover {
+  background: rgba(30, 41, 59, 0.75);
+  border-color: rgba(251, 191, 36, 0.45);
+  color: #fde68a;
+}
+
+.main-app-shell__back:focus-visible {
+  outline: 2px solid #fbbf24;
+  outline-offset: 2px;
+}
+
+.main-app-shell__brand {
+  font-family: var(--font-heading, "Poppins", sans-serif);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fbbf24;
+  letter-spacing: 0.02em;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.main-app-shell__logout {
+  padding: 8px 14px;
+  font-family: var(--font-heading, "Poppins", sans-serif);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(248, 250, 252, 0.95);
+  background: transparent;
+  border: 1px solid rgba(248, 250, 252, 0.45);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.main-app-shell__logout:hover {
+  background: rgba(220, 53, 69, 0.15);
+  border-color: rgba(248, 113, 113, 0.5);
+  color: #fecaca;
+}
+
+.main-app-shell__main {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-direction: column;
+}
+
+/* Flex children default to min-width:auto and won’t shrink — grids then clip past the shell */
+.main-app-shell__main > * {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@media (display-mode: standalone), (display-mode: fullscreen) {
+  .main-app-shell {
+    min-height: 100dvh;
+  }
+}

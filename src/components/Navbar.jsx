@@ -28,10 +28,10 @@ const Navbar = ({ onNavigate, onLogout }) => {
     };
 
     const handleNavClick = (page) => {
-        if (location.pathname === '/') {
+        if (location.pathname === '/home') {
             onNavigate(page);
         } else {
-            navigate('/');
+            navigate('/home');
             setTimeout(() => scrollToSection(page), 80);
         }
         setMobileMenuOpen(false);

@@ -10,46 +10,10 @@
   box-sizing: border-box;
 }
 
-.voting-page-back-row {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  width: 100%;
-  max-width: var(--content-width, 1200px);
-  margin: 0 auto;
-  box-sizing: border-box;
-  padding-top: 0.25rem;
-  padding-bottom: 0.35rem;
-}
-
-.voting-page-back {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  min-width: 44px;
-  min-height: 44px;
-  margin: 0;
-  padding: 0;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  background: #fff;
-  color: #4338ca;
-  cursor: pointer;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
-  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-  touch-action: manipulation;
-}
-
-.voting-page-back:hover {
-  background: #eef2ff;
-  border-color: #c7d2fe;
-}
-
-.voting-page-back:focus-visible {
-  outline: 3px solid #6366f1;
-  outline-offset: 2px;
+/* Content width (e.g. 428px app frame), not viewport — avoids 2 cramped columns on desktop-with-narrow-shell */
+.app-wrapper.voting-page-cq {
+  container-type: inline-size;
+  container-name: voting;
 }
 
 .voting-page-body {
@@ -278,15 +242,13 @@
   width: 100%;
 }
 
-/* Tablet: two columns when space allows */
-@media (min-width: 640px) {
+@container voting (min-width: 640px) {
   .voting-page-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-/* Large laptop: cap readable width, keep two columns */
-@media (min-width: 1100px) {
+@container voting (min-width: 1100px) {
   .voting-page-grid {
     gap: 1.5rem;
   }

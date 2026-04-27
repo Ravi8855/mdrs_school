@@ -11,6 +11,10 @@
   font-family: var(--font-body, "Poppins", sans-serif);
   background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
   box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
 }
 
 .hostel-page[data-gender="boys"] {
@@ -28,6 +32,10 @@
 .hostel-inner {
   max-width: 1100px;
   margin: 0 auto;
+  width: 100%;
+  min-width: 0;
+  container-type: inline-size;
+  container-name: hostel;
 }
 
 .hostel-back {
@@ -452,7 +460,7 @@
   margin-bottom: 24px;
 }
 
-@media (min-width: 640px) {
+@container hostel (min-width: 560px) {
   .hostel-toolbar {
     flex-direction: row;
     align-items: center;
@@ -616,6 +624,10 @@
   border: 1px solid rgba(15, 23, 42, 0.06);
   box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
   margin-bottom: 28px;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .hostel-details-hero h1 {
@@ -627,22 +639,32 @@
 
 .hostel-details-row {
   display: grid;
+  grid-template-columns: 1fr;
   gap: 16px;
+  min-width: 0;
 }
 
-@media (min-width: 560px) {
+/* Content width (app shell ~428px), not viewport — avoids clipped two-up master/leader tiles */
+@container hostel (min-width: 520px) {
   .hostel-details-row {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 .hostel-detail-block {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 14px 16px;
+  gap: 12px;
+  padding: 12px 14px;
   border-radius: 14px;
   background: var(--accent-soft, #f1f5f9);
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.hostel-detail-block > div:last-of-type {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .hostel-page[data-gender="girls"] .hostel-detail-block {
@@ -666,6 +688,9 @@
 .hostel-detail-block strong {
   font-size: 1rem;
   color: #0f172a;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  line-height: 1.35;
 }
 
 .hostel-students {
@@ -820,10 +845,10 @@
   height: 72px;
 }
 
-@media (max-width: 480px) {
+@container hostel (max-width: 480px) {
   .hostel-avatar--lg {
-    width: 60px;
-    height: 60px;
+    width: 56px;
+    height: 56px;
   }
 }
 

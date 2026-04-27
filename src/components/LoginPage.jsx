@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaArrowLeft, FaEye, FaEyeSlash } from "react-icons/fa";
 import "./Login.css";
 
 const POPUP_DURATION = 3500;
@@ -21,7 +21,7 @@ const LoginPage = ({ onLogin }) => {
 
   useEffect(() => {
     if (sessionStorage.getItem(SESSION_KEY) === "true") {
-      navigate("/", { replace: true });
+      navigate("/home", { replace: true });
     }
   }, [navigate]);
 
@@ -62,15 +62,22 @@ const LoginPage = ({ onLogin }) => {
       navigateAfterLoginRef.current = setTimeout(() => {
         navigateAfterLoginRef.current = null;
         onLogin?.();
-        navigate("/", { replace: true });
+        navigate("/home", { replace: true });
       }, SUCCESS_NAV_DELAY_MS);
     } else {
       setPopup({ show: true, type: "error", message: "Invalid username or password." });
     }
   };
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   return (
     <div className="login-page">
+      <button type="button" className="login-page__back" onClick={handleBack} aria-label="Go back">
+        <FaArrowLeft aria-hidden />
+      </button>
       {popup.show && (
         <div className={`login-popup-backdrop login-popup-backdrop--${popup.type}`} aria-live="polite">
           <div

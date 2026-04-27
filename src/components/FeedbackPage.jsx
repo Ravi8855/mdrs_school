@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate, useLocation } from "react-router-dom";
 import emailjs from "@emailjs/browser";
-import { FaArrowLeft, FaCheckCircle, FaExclamationCircle } from "react-icons/fa";
+import { FaCheckCircle, FaExclamationCircle } from "react-icons/fa";
 import Navbar from "./Navbar";
 import AnimatedSection from "./AnimatedSection";
 import FeedbackRoleSelect from "./FeedbackRoleSelect";
@@ -113,16 +113,12 @@ export default function FeedbackPage({ onLogout }) {
       }
     };
 
-    if (location.pathname !== "/") {
-      navigate("/");
+    if (location.pathname !== "/home") {
+      navigate("/home");
       setTimeout(scrollToTarget, 80);
       return;
     }
     scrollToTarget();
-  };
-
-  const goBack = () => {
-    navigate(-1);
   };
 
   const closeThanks = useCallback(() => {
@@ -289,30 +285,6 @@ export default function FeedbackPage({ onLogout }) {
           max-width: 640px;
           margin: 0 auto;
           padding: 0 clamp(16px, 4vw, 24px);
-        }
-        .feedback-back {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          width: 44px;
-          height: 44px;
-          margin: 0 0 0.75rem;
-          padding: 0;
-          border: 1px solid #e2e8f0;
-          border-radius: 12px;
-          background: #fff;
-          color: #4338ca;
-          cursor: pointer;
-          box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
-          transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-        }
-        .feedback-back:hover {
-          background: #eef2ff;
-          border-color: #c7d2fe;
-        }
-        .feedback-back:focus-visible {
-          outline: 3px solid #6366f1;
-          outline-offset: 2px;
         }
         .feedback-page-title {
           margin: 0 0 1.25rem;
@@ -676,9 +648,6 @@ export default function FeedbackPage({ onLogout }) {
       <Navbar onNavigate={handleNavigate} onLogout={onLogout} />
       <main className="page-section feedback-page-main">
         <div className="feedback-page-inner">
-          <button type="button" className="feedback-back" onClick={goBack} aria-label="Go back">
-            <FaArrowLeft aria-hidden />
-          </button>
           <h1 className="feedback-page-title">Feedback</h1>
 
           <form id="feedback-form" className="feedback-form" onSubmit={handleSubmit} noValidate>
