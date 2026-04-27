@@ -46,7 +46,7 @@ export const ALUMNI_STUDENTS = [
     name: "Ambadas",
     qual: "Medical (BAMS) in Bidar",
     qualification: "Medical (BAMS)",
-    University: "Sri Sidharameshwar Ayurvedic Medical College",
+    collegeUniversity: "Sri Sidharameshwar Ayurvedic Medical College",
     location: "Bidar",
   },
   { name: "Hrutik", qual: "Medical (BHMS) in Dharawada" },
@@ -57,7 +57,7 @@ export const ALUMNI_STUDENTS = [
     name: "Arun",
     qual: "Medical (BAMS) in Udapi",
     qualification: "Medical (BAMS)",
-    University:
+    collegeUniversity:
       "Shri Dharmasthala Manjunatheshwara Ayurvedic Medical College, Udupi",
     location: "Udupi",
   },
