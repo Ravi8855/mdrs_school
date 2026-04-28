@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FaUserCircle, FaPen } from "react-icons/fa";
+import { FaCircleCheck } from "react-icons/fa6";
 import { getProfileKey } from "../lib/profileSession";
 import {
   fetchProfileByUserKey,
@@ -11,6 +12,25 @@ import {
 } from "../lib/profilesSupabase";
 import { isProfilesTableMissingError, profilesTableSetupHint } from "../lib/profileErrors";
 import "./StudentProfilePage.css";
+
+/** @param {{ name?: unknown; qualification?: unknown; college?: unknown; location?: unknown; bio?: unknown; image?: unknown }} profile */
+export function calculateProfileCompletion(profile) {
+  const s = (v) => (v == null ? "" : String(v));
+  const fields = [
+    s(profile.name),
+    s(profile.qualification),
+    s(profile.college),
+    s(profile.location),
+    s(profile.bio),
+  ];
+  const filledFields = fields.filter((field) => field && field.trim() !== "").length;
+  const totalFields = fields.length;
+  let percentage = Math.round((filledFields / totalFields) * 100);
+  if (profile.image) {
+    percentage = Math.min(100, percentage + 10);
+  }
+  return percentage;
+}
 
 export default function StudentProfilePage() {
   const routeLocation = useLocation();
@@ -32,6 +52,7 @@ export default function StudentProfilePage() {
   const [preview, setPreview] = useState("");
   const [saving, setSaving] = useState(false);
   const [showSaveSuccess, setShowSaveSuccess] = useState(false);
+  const [percentage, setPercentage] = useState(0);
 
   const showEditorRef = useRef(false);
   const loadRequestIdRef = useRef(0);
@@ -118,6 +139,41 @@ export default function StudentProfilePage() {
     setPreview(u);
     return () => URL.revokeObjectURL(u);
   }, [file]);
+
+  const profileForCompletion = useMemo(() => {
+    if (showEditor) {
+      const hasImage = Boolean(preview || (imageUrl && imageUrl.trim()) || file);
+      return { name, qualification, college, location, bio, image: hasImage };
+    }
+    if (row) {
+      return {
+        name: row.name,
+        qualification: row.qualification,
+        college: row.college,
+        location: row.location,
+        bio: row.bio,
+        image: Boolean(row.image_url && String(row.image_url).trim()),
+      };
+    }
+    return { name: "", qualification: "", college: "", location: "", bio: "", image: false };
+  }, [showEditor, name, qualification, college, location, bio, imageUrl, preview, file, row]);
+
+  useEffect(() => {
+    setPercentage(calculateProfileCompletion(profileForCompletion));
+  }, [profileForCompletion]);
+
+  const completionChecklist = useMemo(() => {
+    const p = profileForCompletion;
+    const t = (v) => (v == null ? "" : String(v).trim());
+    return [
+      { id: "name", label: "Name", done: Boolean(t(p.name)) },
+      { id: "qualification", label: "Qualification", done: Boolean(t(p.qualification)) },
+      { id: "college", label: "College / University", todoPhrase: "college / university", done: Boolean(t(p.college)) },
+      { id: "location", label: "Location", done: Boolean(t(p.location)) },
+      { id: "bio", label: "Bio", done: Boolean(t(p.bio)) },
+      { id: "photo", label: "Profile photo", done: Boolean(p.image), optional: true },
+    ];
+  }, [profileForCompletion]);
 
   const openEditor = () => {
     setShowEditor(true);
@@ -344,7 +400,9 @@ export default function StudentProfilePage() {
         </button>
       </div>
 
-      <label className="student-profile-label">
+      <label
+        className={`student-profile-label${!name.trim() ? " student-profile-label--missing" : ""}`}
+      >
         Name
         <input
           className="student-profile-input"
@@ -354,7 +412,9 @@ export default function StudentProfilePage() {
           autoComplete="name"
         />
       </label>
-      <label className="student-profile-label">
+      <label
+        className={`student-profile-label${!qualification.trim() ? " student-profile-label--missing" : ""}`}
+      >
         Qualification
         <input
           className="student-profile-input"
@@ -363,7 +423,9 @@ export default function StudentProfilePage() {
           autoComplete="off"
         />
       </label>
-      <label className="student-profile-label">
+      <label
+        className={`student-profile-label${!college.trim() ? " student-profile-label--missing" : ""}`}
+      >
         College / University
         <input
           className="student-profile-input"
@@ -372,7 +434,9 @@ export default function StudentProfilePage() {
           autoComplete="organization"
         />
       </label>
-      <label className="student-profile-label">
+      <label
+        className={`student-profile-label${!location.trim() ? " student-profile-label--missing" : ""}`}
+      >
         Location
         <input
           className="student-profile-input"
@@ -381,7 +445,9 @@ export default function StudentProfilePage() {
           autoComplete="address-level1"
         />
       </label>
-      <label className="student-profile-label">
+      <label
+        className={`student-profile-label${!bio.trim() ? " student-profile-label--missing" : ""}`}
+      >
         Bio
         <textarea
           className="student-profile-textarea"
@@ -460,6 +526,65 @@ export default function StudentProfilePage() {
               </p>
             ) : null}
           </header>
+
+          <div
+            className={`profile-progress${percentage === 100 ? " profile-progress--complete" : ""}`}
+            aria-live="polite"
+          >
+            {percentage === 100 ? (
+              <>
+                <div className="profile-progress-complete">
+                  <div className="profile-progress-complete__badge" aria-hidden>
+                    <FaCircleCheck className="profile-progress-complete__badge-icon" />
+                  </div>
+                  <div className="profile-progress-complete__copy">
+                    <p className="profile-progress-complete__kicker">Profile strength</p>
+                    <p className="profile-progress-complete__title">100% complete</p>
+                    <p className="profile-progress-complete__subtitle">
+                      Your alumni profile is fully visible and ready for classmates to discover.
+                    </p>
+                  </div>
+                </div>
+                <div
+                  className="progress-bar progress-bar--complete"
+                  role="progressbar"
+                  aria-valuenow={100}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                >
+                  <div className="progress-fill progress-fill--complete" style={{ width: "100%" }} />
+                </div>
+              </>
+            ) : (
+              <>
+                <p className="profile-progress__percent">{percentage}% Profile Completed</p>
+                <div className="progress-bar" role="progressbar" aria-valuenow={percentage} aria-valuemin={0} aria-valuemax={100}>
+                  <div className="progress-fill" style={{ width: `${percentage}%` }} />
+                </div>
+                <p className="profile-progress__hint">Complete your profile to reach 100%</p>
+                <ul className="profile-completion-checklist">
+                  {completionChecklist.map((item) => {
+                    const todoText =
+                      item.id === "photo"
+                        ? "Add profile photo (optional +10%)"
+                        : `Add ${item.todoPhrase ?? item.label.toLowerCase()}`;
+                    const doneText = item.id === "photo" ? "Profile photo added" : `${item.label} added`;
+                    return (
+                      <li
+                        key={item.id}
+                        className={`profile-completion-checklist__item${item.done ? " profile-completion-checklist__item--done" : " profile-completion-checklist__item--todo"}`}
+                      >
+                        <span className="profile-completion-checklist__icon" aria-hidden>
+                          {item.done ? "✅" : "❌"}
+                        </span>
+                        {item.done ? doneText : todoText}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </>
+            )}
+          </div>
 
           <div className="student-profile-panel-stack">
             {showEditor ? (

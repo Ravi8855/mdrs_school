@@ -45,8 +45,35 @@ const ClassmatesPage = ({ variant = "full" }) => {
   // eslint-disable-next-line no-underscore-dangle
   ClassmatesPage.__shuffleTimer ??= 0;
 
+  /** Cool accent per student (cycles); drives card tint + glow. */
   const palette = useMemo(
-    () => ["#38bdf8", "#a78bfa", "#fb7185", "#34d399", "#fbbf24", "#22c55e", "#60a5fa", "#f472b6"],
+    () => [
+      "#22d3ee",
+      "#38bdf8",
+      "#60a5fa",
+      "#818cf8",
+      "#a78bfa",
+      "#c084fc",
+      "#e879f9",
+      "#14b8a6",
+      "#5eead4",
+      "#34d399",
+      "#4ade80",
+      "#7dd3fc",
+      "#93c5fd",
+      "#67e8f9",
+      "#a5f3fc",
+      "#7c3aed",
+      "#6366f1",
+      "#0ea5e9",
+      "#06b6d4",
+      "#2dd4bf",
+      "#10b981",
+      "#8b5cf6",
+      "#d946ef",
+      "#0891b2",
+      "#2563eb",
+    ],
     []
   );
 
@@ -63,13 +90,24 @@ const ClassmatesPage = ({ variant = "full" }) => {
   }, []);
 
   const buildLayout = (w, count, seed) => {
+    const isNarrow = w > 0 && w < 400;
     const isMobile = w < 520;
-    const cardW = isMobile ? 132 : 160;
-    const cardH = isMobile ? 40 : 44;
-    const gap = isMobile ? 32 : 52; // large enough to allow safe floating without overlap
-    const pad = isMobile ? 16 : 20;
 
-    const cols = clamp(Math.floor((w - pad * 2) / (cardW + gap)), 2, isMobile ? 3 : 6);
+    const pad = isNarrow ? 10 : isMobile ? 12 : 20;
+    const gap = isNarrow ? 20 : isMobile ? 26 : 52;
+    let cardW = isNarrow ? 116 : isMobile ? 126 : 160;
+    const cardH = isNarrow ? 36 : isMobile ? 40 : 44;
+
+    const slotW = cardW + gap;
+    const inner = Math.max(0, w - pad * 2);
+    let cols = Math.max(1, Math.floor(inner / slotW));
+    const maxCols = isMobile ? (isNarrow ? 2 : 3) : 6;
+    cols = Math.min(cols, maxCols);
+    // Single column: stretch chip to available width (still capped for readability).
+    if (cols === 1) {
+      cardW = clamp(inner, isNarrow ? 108 : 118, 300);
+    }
+
     const rows = Math.ceil(count / cols);
     const minH = pad * 2 + rows * cardH + Math.max(0, rows - 1) * gap;
 
@@ -82,8 +120,8 @@ const ClassmatesPage = ({ variant = "full" }) => {
 
     // Collision-safe: movement stays inside the gap budget, even if two neighbors drift toward each other.
     // Effective "free space" between cards is `gap`; allow max drift < gap/2 minus safety.
-    const safety = isMobile ? 10 : 12; // includes hover scale allowance
-    const floatMax = clamp(Math.floor((gap - safety) / 2), 14, 26); // bounded, smooth, and safe
+    const safety = isMobile ? 8 : 12; // includes hover scale allowance
+    const floatMax = clamp(Math.floor((gap - safety) / 2), isNarrow ? 8 : 12, isMobile ? 22 : 26);
 
     const positions = Array.from({ length: count }, () => null);
     order.forEach((originalIndex, slotIndex) => {
@@ -153,7 +191,14 @@ const ClassmatesPage = ({ variant = "full" }) => {
           </header>
 
           <section className={`classmates-aquarium${isPreview ? " classmates-aquarium--preview" : ""}`}>
-            <div className="classmates-aquarium__tank" ref={aquariumRef} aria-label="Classmates tank">
+            <div
+              className="classmates-aquarium__tank"
+              ref={aquariumRef}
+              aria-label="Classmates tank"
+              style={{
+                ["--classmates-tank-min-h"]: `${Math.max(layout.minH || 0, 320)}px`,
+              }}
+            >
               <div className="classmates-aquarium__water" aria-hidden />
               {displayedClassmates.map((name, index) => {
                 const p =
@@ -239,9 +284,11 @@ const ClassmatesPage = ({ variant = "full" }) => {
       <style>{`
         .classmates-page {
           background: #f1f5f9;
-          padding-bottom: 24px;
+          padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
           font-family: var(--font-body, 'Poppins', sans-serif);
           transition: background 0.45s ease;
+          overflow-x: hidden;
+          box-sizing: border-box;
         }
 
         .classmates-page--aquarium {
@@ -254,13 +301,15 @@ const ClassmatesPage = ({ variant = "full" }) => {
           width: 100%;
           max-width: 980px;
           margin: 0 auto;
+          box-sizing: border-box;
         }
 
         .classmates-shell__head {
           text-align: center;
-          padding: 18px 14px 18px;
+          padding: calc(14px + env(safe-area-inset-top, 0px) * 0.35) 14px 16px;
           border-radius: 18px;
           margin: 8px auto 8px;
+          box-sizing: border-box;
           background: rgba(255,255,255,0.04);
           border: 1px solid rgba(255,255,255,0.08);
           box-shadow: 0 10px 30px rgba(0,0,0,0.35);
@@ -284,10 +333,11 @@ const ClassmatesPage = ({ variant = "full" }) => {
 
         .classmates-shell__subtitle {
           margin: 0;
-          font-size: 0.95rem;
+          font-size: clamp(0.82rem, 3.5vw, 0.95rem);
           font-weight: 600;
           color: rgba(248,250,252,0.72);
           letter-spacing: 0.02em;
+          padding: 0 4px;
         }
 
         .classmates-shell__cta {
@@ -408,7 +458,7 @@ const ClassmatesPage = ({ variant = "full" }) => {
 
         .classmates-aquarium {
           width: 100%;
-          padding: 10px clamp(12px, 4vw, 24px) 18px;
+          padding: 8px clamp(8px, 3.2vw, 24px) calc(14px + env(safe-area-inset-bottom, 0px));
           box-sizing: border-box;
         }
 
@@ -417,10 +467,11 @@ const ClassmatesPage = ({ variant = "full" }) => {
           width: 100%;
           max-width: min(980px, 100%);
           height: min(78vh, 720px);
-          min-height: max(620px, ${layout.minH}px);
+          min-height: var(--classmates-tank-min-h, 620px);
           margin: 0 auto;
           border-radius: 24px;
           overflow: hidden;
+          box-sizing: border-box;
           background:
             radial-gradient(900px 420px at 20% 0%, rgba(56, 189, 248, 0.14) 0%, transparent 58%),
             radial-gradient(700px 420px at 88% 22%, rgba(251, 191, 36, 0.12) 0%, transparent 60%),
@@ -469,16 +520,22 @@ const ClassmatesPage = ({ variant = "full" }) => {
           font-family: var(--font-heading, 'Poppins', sans-serif);
           font-weight: 800;
           font-size: 0.94rem;
-          color: rgba(248,250,252,0.96);
+          color: rgba(248,250,252,0.98);
           letter-spacing: 0.01em;
-          background: linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.10));
-          border: 1px solid rgba(255,255,255,0.20);
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
+          background:
+            linear-gradient(155deg,
+              color-mix(in srgb, var(--fishHue) 52%, rgba(15, 23, 42, 0.35)) 0%,
+              color-mix(in srgb, var(--fishHue) 28%, rgba(15, 23, 42, 0.55)) 48%,
+              color-mix(in srgb, var(--fishHue) 14%, rgba(15, 23, 42, 0.72)) 100%),
+            linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.04) 100%);
+          border: 1px solid color-mix(in srgb, var(--fishHue) 42%, rgba(255,255,255,0.22));
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
           box-shadow:
-            0 16px 36px rgba(0,0,0,0.42),
-            0 0 0 1px rgba(0,0,0,0.18);
-          text-shadow: 0 2px 10px rgba(0,0,0,0.55);
+            0 0 0 1px color-mix(in srgb, var(--fishHue) 25%, transparent) inset,
+            0 18px 40px rgba(0,0,0,0.38),
+            0 0 28px color-mix(in srgb, var(--fishHue) 22%, transparent);
+          text-shadow: 0 1px 2px rgba(0,0,0,0.45), 0 0 20px color-mix(in srgb, var(--fishHue) 35%, transparent);
           max-width: 190px;
           white-space: nowrap;
           overflow: hidden;
@@ -490,26 +547,57 @@ const ClassmatesPage = ({ variant = "full" }) => {
         .classmates-fish__body::before {
           content: "";
           position: absolute;
-          inset: -2px;
-          border-radius: 18px;
-          background: radial-gradient(60% 80% at 20% 20%, color-mix(in srgb, var(--fishHue) 45%, transparent) 0%, transparent 60%),
-            radial-gradient(70% 90% at 80% 90%, color-mix(in srgb, var(--fishHue) 35%, transparent) 0%, transparent 62%);
-          filter: blur(10px);
-          opacity: 0.9;
+          inset: -3px;
+          border-radius: 20px;
+          background:
+            radial-gradient(70% 85% at 18% 12%, color-mix(in srgb, var(--fishHue) 55%, transparent) 0%, transparent 55%),
+            radial-gradient(65% 80% at 92% 88%, color-mix(in srgb, var(--fishHue) 40%, transparent) 0%, transparent 58%);
+          filter: blur(14px);
+          opacity: 0.85;
           pointer-events: none;
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 520px) {
           .classmates-aquarium__tank {
-            min-height: 640px;
-            height: min(80vh, 740px);
-            border-radius: 20px;
+            height: min(74vh, 760px);
+            min-height: var(--classmates-tank-min-h, 560px);
+            border-radius: 18px;
           }
 
           .classmates-fish__body {
-            font-size: 0.92rem;
-            padding: 9px 11px;
-            max-width: 170px;
+            font-size: clamp(0.8rem, 3.6vw, 0.92rem);
+            padding: 8px 10px;
+            max-width: min(300px, calc(100vw - 48px));
+            border-radius: 14px;
+          }
+
+          .classmates-fish__body::before {
+            border-radius: 16px;
+          }
+
+          .classmates-shell__head {
+            margin-left: 0;
+            margin-right: 0;
+            border-radius: 16px;
+            padding-left: max(12px, env(safe-area-inset-left, 0px));
+            padding-right: max(12px, env(safe-area-inset-right, 0px));
+          }
+
+          .mode-btn {
+            min-height: 44px;
+            padding: 10px 20px;
+            touch-action: manipulation;
+          }
+        }
+
+        @media (max-width: 380px) {
+          .classmates-aquarium__tank {
+            height: min(72vh, 720px);
+            border-radius: 14px;
+          }
+
+          .classmates-fish__body {
+            padding: 7px 9px;
           }
         }
 
