@@ -16,7 +16,8 @@ This guide turns the deployed PWA at **https://mdrs-school-8865.vercel.app** int
 **Repo files**
 
 - `public/.well-known/assetlinks.json` — Digital Asset Links (must include your real SHA-256 fingerprints after you sign builds).
-- `vercel.json` — already serves `/.well-known/assetlinks.json` as `application/json`.
+- `vercel.json` — serves `/.well-known/assetlinks.json` as `application/json`. **Important:** Vercel applies the **last** matching rule when the same header name appears twice, so order is: global `/(.*)` first, then `/privacy-policy.html`, then `/.well-known/assetlinks.json`. That way `Cache-Control: public, max-age=3600` wins for the policy page and for Digital Asset Links instead of being overwritten by the global `no-store`.
+- `docs/twa-manifest.reference.json` — copy fields into your Bubblewrap project’s `twa-manifest.json` (or merge by hand): `host`, `packageId`, `display`, `startUrl`, icon URLs, signing key path/alias.
 - `scripts/print-twa-sha256-fingerprint.ps1` — optional helper to print SHA-256 from a keystore.
 
 ---
@@ -195,11 +196,39 @@ Play Store requires an **AAB** signed with your **release** / **upload** key (or
 
 ## 7. Troubleshooting
 
+### 7a. Confirm Digital Asset Links (device + web)
+
+1. **Statement List Generator & Tester** (Google): open [Digital Asset Links](https://developers.google.com/digital-asset-links/tools/generator), enter package `com.mdrs.school`, SHA-256 from your keystore, and site `https://mdrs-school-8865.vercel.app` — it fetches `/.well-known/assetlinks.json` and reports whether the statement verifies.
+2. **URL checks:** `curl.exe -sI "https://mdrs-school-8865.vercel.app/.well-known/assetlinks.json"` — expect **200**, `Content-Type: application/json`, body must be **raw JSON** (no HTML). **No redirects** on that URL (especially no `www` hop).
+3. **Fingerprint must match the installed APK:** debug keystore ≠ release keystore. If you use **Google Play App Signing**, add the **App signing key certificate** SHA-256 from Play Console → *App integrity* alongside your **upload key** in `sha256_cert_fingerprints` (multiple strings in the array are allowed).
+4. **After fixing `assetlinks.json`:** redeploy the site, uninstall the Android app, clear **Chrome** and **Android System WebView** storage (or wait for cache), reinstall the APK, and launch again.
+
+### 7b. `adb` checks (optional)
+
+```bash
+adb shell pm get-app-links com.mdrs.school
+adb shell am start -a android.intent.action.VIEW -d "https://mdrs-school-8865.vercel.app/" com.mdrs.school
+```
+
+When verification succeeds, the app should open **without** Custom Tabs chrome (no URL bar / share row from CCT).
+
+### 7c. Rebuild release APK with Gradle (Bubblewrap project folder)
+
+From the directory that contains `gradlew` (created by `bubblewrap init` / `bubblewrap update`):
+
+```bash
+./gradlew clean
+./gradlew assembleRelease
+```
+
+On Windows: `gradlew.bat clean` then `gradlew.bat assembleRelease`. Prefer `bubblewrap build` / `bubblewrap build --release` so signing env vars stay aligned with `twa-manifest.json`.
+
 | Symptom | What to check |
 |--------|----------------|
-| **Opens in browser** instead of TWA | `assetlinks.json` deployed at **exact** `https://mdrs-school-8865.vercel.app/.well-known/assetlinks.json`; package `com.mdrs.school`; SHA-256 matches **the cert that signed the installed APK**; wait a few minutes after deploy; clear Chrome / Android System WebView data. |
-| **Asset links not verified** | Statement tester; no redirects on `assetlinks.json` URL; `Content-Type: application/json` (already set in `vercel.json`); JSON must be valid UTF-8. |
-| **Service worker offline issues** | TWA uses Chrome; same origin as production URL; ensure SW scope covers navigations; avoid `Cache-Control: no-store` on **all** routes if it prevents caching critical assets (review `vercel.json` — your global `no-store` may reduce offline effectiveness for non-SW assets). |
+| **Chrome UI (URL bar / share)** on launch | Almost always **failed or cached Digital Asset Links** — SHA-256 in `assetlinks.json` must match the signing cert of the APK you installed; `package_name` must be `com.mdrs.school`; host in `twa-manifest.json` must be **`mdrs-school-8865.vercel.app`** (no `https://`). Set `"display": "fullscreen"` (or `"fullscreen-sticky"`) in `twa-manifest.json`, then `bubblewrap update` and rebuild. |
+| **Opens in browser** instead of TWA | Same as above; deploy `assetlinks.json` before testing; allow a few minutes for propagation. |
+| **Asset links not verified** | Statement List Generator; no redirects on `assetlinks.json`; `Content-Type: application/json`; valid UTF-8 JSON array. |
+| **Service worker offline issues** | TWA uses Chrome; same origin as production URL; ensure SW scope covers navigations; global `no-store` in `vercel.json` may reduce caching for non-SW assets (`.well-known` is excluded from that behavior for headers overlap — see repo `vercel.json` order). |
 | **Bubblewrap prompts every time** | Fix `~/.bubblewrap/config.json` paths. |
 | **`bubblewrap validate` fails** | Run from TWA folder; run `bubblewrap update` after manifest changes. |
 

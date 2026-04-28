@@ -1,0 +1,39 @@
+{
+  "packageId": "com.mdrs.school",
+  "host": "mdrs-school-8865.vercel.app",
+  "name": "MDRS School",
+  "launcherName": "MDRS",
+  "display": "fullscreen",
+  "themeColor": "#121212",
+  "themeColorDark": "#121212",
+  "navigationColor": "#121212",
+  "navigationColorDark": "#121212",
+  "navigationDividerColor": "#121212",
+  "navigationDividerColorDark": "#121212",
+  "backgroundColor": "#121212",
+  "enableNotifications": false,
+  "startUrl": "/?v=2",
+  "iconUrl": "https://mdrs-school-8865.vercel.app/icon-512.png",
+  "maskableIconUrl": "https://mdrs-school-8865.vercel.app/icon-512.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "./android.keystore",
+    "alias": "android"
+  },
+  "appVersionCode": 1,
+  "appVersion": "1",
+  "shortcuts": [],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://mdrs-school-8865.vercel.app/manifest.json",
+  "fallbackType": "customtabs",
+  "features": {},
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "orientation": "default",
+  "fingerprints": [],
+  "additionalTrustedOrigins": [],
+  "retainedBundles": []
+}

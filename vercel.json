@@ -1,6 +1,12 @@
 {
   "headers": [
     {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store, no-cache, must-revalidate" }
+      ]
+    },
+    {
       "source": "/privacy-policy.html",
       "headers": [
         { "key": "Content-Type", "value": "text/html; charset=utf-8" },
@@ -12,12 +18,6 @@
       "headers": [
         { "key": "Content-Type", "value": "application/json; charset=utf-8" },
         { "key": "Cache-Control", "value": "public, max-age=3600" }
-      ]
-    },
-    {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "no-store, no-cache, must-revalidate" }
       ]
     }
   ]
