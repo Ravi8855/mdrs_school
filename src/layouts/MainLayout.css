@@ -1,4 +1,4 @@
-/* Shell for tab-based mobile app: top bar + scrollable main + fixed bottom nav */
+/* Shell for tab-based mobile app: scrollable main + fixed bottom nav */
 
 .main-app-shell {
   display: flex;
@@ -42,122 +42,6 @@
   display: none !important;
 }
 
-.main-app-shell__header {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 12px 14px 12px 12px;
-  background: linear-gradient(135deg, #0f172a, #1e293b);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow:
-    0 4px 24px rgba(0, 0, 0, 0.35),
-    0 1px 0 rgba(255, 255, 255, 0.06) inset;
-}
-
-.main-app-shell__header-left {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  min-width: 0;
-  flex: 1;
-}
-
-.main-app-shell__back {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  margin: 0;
-  padding: 0;
-  border: 1px solid rgba(248, 250, 252, 0.28);
-  border-radius: 12px;
-  background: rgba(15, 23, 42, 0.45);
-  color: #facc15;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  touch-action: manipulation;
-}
-
-.main-app-shell__back:hover {
-  background: rgba(30, 41, 59, 0.75);
-  border-color: rgba(250, 204, 21, 0.45);
-  color: #fde047;
-}
-
-.main-app-shell__back:active {
-  transform: scale(0.94);
-}
-
-.main-app-shell__back:focus-visible {
-  outline: 2px solid #fbbf24;
-  outline-offset: 2px;
-}
-
-.main-app-shell__header-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
-.main-app-shell__profile {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  margin: 0;
-  padding: 0;
-  border: 2px solid rgba(255, 255, 255, 0.22);
-  border-radius: 50%;
-  background: rgba(15, 23, 42, 0.55);
-  color: #facc15;
-  text-decoration: none;
-  font-size: 1.45rem;
-  box-shadow:
-    0 0 0 1px rgba(250, 204, 21, 0.12),
-    0 0 20px rgba(250, 204, 21, 0.28),
-    0 6px 16px rgba(0, 0, 0, 0.35);
-  transition: all 0.3s ease;
-  touch-action: manipulation;
-}
-
-.main-app-shell__profile:hover {
-  background: rgba(30, 41, 59, 0.85);
-  border-color: rgba(250, 204, 21, 0.45);
-  color: #fde047;
-  box-shadow:
-    0 0 0 1px rgba(250, 204, 21, 0.2),
-    0 0 28px rgba(250, 204, 21, 0.4),
-    0 8px 20px rgba(0, 0, 0, 0.4);
-}
-
-.main-app-shell__profile:active {
-  transform: scale(0.94);
-}
-
-.main-app-shell__profile:focus-visible {
-  outline: 2px solid #fbbf24;
-  outline-offset: 2px;
-}
-
-.main-app-shell__brand {
-  font-family: var(--font-heading, "Poppins", sans-serif);
-  font-size: 1.125rem;
-  font-weight: 800;
-  color: #fefce8;
-  letter-spacing: 0.04em;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
-}
-
 .main-app-shell__main {
   position: relative;
   z-index: 0;
@@ -189,14 +73,3 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .main-app-shell__back,
-  .main-app-shell__profile {
-    transition: none;
-  }
-
-  .main-app-shell__back:active,
-  .main-app-shell__profile:active {
-    transform: none;
-  }
-}
