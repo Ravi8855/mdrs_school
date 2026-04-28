@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 
 // ✅ IMPORT IMAGES (ONLY AVAILABLE TEACHER FILES)
 import subhasImg from "../assets/Subhas sir.jpg";
@@ -14,12 +15,62 @@ import chandruImg from "../assets/Chandru sir.jpg";
 import RenukaImg from "../assets/Renuka mam.jpg";
 import AshwiniImg from "../assets/Ashwini mam.jpg";
 
+/** Public gallery — 3 per row; opened in memory viewer */
+const TEACHER_GALLERY_IMAGES = [
+  "/gallery/s1.jpg",
+  "/gallery/s2.jpg",
+  "/gallery/s3.jpg",
+  "/gallery/s4.jpg",
+  "/gallery/s5.jpg",
+  "/gallery/s6.jpg",
+  "/gallery/s7.jpg",
+];
 
-
+const GALLERY_LEN = TEACHER_GALLERY_IMAGES.length;
 
 const TeachersPage = () => {
   const [selectedTeacher, setSelectedTeacher] = useState(null);
   const [expandedImage, setExpandedImage] = useState(null);
+  const [memoryIndex, setMemoryIndex] = useState(null);
+
+  const closeMemoryViewer = useCallback(() => setMemoryIndex(null), []);
+
+  const showPrevMemory = useCallback(() => {
+    setMemoryIndex((i) =>
+      i === null ? null : (i - 1 + GALLERY_LEN) % GALLERY_LEN
+    );
+  }, []);
+
+  const showNextMemory = useCallback(() => {
+    setMemoryIndex((i) => (i === null ? null : (i + 1) % GALLERY_LEN));
+  }, []);
+
+  useEffect(() => {
+    if (memoryIndex === null) return undefined;
+    const onKey = (e) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        closeMemoryViewer();
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        showPrevMemory();
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        showNextMemory();
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [memoryIndex, closeMemoryViewer, showPrevMemory, showNextMemory]);
+
+  useEffect(() => {
+    if (memoryIndex === null) return undefined;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [memoryIndex]);
 
   const principal = {
     name: "Eranna Arkera Sir",
@@ -66,7 +117,8 @@ const TeachersPage = () => {
         .section-inner {
           max-width: 1200px;
           margin: 0 auto;
-          padding: 0 var(--space-4);
+          padding-left: clamp(14px, 4vw, 24px);
+          padding-right: clamp(14px, 4vw, 24px);
           width: 100%;
           max-width: 100%;
           box-sizing: border-box;
@@ -75,6 +127,9 @@ const TeachersPage = () => {
         .section-title-wrap {
           text-align: center;
           margin-bottom: var(--space-8);
+          max-width: min(720px, 100%);
+          margin-left: auto;
+          margin-right: auto;
         }
 
         .section-title {
@@ -111,8 +166,10 @@ const TeachersPage = () => {
           background: linear-gradient(135deg, #ffe66d 0%, #ffb347 100%);
           border-radius: 20px;
           padding: 40px 30px;
-          margin: var(--space-8) 0;
+          margin: var(--space-8) auto;
+          max-width: min(520px, 100%);
           box-shadow: 0 12px 36px rgba(0,0,0,0.12);
+          box-sizing: border-box;
         }
 
         .principal-title {
@@ -154,9 +211,10 @@ const TeachersPage = () => {
           grid-template-columns: repeat(2, minmax(0, 1fr));
           gap: 20px;
           width: 100%;
-          max-width: 100%;
+          max-width: min(720px, 100%);
           margin: 0 auto;
           align-items: stretch;
+          justify-items: stretch;
           box-sizing: border-box;
         }
 
@@ -170,12 +228,12 @@ const TeachersPage = () => {
           background: white;
           width: 100%;
           min-width: 0;
-          min-height: 0;
+          min-height: 148px;
           box-sizing: border-box;
           display: flex;
           flex-direction: column;
           align-items: center;
-          justify-content: flex-start;
+          justify-content: center;
           gap: 10px;
         }
 
@@ -214,8 +272,8 @@ const TeachersPage = () => {
         }
 
         .teacher-img {
-          width: clamp(56px, 32%, 80px);
-          height: clamp(56px, 32%, 80px);
+          width: 72px;
+          height: 72px;
           border-radius: 50%;
           object-fit: cover;
           margin: 0 auto;
@@ -230,6 +288,306 @@ const TeachersPage = () => {
         .teacher-img:hover {
           transform: scale(1.1);
           box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+        }
+
+        /* School memories — 3-column grid below teacher cards */
+        .school-memories {
+          width: 100%;
+          max-width: min(640px, 100%);
+          margin: clamp(28px, 5vw, 44px) auto 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        .school-memories__head {
+          margin-bottom: 14px;
+          padding: 0 2px;
+        }
+
+        .school-memories__title {
+          font-family: var(--font-heading);
+          font-size: clamp(1.05rem, 3.2vw, 1.2rem);
+          font-weight: 800;
+          color: var(--text);
+          margin: 0;
+          letter-spacing: -0.02em;
+          line-height: 1.2;
+        }
+
+        .school-memories__subtitle {
+          font-size: 0.8125rem;
+          color: var(--text-muted);
+          margin: 6px 0 0;
+          font-weight: 500;
+          line-height: 1.4;
+        }
+
+        .school-memories__grid {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 8px;
+          width: 100%;
+        }
+
+        .school-memories__tile {
+          position: relative;
+          aspect-ratio: 1;
+          border: none;
+          padding: 0;
+          margin: 0;
+          width: 100%;
+          border-radius: 14px;
+          overflow: hidden;
+          cursor: pointer;
+          background: linear-gradient(145deg, #e2e8f0, #cbd5e1);
+          box-shadow:
+            0 1px 0 rgba(255, 255, 255, 0.6) inset,
+            0 2px 10px rgba(15, 23, 42, 0.08),
+            0 0 0 1px rgba(15, 23, 42, 0.06);
+          transition: transform 0.22s ease, box-shadow 0.22s ease;
+          -webkit-tap-highlight-color: transparent;
+        }
+
+        .school-memories__tile:hover {
+          transform: translateY(-3px);
+          box-shadow:
+            0 1px 0 rgba(255, 255, 255, 0.5) inset,
+            0 10px 28px rgba(15, 23, 42, 0.14),
+            0 0 0 1px rgba(15, 23, 42, 0.08);
+        }
+
+        .school-memories__tile:active {
+          transform: scale(0.97);
+        }
+
+        .school-memories__tile:focus-visible {
+          outline: 2px solid rgba(59, 130, 246, 0.9);
+          outline-offset: 3px;
+        }
+
+        .school-memories__tile img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: center;
+          display: block;
+        }
+
+        .school-memories__tile-shine {
+          pointer-events: none;
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(
+            165deg,
+            rgba(255, 255, 255, 0.2) 0%,
+            transparent 42%,
+            transparent 100%
+          );
+          opacity: 0.55;
+        }
+
+        /* Memory photo viewer (lightbox) */
+        .memory-viewer {
+          position: fixed;
+          inset: 0;
+          z-index: 3600;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: max(12px, env(safe-area-inset-top, 0px)) max(12px, env(safe-area-inset-right, 0px))
+            max(12px, env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px));
+          box-sizing: border-box;
+          background: rgba(15, 23, 42, 0.88);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          animation: fadeIn 0.25s ease;
+        }
+
+        .memory-viewer__panel {
+          width: min(920px, 100%);
+          max-height: min(92vh, 900px);
+          background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+          border-radius: 20px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          box-shadow:
+            0 24px 80px rgba(0, 0, 0, 0.45),
+            0 0 0 1px rgba(0, 0, 0, 0.2);
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          animation: slideUp 0.28s ease;
+        }
+
+        .memory-viewer__header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          padding: 14px 16px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+          flex-shrink: 0;
+        }
+
+        .memory-viewer__brand {
+          font-family: var(--font-heading);
+          font-size: 0.9375rem;
+          font-weight: 800;
+          color: #f8fafc;
+          letter-spacing: -0.02em;
+        }
+
+        .memory-viewer__count {
+          font-size: 0.8125rem;
+          font-weight: 600;
+          color: rgba(248, 250, 252, 0.65);
+          font-variant-numeric: tabular-nums;
+        }
+
+        .memory-viewer__close {
+          flex-shrink: 0;
+          width: 40px;
+          height: 40px;
+          border-radius: 12px;
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          background: rgba(255, 255, 255, 0.06);
+          color: #f1f5f9;
+          font-size: 1.35rem;
+          line-height: 1;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        .memory-viewer__close:hover {
+          background: rgba(255, 255, 255, 0.12);
+        }
+
+        .memory-viewer__close:active {
+          transform: scale(0.94);
+        }
+
+        .memory-viewer__stage {
+          position: relative;
+          flex: 1;
+          min-height: 200px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 12px 52px 20px;
+          background: radial-gradient(ellipse at 50% 0%, rgba(30, 41, 59, 0.9) 0%, #0f172a 55%);
+        }
+
+        .memory-viewer__img {
+          max-width: 100%;
+          max-height: min(72vh, 720px);
+          width: auto;
+          height: auto;
+          object-fit: contain;
+          border-radius: 12px;
+          box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .memory-viewer__nav {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 44px;
+          height: 44px;
+          border-radius: 50%;
+          border: 1px solid rgba(255, 255, 255, 0.15);
+          background: rgba(15, 23, 42, 0.75);
+          color: #f8fafc;
+          font-size: 1.5rem;
+          line-height: 1;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: background 0.2s ease, transform 0.2s ease;
+          z-index: 2;
+        }
+
+        .memory-viewer__nav:hover {
+          background: rgba(51, 65, 85, 0.95);
+        }
+
+        .memory-viewer__nav:active {
+          transform: translateY(-50%) scale(0.94);
+        }
+
+        .memory-viewer__nav--prev {
+          left: 10px;
+        }
+
+        .memory-viewer__nav--next {
+          right: 10px;
+        }
+
+        .memory-viewer__footer {
+          padding: 10px 16px 16px;
+          text-align: center;
+          border-top: 1px solid rgba(255, 255, 255, 0.06);
+          flex-shrink: 0;
+        }
+
+        .memory-viewer__hint {
+          font-size: 0.75rem;
+          color: rgba(248, 250, 252, 0.45);
+          margin: 0;
+        }
+
+        @media (min-width: 480px) {
+          .school-memories__grid {
+            gap: 12px;
+          }
+
+          .school-memories__tile {
+            border-radius: 16px;
+          }
+        }
+
+        @media (max-width: 380px) {
+          .school-memories__grid {
+            gap: 6px;
+          }
+
+          .school-memories__tile {
+            border-radius: 12px;
+          }
+
+          .memory-viewer__stage {
+            padding: 10px 40px 16px;
+          }
+
+          .memory-viewer__nav {
+            width: 38px;
+            height: 38px;
+            font-size: 1.25rem;
+          }
+
+          .memory-viewer__nav--prev {
+            left: 6px;
+          }
+
+          .memory-viewer__nav--next {
+            right: 6px;
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .school-memories__tile,
+          .school-memories__tile:hover,
+          .school-memories__tile:active {
+            transition: none;
+            transform: none;
+          }
+
+          .memory-viewer,
+          .memory-viewer__panel {
+            animation: none;
+          }
         }
 
         /* Responsive */
@@ -253,7 +611,8 @@ const TeachersPage = () => {
           }
 
           .section-inner {
-            padding: 0 var(--space-3);
+            padding-left: clamp(12px, 3vw, 20px);
+            padding-right: clamp(12px, 3vw, 20px);
           }
 
           .teachers-grid {
@@ -264,11 +623,12 @@ const TeachersPage = () => {
           .teacher-pill {
             padding: 14px 10px;
             gap: 8px;
+            min-height: 138px;
           }
 
           .teacher-img {
-            width: clamp(52px, 30%, 76px);
-            height: clamp(52px, 30%, 76px);
+            width: 68px;
+            height: 68px;
           }
         }
 
@@ -278,7 +638,8 @@ const TeachersPage = () => {
           }
 
           .section-inner {
-            padding: 0;
+            padding-left: clamp(12px, 3vw, 20px);
+            padding-right: clamp(12px, 3vw, 20px);
           }
 
           .teachers-grid {
@@ -297,11 +658,12 @@ const TeachersPage = () => {
           .teacher-pill {
             padding: 12px 8px;
             gap: 8px;
+            min-height: 132px;
           }
 
           .teacher-img {
-            width: clamp(48px, 28%, 70px);
-            height: clamp(48px, 28%, 70px);
+            width: 64px;
+            height: 64px;
           }
 
           .teacher-pill__name {
@@ -317,7 +679,8 @@ const TeachersPage = () => {
           }
 
           .section-inner {
-            padding: 0;
+            padding-left: clamp(10px, 2.5vw, 16px);
+            padding-right: clamp(10px, 2.5vw, 16px);
           }
 
           .teachers-grid {
@@ -329,6 +692,7 @@ const TeachersPage = () => {
             padding: 10px 6px;
             border-radius: 12px;
             gap: 6px;
+            min-height: 124px;
           }
 
           .teacher-pill__name {
@@ -338,14 +702,14 @@ const TeachersPage = () => {
           }
 
           .teacher-img {
-            width: clamp(44px, 26%, 64px);
-            height: clamp(44px, 26%, 64px);
+            width: 58px;
+            height: 58px;
             border: 2px solid white;
           }
 
           .principal-card {
             padding: 25px 15px;
-            margin: 15px 0;
+            margin: 15px auto;
           }
 
           .principal-title {
@@ -379,7 +743,8 @@ const TeachersPage = () => {
           }
 
           .section-inner {
-            padding: 0;
+            padding-left: clamp(10px, 2.5vw, 16px);
+            padding-right: clamp(10px, 2.5vw, 16px);
           }
 
           .teachers-grid {
@@ -393,6 +758,7 @@ const TeachersPage = () => {
             padding: 8px 5px;
             border-radius: 12px;
             gap: 6px;
+            min-height: 118px;
           }
 
           .teacher-pill__name {
@@ -403,14 +769,14 @@ const TeachersPage = () => {
           }
 
           .teacher-img {
-            width: clamp(40px, 24%, 58px);
-            height: clamp(40px, 24%, 58px);
+            width: 54px;
+            height: 54px;
             border: 2px solid white;
           }
 
           .principal-card {
             padding: 20px 15px;
-            margin: 15px 0;
+            margin: 15px auto;
           }
 
           .principal-title {
@@ -445,7 +811,8 @@ const TeachersPage = () => {
           }
 
           .section-inner {
-            padding: 0;
+            padding-left: clamp(8px, 2vw, 14px);
+            padding-right: clamp(8px, 2vw, 14px);
           }
 
           .teachers-grid {
@@ -458,6 +825,7 @@ const TeachersPage = () => {
             padding: 7px 4px;
             border-radius: 10px;
             gap: 5px;
+            min-height: 112px;
           }
 
           .teacher-pill__name {
@@ -467,14 +835,14 @@ const TeachersPage = () => {
           }
 
           .teacher-img {
-            width: clamp(38px, 22%, 54px);
-            height: clamp(38px, 22%, 54px);
+            width: 50px;
+            height: 50px;
             border: 2px solid white;
           }
 
           .principal-card {
             padding: 15px 12px;
-            margin: 10px 0;
+            margin: 10px auto;
           }
 
           .principal-name {
@@ -503,7 +871,8 @@ const TeachersPage = () => {
           }
 
           .section-inner {
-            padding: 0;
+            padding-left: clamp(8px, 2vw, 12px);
+            padding-right: clamp(8px, 2vw, 12px);
           }
 
           .teachers-grid {
@@ -516,6 +885,7 @@ const TeachersPage = () => {
             padding: 6px 3px;
             border-radius: 10px;
             gap: 4px;
+            min-height: 108px;
           }
 
           .teacher-pill__name {
@@ -526,14 +896,14 @@ const TeachersPage = () => {
           }
 
           .teacher-img {
-            width: clamp(36px, 21%, 50px);
-            height: clamp(36px, 21%, 50px);
+            width: 46px;
+            height: 46px;
             border: 2px solid white;
           }
 
           .principal-card {
             padding: 12px 10px;
-            margin: 8px 0;
+            margin: 8px auto;
           }
 
           .principal-title {
@@ -1090,50 +1460,144 @@ const TeachersPage = () => {
         ))}
       </div>
 
-      {/* IMAGE MODAL - For Principal and Teachers */}
-      {selectedTeacher && (
-        <div className="principal-image-modal" onClick={() => setSelectedTeacher(null)}>
-          <div className="principal-image-modal-content" onClick={(e) => e.stopPropagation()}>
-            <button 
-              className="principal-close-btn" 
-              onClick={() => setSelectedTeacher(null)}
-              title="Close"
-            >
-              ✕
-            </button>
-            <img 
-              src={selectedTeacher.img} 
-              alt={selectedTeacher.name}
-              onClick={(e) => {
-                e.stopPropagation();
-                setExpandedImage(selectedTeacher.img);
-              }}
-              style={{ cursor: "pointer" }}
-              title="Click to view larger"
-            />
-            <div className="modal-teacher-name">{selectedTeacher.name}</div>
-            {selectedTeacher.subject !== "Principal" && (
-              <div className="modal-teacher-subject">Sub: {selectedTeacher.subject}</div>
-            )}
-          </div>
+      <section className="school-memories" aria-label="School memories gallery">
+        <div className="school-memories__head">
+          <h3 className="school-memories__title">School memories</h3>
+          <p className="school-memories__subtitle">
+            Tap a photo to view it full screen. Use the arrows or keyboard to browse.
+          </p>
         </div>
-      )}
+        <div className="school-memories__grid" role="list">
+          {TEACHER_GALLERY_IMAGES.map((src, i) => (
+            <button
+              key={src}
+              type="button"
+              className="school-memories__tile"
+              role="listitem"
+              onClick={() => setMemoryIndex(i)}
+              aria-label={`Open school memory ${i + 1} of ${GALLERY_LEN}`}
+            >
+              <img src={src} alt="" loading="lazy" decoding="async" />
+              <span className="school-memories__tile-shine" aria-hidden />
+            </button>
+          ))}
+        </div>
+      </section>
+
+      {typeof document !== "undefined" &&
+        memoryIndex !== null &&
+        createPortal(
+          <div
+            className="memory-viewer"
+            role="dialog"
+            aria-modal="true"
+            aria-label="School memory viewer"
+            onClick={closeMemoryViewer}
+          >
+            <div className="memory-viewer__panel" onClick={(e) => e.stopPropagation()}>
+              <header className="memory-viewer__header">
+                <span className="memory-viewer__brand">School memories</span>
+                <span className="memory-viewer__count" aria-live="polite">
+                  {memoryIndex + 1} / {GALLERY_LEN}
+                </span>
+                <button
+                  type="button"
+                  className="memory-viewer__close"
+                  onClick={closeMemoryViewer}
+                  aria-label="Close viewer"
+                >
+                  ×
+                </button>
+              </header>
+              <div className="memory-viewer__stage">
+                <button
+                  type="button"
+                  className="memory-viewer__nav memory-viewer__nav--prev"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    showPrevMemory();
+                  }}
+                  aria-label="Previous photo"
+                >
+                  ‹
+                </button>
+                <img
+                  src={TEACHER_GALLERY_IMAGES[memoryIndex]}
+                  alt={`School memory ${memoryIndex + 1} of ${GALLERY_LEN}`}
+                  className="memory-viewer__img"
+                />
+                <button
+                  type="button"
+                  className="memory-viewer__nav memory-viewer__nav--next"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    showNextMemory();
+                  }}
+                  aria-label="Next photo"
+                >
+                  ›
+                </button>
+              </div>
+              <footer className="memory-viewer__footer">
+                <p className="memory-viewer__hint">
+                  Arrow keys to browse · tap outside or × to close
+                </p>
+              </footer>
+            </div>
+          </div>,
+          document.body
+        )}
+
+      {/* IMAGE MODAL - For Principal and Teachers (portal: fixed positioning vs AnimatedSection transform) */}
+      {typeof document !== "undefined" &&
+        selectedTeacher &&
+        createPortal(
+          <div className="principal-image-modal" onClick={() => setSelectedTeacher(null)}>
+            <div className="principal-image-modal-content" onClick={(e) => e.stopPropagation()}>
+              <button
+                className="principal-close-btn"
+                onClick={() => setSelectedTeacher(null)}
+                title="Close"
+              >
+                ✕
+              </button>
+              <img
+                src={selectedTeacher.img}
+                alt={selectedTeacher.name}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setExpandedImage(selectedTeacher.img);
+                }}
+                style={{ cursor: "pointer" }}
+                title="Click to view larger"
+              />
+              <div className="modal-teacher-name">{selectedTeacher.name}</div>
+              {selectedTeacher.subject !== "Principal" && (
+                <div className="modal-teacher-subject">Sub: {selectedTeacher.subject}</div>
+              )}
+            </div>
+          </div>,
+          document.body
+        )}
 
       {/* EXPANDED IMAGE MODAL */}
-      {expandedImage && (
-        <div className="expanded-image-modal" onClick={() => setExpandedImage(null)}>
-          <div className="expanded-image-content" onClick={(e) => e.stopPropagation()}>
-            <button 
-              className="expanded-image-close-btn" 
-              onClick={() => setExpandedImage(null)}
-              title="Close"
-            >
-              ✕
-            </button>
-            <img src={expandedImage} alt="Expanded view" />
-          </div>
-        </div>
-      )}
+      {typeof document !== "undefined" &&
+        expandedImage &&
+        createPortal(
+          <div className="expanded-image-modal" onClick={() => setExpandedImage(null)}>
+            <div className="expanded-image-content" onClick={(e) => e.stopPropagation()}>
+              <button
+                className="expanded-image-close-btn"
+                onClick={() => setExpandedImage(null)}
+                title="Close"
+              >
+                ✕
+              </button>
+              <img src={expandedImage} alt="Expanded view" />
+            </div>
+          </div>,
+          document.body
+        )}
 
       </div>
     </div>

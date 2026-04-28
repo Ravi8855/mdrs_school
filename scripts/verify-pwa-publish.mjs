@@ -59,8 +59,8 @@ if (!existsSync(manifestPath)) {
 
     const has192 = m.icons.some((i) => String(i.src || '').includes('192'))
     const has512 = m.icons.some((i) => String(i.src || '').includes('512'))
-    if (!has192) warn('no 192px-class icon path detected (expected icon-192-v2.png)')
-    if (!has512) warn('no 512px-class icon path detected (expected icon-512-v2.png)')
+    if (!has192) warn('no 192px-class icon path detected (e.g. icon-192.png in manifest)')
+    if (!has512) warn('no 512px-class icon path detected (e.g. icon-512.png in manifest)')
   }
 }
 

@@ -2,7 +2,8 @@
 <html lang="en" class="pwa-boot-active">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/png" href="/icon-192.png" sizes="192x192" />
+    <link rel="icon" type="image/png" href="/icon-512.png" sizes="512x512" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#121212" />
     <meta name="color-scheme" content="dark light" />
@@ -56,18 +57,19 @@
     <style>
       html.pwa-boot-active,
       html.pwa-boot-active body {
-        background-color: #121212;
+        background-color: #000;
         min-height: 100%;
       }
 
+      /* Below React app (cinematic intro z-index 9999) — no logo, solid screen until root mounts */
       #pwa-boot {
         position: fixed;
         inset: 0;
-        z-index: 2147483647;
+        z-index: 1;
         display: flex;
         align-items: center;
         justify-content: center;
-        background: #121212;
+        background: #000;
         transition:
           opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1),
           transform 0.55s cubic-bezier(0.4, 0, 0.2, 1),
@@ -85,27 +87,8 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 28px;
+        gap: 0;
         animation: pwaBootReveal 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
-      }
-
-      #pwa-boot .pwa-boot__logo-wrap {
-        padding: 10px;
-        border-radius: 22%;
-        background: rgba(255, 255, 255, 0.03);
-        box-shadow:
-          0 20px 56px rgba(0, 0, 0, 0.55),
-          0 0 0 1px rgba(255, 255, 255, 0.05) inset;
-        animation: pwaBootLogoFloat 2.2s ease-in-out infinite;
-      }
-
-      #pwa-boot img {
-        display: block;
-        width: clamp(120px, 38vw, 188px);
-        height: auto;
-        object-fit: contain;
-        border-radius: 20%;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
       }
 
       .pwa-boot__spinner {
@@ -128,16 +111,6 @@
         }
       }
 
-      @keyframes pwaBootLogoFloat {
-        0%,
-        100% {
-          transform: translateY(0);
-        }
-        50% {
-          transform: translateY(-3px);
-        }
-      }
-
       @keyframes pwaBootSpin {
         to {
           transform: rotate(360deg);
@@ -147,7 +120,6 @@
       @media (prefers-reduced-motion: reduce) {
         #pwa-boot,
         #pwa-boot .pwa-boot__inner,
-        #pwa-boot .pwa-boot__logo-wrap,
         .pwa-boot__spinner {
           animation: none !important;
         }
@@ -162,120 +134,9 @@
         }
       }
 
-      /* Premium welcome (once per session, non-blocking) */
+      /* Welcome overlay disabled — launcher icon stays in manifest / favicon only */
       #pwa-welcome {
-        position: fixed;
-        inset: 0;
-        z-index: 2147483640;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: max(24px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right))
-          max(24px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left));
-        box-sizing: border-box;
-        background: #121212;
-        pointer-events: none;
-        visibility: hidden;
-        opacity: 0;
-      }
-
-      #pwa-welcome.pwa-welcome--on {
-        visibility: visible;
-        opacity: 1;
-        transition: opacity 0.45s ease;
-      }
-
-      #pwa-welcome.pwa-welcome--out {
-        opacity: 0;
-        transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-
-      #pwa-welcome .pwa-welcome__inner {
-        max-width: 22rem;
-        width: 100%;
-        text-align: center;
-        padding: 2rem 1.75rem;
-        border-radius: 1.5rem;
-        background: rgba(30, 30, 32, 0.55);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        box-shadow:
-          0 24px 64px rgba(0, 0, 0, 0.45),
-          0 0 0 1px rgba(251, 191, 36, 0.12) inset;
-        backdrop-filter: blur(18px);
-        -webkit-backdrop-filter: blur(18px);
-        transform: scale(0.96);
-        opacity: 0;
-      }
-
-      #pwa-welcome.pwa-welcome--play .pwa-welcome__inner {
-        animation: pwaWelcomeInner 3.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-      }
-
-      #pwa-welcome .pwa-welcome__logo {
-        width: clamp(88px, 22vw, 120px);
-        height: auto;
-        margin: 0 auto 1.25rem;
-        display: block;
-        object-fit: contain;
-        border-radius: 22%;
-        filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.4));
-      }
-
-      #pwa-welcome .pwa-welcome__title {
-        margin: 0 0 0.65rem;
-        font-family:
-          system-ui,
-          -apple-system,
-          'Segoe UI',
-          Roboto,
-          'Helvetica Neue',
-          sans-serif;
-        font-size: clamp(1.15rem, 4vw, 1.35rem);
-        font-weight: 600;
-        letter-spacing: -0.02em;
-        color: rgba(255, 255, 255, 0.96);
-        line-height: 1.3;
-      }
-
-      #pwa-welcome .pwa-welcome__sub {
-        margin: 0;
-        font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-        font-size: 0.8125rem;
-        font-weight: 500;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-        color: #fbbf24;
-        opacity: 0.95;
-      }
-
-      @keyframes pwaWelcomeInner {
-        0% {
-          opacity: 0;
-          transform: scale(0.94) translateY(10px);
-        }
-        14% {
-          opacity: 1;
-          transform: scale(1) translateY(0);
-        }
-        78% {
-          opacity: 1;
-          transform: scale(1) translateY(0);
-        }
-        100% {
-          opacity: 0;
-          transform: scale(1.03) translateY(-6px);
-        }
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        #pwa-welcome .pwa-welcome__inner {
-          animation: none !important;
-        }
-
-        #pwa-welcome.pwa-welcome--play .pwa-welcome__inner {
-          opacity: 0;
-          transform: none;
-        }
+        display: none !important;
       }
 
       /* —— PWA “Play Store” chrome (install / offline / global feel) —— */
@@ -330,17 +191,16 @@
         }
       }
 
+      /* Do not animate root opacity — it hides CinematicIntro inside #root on first paint */
       #root.pwa-root--mounted {
-        animation: pwaRootFadeIn 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+        animation: pwaRootFadeIn 0.38s cubic-bezier(0.22, 1, 0.36, 1) forwards;
       }
 
       @keyframes pwaRootFadeIn {
         from {
-          opacity: 0;
           transform: translateY(10px);
         }
         to {
-          opacity: 1;
           transform: translateY(0);
         }
       }
@@ -766,18 +626,7 @@
   <body>
     <div id="pwa-boot" aria-hidden="true">
       <div class="pwa-boot__inner">
-        <div class="pwa-boot__logo-wrap">
-          <img src="/icon-192-v2.png" alt="" width="192" height="192" decoding="async" fetchpriority="high" />
-        </div>
         <div class="pwa-boot__spinner"></div>
-      </div>
-    </div>
-
-    <div id="pwa-welcome" hidden aria-hidden="true">
-      <div class="pwa-welcome__inner">
-        <img class="pwa-welcome__logo" src="/icon-192-v2.png" alt="" width="120" height="120" decoding="async" />
-        <p class="pwa-welcome__title">Welcome back to MDRS School</p>
-        <p class="pwa-welcome__sub">Excellence • Discipline • Success</p>
       </div>
     </div>
 
@@ -792,7 +641,7 @@
       <div class="pwa-chrome-install__inner">
         <img
           class="pwa-chrome-install__icon"
-          src="/icon-192-v2.png"
+          src="/icon-192.png"
           alt=""
           width="40"
           height="40"
@@ -863,57 +712,6 @@
         }
 
         failsafe = setTimeout(hide, 12000)
-      })()
-    </script>
-    <script>
-      ;(function () {
-        var SESSION_KEY = 'mdrs_pwa_welcome_once_v2'
-        function dismissWelcome(el) {
-          el.classList.remove('pwa-welcome--on', 'pwa-welcome--play')
-          el.classList.add('pwa-welcome--out')
-          setTimeout(function () {
-            el.remove()
-          }, 580)
-        }
-        function runWelcome() {
-          var el = document.getElementById('pwa-welcome')
-          if (!el) return
-          if (sessionStorage.getItem(SESSION_KEY)) return
-          if (el.dataset.welcomeStarted === '1') return
-          el.dataset.welcomeStarted = '1'
-
-          var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
-          if (reduce) {
-            sessionStorage.setItem(SESSION_KEY, '1')
-            el.remove()
-            return
-          }
-
-          el.removeAttribute('hidden')
-          el.setAttribute('aria-hidden', 'false')
-
-          requestAnimationFrame(function () {
-            requestAnimationFrame(function () {
-              el.classList.add('pwa-welcome--on')
-              el.classList.add('pwa-welcome--play')
-              var inner = el.querySelector('.pwa-welcome__inner')
-              if (!inner) return
-              inner.addEventListener(
-                'animationend',
-                function onEnd() {
-                  inner.removeEventListener('animationend', onEnd)
-                  try {
-                    sessionStorage.setItem(SESSION_KEY, '1')
-                  } catch (e) {}
-                  dismissWelcome(el)
-                },
-                { once: true },
-              )
-            })
-          })
-        }
-
-        window.addEventListener('pwa-boot-dismissed', runWelcome)
       })()
     </script>
     <script defer src="/pwa-chrome.js"></script>

@@ -11,7 +11,7 @@ This guide turns the deployed PWA at **https://mdrs-school-8865.vercel.app** int
 | Host | `mdrs-school-8865.vercel.app` |
 | Theme / background | `#121212` |
 | Web manifest | `https://mdrs-school-8865.vercel.app/manifest.json` |
-| Launcher icons (PWA) | `/icon-192-v2.png`, `/icon-512-v2.png` (512 is used for high-res launcher) |
+| Launcher icons (PWA) | `/icon-192.png`, `/icon-512.png` (512 is used for high-res launcher) |
 
 **Repo files**
 
@@ -77,7 +77,7 @@ After `init`, open **`twa-manifest.json`** in that folder and set **fullscreen**
 
 Valid values include `standalone`, `fullscreen`, and `fullscreen-sticky` (immersive sticky). For “no URL bar” TWA behavior, use **`fullscreen`** or **`fullscreen-sticky`** as you prefer.
 
-Icons: Bubblewrap pulls icons from the web manifest. Your manifest already references **`/icon-512-v2.png`** — ensure that URL returns a **512×512** PNG (it should). Re-run **`bubblewrap update`** after changing `twa-manifest.json`.
+Icons: Bubblewrap pulls icons from the web manifest. Your manifest already references **`/icon-512.png`** — ensure that URL returns a **512×512** PNG (it should). Re-run **`bubblewrap update`** after changing `twa-manifest.json`.
 
 ```bash
 bubblewrap update
@@ -187,7 +187,7 @@ Play Store requires an **AAB** signed with your **release** / **upload** key (or
 1. **Create app** in Play Console → **Production** (or internal testing first).
 2. **Upload AAB** in **Release** → **Create new release** → upload `.aab`.
 3. **Store listing** — required assets:
-   - **App icon**: 512×512 (you can export from `icon-512-v2.png`).
+   - **App icon**: 512×512 (you can export from `icon-512.png`).
    - **Feature graphic** (1024×500), **phone screenshots** (at least 2), short + full description, content rating questionnaire, privacy policy URL if applicable.
 4. **Data safety** form, **target API level** (meet Play’s current requirements — Bubblewrap/Gradle template should be updated via `bubblewrap update` over time).
 

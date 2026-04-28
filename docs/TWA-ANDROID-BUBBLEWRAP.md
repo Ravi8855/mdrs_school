@@ -62,7 +62,7 @@ You will be prompted for values. Align them with your product:
 | **Background color** | `#121212` |
 | **Package name** | `com.mdrs.school` |
 | **Start URL** | Should match manifest (e.g. `/?v=2` if that is your `start_url`) |
-| **Icon** | Bubblewrap downloads icons from the manifest. Your manifest references `/icon-512-v2.png`; ensure that URL returns **200** on production. |
+| **Icon** | Bubblewrap downloads icons from the manifest. Your manifest references `/icon-512.png`; ensure that URL returns **200** on production. |
 | **Maskable icon** | Optional; can skip if not in manifest. |
 | **Signing key** | Choose **Create new** or **Use existing** keystore (see §4). |
 
@@ -205,7 +205,7 @@ Or open `app/` in **Android Studio**: *Build → Generate Signed Bundle / APK* a
 
 ## 8. Quick checklist
 
-1. Deploy web app so `manifest.json` and `icon-512-v2.png` are live.
+1. Deploy web app so `manifest.json` and `icon-512.png` are live.
 2. Fill `sha256_cert_fingerprints` in `public/.well-known/assetlinks.json` and deploy.
 3. Confirm `/.well-known/assetlinks.json` returns JSON **200**.
 4. `bubblewrap init` → `bubblewrap validate` → `bubblewrap build` (or Android Studio).

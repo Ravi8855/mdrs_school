@@ -69,7 +69,13 @@ body {
   background: var(--bg);
   overflow-x: hidden;
 }
-#root { min-height: 100vh; width: 100%; overflow-x: hidden; }
+#root {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+}
 
 /* Touch-friendly tap targets and prevent double-zoom on buttons */
 button, a, [role="button"] {

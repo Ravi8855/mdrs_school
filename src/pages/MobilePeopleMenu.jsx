@@ -1,6 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaUsers, FaChalkboardTeacher, FaGraduationCap, FaChevronRight } from "react-icons/fa";
+import {
+  FaUsers,
+  FaChalkboardTeacher,
+  FaGraduationCap,
+  FaChevronRight,
+  FaUserFriends,
+} from "react-icons/fa";
 import "./mobileHubMenus.css";
 
 const items = [
@@ -19,6 +25,13 @@ const items = [
     accent: "people-teachers",
   },
   {
+    to: "/meet-seniors-juniors",
+    title: "Meet our seniors & juniors",
+    desc: "One gallery — tap photos to expand",
+    Icon: FaUserFriends,
+    accent: "people-seniors-juniors",
+  },
+  {
     to: "/alumni",
     title: "Alumni",
     desc: "Graduates & journeys",
@@ -33,7 +46,9 @@ export default function MobilePeopleMenu() {
       <header className="premium-hub__header">
         <p className="premium-hub__eyebrow">Community</p>
         <h1 className="premium-hub__title">People</h1>
-        <p className="premium-hub__lead">Teachers, classmates, and alumni — all in one place.</p>
+        <p className="premium-hub__lead">
+          Teachers, classmates, seniors &amp; juniors, and alumni — all in one place.
+        </p>
       </header>
       <nav className="premium-hub__list" aria-label="People and community">
         {items.map(({ to, title, desc, Icon, accent }) => (

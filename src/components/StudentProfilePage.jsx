@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { FaUserCircle, FaCheckCircle } from "react-icons/fa";
+import { FaUserCircle, FaPen } from "react-icons/fa";
 import { getProfileKey } from "../lib/profileSession";
 import {
   fetchProfileByUserKey,
@@ -35,6 +35,7 @@ export default function StudentProfilePage() {
 
   const showEditorRef = useRef(false);
   const loadRequestIdRef = useRef(0);
+  const photoInputRef = useRef(null);
 
   useEffect(() => {
     showEditorRef.current = showEditor;
@@ -161,7 +162,6 @@ export default function StudentProfilePage() {
       setError("Name is required.");
       return;
     }
-    const wasExistingRow = Boolean(row);
     setSaving(true);
     setError("");
     let url = imageUrl.trim();
@@ -194,9 +194,7 @@ export default function StudentProfilePage() {
     }
     setShowEditor(false);
     await load();
-    if (wasExistingRow) {
-      setShowSaveSuccess(true);
-    }
+    setShowSaveSuccess(true);
   };
 
   const avatarSrc = preview || (imageUrl && imageUrl.trim()) || undefined;
@@ -316,6 +314,18 @@ export default function StudentProfilePage() {
       ) : null}
 
       <div className="student-profile-avatar-wrap student-profile-avatar-wrap--form student-profile-avatar-wrap--editor">
+        <input
+          ref={photoInputRef}
+          type="file"
+          accept="image/*"
+          className="student-profile-file-input"
+          tabIndex={-1}
+          onChange={(ev) => {
+            const f = ev.target.files?.[0];
+            setFile(f || null);
+            ev.target.value = "";
+          }}
+        />
         <div className="student-profile-avatar-inner">
           {avatarSrc ? (
             <img src={avatarSrc} alt="" className="student-profile-avatar" />
@@ -323,19 +333,16 @@ export default function StudentProfilePage() {
             <FaUserCircle className="student-profile-avatar-placeholder" aria-hidden />
           )}
         </div>
+        <button
+          type="button"
+          className="student-profile-avatar-edit-btn"
+          onClick={() => photoInputRef.current?.click()}
+          disabled={saving}
+          aria-label="Change profile photo"
+        >
+          <FaPen aria-hidden />
+        </button>
       </div>
-      <label className="student-profile-label">
-        Profile photo
-        <input
-          type="file"
-          accept="image/*"
-          className="student-profile-file"
-          onChange={(ev) => {
-            const f = ev.target.files?.[0];
-            setFile(f || null);
-          }}
-        />
-      </label>
 
       <label className="student-profile-label">
         Name
@@ -477,18 +484,11 @@ export default function StudentProfilePage() {
           onClick={() => setShowSaveSuccess(false)}
         >
           <div className="student-profile-success-card" onClick={(ev) => ev.stopPropagation()}>
-            <div className="student-profile-success-icon" aria-hidden>
-              <FaCheckCircle />
-            </div>
-            <p className="student-profile-success-eyebrow">All set</p>
-            <h2 id="student-profile-success-title" className="student-profile-success-title">
-              Profile updated
+            <h2 id="student-profile-success-title" className="student-profile-success-title student-profile-success-title--solo">
+              Edited successfully
             </h2>
-            <p className="student-profile-success-text">
-              Your profile is up to date. Alumni and classmates will see your latest photo and details.
-            </p>
             <button type="button" className="student-profile-success-btn" onClick={() => setShowSaveSuccess(false)}>
-              Done
+              OK
             </button>
           </div>
         </div>

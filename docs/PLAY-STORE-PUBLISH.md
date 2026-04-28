@@ -15,7 +15,7 @@ npm run build
 npm run verify:pwa-publish
 ```
 
-This checks `public/manifest.json` (JSON, `#121212` theme/background, icons on disk including `icon-*-v2.png`), `public/.well-known/assetlinks.json` shape (`com.mdrs.school`, warns if fingerprints still empty), and warns if `dist/sw.js` is missing (run **after** `build`).
+This checks `public/manifest.json` (JSON, `#121212` theme/background, icons on disk including `icon-192.png` / `icon-512.png`), `public/.well-known/assetlinks.json` shape (`com.mdrs.school`, warns if fingerprints still empty), and warns if `dist/sw.js` is missing (run **after** `build`).
 
 **Lighthouse PWA / installability:** run locally against production or `vite preview` (Chrome required):
 
@@ -155,7 +155,7 @@ Questions? Use the contact or feedback options inside the app if your school has
 
 | Asset | Spec | Notes |
 |-------|------|--------|
-| **App icon** | 512 × 512 | Export from [`public/icon-512-v2.png`](../public/icon-512-v2.png); no transparency for Play hi-res icon if required. |
+| **App icon** | 512 × 512 | Export from [`public/icon-512.png`](../public/icon-512.png); no transparency for Play hi-res icon if required. |
 | **Feature graphic** | **1024 × 500** px | One PNG/JPEG; bold branding, `#121212` background, gold `#fbbf24` accents; no small text in margins (safe zone). **Design in Figma/Canva** — repo does not generate this file. |
 | **Phone screenshots** | Min **2**; typical **4–8** | Capture: **Home**, **Memories** (or gallery), **Voting**, **Teachers** (use real device or emulator, status bar clean). |
 
@@ -235,7 +235,7 @@ When in doubt, **under-declare** is not safer — answer **accurately**; you can
 |------|--------|
 | Theme / background | `#121212` |
 | Accent | `#fbbf24` (gold) — match store graphics and in-app chrome |
-| Icons | `icon-512-v2.png` / manifest icons |
+| Icons | `icon-512.png` / manifest icons |
 
 ---
 

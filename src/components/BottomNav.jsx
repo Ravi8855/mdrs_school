@@ -9,6 +9,7 @@ function tabForPath(pathname) {
   if (
     pathname === "/classmates" ||
     pathname === "/teachers" ||
+    pathname === "/meet-seniors-juniors" ||
     pathname === "/alumni" ||
     pathname.startsWith("/alumni/") ||
     pathname === "/batch-students" ||
