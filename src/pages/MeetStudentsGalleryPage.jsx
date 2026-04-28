@@ -59,6 +59,15 @@ export default function MeetStudentsGalleryPage() {
     });
   }, []);
 
+  /** Cached images are often complete before `onLoad` runs; still reveal the thumb. */
+  const thumbRef = useCallback(
+    (img, index) => {
+      if (!img || typeof index !== "number") return;
+      if (img.complete && img.naturalWidth > 0) markThumbLoaded(index);
+    },
+    [markThumbLoaded]
+  );
+
   return (
     <div className="page-wrap meet-students-gallery">
       <header className="meet-students-gallery__header">
@@ -79,12 +88,14 @@ export default function MeetStudentsGalleryPage() {
             <span className="meet-students-gallery__skeleton" aria-hidden />
             <span className="meet-students-gallery__media">
               <img
+                ref={(el) => thumbRef(el, i)}
                 src={src}
                 alt=""
                 loading="lazy"
                 decoding="async"
                 className={`meet-students-gallery__thumb${thumbLoaded.has(i) ? " meet-students-gallery__thumb--loaded" : ""}`}
                 onLoad={() => markThumbLoaded(i)}
+                onError={() => markThumbLoaded(i)}
               />
               <span className="meet-students-gallery__gradient" aria-hidden />
             </span>

@@ -192,7 +192,7 @@ const ClassmatesPage = ({ variant = "full" }) => {
       className="page-wrap classmates-page classmates-page--aquarium"
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
     >
       <div className="section-inner">
         <div className="classmates-shell">

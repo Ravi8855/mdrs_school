@@ -17,12 +17,24 @@ export function useInView(options = {}) {
     if (!el) return;
 
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setIsInView(true);
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setIsInView(true);
+            break;
+          }
+        }
       },
       { threshold, rootMargin }
     );
     observer.observe(el);
+    /* Already in view on first paint: browsers may not enqueue an initial callback. */
+    for (const entry of observer.takeRecords()) {
+      if (entry.isIntersecting && entry.target === el) {
+        setIsInView(true);
+        break;
+      }
+    }
     return () => observer.disconnect();
   }, [threshold, rootMargin]);
 

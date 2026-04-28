@@ -46,8 +46,8 @@
 
   /* Animation — international school style */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  --duration-reveal: 0.7s;
-  --duration-stagger: 0.08s;
+  --duration-reveal: 0.46s;
+  --duration-stagger: 0.06s;
 }
 
 * { box-sizing: border-box; }
@@ -249,9 +249,16 @@ section[id]:not(#home) {
 }
 
 /* ===== Scroll-triggered reveal animations ===== */
+.app-route-fallback {
+  flex: 1;
+  min-height: 50vh;
+  width: 100%;
+  background: var(--bg);
+}
+
 .section-reveal {
   opacity: 0;
-  transform: translateY(28px);
+  transform: translateY(16px);
   transition: opacity var(--duration-reveal) var(--ease-out-expo),
     transform var(--duration-reveal) var(--ease-out-expo);
 }

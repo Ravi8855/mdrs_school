@@ -168,6 +168,7 @@
   overflow-x: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
   /* Extra space so long forms clear the floating bottom nav + safe area. */
   padding-bottom: calc(118px + env(safe-area-inset-bottom, 0px));
   display: flex;

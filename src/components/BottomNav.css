@@ -57,10 +57,10 @@
   -webkit-tap-highlight-color: rgba(251, 191, 36, 0.12);
   touch-action: manipulation;
   transition:
-    color 0.25s ease,
-    background 0.25s ease,
-    box-shadow 0.25s ease,
-    transform 0.22s ease;
+    color 0.16s ease,
+    background 0.16s ease,
+    box-shadow 0.16s ease,
+    transform 0.14s ease;
 }
 
 .mobile-bottom-nav__link:hover {
@@ -96,10 +96,10 @@
   color: rgba(100, 116, 139, 0.92);
   opacity: 0.9;
   transition:
-    color 0.25s ease,
-    opacity 0.25s ease,
-    filter 0.25s ease,
-    transform 0.25s ease;
+    color 0.16s ease,
+    opacity 0.16s ease,
+    filter 0.16s ease,
+    transform 0.16s ease;
 }
 
 .mobile-bottom-nav__link:hover .mobile-bottom-nav__icon {

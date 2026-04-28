@@ -6,7 +6,7 @@ import { useInView } from '../hooks/useInView';
  * enabling CSS scroll-triggered animations (international school style).
  */
 const AnimatedSection = ({ children, className = '', as: Tag = 'div', ...props }) => {
-  const [ref, isInView] = useInView({ threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
+  const [ref, isInView] = useInView({ threshold: 0.04, rootMargin: '0px 0px -48px 0px' });
   return (
     <Tag
       ref={ref}

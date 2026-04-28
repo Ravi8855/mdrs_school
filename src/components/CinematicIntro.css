@@ -6,6 +6,13 @@ html.cinematic-intro-open body {
   height: 100%;
 }
 
+.cinematic-root--interactive {
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 .cinematic-root {
   position: fixed;
   inset: 0;

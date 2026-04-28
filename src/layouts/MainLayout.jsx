@@ -1,13 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Outlet, useNavigate, useLocation, Link } from "react-router-dom";
 import { FaArrowLeft, FaUserCircle } from "react-icons/fa";
 import BottomNav from "../components/BottomNav";
+import { prefetchAppRouteChunks } from "../lazyPages";
 import "./MainLayout.css";
 
 export default function MainLayout() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const showBack = pathname !== "/home";
+
+  useEffect(() => {
+    prefetchAppRouteChunks();
+  }, []);
 
   const handleBack = () => {
     navigate(-1);
