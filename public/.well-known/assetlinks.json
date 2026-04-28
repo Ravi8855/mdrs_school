@@ -4,7 +4,9 @@
     "target": {
       "namespace": "android_app",
       "package_name": "com.mdrs.school",
-      "sha256_cert_fingerprints": []
+      "sha256_cert_fingerprints": [
+        "11:66:3A:B1:4A:1A:EB:F7:D3:FD:EA:26:B3:41:D1:4E:F4:98:29:0A:46:65:F1:72:FE:87:EA:E1:E9:0E:F9:06"
+      ]
     }
   }
 ]

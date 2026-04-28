@@ -29,3 +29,6 @@ dist-ssr
 # Android / TWA signing (never commit keys)
 *.keystore
 *.jks
+
+# Bubblewrap TWA output (often contains keystores and build artifacts)
+android-twa-build/
