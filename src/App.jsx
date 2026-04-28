@@ -26,6 +26,8 @@ import { clearProfileSession } from "./lib/profileSession";
 import CinematicIntro from "./components/CinematicIntro";
 
 const SESSION_KEY = "isLoggedIn";
+/** Once per tab session: intro plays on first open, not on every refresh. */
+const INTRO_SESSION_KEY = "mdrs_intro_done_session";
 
 function ProtectedShell({ authed }) {
   if (!authed) {
@@ -35,7 +37,14 @@ function ProtectedShell({ authed }) {
 }
 
 function App() {
-  const [showIntro, setShowIntro] = useState(true);
+  const [showIntro, setShowIntro] = useState(() => {
+    try {
+      if (typeof sessionStorage === "undefined") return true;
+      return sessionStorage.getItem(INTRO_SESSION_KEY) !== "true";
+    } catch {
+      return true;
+    }
+  });
 
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     try {
@@ -69,6 +78,11 @@ function App() {
     typeof sessionStorage !== "undefined" && sessionStorage.getItem(SESSION_KEY) === "true";
 
   const handleIntroEnd = useCallback(() => {
+    try {
+      sessionStorage.setItem(INTRO_SESSION_KEY, "true");
+    } catch {
+      // ignore
+    }
     setShowIntro(false);
   }, []);
 
