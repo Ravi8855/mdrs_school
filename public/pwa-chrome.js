@@ -219,6 +219,20 @@
   function initUpdate() {
     if (!('serviceWorker' in navigator)) return
 
+    var refreshLock = false
+    navigator.serviceWorker.addEventListener('controllerchange', function () {
+      if (refreshLock) return
+      refreshLock = true
+      window.location.reload()
+    })
+
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState !== 'visible') return
+      navigator.serviceWorker.getRegistration().then(function (reg) {
+        if (reg) reg.update()
+      })
+    })
+
     var toast = $('pwa-update-toast')
     var btn = $('pwa-update-toast-refresh')
     var dismiss = $('pwa-update-toast-dismiss')

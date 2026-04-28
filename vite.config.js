@@ -12,8 +12,11 @@ export default defineConfig({
       strategies: 'generateSW',
       manifest: false,
       workbox: {
-        skipWaiting: false,
+        // New deploys activate immediately so users (especially installed PWA / mobile) pick up
+        // fresh JS/CSS instead of staying on an old precached bundle until all tabs are closed.
+        skipWaiting: true,
         clientsClaim: true,
+        cleanupOutdatedCaches: true,
         globPatterns: [
           '**/*.{js,css,html,ico,png,svg,woff2}',
           'manifest.json',

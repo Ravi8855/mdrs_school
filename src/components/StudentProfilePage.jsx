@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FaUserCircle, FaPen } from "react-icons/fa";
-import { FaCircleCheck } from "react-icons/fa6";
 import { getProfileKey } from "../lib/profileSession";
 import {
   fetchProfileByUserKey,
@@ -527,64 +526,35 @@ export default function StudentProfilePage() {
             ) : null}
           </header>
 
-          <div
-            className={`profile-progress${percentage === 100 ? " profile-progress--complete" : ""}`}
-            aria-live="polite"
-          >
-            {percentage === 100 ? (
-              <>
-                <div className="profile-progress-complete">
-                  <div className="profile-progress-complete__badge" aria-hidden>
-                    <FaCircleCheck className="profile-progress-complete__badge-icon" />
-                  </div>
-                  <div className="profile-progress-complete__copy">
-                    <p className="profile-progress-complete__kicker">Profile strength</p>
-                    <p className="profile-progress-complete__title">100% complete</p>
-                    <p className="profile-progress-complete__subtitle">
-                      Your alumni profile is fully visible and ready for classmates to discover.
-                    </p>
-                  </div>
-                </div>
-                <div
-                  className="progress-bar progress-bar--complete"
-                  role="progressbar"
-                  aria-valuenow={100}
-                  aria-valuemin={0}
-                  aria-valuemax={100}
-                >
-                  <div className="progress-fill progress-fill--complete" style={{ width: "100%" }} />
-                </div>
-              </>
-            ) : (
-              <>
-                <p className="profile-progress__percent">{percentage}% Profile Completed</p>
-                <div className="progress-bar" role="progressbar" aria-valuenow={percentage} aria-valuemin={0} aria-valuemax={100}>
-                  <div className="progress-fill" style={{ width: `${percentage}%` }} />
-                </div>
-                <p className="profile-progress__hint">Complete your profile to reach 100%</p>
-                <ul className="profile-completion-checklist">
-                  {completionChecklist.map((item) => {
-                    const todoText =
-                      item.id === "photo"
-                        ? "Add profile photo (optional +10%)"
-                        : `Add ${item.todoPhrase ?? item.label.toLowerCase()}`;
-                    const doneText = item.id === "photo" ? "Profile photo added" : `${item.label} added`;
-                    return (
-                      <li
-                        key={item.id}
-                        className={`profile-completion-checklist__item${item.done ? " profile-completion-checklist__item--done" : " profile-completion-checklist__item--todo"}`}
-                      >
-                        <span className="profile-completion-checklist__icon" aria-hidden>
-                          {item.done ? "✅" : "❌"}
-                        </span>
-                        {item.done ? doneText : todoText}
-                      </li>
-                    );
-                  })}
-                </ul>
-              </>
-            )}
-          </div>
+          {percentage < 100 ? (
+            <div className="profile-progress" aria-live="polite">
+              <p className="profile-progress__percent">{percentage}% Profile Completed</p>
+              <div className="progress-bar" role="progressbar" aria-valuenow={percentage} aria-valuemin={0} aria-valuemax={100}>
+                <div className="progress-fill" style={{ width: `${percentage}%` }} />
+              </div>
+              <p className="profile-progress__hint">Complete your profile to reach 100%</p>
+              <ul className="profile-completion-checklist">
+                {completionChecklist.map((item) => {
+                  const todoText =
+                    item.id === "photo"
+                      ? "Add profile photo (optional +10%)"
+                      : `Add ${item.todoPhrase ?? item.label.toLowerCase()}`;
+                  const doneText = item.id === "photo" ? "Profile photo added" : `${item.label} added`;
+                  return (
+                    <li
+                      key={item.id}
+                      className={`profile-completion-checklist__item${item.done ? " profile-completion-checklist__item--done" : " profile-completion-checklist__item--todo"}`}
+                    >
+                      <span className="profile-completion-checklist__icon" aria-hidden>
+                        {item.done ? "✅" : "❌"}
+                      </span>
+                      {item.done ? doneText : todoText}
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ) : null}
 
           <div className="student-profile-panel-stack">
             {showEditor ? (
