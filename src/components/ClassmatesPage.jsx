@@ -19,6 +19,16 @@ function clamp(n, min, max) {
   return Math.min(max, Math.max(min, n));
 }
 
+/** Deterministic shuffle using seed (Fisher–Yates). */
+function shuffledOrder(count, rng) {
+  const order = Array.from({ length: count }, (_, i) => i);
+  for (let i = order.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(rng() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  return order;
+}
+
 const ClassmatesPage = ({ variant = "full" }) => {
   const classmates = useMemo(
     () => [
@@ -89,69 +99,86 @@ const ClassmatesPage = ({ variant = "full" }) => {
     return () => ro.disconnect();
   }, []);
 
+  /**
+   * Collision-safe grid: each card lives in a fixed cell. Cell size = card + static gap +
+   * 2×(float envelope + hover slack). Float motion is strictly ≤ floatMax so neighbors never overlap.
+   */
   const buildLayout = (w, count, seed) => {
     const isNarrow = w > 0 && w < 400;
-    const isMobile = w < 520;
+    const isMobile = w < 768;
 
     const pad = isNarrow ? 10 : isMobile ? 12 : 20;
-    const gap = isNarrow ? 20 : isMobile ? 26 : 52;
-    let cardW = isNarrow ? 116 : isMobile ? 126 : 160;
-    const cardH = isNarrow ? 36 : isMobile ? 40 : 44;
-
-    const slotW = cardW + gap;
     const inner = Math.max(0, w - pad * 2);
-    let cols = Math.max(1, Math.floor(inner / slotW));
-    const maxCols = isMobile ? (isNarrow ? 2 : 3) : 6;
-    cols = Math.min(cols, maxCols);
-    // Single column: stretch chip to available width (still capped for readability).
-    if (cols === 1) {
-      cardW = clamp(inner, isNarrow ? 108 : 118, 300);
+
+    let cardW = isNarrow ? 108 : isMobile ? 118 : 156;
+    let cardH = isNarrow ? 34 : isMobile ? 36 : 40;
+
+    /** Exactly two names per row (two columns) whenever there is more than one student. */
+    const cols = count <= 1 ? 1 : 2;
+
+    const hoverSlack = () => Math.ceil(cardW * 0.03) + 4; // whileHover 1.05 + blur slack
+
+    let gapVisual = isNarrow ? 16 : isMobile ? 18 : 22;
+    let floatMax = isNarrow ? 8 : isMobile ? 10 : 16;
+    floatMax = clamp(floatMax, 6, 22);
+
+    const cellSize = () => ({
+      cellW: cardW + gapVisual + 2 * (floatMax + hoverSlack()),
+      cellH: cardH + gapVisual + 2 * (floatMax + hoverSlack()),
+    });
+
+    let { cellW, cellH } = cellSize();
+
+    // Tighten until two columns fit (never reduce below 2 cols when count > 1).
+    let guard = 0;
+    while (cols * cellW > inner && guard < 36) {
+      if (floatMax > 4) floatMax -= 1;
+      else if (gapVisual > 12) gapVisual -= 1;
+      else if (cardW > 92) {
+        cardW -= 4;
+        cardH = Math.max(30, cardH - 1);
+      } else break;
+      ({ cellW, cellH } = cellSize());
+      guard += 1;
     }
 
     const rows = Math.ceil(count / cols);
-    const minH = pad * 2 + rows * cardH + Math.max(0, rows - 1) * gap;
+    const minH = pad * 2 + rows * cellH;
 
-    const rng = mulberry32(seed);
-    const order = Array.from({ length: count }, (_, i) => i);
-    for (let i = order.length - 1; i > 0; i -= 1) {
-      const j = Math.floor(rng() * (i + 1));
-      [order[i], order[j]] = [order[j], order[i]];
-    }
-
-    // Collision-safe: movement stays inside the gap budget, even if two neighbors drift toward each other.
-    // Effective "free space" between cards is `gap`; allow max drift < gap/2 minus safety.
-    const safety = isMobile ? 8 : 12; // includes hover scale allowance
-    const floatMax = clamp(Math.floor((gap - safety) / 2), isNarrow ? 8 : 12, isMobile ? 22 : 26);
+    const slotRng = mulberry32(seed >>> 0);
+    const order = shuffledOrder(count, slotRng);
+    const animRng = mulberry32((seed ^ 0x9e3779b9) >>> 0);
 
     const positions = Array.from({ length: count }, () => null);
-    order.forEach((originalIndex, slotIndex) => {
+    order.forEach((studentIndex, slotIndex) => {
       const r = Math.floor(slotIndex / cols);
       const c = slotIndex % cols;
+      const cellLeft = pad + c * cellW;
+      const cellTop = pad + r * cellH;
+      const left = cellLeft + (cellW - cardW) / 2;
+      const top = cellTop + (cellH - cardH) / 2;
 
-      const left = pad + c * (cardW + gap);
-      const top = pad + r * (cardH + gap);
+      /* ~2–3.6s per cycle (faster drift; layout/gap unchanged). */
+      const duration = 2 + animRng() * 1.6;
+      const floatX = (animRng() * 2 - 1) * floatMax;
+      const floatY = (animRng() * 2 - 1) * floatMax;
 
-      const phaseX = (rng() * 2 - 1) * floatMax;
-      const phaseY = (rng() * 2 - 1) * floatMax;
-      const duration = 3 + rng() * 3; // 3s–6s
-      const rotate = (rng() * 2 - 1) * 2.2;
-      const scale = 0.985 + rng() * 0.045;
-
-      positions[originalIndex] = {
+      positions[studentIndex] = {
         left,
         top,
-        floatX: phaseX,
-        floatY: phaseY,
+        floatX,
+        floatY,
+        floatMax,
         duration,
-        rotate,
-        scale,
-        hue: palette[originalIndex % palette.length],
+        hue: palette[studentIndex % palette.length],
         cardW,
         cardH,
+        cellW,
+        cellH,
       };
     });
 
-    return { positions, cols, rows, minH, cardW, cardH, gap, pad };
+    return { positions, cols, rows, minH, cardW, cardH, cellW, cellH, gapVisual, floatMax, pad };
   };
 
   useEffect(() => {
@@ -208,12 +235,13 @@ const ClassmatesPage = ({ variant = "full" }) => {
                     top: 20,
                     floatX: 0,
                     floatY: 0,
-                    duration: 4.5,
-                    rotate: 0,
-                    scale: 1,
+                    floatMax: 0,
+                    duration: 2.8,
                     hue: palette[index % palette.length],
-                    cardW: 160,
-                    cardH: 44,
+                    cardW: 156,
+                    cardH: 40,
+                    cellW: 156,
+                    cellH: 40,
                   });
                 return (
                   <motion.div
@@ -232,37 +260,25 @@ const ClassmatesPage = ({ variant = "full" }) => {
                       duration: 0.65,
                       ease: [0.16, 1, 0.3, 1],
                     }}
-                    whileHover={{ scale: 1.05 }}
+                    whileHover={{
+                      scale: 1.05,
+                      transition: { duration: 0.32, ease: [0.45, 0, 0.55, 1] },
+                    }}
+                    whileTap={{ scale: 0.99 }}
                   >
                     <motion.div
                       className="classmates-fish__motion"
                       animate={{
-                        rotate: p.rotate,
-                        scale: p.scale,
-                        x: [0, p.floatX, 0, -p.floatX * 0.7, 0],
-                        y: [0, -p.floatY, 0, p.floatY * 0.7, 0],
+                        x: [0, p.floatX, 0, -p.floatX * 0.82, 0],
+                        y: [0, -p.floatY, 0, p.floatY * 0.78, 0],
                       }}
                       transition={{
                         duration: p.duration,
                         repeat: Infinity,
-                        ease: "easeInOut",
+                        ease: [0.45, 0, 0.55, 1],
                       }}
                     >
-                      <motion.div
-                      className="classmates-fish__body"
-                      animate={{
-                        y: [0, -6, 0],
-                        x: [0, 3, 0, -2, 0],
-                        rotate: [0, 1.4, 0, -1.2, 0],
-                      }}
-                      transition={{
-                        duration: 3.6 + (index % 7) * 0.22,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      }}
-                    >
-                      {name}
-                    </motion.div>
+                      <div className="classmates-fish__body">{name}</div>
                     </motion.div>
                   </motion.div>
                 );
@@ -499,24 +515,29 @@ const ClassmatesPage = ({ variant = "full" }) => {
           position: absolute;
           left: 0;
           top: 0;
+          width: var(--cardW, 156px);
+          height: var(--cardH, 40px);
+          transform-origin: center center;
           will-change: left, top, transform;
-          filter: drop-shadow(0 14px 26px rgba(0,0,0,0.35));
+          filter: drop-shadow(0 12px 24px rgba(0,0,0,0.38));
         }
 
         .classmates-fish__motion {
-          width: var(--cardW, 160px);
-          height: var(--cardH, 44px);
+          width: var(--cardW, 156px);
+          height: var(--cardH, 40px);
           will-change: transform;
+          transform-origin: center center;
         }
 
         .classmates-fish__body {
           width: 100%;
           height: 100%;
+          max-width: none;
           display: flex;
           align-items: center;
           justify-content: center;
           padding: 10px 12px;
-          border-radius: 18px;
+          border-radius: 16px;
           font-family: var(--font-heading, 'Poppins', sans-serif);
           font-weight: 800;
           font-size: 0.94rem;
@@ -533,15 +554,22 @@ const ClassmatesPage = ({ variant = "full" }) => {
           -webkit-backdrop-filter: blur(12px);
           box-shadow:
             0 0 0 1px color-mix(in srgb, var(--fishHue) 25%, transparent) inset,
-            0 18px 40px rgba(0,0,0,0.38),
-            0 0 28px color-mix(in srgb, var(--fishHue) 22%, transparent);
-          text-shadow: 0 1px 2px rgba(0,0,0,0.45), 0 0 20px color-mix(in srgb, var(--fishHue) 35%, transparent);
-          max-width: 190px;
+            0 14px 32px rgba(0,0,0,0.42),
+            0 0 22px color-mix(in srgb, var(--fishHue) 20%, transparent);
+          text-shadow: 0 1px 2px rgba(0,0,0,0.45), 0 0 18px color-mix(in srgb, var(--fishHue) 32%, transparent);
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
           position: relative;
-          transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+          transition: box-shadow 0.35s cubic-bezier(0.45, 0, 0.55, 1), border-color 0.35s ease, filter 0.35s ease;
+        }
+
+        .classmates-fish:hover .classmates-fish__body,
+        .classmates-fish:focus-within .classmates-fish__body {
+          box-shadow:
+            0 0 0 1px color-mix(in srgb, var(--fishHue) 35%, transparent) inset,
+            0 18px 40px rgba(0,0,0,0.48),
+            0 0 32px color-mix(in srgb, var(--fishHue) 28%, transparent);
         }
 
         .classmates-fish__body::before {
@@ -567,7 +595,6 @@ const ClassmatesPage = ({ variant = "full" }) => {
           .classmates-fish__body {
             font-size: clamp(0.8rem, 3.6vw, 0.92rem);
             padding: 8px 10px;
-            max-width: min(300px, calc(100vw - 48px));
             border-radius: 14px;
           }
 
