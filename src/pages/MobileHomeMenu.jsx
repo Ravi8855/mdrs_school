@@ -20,17 +20,17 @@ export default function MobileHomeMenu() {
         <div className="mobile-home-hero__vignette" aria-hidden />
         <div className="mobile-home-hero__stack">
           <div className="mobile-home-hero__content">
-            <div className="mobile-home-hero__avatar-ring">
+            <div className="mobile-home-hero__logo-panel">
               <img
                 src={desaiImg}
                 alt="Morarji Desai"
-                className="mobile-home-hero__avatar"
+                className="mobile-home-hero__logo"
                 width={160}
                 height={160}
                 decoding="async"
               />
             </div>
-            <h1 className="mobile-home-hero__headline">MORARJI DESAI RESIDENTIAL SCHOOL</h1>
+            <h1 className="mobile-home-hero__headline">Morarji Desai Residential School</h1>
             <address className="mobile-home-hero__tagline">
               Dorigudda Ukkenala, Shahapur, Yadgir Dist – 585309
             </address>
