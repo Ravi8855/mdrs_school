@@ -86,39 +86,10 @@ const ClassmatesPage = ({
   const [tankSize, setTankSize] = useState({ w: 0, h: 0 });
   const [layout, setLayout] = useState({ positions: [], cols: 0, rows: 0, minH: 0 });
   const [layoutSeed, setLayoutSeed] = useState(1);
-  // internal timer holder for burst reset (avoids reflow/jitter)
-  // eslint-disable-next-line no-underscore-dangle
-  ClassmatesPage.__shuffleTimer ??= 0;
 
-  /** Cool accent per student (cycles); drives card tint + glow. */
+  /** Accent per card from fixed premium palette (cycles by student index). */
   const palette = useMemo(
-    () => [
-      "#22d3ee",
-      "#38bdf8",
-      "#60a5fa",
-      "#818cf8",
-      "#a78bfa",
-      "#c084fc",
-      "#e879f9",
-      "#14b8a6",
-      "#5eead4",
-      "#34d399",
-      "#4ade80",
-      "#7dd3fc",
-      "#93c5fd",
-      "#67e8f9",
-      "#a5f3fc",
-      "#7c3aed",
-      "#6366f1",
-      "#0ea5e9",
-      "#06b6d4",
-      "#2dd4bf",
-      "#10b981",
-      "#8b5cf6",
-      "#d946ef",
-      "#0891b2",
-      "#2563eb",
-    ],
+    () => ["#22d3ee", "#38bdf8", "#60a5fa", "#818cf8", "#a78bfa", "#c084fc", "#e879f9", "#14b8a6"],
     []
   );
 
@@ -193,16 +164,16 @@ const ClassmatesPage = ({
       const left = cellLeft + (cellW - cardW) / 2;
       const top = cellTop + (cellH - cardH) / 2;
 
-      /* ~2–3.6s per cycle (faster drift; layout/gap unchanged). */
-      const duration = 2 + animRng() * 1.6;
-      const floatX = (animRng() * 2 - 1) * floatMax;
-      const floatY = (animRng() * 2 - 1) * floatMax;
+      /* 2s–4s per float cycle; magnitudes stay within floatMax (strictly inside cell). */
+      const duration = 2 + animRng() * 2;
+      const floatMagX = (0.32 + animRng() * 0.68) * floatMax;
+      const floatMagY = (0.32 + animRng() * 0.68) * floatMax;
 
       positions[studentIndex] = {
         left,
         top,
-        floatX,
-        floatY,
+        floatMagX,
+        floatMagY,
         floatMax,
         duration,
         hue: palette[studentIndex % palette.length],
@@ -268,16 +239,18 @@ const ClassmatesPage = ({
                   ({
                     left: 20,
                     top: 20,
-                    floatX: 0,
-                    floatY: 0,
+                    floatMagX: 0,
+                    floatMagY: 0,
                     floatMax: 0,
-                    duration: 2.8,
+                    duration: 3,
                     hue: palette[index % palette.length],
                     cardW: 156,
                     cardH: 40,
                     cellW: 156,
                     cellH: 40,
                   });
+                const magX = p.floatMagX ?? 0;
+                const magY = p.floatMagY ?? 0;
                 return (
                   <motion.div
                     key={`${name}-${index}`}
@@ -287,12 +260,13 @@ const ClassmatesPage = ({
                       ["--cardW"]: `${p.cardW}px`,
                       ["--cardH"]: `${p.cardH}px`,
                     }}
+                    initial={false}
                     animate={{
-                      left: p.left,
-                      top: p.top,
+                      x: p.left,
+                      y: p.top,
                     }}
                     transition={{
-                      duration: 0.65,
+                      duration: 0.6,
                       ease: [0.16, 1, 0.3, 1],
                     }}
                     whileHover={{
@@ -304,13 +278,13 @@ const ClassmatesPage = ({
                     <motion.div
                       className="classmates-fish__motion"
                       animate={{
-                        x: [0, p.floatX, 0, -p.floatX * 0.82, 0],
-                        y: [0, -p.floatY, 0, p.floatY * 0.78, 0],
+                        x: [0, magX, 0, -magX, 0],
+                        y: [0, -magY, 0, magY, 0],
                       }}
                       transition={{
                         duration: p.duration,
                         repeat: Infinity,
-                        ease: [0.45, 0, 0.55, 1],
+                        ease: "easeInOut",
                       }}
                     >
                       <div className="classmates-fish__body">{name}</div>
@@ -553,7 +527,7 @@ const ClassmatesPage = ({
           width: var(--cardW, 156px);
           height: var(--cardH, 40px);
           transform-origin: center center;
-          will-change: left, top, transform;
+          will-change: transform;
           filter: drop-shadow(0 12px 24px rgba(0,0,0,0.38));
         }
 
@@ -579,18 +553,19 @@ const ClassmatesPage = ({
           color: rgba(248,250,252,0.98);
           letter-spacing: 0.01em;
           background:
-            linear-gradient(155deg,
-              color-mix(in srgb, var(--fishHue) 52%, rgba(15, 23, 42, 0.35)) 0%,
-              color-mix(in srgb, var(--fishHue) 28%, rgba(15, 23, 42, 0.55)) 48%,
-              color-mix(in srgb, var(--fishHue) 14%, rgba(15, 23, 42, 0.72)) 100%),
-            linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.04) 100%);
-          border: 1px solid color-mix(in srgb, var(--fishHue) 42%, rgba(255,255,255,0.22));
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
+            linear-gradient(160deg,
+              color-mix(in srgb, var(--fishHue) 38%, rgba(15, 23, 42, 0.22)) 0%,
+              color-mix(in srgb, var(--fishHue) 22%, rgba(15, 23, 42, 0.45)) 45%,
+              color-mix(in srgb, var(--fishHue) 12%, rgba(15, 23, 42, 0.62)) 100%),
+            linear-gradient(125deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.03) 55%, transparent 100%);
+          border: 1px solid color-mix(in srgb, var(--fishHue) 48%, rgba(255,255,255,0.18));
+          backdrop-filter: blur(14px) saturate(1.25);
+          -webkit-backdrop-filter: blur(14px) saturate(1.25);
           box-shadow:
-            0 0 0 1px color-mix(in srgb, var(--fishHue) 25%, transparent) inset,
-            0 14px 32px rgba(0,0,0,0.42),
-            0 0 22px color-mix(in srgb, var(--fishHue) 20%, transparent);
+            0 0 0 1px color-mix(in srgb, var(--fishHue) 22%, transparent) inset,
+            0 14px 36px rgba(0,0,0,0.45),
+            0 0 28px color-mix(in srgb, var(--fishHue) 26%, transparent),
+            0 0 48px color-mix(in srgb, var(--fishHue) 12%, transparent);
           text-shadow: 0 1px 2px rgba(0,0,0,0.45), 0 0 18px color-mix(in srgb, var(--fishHue) 32%, transparent);
           white-space: nowrap;
           overflow: hidden;
@@ -602,9 +577,10 @@ const ClassmatesPage = ({
         .classmates-fish:hover .classmates-fish__body,
         .classmates-fish:focus-within .classmates-fish__body {
           box-shadow:
-            0 0 0 1px color-mix(in srgb, var(--fishHue) 35%, transparent) inset,
-            0 18px 40px rgba(0,0,0,0.48),
-            0 0 32px color-mix(in srgb, var(--fishHue) 28%, transparent);
+            0 0 0 1px color-mix(in srgb, var(--fishHue) 32%, transparent) inset,
+            0 18px 44px rgba(0,0,0,0.5),
+            0 0 36px color-mix(in srgb, var(--fishHue) 34%, transparent),
+            0 0 56px color-mix(in srgb, var(--fishHue) 16%, transparent);
         }
 
         .classmates-fish__body::before {

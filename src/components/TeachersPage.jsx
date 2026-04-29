@@ -26,24 +26,46 @@ const TEACHER_GALLERY_IMAGES = [
   "/gallery/s7.jpg",
 ];
 
-const GALLERY_LEN = TEACHER_GALLERY_IMAGES.length;
+const MEMORY_BOOKMARK_STORAGE_KEY = "mdrs-teachers-gallery-bookmarks";
+
+function readMemoryBookmarks() {
+  if (typeof window === "undefined") return new Set();
+  try {
+    const raw = window.localStorage.getItem(MEMORY_BOOKMARK_STORAGE_KEY);
+    if (!raw) return new Set();
+    const arr = JSON.parse(raw);
+    return new Set(Array.isArray(arr) ? arr.filter((x) => typeof x === "string") : []);
+  } catch {
+    return new Set();
+  }
+}
 
 const TeachersPage = () => {
   const [selectedTeacher, setSelectedTeacher] = useState(null);
   const [expandedImage, setExpandedImage] = useState(null);
   const [memoryIndex, setMemoryIndex] = useState(null);
+  const [memoryBookmarks, setMemoryBookmarks] = useState(readMemoryBookmarks);
 
   const closeMemoryViewer = useCallback(() => setMemoryIndex(null), []);
 
-  const showPrevMemory = useCallback(() => {
-    setMemoryIndex((i) =>
-      i === null ? null : (i - 1 + GALLERY_LEN) % GALLERY_LEN
-    );
-  }, []);
-
-  const showNextMemory = useCallback(() => {
-    setMemoryIndex((i) => (i === null ? null : (i + 1) % GALLERY_LEN));
-  }, []);
+  const toggleMemoryBookmark = useCallback(() => {
+    if (memoryIndex === null) return;
+    const src = TEACHER_GALLERY_IMAGES[memoryIndex];
+    setMemoryBookmarks((prev) => {
+      const next = new Set(prev);
+      if (next.has(src)) next.delete(src);
+      else next.add(src);
+      try {
+        window.localStorage.setItem(
+          MEMORY_BOOKMARK_STORAGE_KEY,
+          JSON.stringify([...next])
+        );
+      } catch {
+        /* ignore quota / private mode */
+      }
+      return next;
+    });
+  }, [memoryIndex]);
 
   useEffect(() => {
     if (memoryIndex === null) return undefined;
@@ -51,17 +73,11 @@ const TeachersPage = () => {
       if (e.key === "Escape") {
         e.preventDefault();
         closeMemoryViewer();
-      } else if (e.key === "ArrowLeft") {
-        e.preventDefault();
-        showPrevMemory();
-      } else if (e.key === "ArrowRight") {
-        e.preventDefault();
-        showNextMemory();
       }
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [memoryIndex, closeMemoryViewer, showPrevMemory, showNextMemory]);
+  }, [memoryIndex, closeMemoryViewer]);
 
   useEffect(() => {
     if (memoryIndex === null) return undefined;
@@ -386,156 +402,161 @@ const TeachersPage = () => {
           opacity: 0.55;
         }
 
-        /* Memory photo viewer (lightbox) */
+        /* Memory photo viewer — single image, overlay chrome only */
+        @keyframes memoryViewerBackdropIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
+        @keyframes memoryViewerImgIn {
+          from {
+            opacity: 0;
+            transform: scale(0.96);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+
         .memory-viewer {
           position: fixed;
           inset: 0;
           z-index: 3600;
           display: flex;
-          align-items: center;
+          align-items: stretch;
           justify-content: center;
-          padding: max(12px, env(safe-area-inset-top, 0px)) max(12px, env(safe-area-inset-right, 0px))
-            max(12px, env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px));
+          padding: max(10px, env(safe-area-inset-top, 0px)) max(10px, env(safe-area-inset-right, 0px))
+            max(14px, env(safe-area-inset-bottom, 0px)) max(10px, env(safe-area-inset-left, 0px));
           box-sizing: border-box;
-          background: rgba(15, 23, 42, 0.88);
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-          animation: fadeIn 0.25s ease;
+          background: rgba(9, 11, 18, 0.94);
+          backdrop-filter: blur(18px);
+          -webkit-backdrop-filter: blur(18px);
+          animation: memoryViewerBackdropIn 0.28s ease forwards;
+          -webkit-tap-highlight-color: transparent;
+          touch-action: manipulation;
+          overscroll-behavior: contain;
         }
 
-        .memory-viewer__panel {
-          width: min(920px, 100%);
-          max-height: min(92vh, 900px);
-          background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-          border-radius: 20px;
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          box-shadow:
-            0 24px 80px rgba(0, 0, 0, 0.45),
-            0 0 0 1px rgba(0, 0, 0, 0.2);
-          overflow: hidden;
+        .memory-viewer__inner {
+          position: relative;
+          flex: 1;
+          min-height: 0;
+          min-width: 0;
+          width: 100%;
+          max-width: 100%;
           display: flex;
           flex-direction: column;
-          animation: slideUp 0.28s ease;
         }
 
-        .memory-viewer__header {
+        .memory-viewer__chrome {
+          position: absolute;
+          top: max(4px, env(safe-area-inset-top, 0px));
+          right: max(4px, env(safe-area-inset-right, 0px));
+          z-index: 5;
           display: flex;
           align-items: center;
-          justify-content: space-between;
-          gap: 12px;
-          padding: 14px 16px;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-          flex-shrink: 0;
+          gap: 10px;
+          pointer-events: none;
+          padding: 4px;
         }
 
-        .memory-viewer__brand {
-          font-family: var(--font-heading);
-          font-size: 0.9375rem;
-          font-weight: 800;
-          color: #f8fafc;
-          letter-spacing: -0.02em;
-        }
-
-        .memory-viewer__count {
-          font-size: 0.8125rem;
-          font-weight: 600;
-          color: rgba(248, 250, 252, 0.65);
-          font-variant-numeric: tabular-nums;
-        }
-
+        .memory-viewer__bookmark,
         .memory-viewer__close {
+          pointer-events: auto;
           flex-shrink: 0;
-          width: 40px;
-          height: 40px;
-          border-radius: 12px;
-          border: 1px solid rgba(255, 255, 255, 0.12);
-          background: rgba(255, 255, 255, 0.06);
-          color: #f1f5f9;
-          font-size: 1.35rem;
-          line-height: 1;
+          width: 44px;
+          height: 44px;
+          min-width: 44px;
+          min-height: 44px;
+          border-radius: 50%;
+          border: 1px solid rgba(255, 255, 255, 0.14);
+          background: rgba(22, 26, 36, 0.55);
+          color: #f8fafc;
           cursor: pointer;
           display: flex;
           align-items: center;
           justify-content: center;
-          transition: background 0.2s ease, transform 0.2s ease;
+          transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
         }
 
+        .memory-viewer__bookmark:hover,
         .memory-viewer__close:hover {
           background: rgba(255, 255, 255, 0.12);
+          border-color: rgba(255, 255, 255, 0.22);
         }
 
+        .memory-viewer__bookmark:active,
         .memory-viewer__close:active {
           transform: scale(0.94);
+        }
+
+        .memory-viewer__bookmark--on {
+          background: rgba(251, 191, 36, 0.22);
+          border-color: rgba(251, 191, 36, 0.5);
+          color: #fde68a;
+        }
+
+        .memory-viewer__bookmark svg {
+          width: 22px;
+          height: 22px;
+          display: block;
+        }
+
+        .memory-viewer__close {
+          font-size: 1.45rem;
+          line-height: 1;
+          font-weight: 300;
         }
 
         .memory-viewer__stage {
           position: relative;
           flex: 1;
-          min-height: 200px;
+          min-height: 0;
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 12px 52px 20px;
-          background: radial-gradient(ellipse at 50% 0%, rgba(30, 41, 59, 0.9) 0%, #0f172a 55%);
+          padding: 56px 6px 12px;
+          touch-action: manipulation;
+        }
+
+        .memory-viewer__img-wrap {
+          max-width: min(100%, 960px);
+          max-height: 100%;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
 
         .memory-viewer__img {
           max-width: 100%;
-          max-height: min(72vh, 720px);
+          max-height: min(calc(100vh - 120px), calc(100dvh - 120px), 78vh, 78dvh, 820px);
           width: auto;
           height: auto;
           object-fit: contain;
+          object-position: center;
           border-radius: 12px;
-          box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+          box-shadow:
+            0 8px 40px rgba(0, 0, 0, 0.45),
+            0 0 0 1px rgba(255, 255, 255, 0.05);
+          animation: memoryViewerImgIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
 
-        .memory-viewer__nav {
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-          width: 44px;
-          height: 44px;
-          border-radius: 50%;
-          border: 1px solid rgba(255, 255, 255, 0.15);
-          background: rgba(15, 23, 42, 0.75);
-          color: #f8fafc;
-          font-size: 1.5rem;
-          line-height: 1;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: background 0.2s ease, transform 0.2s ease;
-          z-index: 2;
-        }
+        @media (max-width: 480px) {
+          .memory-viewer__img {
+            max-height: min(calc(100vh - 108px), calc(100dvh - 108px), 72vh, 72dvh, 640px);
+            border-radius: 10px;
+          }
 
-        .memory-viewer__nav:hover {
-          background: rgba(51, 65, 85, 0.95);
-        }
-
-        .memory-viewer__nav:active {
-          transform: translateY(-50%) scale(0.94);
-        }
-
-        .memory-viewer__nav--prev {
-          left: 10px;
-        }
-
-        .memory-viewer__nav--next {
-          right: 10px;
-        }
-
-        .memory-viewer__footer {
-          padding: 10px 16px 16px;
-          text-align: center;
-          border-top: 1px solid rgba(255, 255, 255, 0.06);
-          flex-shrink: 0;
-        }
-
-        .memory-viewer__hint {
-          font-size: 0.75rem;
-          color: rgba(248, 250, 252, 0.45);
-          margin: 0;
+          .memory-viewer__stage {
+            padding-top: 52px;
+          }
         }
 
         @media (min-width: 480px) {
@@ -557,22 +578,8 @@ const TeachersPage = () => {
             border-radius: 12px;
           }
 
-          .memory-viewer__stage {
-            padding: 10px 40px 16px;
-          }
-
-          .memory-viewer__nav {
-            width: 38px;
-            height: 38px;
-            font-size: 1.25rem;
-          }
-
-          .memory-viewer__nav--prev {
-            left: 6px;
-          }
-
-          .memory-viewer__nav--next {
-            right: 6px;
+          .memory-viewer__img {
+            max-height: min(calc(100vh - 100px), calc(100dvh - 100px), 68vh, 68dvh, 560px);
           }
         }
 
@@ -584,8 +591,19 @@ const TeachersPage = () => {
             transform: none;
           }
 
-          .memory-viewer,
-          .memory-viewer__panel {
+          .memory-viewer {
+            animation: none;
+          }
+
+          .memory-viewer__img {
+            animation: none;
+          }
+
+          .expanded-image-modal {
+            animation: none;
+          }
+
+          .expanded-image-modal img {
             animation: none;
           }
         }
@@ -1062,197 +1080,107 @@ const TeachersPage = () => {
           transform: scale(1.05);
         }
 
-        /* Expanded Image Modal */
+        /* Expanded teacher portrait — same minimal lightbox (close only, no bookmark) */
         .expanded-image-modal {
           position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: rgba(0, 0, 0, 0.88);
+          inset: 0;
+          z-index: 3700;
           display: flex;
           align-items: center;
           justify-content: center;
-          z-index: 3500;
-          animation: fadeIn 0.3s ease;
-          padding: 20px;
-          overflow: auto;
+          padding: max(10px, env(safe-area-inset-top, 0px)) max(10px, env(safe-area-inset-right, 0px))
+            max(14px, env(safe-area-inset-bottom, 0px)) max(10px, env(safe-area-inset-left, 0px));
+          box-sizing: border-box;
+          background: rgba(9, 11, 18, 0.94);
+          backdrop-filter: blur(18px);
+          -webkit-backdrop-filter: blur(18px);
+          animation: memoryViewerBackdropIn 0.28s ease forwards;
+          -webkit-tap-highlight-color: transparent;
+          touch-action: manipulation;
+          overscroll-behavior: contain;
+          overflow: hidden;
         }
 
         .expanded-image-content {
           position: relative;
-          max-width: 600px;
-          max-height: 700px;
+          flex: 1;
+          min-height: 0;
+          min-width: 0;
           width: 100%;
-          height: auto;
-          animation: slideUp 0.3s ease;
-          border-radius: 12px;
-          overflow: hidden;
+          max-width: min(100%, 960px);
+          max-height: 100%;
+          margin: 0 auto;
           display: flex;
           align-items: center;
           justify-content: center;
-          background: white;
-          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-          z-index: 3510;
+          background: transparent;
           box-sizing: border-box;
-          padding: 0;
+          padding: 56px 8px 16px;
         }
 
         .expanded-image-modal img {
-          width: 100%;
-          height: auto;
           max-width: 100%;
-          max-height: 700px;
+          max-height: min(calc(100vh - 120px), calc(100dvh - 120px), 78vh, 78dvh, 820px);
+          width: auto;
+          height: auto;
           object-fit: contain;
+          object-position: center;
           border-radius: 12px;
           display: block;
+          box-shadow:
+            0 8px 40px rgba(0, 0, 0, 0.45),
+            0 0 0 1px rgba(255, 255, 255, 0.05);
+          animation: memoryViewerImgIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
 
         .expanded-image-close-btn {
           position: absolute;
-          top: 10px;
-          right: 10px;
-          background: rgba(0, 0, 0, 0.7);
-          color: white;
-          border: none;
-          width: 40px;
-          height: 40px;
+          top: max(4px, env(safe-area-inset-top, 0px));
+          right: max(4px, env(safe-area-inset-right, 0px));
+          width: 44px;
+          height: 44px;
+          min-width: 44px;
+          min-height: 44px;
           border-radius: 50%;
-          font-size: 24px;
+          border: 1px solid rgba(255, 255, 255, 0.14);
+          background: rgba(22, 26, 36, 0.55);
+          color: #f8fafc;
+          font-size: 1.45rem;
+          line-height: 1;
+          font-weight: 300;
           cursor: pointer;
-          font-weight: bold;
           display: flex;
           align-items: center;
           justify-content: center;
-          transition: all 0.2s ease;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-          z-index: 3520;
+          transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+          z-index: 5;
+          padding: 0;
+          box-sizing: border-box;
         }
 
         .expanded-image-close-btn:hover {
-          background: rgba(0, 0, 0, 0.9);
-          transform: scale(1.15);
-          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+          background: rgba(255, 255, 255, 0.12);
+          border-color: rgba(255, 255, 255, 0.22);
         }
 
-        /* Expanded Image Responsive */
-        @media (max-width: 1024px) {
-          .expanded-image-modal {
-            padding: 20px;
-          }
-
-          .expanded-image-content {
-            max-width: 550px;
-            max-height: 650px;
-          }
-
-          .expanded-image-modal img {
-            max-height: 650px;
-          }
-
-          .expanded-image-close-btn {
-            width: 38px;
-            height: 38px;
-            font-size: 22px;
-            top: 8px;
-            right: 8px;
-          }
-        }
-
-        @media (max-width: 768px) {
-          .expanded-image-modal {
-            padding: 15px;
-          }
-
-          .expanded-image-content {
-            max-width: 500px;
-            max-height: 600px;
-          }
-
-          .expanded-image-modal img {
-            max-height: 600px;
-          }
-
-          .expanded-image-close-btn {
-            width: 36px;
-            height: 36px;
-            font-size: 20px;
-            top: 8px;
-            right: 8px;
-          }
-        }
-
-        @media (max-width: 600px) {
-          .expanded-image-modal {
-            padding: 12px;
-          }
-
-          .expanded-image-content {
-            max-width: 95%;
-            max-height: 500px;
-            border-radius: 10px;
-          }
-
-          .expanded-image-modal img {
-            max-height: 500px;
-            border-radius: 10px;
-          }
-
-          .expanded-image-close-btn {
-            width: 34px;
-            height: 34px;
-            font-size: 18px;
-            top: 8px;
-            right: 8px;
-          }
+        .expanded-image-close-btn:active {
+          transform: scale(0.94);
         }
 
         @media (max-width: 480px) {
-          .expanded-image-modal {
-            padding: 10px;
+          .expanded-image-modal img {
+            max-height: min(calc(100vh - 108px), calc(100dvh - 108px), 72vh, 72dvh, 640px);
+            border-radius: 10px;
           }
 
           .expanded-image-content {
-            max-width: 100%;
-            max-height: 450px;
-            border-radius: 8px;
-          }
-
-          .expanded-image-modal img {
-            max-height: 450px;
-            border-radius: 8px;
-          }
-
-          .expanded-image-close-btn {
-            width: 32px;
-            height: 32px;
-            font-size: 16px;
-            top: 6px;
-            right: 6px;
+            padding-top: 52px;
           }
         }
 
-        @media (max-width: 360px) {
-          .expanded-image-modal {
-            padding: 8px;
-          }
-
-          .expanded-image-content {
-            max-width: 100%;
-            max-height: 400px;
-            border-radius: 8px;
-          }
-
+        @media (max-width: 380px) {
           .expanded-image-modal img {
-            max-height: 400px;
-          }
-
-          .expanded-image-close-btn {
-            width: 30px;
-            height: 30px;
-            font-size: 14px;
-            top: 5px;
-            right: 5px;
+            max-height: min(calc(100vh - 100px), calc(100dvh - 100px), 68vh, 68dvh, 560px);
           }
         }
 
@@ -1464,7 +1392,7 @@ const TeachersPage = () => {
         <div className="school-memories__head">
           <h3 className="school-memories__title">School memories</h3>
           <p className="school-memories__subtitle">
-            Tap a photo to view it full screen. Use the arrows or keyboard to browse.
+            Tap a photo to view it full screen. Tap outside or close when you are done.
           </p>
         </div>
         <div className="school-memories__grid" role="list">
@@ -1475,7 +1403,7 @@ const TeachersPage = () => {
               className="school-memories__tile"
               role="listitem"
               onClick={() => setMemoryIndex(i)}
-              aria-label={`Open school memory ${i + 1} of ${GALLERY_LEN}`}
+              aria-label="Open school memory full screen"
             >
               <img src={src} alt="" loading="lazy" decoding="async" />
               <span className="school-memories__tile-shine" aria-hidden />
@@ -1491,15 +1419,51 @@ const TeachersPage = () => {
             className="memory-viewer"
             role="dialog"
             aria-modal="true"
-            aria-label="School memory viewer"
+            aria-label="School memory"
             onClick={closeMemoryViewer}
           >
-            <div className="memory-viewer__panel" onClick={(e) => e.stopPropagation()}>
-              <header className="memory-viewer__header">
-                <span className="memory-viewer__brand">School memories</span>
-                <span className="memory-viewer__count" aria-live="polite">
-                  {memoryIndex + 1} / {GALLERY_LEN}
-                </span>
+            <div className="memory-viewer__inner" onClick={(e) => e.stopPropagation()}>
+              <div className="memory-viewer__chrome">
+                <button
+                  type="button"
+                  className={
+                    "memory-viewer__bookmark" +
+                    (memoryBookmarks.has(TEACHER_GALLERY_IMAGES[memoryIndex])
+                      ? " memory-viewer__bookmark--on"
+                      : "")
+                  }
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleMemoryBookmark();
+                  }}
+                  aria-pressed={
+                    memoryBookmarks.has(TEACHER_GALLERY_IMAGES[memoryIndex])
+                  }
+                  aria-label={
+                    memoryBookmarks.has(TEACHER_GALLERY_IMAGES[memoryIndex])
+                      ? "Remove bookmark"
+                      : "Bookmark this photo"
+                  }
+                >
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden>
+                    <path
+                      d="M6 4.5h12v15l-6-3.5-6 3.5v-15z"
+                      stroke="currentColor"
+                      strokeWidth="1.75"
+                      strokeLinejoin="round"
+                      fill={
+                        memoryBookmarks.has(TEACHER_GALLERY_IMAGES[memoryIndex])
+                          ? "currentColor"
+                          : "none"
+                      }
+                      fillOpacity={
+                        memoryBookmarks.has(TEACHER_GALLERY_IMAGES[memoryIndex])
+                          ? 0.35
+                          : undefined
+                      }
+                    />
+                  </svg>
+                </button>
                 <button
                   type="button"
                   className="memory-viewer__close"
@@ -1508,41 +1472,18 @@ const TeachersPage = () => {
                 >
                   ×
                 </button>
-              </header>
-              <div className="memory-viewer__stage">
-                <button
-                  type="button"
-                  className="memory-viewer__nav memory-viewer__nav--prev"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    showPrevMemory();
-                  }}
-                  aria-label="Previous photo"
-                >
-                  ‹
-                </button>
-                <img
-                  src={TEACHER_GALLERY_IMAGES[memoryIndex]}
-                  alt={`School memory ${memoryIndex + 1} of ${GALLERY_LEN}`}
-                  className="memory-viewer__img"
-                />
-                <button
-                  type="button"
-                  className="memory-viewer__nav memory-viewer__nav--next"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    showNextMemory();
-                  }}
-                  aria-label="Next photo"
-                >
-                  ›
-                </button>
               </div>
-              <footer className="memory-viewer__footer">
-                <p className="memory-viewer__hint">
-                  Arrow keys to browse · tap outside or × to close
-                </p>
-              </footer>
+              <div className="memory-viewer__stage">
+                <div className="memory-viewer__img-wrap">
+                  <img
+                    key={TEACHER_GALLERY_IMAGES[memoryIndex]}
+                    src={TEACHER_GALLERY_IMAGES[memoryIndex]}
+                    alt="School memory"
+                    className="memory-viewer__img"
+                    decoding="async"
+                  />
+                </div>
+              </div>
             </div>
           </div>,
           document.body

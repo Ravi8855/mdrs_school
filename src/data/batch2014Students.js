@@ -28,4 +28,5 @@ export const BATCH_2014_STUDENTS = [
     location: "Bangalore",
     image: kiranPhoto,
   },
+ 
 ];
