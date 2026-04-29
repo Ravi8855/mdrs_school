@@ -54,7 +54,7 @@
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: contain;
   /* Extra space so long forms clear the floating bottom nav + safe area. */
-  padding-bottom: calc(118px + env(safe-area-inset-bottom, 0px));
+  padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
   display: flex;
   flex-direction: column;
 }

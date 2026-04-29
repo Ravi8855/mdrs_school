@@ -29,20 +29,55 @@ function shuffledOrder(count, rng) {
   return order;
 }
 
-const ClassmatesPage = ({ variant = "full" }) => {
-  const classmates = useMemo(
-    () => [
-    "Ambadas", "Arun", "Bhimu", "Bhimashankar",
-    "Hrutik", "Jattappa", "Ningappa", "Mallikarjun", "Marilinga",
-    "Ravi", "Vinod", "Viresh", "Chandrashekar", "Gollalappa", "Sunil",
-    "Ambika", "Bheembai", "Chaitra", "Ganga", "Mallamma", "Ningamma",
-    "Parvati", "Prema", "Roopa", "Savita", "Sharanamma",
-    "Shweta", "Shweta H", "Suvarna", "Umashree",
-    "Mahesh", "Praveen", "Suchitra", "Shreedevi",
-    "Mamtha", "Archana",
-    ],
-    []
-  );
+const DEFAULT_CLASSMATES = [
+  "Ambadas",
+  "Arun",
+  "Bhimu",
+  "Bhimashankar",
+  "Hrutik",
+  "Jattappa",
+  "Ningappa",
+  "Mallikarjun",
+  "Marilinga",
+  "Ravi",
+  "Vinod",
+  "Viresh",
+  "Chandrashekar",
+  "Gollalappa",
+  "Sunil",
+  "Ambika",
+  "Bheembai",
+  "Chaitra",
+  "Ganga",
+  "Mallamma",
+  "Ningamma",
+  "Parvati",
+  "Prema",
+  "Roopa",
+  "Savita",
+  "Sharanamma",
+  "Shweta",
+  "Shweta H",
+  "Suvarna",
+  "Umashree",
+  "Mahesh",
+  "Praveen",
+  "Suchitra",
+  "Shreedevi",
+  "Mamtha",
+  "Archana",
+];
+
+const ClassmatesPage = ({
+  variant = "full",
+  headTitle,
+  headSubtitle,
+  names,
+}) => {
+  const classmates = useMemo(() => (Array.isArray(names) && names.length ? names : DEFAULT_CLASSMATES), [names]);
+
+  const shellTitle = headTitle ?? "Classmates";
+  const shellSubtitle = headSubtitle ?? "All students in your class";
 
   const isPreview = variant === "preview";
   const displayedClassmates = isPreview ? classmates.slice(0, PREVIEW_COUNT) : classmates;
@@ -197,8 +232,8 @@ const ClassmatesPage = ({ variant = "full" }) => {
       <div className="section-inner">
         <div className="classmates-shell">
           <header className="classmates-shell__head">
-            <h2 className="classmates-shell__title">Classmates</h2>
-            <p className="classmates-shell__subtitle">All students in your class</p>
+            <h2 className="classmates-shell__title">{shellTitle}</h2>
+            <p className="classmates-shell__subtitle">{shellSubtitle}</p>
             {!isPreview ? (
               <div className="classmates-shell__cta">
                 <motion.button

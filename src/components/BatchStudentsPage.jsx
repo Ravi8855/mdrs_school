@@ -1,11 +1,12 @@
 import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import AnimatedSection from "./AnimatedSection";
-import ClassmatesPage from "./ClassmatesPage";
+import { BATCH_2014_STUDENTS, batch2014Slug } from "../data/batch2014Students";
+import "./Alumni.css";
 
 /**
- * Full SSLC batch student list at /batch-students (same UI as the former homepage section).
+ * 2014 batch at /batch-students — same card grid pattern as Alumni (static data).
  */
 export default function BatchStudentsPage({ onLogout }) {
   const location = useLocation();
@@ -35,11 +36,95 @@ export default function BatchStudentsPage({ onLogout }) {
           padding-bottom: max(1.5rem, calc(env(safe-area-inset-bottom, 0px) + 1rem));
           font-family: var(--font-body, "Poppins", sans-serif);
         }
+        .batch-2014-page {
+          display: flex;
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .batch-2014-top {
+          width: 100%;
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 clamp(8px, 2vw, 16px);
+          box-sizing: border-box;
+        }
+        .batch-2014-back {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.35rem;
+          margin: 0 0 12px;
+          font-size: 0.9rem;
+          font-weight: 600;
+          color: #475569;
+          text-decoration: none;
+        }
+        .batch-2014-back:hover {
+          color: #0f172a;
+        }
+        .batch-2014-page .section-title-wrap {
+          margin-bottom: clamp(14px, 3vw, 22px);
+          padding-top: 0;
+          padding-left: clamp(6px, 2.5vw, 14px);
+          padding-right: clamp(6px, 2.5vw, 14px);
+          box-sizing: border-box;
+        }
+        /* Global .section-title uses a large min size — here we scale so the line fits typical phone widths */
+        .batch-2014-page .section-title {
+          margin: 0 auto 8px;
+          max-width: min(100%, 20.5rem);
+          font-size: clamp(0.94rem, 3.65vw + 0.38rem, 1.55rem);
+          line-height: 1.12;
+          letter-spacing: -0.035em;
+          font-weight: 800;
+          text-align: center;
+          text-wrap: balance;
+        }
+        .batch-2014-page .section-title-accent {
+          margin-top: 0;
+        }
+        .batch-2014-page .alumni-grid {
+          margin-top: 0;
+        }
       `}</style>
       <Navbar onNavigate={handleNavigate} onLogout={onLogout} />
       <main className="page-section batch-students-page-main">
         <AnimatedSection>
-          <ClassmatesPage variant="full" />
+          <div className="alumni-section container batch-2014-page">
+            <div className="batch-2014-top">
+              <Link to="/batches" className="batch-2014-back">
+                ← Batches
+              </Link>
+            </div>
+            <div className="section-title-wrap">
+              <h2 className="section-title">2014 batch students</h2>
+              <div className="section-title-accent" aria-hidden="true" />
+            </div>
+
+            <div className="alumni-grid">
+              {BATCH_2014_STUDENTS.map((s, i) => (
+                <Link
+                  key={s.name}
+                  to={`/batch-students/${batch2014Slug(s.name)}`}
+                  className="alumni-item glass-card reveal-card"
+                  aria-label={`Open profile for ${s.name}`}
+                  style={{ animationDelay: `${i * 40}ms` }}
+                >
+                  <div className="alumni-thumb-wrap">
+                    <div className="alumni-thumb-inner">
+                      <img src={s.image} alt={s.name} className="alumni-thumb" loading="lazy" />
+                    </div>
+                  </div>
+                  <div className="alumni-meta">
+                    <span className="alumni-name">{s.name}</span>
+                    {s.qualification ? (
+                      <span className="alumni-qual-short">{s.qualification}</span>
+                    ) : null}
+                    {s.location ? <span className="alumni-loc-short">{s.location}</span> : null}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
         </AnimatedSection>
       </main>
     </div>

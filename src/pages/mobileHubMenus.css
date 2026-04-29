@@ -41,7 +41,7 @@
   flex-direction: column;
   /* Match MainLayout main column: full viewport minus top/safe insets and bottom nav padding */
   min-height: calc(
-    100svh - env(safe-area-inset-top, 0px) - 118px - env(safe-area-inset-bottom, 0px)
+    100svh - env(safe-area-inset-top, 0px) - 96px - env(safe-area-inset-bottom, 0px)
   );
   background: #020617;
 }
@@ -51,7 +51,7 @@
   width: 100%;
   flex: 1 1 auto;
   min-height: calc(
-    100svh - env(safe-area-inset-top, 0px) - 118px - env(safe-area-inset-bottom, 0px)
+    100svh - env(safe-area-inset-top, 0px) - 96px - env(safe-area-inset-bottom, 0px)
   );
   overflow: hidden;
   border-radius: 0;
@@ -478,6 +478,11 @@
 .premium-tile--people-seniors-juniors .premium-tile__icon {
   background: linear-gradient(145deg, #ffedd5, #a5f3fc);
   color: #0f766e;
+}
+
+.premium-tile--batches-2014 .premium-tile__icon {
+  background: linear-gradient(145deg, #fef3c7, #fde68a);
+  color: #92400e;
 }
 
 .premium-tile--feat-hostel .premium-tile__icon {

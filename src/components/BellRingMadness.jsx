@@ -259,7 +259,7 @@ export default function BellRingMadness() {
     if (!name) return false;
     const allowedLower = allowedStudents.map((s) => s.toLowerCase());
     if (!allowedLower.includes(name.toLowerCase())) {
-      setNameError("Enter your original name.");
+      setNameError("only 2015 batch students are allowed.");
       return false;
     }
     setNameError("");

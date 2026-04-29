@@ -10,6 +10,7 @@ import CinematicIntro from "./components/CinematicIntro";
 import {
   ClassmatesPage,
   BatchStudentsPage,
+  Batch2014StudentProfile,
   TeachersPage,
   GalleryPage,
   Alumni,
@@ -23,6 +24,7 @@ import {
   FeedbackPage,
   StudentProfilePage,
   MobilePeopleMenu,
+  MobileBatchesMenu,
   MobileFeaturesMenu,
   MeetStudentsGalleryPage,
 } from "./lazyPages";
@@ -113,6 +115,7 @@ function App() {
             <Route element={<ProtectedShell authed={authed} />}>
               <Route path="/home" element={<MobileHomeMenu />} />
               <Route path="/people" element={<MobilePeopleMenu />} />
+              <Route path="/batches" element={<MobileBatchesMenu />} />
               <Route path="/meet-seniors-juniors" element={<MeetStudentsGalleryPage />} />
               <Route path="/features" element={<MobileFeaturesMenu />} />
               <Route path="/feedback" element={<FeedbackPage onLogout={handleLogout} />} />
@@ -166,6 +169,14 @@ function App() {
                 }
               />
               <Route path="/batch-students" element={<BatchStudentsPage onLogout={handleLogout} />} />
+              <Route
+                path="/batch-students/:slug"
+                element={
+                  <AnimatedSection>
+                    <Batch2014StudentProfile />
+                  </AnimatedSection>
+                }
+              />
               <Route path="/hostel" element={<HostelLayout onLogout={handleLogout} />}>
                 <Route index element={<HostelDashboard />} />
                 <Route path="boys" element={<RoomList gender="boys" />} />

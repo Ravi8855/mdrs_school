@@ -7,7 +7,6 @@ import {
   mergeAlumniWithProfiles,
   mergeProfilesIntoStaticGrid,
 } from "../data/alumniData";
-import { getProfileKey } from "../lib/profileSession";
 import { getSupabaseClient } from "../lib/supabaseClient";
 import { fetchAllProfiles, isSupabaseConfigured } from "../lib/profilesSupabase";
 
@@ -52,8 +51,6 @@ export default function Alumni() {
     return mergeProfilesIntoStaticGrid(profiles);
   }, [profiles]);
 
-  const profileKey = getProfileKey();
-
   return (
     <div className="alumni-section container">
       <div className="section-title-wrap">
@@ -61,20 +58,6 @@ export default function Alumni() {
         <div className="section-title-accent" aria-hidden="true" />
         <p className="section-subtitle alumni-subtitle">Passout students of MDRS — where they are now.</p>
       </div>
-
-      {profileKey ? (
-        <div className="alumni-profile-cta" role="region" aria-label="Your alumni profile">
-          <div className="alumni-profile-cta-inner">
-            <p className="alumni-profile-cta-title">Edit your profile</p>
-            <p className="alumni-profile-cta-text">
-              Keep your photo and qualification up to date so you appear correctly here.
-            </p>
-            <Link to="/profile" className="alumni-profile-cta-link">
-              Open profile editor
-            </Link>
-          </div>
-        </div>
-      ) : null}
 
       <div className="alumni-grid">
         {list.map((s, i) => (
