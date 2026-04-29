@@ -206,6 +206,9 @@ export function mergeAlumniWithProfiles(staticStudents, dbProfiles) {
   });
 }
 
+/** Name slugs for Supabase-only profiles that must not appear on the public alumni grid. */
+const ALUMNI_GRID_EXCLUDED_PROFILE_SLUGS = new Set(["kiran-kumar"]);
+
 /**
  * Full alumni grid: static passout list (photos + qual) merged with DB, then any
  * profile-only signups not already matched by name slug.
@@ -220,6 +223,7 @@ export function mergeProfilesIntoStaticGrid(dbProfiles) {
     const name = p.name != null ? String(p.name).trim() : "";
     if (!name) continue;
     const slug = alumniSlug(name);
+    if (ALUMNI_GRID_EXCLUDED_PROFILE_SLUGS.has(slug)) continue;
     if (seenSlugs.has(slug)) continue;
     seenSlugs.add(slug);
     const url = p.image_url && String(p.image_url).trim() ? String(p.image_url).trim() : "";
