@@ -6,6 +6,9 @@
   align-items: center;
   min-height: 100dvh;
   min-height: 100vh;
+  /* Lock shell to one viewport so the inner main stays a bounded scrollport (wheel/trackpad on desktop). */
+  height: 100vh;
+  height: 100dvh;
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
@@ -17,8 +20,8 @@
 .main-app-shell__frame {
   width: 100%;
   max-width: 428px;
-  min-height: 100dvh;
-  min-height: 100vh;
+  flex: 1 1 auto;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   background: var(--bg, #f8fafc);
@@ -52,7 +55,8 @@
   overflow-x: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  overscroll-behavior-y: contain;
+  /* auto allows scroll chaining when content fits; contain blocked wheel scroll to document on some desktops. */
+  overscroll-behavior-y: auto;
   /* Extra space so long forms clear the floating bottom nav + safe area. */
   padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
   display: flex;
@@ -70,6 +74,7 @@
 @media (display-mode: standalone), (display-mode: fullscreen) {
   .main-app-shell {
     min-height: 100dvh;
+    height: 100dvh;
   }
 }
 

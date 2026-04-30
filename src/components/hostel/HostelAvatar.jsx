@@ -1,5 +1,6 @@
 import React from "react";
 import { getHostelPersonPhoto } from "../../data/hostelPersonPhotos";
+import { handleImgError } from "../../utils/imageFallback";
 import "./Hostel.css";
 
 /**
@@ -36,8 +37,8 @@ export default function HostelAvatar({ name, size = "md", className = "", title 
       alt=""
       title={title ?? name}
       className={`hostel-avatar hostel-avatar--${size} ${className}`.trim()}
-      loading="lazy"
       decoding="async"
+      onError={handleImgError}
     />
   );
 }

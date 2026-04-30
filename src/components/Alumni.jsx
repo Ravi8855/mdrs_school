@@ -9,6 +9,7 @@ import {
 } from "../data/alumniData";
 import { getSupabaseClient } from "../lib/supabaseClient";
 import { fetchAllProfiles, isSupabaseConfigured } from "../lib/profilesSupabase";
+import { handleImgError } from "../utils/imageFallback";
 
 export default function Alumni() {
   const [profiles, setProfiles] = useState(() => (isSupabaseConfigured() ? undefined : []));
@@ -74,7 +75,8 @@ export default function Alumni() {
                   src={s.displayImage}
                   alt={s.name}
                   className="alumni-thumb"
-                  loading="lazy"
+                  decoding="async"
+                  onError={handleImgError}
                 />
               </div>
             </div>

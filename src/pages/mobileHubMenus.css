@@ -59,6 +59,16 @@
   transition: box-shadow 0.3s ease;
 }
 
+.mobile-home-hero__secondary {
+  width: 100%;
+  height: auto;
+  display: block;
+  flex-shrink: 0;
+  object-fit: contain;
+  object-position: center top;
+  background: #020617;
+}
+
 .mobile-home-hero__campus {
   position: absolute;
   inset: 0;
@@ -485,6 +495,21 @@
   color: #92400e;
 }
 
+.premium-tile--batches-2013 .premium-tile__icon {
+  background: linear-gradient(145deg, #e0e7ff, #c7d2fe);
+  color: #4338ca;
+}
+
+.premium-tile--batches-2015 .premium-tile__icon {
+  background: linear-gradient(145deg, #d1fae5, #a7f3d0);
+  color: #047857;
+}
+
+.premium-tile--batches-2016 .premium-tile__icon {
+  background: linear-gradient(145deg, #fed7aa, #fdba74);
+  color: #9a3412;
+}
+
 .premium-tile--feat-hostel .premium-tile__icon {
   background: linear-gradient(145deg, #d1fae5, #a7f3d0);
   color: #047857;
@@ -520,6 +545,13 @@
   font-weight: 700;
   color: #0f172a;
   letter-spacing: 0.01em;
+}
+
+.premium-tile__serial {
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  color: #94a3b8;
+  margin-right: 0.12em;
 }
 
 .premium-tile__desc {

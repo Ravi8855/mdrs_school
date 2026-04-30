@@ -3,7 +3,13 @@ import { lazy } from "react";
 /** Route-level code splitting — chunks warm up via `prefetchAppRouteChunks` after shell mounts. */
 export const ClassmatesPage = lazy(() => import("./components/ClassmatesPage"));
 export const BatchStudentsPage = lazy(() => import("./components/BatchStudentsPage"));
+export const Batch2013StudentsPage = lazy(() => import("./components/Batch2013StudentsPage"));
+export const Batch2015StudentsPage = lazy(() => import("./components/Batch2015StudentsPage"));
+export const Batch2016StudentsPage = lazy(() => import("./components/Batch2016StudentsPage"));
 export const Batch2014StudentProfile = lazy(() => import("./components/Batch2014StudentProfile"));
+export const Batch2013StudentProfile = lazy(() => import("./components/Batch2013StudentProfile"));
+export const Batch2015StudentProfile = lazy(() => import("./components/Batch2015StudentProfile"));
+export const Batch2016StudentProfile = lazy(() => import("./components/Batch2016StudentProfile"));
 export const TeachersPage = lazy(() => import("./components/TeachersPage"));
 export const GalleryPage = lazy(() => import("./components/GalleryPage"));
 export const Alumni = lazy(() => import("./components/Alumni"));
@@ -24,7 +30,13 @@ export const MeetStudentsGalleryPage = lazy(() => import("./pages/MeetStudentsGa
 const CHUNK_IMPORTS = [
   () => import("./components/ClassmatesPage"),
   () => import("./components/BatchStudentsPage"),
+  () => import("./components/Batch2013StudentsPage"),
+  () => import("./components/Batch2015StudentsPage"),
+  () => import("./components/Batch2016StudentsPage"),
   () => import("./components/Batch2014StudentProfile"),
+  () => import("./components/Batch2013StudentProfile"),
+  () => import("./components/Batch2015StudentProfile"),
+  () => import("./components/Batch2016StudentProfile"),
   () => import("./components/TeachersPage"),
   () => import("./components/GalleryPage"),
   () => import("./components/Alumni"),

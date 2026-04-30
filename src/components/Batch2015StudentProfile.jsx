@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
-import { getBatch2014BySlug } from "../data/batch2014Students";
+import { getBatch2015BySlug } from "../data/batch2015Students";
 import { handleImgError } from "../utils/imageFallback";
 import "./Alumni.css";
 
 /**
- * Static 2014 batch student detail — same layout as AlumniProfile (no Supabase).
+ * Static 2015 batch student detail — same layout as other batch profiles.
  */
-export default function Batch2014StudentProfile() {
+export default function Batch2015StudentProfile() {
   const { slug } = useParams();
-  const student = slug ? getBatch2014BySlug(slug) : null;
+  const student = slug ? getBatch2015BySlug(slug) : null;
   const [lightbox, setLightbox] = useState(null);
 
   if (!student) {
-    return <Navigate to="/batch-students" replace />;
+    return <Navigate to="/batch-2015-students" replace />;
   }
 
   const displayName = student.name;
@@ -27,12 +27,12 @@ export default function Batch2014StudentProfile() {
   return (
     <div className="alumni-profile-page">
       <div className="alumni-profile-inner">
-        <Link to="/batch-students" className="alumni-profile-back">
-          ← 2014 batch students
+        <Link to="/batch-2015-students" className="alumni-profile-back">
+          ← 2015 batch students
         </Link>
 
         <article className="alumni-profile-card">
-          <p className="alumni-profile-eyebrow">2014 batch</p>
+          <p className="alumni-profile-eyebrow">2015 batch</p>
           <h1 className="alumni-profile-title">{displayName}</h1>
 
           <div className="alumni-profile-avatar-wrap">

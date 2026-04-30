@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
+import { handleImgError, publicAssetUrl } from "../utils/imageFallback";
 
 // ✅ IMPORT IMAGES (ONLY AVAILABLE TEACHER FILES)
 import subhasImg from "../assets/Subhas sir.jpg";
@@ -17,13 +18,13 @@ import AshwiniImg from "../assets/Ashwini mam.jpg";
 
 /** Public gallery — 3 per row; opened in memory viewer */
 const TEACHER_GALLERY_IMAGES = [
-  "/gallery/s1.jpg",
-  "/gallery/s2.jpg",
-  "/gallery/s3.jpg",
-  "/gallery/s4.jpg",
-  "/gallery/s5.jpg",
-  "/gallery/s6.jpg",
-  "/gallery/s7.jpg",
+  publicAssetUrl("gallery/s1.jpg"),
+  publicAssetUrl("gallery/s2.jpg"),
+  publicAssetUrl("gallery/s3.jpg"),
+  publicAssetUrl("gallery/s4.jpg"),
+  publicAssetUrl("gallery/s5.jpg"),
+  publicAssetUrl("gallery/s6.jpg"),
+  publicAssetUrl("gallery/s7.jpg"),
 ];
 
 const MEMORY_BOOKMARK_STORAGE_KEY = "mdrs-teachers-gallery-bookmarks";
@@ -1357,6 +1358,7 @@ const TeachersPage = () => {
           src={principal.img} 
           alt="Principal" 
           onClick={() => setSelectedTeacher({ ...principal, subject: "Principal" })}
+          onError={handleImgError}
         />
       </div>
 
@@ -1382,6 +1384,7 @@ const TeachersPage = () => {
               src={t.img}
               alt={t.name}
               className="teacher-img"
+              onError={handleImgError}
             />
             <div className="teacher-pill__name">{t.name}</div>
           </div>
@@ -1405,7 +1408,7 @@ const TeachersPage = () => {
               onClick={() => setMemoryIndex(i)}
               aria-label="Open school memory full screen"
             >
-              <img src={src} alt="" loading="lazy" decoding="async" />
+              <img src={src} alt="" decoding="async" onError={handleImgError} />
               <span className="school-memories__tile-shine" aria-hidden />
             </button>
           ))}
@@ -1481,6 +1484,7 @@ const TeachersPage = () => {
                     alt="School memory"
                     className="memory-viewer__img"
                     decoding="async"
+                    onError={handleImgError}
                   />
                 </div>
               </div>
@@ -1511,6 +1515,7 @@ const TeachersPage = () => {
                 }}
                 style={{ cursor: "pointer" }}
                 title="Click to view larger"
+                onError={handleImgError}
               />
               <div className="modal-teacher-name">{selectedTeacher.name}</div>
               {selectedTeacher.subject !== "Principal" && (
@@ -1534,7 +1539,7 @@ const TeachersPage = () => {
               >
                 ✕
               </button>
-              <img src={expandedImage} alt="Expanded view" />
+              <img src={expandedImage} alt="Expanded view" onError={handleImgError} />
             </div>
           </div>,
           document.body

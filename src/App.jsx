@@ -10,7 +10,13 @@ import CinematicIntro from "./components/CinematicIntro";
 import {
   ClassmatesPage,
   BatchStudentsPage,
+  Batch2013StudentsPage,
+  Batch2015StudentsPage,
+  Batch2016StudentsPage,
   Batch2014StudentProfile,
+  Batch2013StudentProfile,
+  Batch2015StudentProfile,
+  Batch2016StudentProfile,
   TeachersPage,
   GalleryPage,
   Alumni,
@@ -174,6 +180,33 @@ function App() {
                 element={
                   <AnimatedSection>
                     <Batch2014StudentProfile />
+                  </AnimatedSection>
+                }
+              />
+              <Route path="/batch-2013-students" element={<Batch2013StudentsPage onLogout={handleLogout} />} />
+              <Route
+                path="/batch-2013-students/:slug"
+                element={
+                  <AnimatedSection>
+                    <Batch2013StudentProfile />
+                  </AnimatedSection>
+                }
+              />
+              <Route path="/batch-2015-students" element={<Batch2015StudentsPage onLogout={handleLogout} />} />
+              <Route
+                path="/batch-2015-students/:slug"
+                element={
+                  <AnimatedSection>
+                    <Batch2015StudentProfile />
+                  </AnimatedSection>
+                }
+              />
+              <Route path="/batch-2016-students" element={<Batch2016StudentsPage onLogout={handleLogout} />} />
+              <Route
+                path="/batch-2016-students/:slug"
+                element={
+                  <AnimatedSection>
+                    <Batch2016StudentProfile />
                   </AnimatedSection>
                 }
               />

@@ -1,6 +1,7 @@
 import React from "react";
 import collegeImg from "../assets/college.jpg";
 import desaiImg from "../assets/desai.jpg";
+import { handleImgError, publicAssetUrl } from "../utils/imageFallback";
 import "./mobileHubMenus.css";
 
 export default function MobileHomeMenu() {
@@ -28,6 +29,7 @@ export default function MobileHomeMenu() {
                 width={160}
                 height={160}
                 decoding="async"
+                onError={handleImgError}
               />
             </div>
             <h1 className="mobile-home-hero__headline">Morarji Desai Residential School</h1>
@@ -37,6 +39,13 @@ export default function MobileHomeMenu() {
           </div>
         </div>
       </div>
+      <img
+        src={publicAssetUrl("gallery/img11.jpg")}
+        alt="MDRS school campus"
+        className="mobile-home-hero__secondary"
+        decoding="async"
+        onError={handleImgError}
+      />
     </section>
   );
 }

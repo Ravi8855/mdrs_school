@@ -10,6 +10,7 @@ import {
   isSupabaseConfigured,
 } from "../lib/profilesSupabase";
 import { isProfilesTableMissingError, profilesTableSetupHint } from "../lib/profileErrors";
+import { handleImgError } from "../utils/imageFallback";
 import "./StudentProfilePage.css";
 
 /** @param {{ name?: unknown; qualification?: unknown; college?: unknown; location?: unknown; bio?: unknown; image?: unknown }} profile */
@@ -294,7 +295,7 @@ export default function StudentProfilePage() {
             <div className="student-profile-avatar-wrap student-profile-avatar-wrap--hero">
               <div className="student-profile-avatar-inner">
                 {avatarSrc ? (
-                  <img src={avatarSrc} alt="" className="student-profile-avatar" />
+                  <img src={avatarSrc} alt="" className="student-profile-avatar" onError={handleImgError} />
                 ) : (
                   <FaUserCircle className="student-profile-avatar-placeholder" aria-hidden />
                 )}
@@ -383,7 +384,7 @@ export default function StudentProfilePage() {
         />
         <div className="student-profile-avatar-inner">
           {avatarSrc ? (
-            <img src={avatarSrc} alt="" className="student-profile-avatar" />
+            <img src={avatarSrc} alt="" className="student-profile-avatar" onError={handleImgError} />
           ) : (
             <FaUserCircle className="student-profile-avatar-placeholder" aria-hidden />
           )}

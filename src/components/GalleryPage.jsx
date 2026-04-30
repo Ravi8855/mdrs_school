@@ -1,29 +1,12 @@
 import React, { useState } from 'react';
+import { handleImgError, publicAssetUrl } from '../utils/imageFallback';
 
+/** Paths under `public/gallery/` that exist in the repo (avoids 404 storms in WebView / PWA). */
 const GalleryPage = () => {
     const images = [
-        "/gallery/img1.jpg",
-        "/gallery/img2.jpg",
-        "/gallery/img3.jpg",
-        "/gallery/img4.jpg",
-        "/gallery/img6.jpg",
-        "/gallery/img9.jpg",
-        "/gallery/img10.jpg",
-        "/gallery/img11.jpg",
-        "/gallery/img12.jpg",
-        "/gallery/img13.jpg",
-        "/gallery/img14.jpg",
-        "/gallery/33.jpg",
-        "/gallery/99.jpg",
-        "/gallery/21.jpg",
-        "/gallery/22.jpg",
-        "/gallery/23.jpg",
-        "/gallery/78.jpg",
-        "/gallery/2.jpg",
-        "/gallery/00.jpg",
-        "/gallery/friends.jpg",
-        "/gallery/image.jpg",
-       
+        ...Array.from({ length: 12 }, (_, i) => publicAssetUrl(`gallery/m${i + 1}.jpg`)),
+        ...Array.from({ length: 7 }, (_, i) => publicAssetUrl(`gallery/s${i + 1}.jpg`)),
+        publicAssetUrl('gallery/image.jpg'),
     ];
 
     const [selectedImage, setSelectedImage] = useState(null);
@@ -308,7 +291,7 @@ const GalleryPage = () => {
             <div className="gallery-grid">
                 {images.map((src, index) => (
                     <div
-                        key={index}
+                        key={src}
                         className="gallery-card"
                         onClick={() => {
                             setRevealedImages((prev) => new Set(prev).add(src));
@@ -316,7 +299,14 @@ const GalleryPage = () => {
                         }}
                     >
                         <div className="memory-card">
-                            <img src={src} alt={`img-${index}`} />
+                            <img
+                                src={src}
+                                alt={`img-${index}`}
+                                decoding="async"
+                                loading="eager"
+                                fetchPriority={index < 4 ? 'high' : 'auto'}
+                                onError={handleImgError}
+                            />
                             <div
                                 className={`memory-locked-layer${revealedImages.has(src) ? " memory-locked-layer--revealed" : ""}`}
                                 aria-hidden={revealedImages.has(src)}
@@ -332,9 +322,13 @@ const GalleryPage = () => {
                 <div className="lightbox" onClick={closeLightbox}>
                     
                     <img
+                        key={selectedImage}
                         src={selectedImage}
                         alt="preview"
+                        decoding="async"
+                        loading="eager"
                         onClick={(e) => e.stopPropagation()}
+                        onError={handleImgError}
                     />
 
                     <div className="buttons" onClick={(e) => e.stopPropagation()}>

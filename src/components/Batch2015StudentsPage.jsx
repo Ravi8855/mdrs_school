@@ -3,18 +3,18 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import AnimatedSection from "./AnimatedSection";
 import {
-  BATCH_2014_STUDENTS,
-  BATCH_2014_CLASS_NAMES,
-  batch2014Slug,
-} from "../data/batch2014Students";
+  BATCH_2015_STUDENTS,
+  BATCH_2015_CLASS_NAMES,
+  batch2015Slug,
+} from "../data/batch2015Students";
 import { handleImgError } from "../utils/imageFallback";
 import Batch2014NameAquarium from "./Batch2014NameAquarium";
 import "./Alumni.css";
 
 /**
- * 2014 batch at /batch-students — same card grid pattern as Alumni (static data).
+ * 2015 batch at /batch-2015-students — same layout pattern as 2013 / 2014 batch pages.
  */
-export default function BatchStudentsPage({ onLogout }) {
+export default function Batch2015StudentsPage({ onLogout }) {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -74,7 +74,6 @@ export default function BatchStudentsPage({ onLogout }) {
           padding-right: clamp(6px, 2.5vw, 14px);
           box-sizing: border-box;
         }
-        /* Global .section-title uses a large min size — here we scale so the line fits typical phone widths */
         .batch-2014-page .section-title {
           margin: 0 auto 8px;
           max-width: min(100%, 20.5rem);
@@ -91,26 +90,69 @@ export default function BatchStudentsPage({ onLogout }) {
         .batch-2014-page .alumni-grid {
           margin-top: 0;
         }
+        /* 2015 only: slightly wider column + a bit more vertical room; mobile-safe (safe-area, dvh) */
+        .batch-2015-students-page.alumni-section.container {
+          padding-top: clamp(22px, 4.5vw, 28px);
+          padding-bottom: clamp(22px, 4.5vw, 28px);
+          padding-left: max(10px, env(safe-area-inset-left, 0px));
+          padding-right: max(10px, env(safe-area-inset-right, 0px));
+          box-sizing: border-box;
+        }
+        @media (max-width: 768px) {
+          .batch-2015-students-page.alumni-section.container {
+            padding-left: max(8px, env(safe-area-inset-left, 0px));
+            padding-right: max(8px, env(safe-area-inset-right, 0px));
+          }
+        }
+        @media (max-width: 480px) {
+          .batch-2015-students-page.alumni-section.container {
+            padding-left: max(6px, env(safe-area-inset-left, 0px));
+            padding-right: max(6px, env(safe-area-inset-right, 0px));
+          }
+        }
+        .batch-2015-students-page .batch-2014-top {
+          max-width: min(1320px, 100%);
+          padding-left: clamp(6px, 1.5vw, 14px);
+          padding-right: clamp(6px, 1.5vw, 14px);
+        }
+        .batch-2015-students-page .alumni-grid {
+          max-width: min(1320px, 100%);
+          padding-left: clamp(6px, 1.5vw, 14px);
+          padding-right: clamp(6px, 1.5vw, 14px);
+        }
+        .batch-2015-students-page .batch-2014-aquarium-root--large {
+          max-width: min(1320px, 100%);
+        }
+        .batch-2015-students-page .batch-2014-aquarium--large {
+          height: clamp(400px, 62vh, 680px);
+          max-height: min(680px, 80vh);
+        }
+        @supports (height: 1dvh) {
+          .batch-2015-students-page .batch-2014-aquarium--large {
+            height: clamp(400px, 62dvh, 680px);
+            max-height: min(680px, 80dvh);
+          }
+        }
       `}</style>
       <Navbar onNavigate={handleNavigate} onLogout={onLogout} />
       <main className="page-section batch-students-page-main">
         <AnimatedSection>
-          <div className="alumni-section container batch-2014-page">
+          <div className="alumni-section container batch-2014-page batch-2015-students-page">
             <div className="batch-2014-top">
               <Link to="/batches" className="batch-2014-back">
                 ← Batches
               </Link>
             </div>
             <div className="section-title-wrap">
-              <h2 className="section-title">2014 batch students</h2>
+              <h2 className="section-title">2015 batch students</h2>
               <div className="section-title-accent" aria-hidden="true" />
             </div>
 
             <div className="alumni-grid">
-              {BATCH_2014_STUDENTS.map((s, i) => (
+              {BATCH_2015_STUDENTS.map((s, i) => (
                 <Link
                   key={s.name}
-                  to={`/batch-students/${batch2014Slug(s.name)}`}
+                  to={`/batch-2015-students/${batch2015Slug(s.name)}`}
                   className="alumni-item glass-card reveal-card"
                   aria-label={`Open profile for ${s.name}`}
                   style={{ animationDelay: `${i * 40}ms` }}
@@ -132,8 +174,9 @@ export default function BatchStudentsPage({ onLogout }) {
             </div>
 
             <Batch2014NameAquarium
-              names={BATCH_2014_CLASS_NAMES}
-              aquariumAriaLabel="Animated aquarium of 2014 batch names"
+              names={BATCH_2015_CLASS_NAMES}
+              aquariumAriaLabel="Animated aquarium of 2015 batch names"
+              aquariumSize="large"
             />
           </div>
         </AnimatedSection>

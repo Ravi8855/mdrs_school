@@ -1,5 +1,6 @@
 import React from "react";
 import desaiImg from "../assets/desai.jpg";
+import { handleImgError, publicAssetUrl } from "../utils/imageFallback";
 
 const SchoolHome = () => {
   return (
@@ -200,10 +201,11 @@ const SchoolHome = () => {
       <div className="home-hero__media" aria-hidden="true">
         <img
           className="home-hero__bg-img"
-          src="/gallery/img12.jpg"
+          src={publicAssetUrl("gallery/m12.jpg")}
           alt=""
           decoding="async"
           fetchPriority="high"
+          onError={handleImgError}
         />
       </div>
 
@@ -214,8 +216,14 @@ const SchoolHome = () => {
               src={desaiImg}
               alt="Morarji Desai"
               className="desai-image"
+              onError={handleImgError}
             />
           </div>
+          <img
+            src={publicAssetUrl("gallery/img11.jpg")}
+            alt="school additional"
+            style={{ width: "100%", height: "auto", marginTop: "10px" }}
+          />
           <h1 className="school-name hero-title">
             MORARJI DESAI RESIDENTIAL SCHOOL
           </h1>

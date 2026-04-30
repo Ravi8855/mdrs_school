@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useLayoutEffect, useCallback, useMemo } from "react";
 
 import { createPortal } from "react-dom";
 
@@ -6,9 +6,13 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 import "./MeetStudentsGalleryPage.css";
 
+import { handleImgError, publicAssetUrl } from "../utils/imageFallback";
 
 
-const M_GALLERY_IMAGES = Array.from({ length: 12 }, (_, i) => `/gallery/m${i + 1}.jpg`);
+
+const M_GALLERY_IMAGES = Array.from({ length: 12 }, (_, i) =>
+  publicAssetUrl(`gallery/m${i + 1}.jpg`)
+);
 
 const GALLERY_LEN = M_GALLERY_IMAGES.length;
 
@@ -128,7 +132,57 @@ export default function MeetStudentsGalleryPage() {
 
   }, []);
 
+  /** Cached / bfcache images often skip `onLoad` while CSS keeps opacity at 0 — sweep after paint. */
+  const sweepThumbsFromDom = useCallback(() => {
+    if (typeof document === "undefined") return;
+    const nodes = document.querySelectorAll("img.meet-students-gallery__thumb");
+    nodes.forEach((el, i) => {
+      if (el.complete && el.naturalWidth > 0) markThumbLoaded(i);
+    });
+  }, [markThumbLoaded]);
 
+  useLayoutEffect(() => {
+    let cancelled = false;
+    const run = () => {
+      if (!cancelled) sweepThumbsFromDom();
+    };
+    run();
+    let innerRaf = 0;
+    const outerRaf = requestAnimationFrame(() => {
+      run();
+      innerRaf = requestAnimationFrame(run);
+    });
+    const t = window.setTimeout(run, 120);
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(outerRaf);
+      if (innerRaf) cancelAnimationFrame(innerRaf);
+      window.clearTimeout(t);
+    };
+  }, [sweepThumbsFromDom]);
+
+  useEffect(() => {
+    const onVis = () => {
+      if (document.visibilityState === "visible") sweepThumbsFromDom();
+    };
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, [sweepThumbsFromDom]);
+
+  /** After closing the viewer, thumbs can need another pass (WebView / focus changes). */
+  useLayoutEffect(() => {
+    if (selectedImage != null) return;
+    sweepThumbsFromDom();
+  }, [selectedImage, sweepThumbsFromDom]);
+
+  /** bfcache restore: WebKit often skips `load` / leaves opacity gate stuck — sweep again. */
+  useEffect(() => {
+    const onPageShow = (ev) => {
+      if (ev.persisted) sweepThumbsFromDom();
+    };
+    window.addEventListener("pageshow", onPageShow);
+    return () => window.removeEventListener("pageshow", onPageShow);
+  }, [sweepThumbsFromDom]);
 
   /** Cached images are often complete before `onLoad` runs; still reveal the thumb. */
 
@@ -138,8 +192,28 @@ export default function MeetStudentsGalleryPage() {
 
       if (!img || typeof index !== "number") return;
 
-      if (img.complete && img.naturalWidth > 0) markThumbLoaded(index);
+      let alive = true;
+      const markIfReady = () => {
+        if (!alive) return;
+        if (img.complete && img.naturalWidth > 0) markThumbLoaded(index);
+      };
 
+      markIfReady();
+      const raf1 = requestAnimationFrame(markIfReady);
+      let rafInner = 0;
+      const raf2 = requestAnimationFrame(() => {
+        rafInner = requestAnimationFrame(markIfReady);
+      });
+      const t = window.setTimeout(markIfReady, 160);
+      img.addEventListener("load", markIfReady);
+      return () => {
+        alive = false;
+        cancelAnimationFrame(raf1);
+        cancelAnimationFrame(raf2);
+        if (rafInner) cancelAnimationFrame(rafInner);
+        window.clearTimeout(t);
+        img.removeEventListener("load", markIfReady);
+      };
     },
 
     [markThumbLoaded]
@@ -200,17 +274,25 @@ export default function MeetStudentsGalleryPage() {
 
                   alt=""
 
-                  loading="lazy"
-
                   decoding="async"
 
+                  loading="eager"
+
                   draggable={false}
+
+                  fetchPriority={i < 4 ? "high" : "auto"}
 
                   className={`meet-students-gallery__thumb${thumbLoaded.has(i) ? " meet-students-gallery__thumb--loaded" : ""}`}
 
                   onLoad={() => markThumbLoaded(i)}
 
-                  onError={() => markThumbLoaded(i)}
+                  onError={(e) => {
+
+                    handleImgError(e);
+
+                    markThumbLoaded(i);
+
+                  }}
 
                 />
 
@@ -316,6 +398,8 @@ export default function MeetStudentsGalleryPage() {
 
                     <img
 
+                      key={selectedImage}
+
                       src={selectedImage}
 
                       alt=""
@@ -323,6 +407,12 @@ export default function MeetStudentsGalleryPage() {
                       className="meet-viewer__img"
 
                       draggable={false}
+
+                      decoding="async"
+
+                      loading="eager"
+
+                      onError={handleImgError}
 
                     />
 

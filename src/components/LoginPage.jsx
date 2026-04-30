@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { FaArrowLeft, FaEye, FaEyeSlash } from "react-icons/fa";
 import "./Login.css";
 import { setProfileKeyFromLogin } from "../lib/profileSession";
+import desaiLogo from "../assets/desai.jpg";
+import { handleImgError } from "../utils/imageFallback";
 
 const POPUP_DURATION = 3500;
 const SUCCESS_NAV_DELAY_MS = 2800;
@@ -130,7 +132,7 @@ const LoginPage = ({ onLogin }) => {
           <div className="login-card-inner">
             <div className="login-header">
               <div className="login-logo">
-                <img src="/gallery/desai.jpg" alt="MDRS School" className="login-logo-img" />
+                <img src={desaiLogo} alt="MDRS School" className="login-logo-img" onError={handleImgError} />
               </div>
               <h1 className="login-title">MDRS School</h1>
             </div>

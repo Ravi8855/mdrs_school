@@ -12,7 +12,17 @@ import "./BottomNav.css";
 function tabForPath(pathname) {
   if (pathname === "/people") return "people";
 
-  if (pathname === "/batches" || pathname === "/batch-students" || pathname.startsWith("/batch-students/")) {
+  if (
+    pathname === "/batches" ||
+    pathname === "/batch-students" ||
+    pathname.startsWith("/batch-students/") ||
+    pathname === "/batch-2013-students" ||
+    pathname.startsWith("/batch-2013-students/") ||
+    pathname === "/batch-2015-students" ||
+    pathname.startsWith("/batch-2015-students/") ||
+    pathname === "/batch-2016-students" ||
+    pathname.startsWith("/batch-2016-students/")
+  ) {
     return "batches";
   }
 

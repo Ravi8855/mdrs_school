@@ -1,5 +1,3 @@
-import kiranPhoto from "../assets/Kiran.jpg";
-
 /** URL slug from display name (same rules as alumni list). */
 export function batch2014Slug(name) {
   return String(name)
@@ -20,13 +18,31 @@ export function getBatch2014BySlug(slug) {
  * @typedef {{ name: string, qualification: string, location: string, image: string, collegeUniversity?: string }} Batch2014Student
  * @type {Batch2014Student[]}
  */
-export const BATCH_2014_STUDENTS = [
-  {
-    name: "Kiran",
-    qualification: "Bsc",
-    collegeUniversity: " Prakash C N  college vijayapur",
-    location: "Bangalore",
-    image: kiranPhoto,
-  },
- 
+export const BATCH_2014_STUDENTS = [];
+
+/** Display-only class list (no profile cards). */
+export const BATCH_2014_CLASS_NAMES = [
+  "Gyanappa",
+  "Revansiddappa",
+  "Prakash",
+  "Ramesh",
+  "Mahesh",
+  "Kiran",
+  "Ashok",
+  "Jattappa",
+  "Arun",
+  "Sanjay",
+  "Devaraj",
+  "Venugopal",
+  "Kaif",
+  "Musthafa",
+  "Rahul",
+  "Kaveri",
+  "Laxmi",
+  "Radhika",
+  "Sangita",
+  "Bhagyashree",
+  "Sakareppa",
+  "Hulagappa",
+  "Aishwarya",
 ];

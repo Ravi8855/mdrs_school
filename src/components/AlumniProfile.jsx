@@ -8,6 +8,7 @@ import {
 } from "../data/alumniData";
 import { getSupabaseClient } from "../lib/supabaseClient";
 import { fetchAllProfiles, isSupabaseConfigured } from "../lib/profilesSupabase";
+import { handleImgError } from "../utils/imageFallback";
 import "./Alumni.css";
 
 export default function AlumniProfile() {
@@ -111,7 +112,7 @@ export default function AlumniProfile() {
                 onClick={() => setLightbox({ src: img, name: displayName })}
                 aria-label={`View larger photo of ${displayName}`}
               >
-                <img src={img} alt="" className="alumni-profile-avatar" />
+                <img src={img} alt="" className="alumni-profile-avatar" decoding="async" onError={handleImgError} />
               </button>
             </div>
           </div>
@@ -149,7 +150,7 @@ export default function AlumniProfile() {
             ✕
           </button>
           <div className="alumni-fullscreen-square" onClick={(e) => e.stopPropagation()}>
-            <img src={lightbox.src} alt={lightbox.name} />
+            <img src={lightbox.src} alt={lightbox.name} decoding="async" onError={handleImgError} />
           </div>
         </div>
       )}

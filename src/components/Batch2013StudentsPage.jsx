@@ -3,18 +3,18 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import AnimatedSection from "./AnimatedSection";
 import {
-  BATCH_2014_STUDENTS,
-  BATCH_2014_CLASS_NAMES,
-  batch2014Slug,
-} from "../data/batch2014Students";
+  BATCH_2013_STUDENTS,
+  BATCH_2013_CLASS_NAMES,
+  batch2013Slug,
+} from "../data/batch2013Students";
 import { handleImgError } from "../utils/imageFallback";
 import Batch2014NameAquarium from "./Batch2014NameAquarium";
 import "./Alumni.css";
 
 /**
- * 2014 batch at /batch-students — same card grid pattern as Alumni (static data).
+ * 2013 batch at /batch-2013-students — same layout pattern as 2014 batch page.
  */
-export default function BatchStudentsPage({ onLogout }) {
+export default function Batch2013StudentsPage({ onLogout }) {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -74,7 +74,6 @@ export default function BatchStudentsPage({ onLogout }) {
           padding-right: clamp(6px, 2.5vw, 14px);
           box-sizing: border-box;
         }
-        /* Global .section-title uses a large min size — here we scale so the line fits typical phone widths */
         .batch-2014-page .section-title {
           margin: 0 auto 8px;
           max-width: min(100%, 20.5rem);
@@ -102,15 +101,15 @@ export default function BatchStudentsPage({ onLogout }) {
               </Link>
             </div>
             <div className="section-title-wrap">
-              <h2 className="section-title">2014 batch students</h2>
+              <h2 className="section-title">2013 batch students</h2>
               <div className="section-title-accent" aria-hidden="true" />
             </div>
 
             <div className="alumni-grid">
-              {BATCH_2014_STUDENTS.map((s, i) => (
+              {BATCH_2013_STUDENTS.map((s, i) => (
                 <Link
                   key={s.name}
-                  to={`/batch-students/${batch2014Slug(s.name)}`}
+                  to={`/batch-2013-students/${batch2013Slug(s.name)}`}
                   className="alumni-item glass-card reveal-card"
                   aria-label={`Open profile for ${s.name}`}
                   style={{ animationDelay: `${i * 40}ms` }}
@@ -132,8 +131,8 @@ export default function BatchStudentsPage({ onLogout }) {
             </div>
 
             <Batch2014NameAquarium
-              names={BATCH_2014_CLASS_NAMES}
-              aquariumAriaLabel="Animated aquarium of 2014 batch names"
+              names={BATCH_2013_CLASS_NAMES}
+              aquariumAriaLabel="Animated aquarium of 2013 batch names"
             />
           </div>
         </AnimatedSection>
