@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import AnimatedSection from "./AnimatedSection";
@@ -17,6 +17,7 @@ import "./Alumni.css";
 export default function BatchStudentsPage({ onLogout }) {
   const location = useLocation();
   const navigate = useNavigate();
+  const [lightboxSrc, setLightboxSrc] = useState(null);
 
   const handleNavigate = (target) => {
     const scrollToTarget = () => {
@@ -91,6 +92,92 @@ export default function BatchStudentsPage({ onLogout }) {
         .batch-2014-page .alumni-grid {
           margin-top: 0;
         }
+        .batch-page-gallery-extra {
+          width: 100%;
+          max-width: 1200px;
+          margin: clamp(1rem, 3vw, 1.75rem) auto 0;
+          padding: 0 clamp(8px, 2vw, 16px);
+          box-sizing: border-box;
+        }
+        .batch-page-gallery-extra__thumbs {
+          display: flex;
+          flex-wrap: wrap;
+          gap: clamp(10px, 2vw, 16px);
+          justify-content: center;
+        }
+        .batch-page-gallery-extra__thumb {
+          margin: 0;
+          padding: 0;
+          border: none;
+          background: transparent;
+          cursor: pointer;
+          border-radius: 12px;
+          overflow: hidden;
+          box-shadow: 0 4px 20px rgba(15, 23, 42, 0.12);
+          max-width: min(100%, 420px);
+        }
+        .batch-page-gallery-extra__thumb:focus-visible {
+          outline: 2px solid #3b82f6;
+          outline-offset: 2px;
+        }
+        .batch-page-gallery-extra__thumb img {
+          display: block;
+          width: 100%;
+          height: auto;
+          vertical-align: middle;
+        }
+        .batch-gallery-lightbox {
+          position: fixed;
+          inset: 0;
+          z-index: 1100;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right))
+            max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+          box-sizing: border-box;
+        }
+        .batch-gallery-lightbox__backdrop {
+          position: absolute;
+          inset: 0;
+          background: rgba(15, 23, 42, 0.72);
+        }
+        .batch-gallery-lightbox__panel {
+          position: relative;
+          z-index: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 14px;
+          max-width: min(96vw, 920px);
+          max-height: 100%;
+        }
+        .batch-gallery-lightbox__panel img {
+          max-width: 100%;
+          max-height: min(78vh, 860px);
+          width: auto;
+          height: auto;
+          object-fit: contain;
+          border-radius: 8px;
+        }
+        .batch-gallery-lightbox__cancel {
+          flex-shrink: 0;
+          padding: 10px 22px;
+          font-size: 0.95rem;
+          font-weight: 600;
+          font-family: var(--font-body, "Poppins", sans-serif);
+          color: #f8fafc;
+          background: #334155;
+          border: none;
+          border-radius: 10px;
+          cursor: pointer;
+        }
+        .batch-gallery-lightbox__cancel:hover {
+          background: #475569;
+        }
+        .batch-gallery-lightbox__cancel:active {
+          transform: scale(0.98);
+        }
       `}</style>
       <Navbar onNavigate={handleNavigate} onLogout={onLogout} />
       <main className="page-section batch-students-page-main">
@@ -136,6 +223,31 @@ export default function BatchStudentsPage({ onLogout }) {
               aquariumAriaLabel="Animated aquarium of 2014 batch names"
             />
           </div>
+
+          <div className="batch-page-gallery-extra">
+            <div className="batch-page-gallery-extra__thumbs">
+              <button
+                type="button"
+                className="batch-page-gallery-extra__thumb"
+                onClick={() => setLightboxSrc("/gallery/m7.jpg")}
+                aria-label="Open gallery image larger"
+              >
+                <img src="/gallery/m7.jpg" alt="2014 batch gallery" decoding="async" onError={handleImgError} />
+              </button>
+            </div>
+          </div>
+
+          {lightboxSrc ? (
+            <div className="batch-gallery-lightbox" role="dialog" aria-modal="true" aria-label="Gallery image">
+              <div className="batch-gallery-lightbox__backdrop" aria-hidden="true" />
+              <div className="batch-gallery-lightbox__panel">
+                <img src={lightboxSrc} alt="" decoding="async" />
+                <button type="button" className="batch-gallery-lightbox__cancel" onClick={() => setLightboxSrc(null)}>
+                  Cancel
+                </button>
+              </div>
+            </div>
+          ) : null}
         </AnimatedSection>
       </main>
     </div>
