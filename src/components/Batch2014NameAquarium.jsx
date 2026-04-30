@@ -4,7 +4,8 @@ import { BATCH_2014_CLASS_NAMES } from "../data/batch2014Students";
 /** Cap for perf on low-end devices */
 const MAX_NAMES = 48;
 
-const SHUFFLE_MS = 920;
+/** “Click Me” reshuffle duration — slightly longer = calmer flight (all batch pages). */
+const SHUFFLE_MS = 1040;
 const EPS = 0.5;
 
 /** Smooth deceleration for shuffle flight */
@@ -49,9 +50,9 @@ function bubbleStyle(i, n) {
   };
 }
 
-/** Visible speeds: ~72–165 px/s (~1.2–2.75 px/frame at 60fps) */
+/** Cruise speeds — a bit slower than before for calmer, still lively motion (~58–132 px/s). */
 function randSpeed() {
-  const pxPerSec = 72 + Math.random() * 93;
+  const pxPerSec = 58 + Math.random() * 74;
   const th = Math.random() * Math.PI * 2;
   return { vx: Math.cos(th) * pxPerSec, vy: Math.sin(th) * pxPerSec };
 }
@@ -443,7 +444,7 @@ export default function Batch2014NameAquarium({
             radial-gradient(ellipse 70% 55% at 22% 28%, rgba(255, 255, 255, 0.42), transparent 58%),
             radial-gradient(ellipse 60% 50% at 78% 72%, rgba(255, 255, 255, 0.22), transparent 52%),
             radial-gradient(ellipse 45% 40% at 50% 50%, rgba(165, 243, 252, 0.35), transparent 65%);
-          animation: batch-2014-aquarium-drift 16s ease-in-out infinite alternate;
+          animation: batch-2014-aquarium-drift 20s ease-in-out infinite alternate;
         }
         @keyframes batch-2014-aquarium-drift {
           0% {
