@@ -39,4 +39,6 @@ export const BATCH_2013_CLASS_NAMES = [
   "Praveen",
   "Bhojappa",
   "Arun Chawan",
+  "Chandrashekar",
+  "Bhagesh",
 ];

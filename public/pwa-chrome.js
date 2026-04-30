@@ -219,12 +219,17 @@
   function initUpdate() {
     if (!('serviceWorker' in navigator)) return
 
-    var refreshLock = false
-    navigator.serviceWorker.addEventListener('controllerchange', function () {
-      if (refreshLock) return
-      refreshLock = true
+    var reloadOnceLock = false
+    function reloadOnce() {
+      if (reloadOnceLock) return
+      reloadOnceLock = true
       window.location.reload()
-    })
+    }
+    navigator.serviceWorker.addEventListener('controllerchange', reloadOnce)
+
+    function triggerReload() {
+      setTimeout(reloadOnce, 2000)
+    }
 
     document.addEventListener('visibilitychange', function () {
       if (document.visibilityState !== 'visible') return
@@ -243,6 +248,7 @@
     var updateAutoTimer = null
     var updateCountdownTimer = null
     var updateDefaultMsg = ''
+    var waitingWorker = null
 
     function getUpdateMsgEl() {
       return toast.querySelector('.pwa-update-toast__msg')
@@ -280,21 +286,10 @@
         '…'
     }
 
-    function registerReloadFallback() {
-      var done = false
-      function reloadOnce() {
-        if (done) return
-        done = true
-        window.location.reload()
-      }
-      navigator.serviceWorker.addEventListener('controllerchange', reloadOnce)
-      setTimeout(reloadOnce, 2000)
-    }
-
-    function scheduleAutoUpdate(reg) {
+    function scheduleAutoUpdate() {
       clearUpdateAutoTimers()
       if (updateTriggered) return
-      if (!reg || !reg.waiting) return
+      if (!waitingWorker) return
       try {
         if (sessionStorage.getItem(UPDATE_DISMISS_SESSION) === '1') return
       } catch (e) {}
@@ -302,7 +297,7 @@
       var msgEl = getUpdateMsgEl()
       if (msgEl && !updateDefaultMsg) updateDefaultMsg = msgEl.textContent || ''
 
-      var totalSec = 6
+      var totalSec = 5
       var remaining = totalSec
       setUpdateCountdownLabel(remaining)
 
@@ -324,15 +319,18 @@
           updateCountdownTimer = null
         }
         if (updateTriggered) return
-        if (!reg.waiting) return
+        if (!waitingWorker) return
         try {
           if (sessionStorage.getItem(UPDATE_DISMISS_SESSION) === '1') return
         } catch (e) {}
 
-        updateTriggered = true
-        if (reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' })
-        registerReloadFallback()
-      }, totalSec * 1000)
+        if (!updateTriggered && waitingWorker) {
+          updateTriggered = true
+          console.log('Auto update triggered')
+          waitingWorker.postMessage({ type: 'SKIP_WAITING' })
+          triggerReload()
+        }
+      }, 5000)
     }
 
     function hideUpdate() {
@@ -357,18 +355,18 @@
       }, 400)
     }
 
-    function wire(reg) {
+    function wire() {
       if (bound) return
       bound = true
       btn.addEventListener('click', function () {
         if (updateTriggered) return
         clearUpdateAutoTimers()
         restoreUpdateToastMessage()
-        if (!reg.waiting) return
+        if (!waitingWorker) return
         updateTriggered = true
         triggerHaptic()
-        reg.waiting.postMessage({ type: 'SKIP_WAITING' })
-        registerReloadFallback()
+        waitingWorker.postMessage({ type: 'SKIP_WAITING' })
+        triggerReload()
       })
     }
 
@@ -387,9 +385,12 @@
         if (sessionStorage.getItem(UPDATE_DISMISS_SESSION) === '1') return
       } catch (e) {}
       if (updateTriggered) return
+      waitingWorker = reg.waiting
+      console.log('Update detected')
+      console.log('Waiting worker:', waitingWorker)
       showUpdate()
-      wire(reg)
-      scheduleAutoUpdate(reg)
+      wire()
+      scheduleAutoUpdate()
     }
 
     function attach(reg) {
@@ -399,7 +400,12 @@
         var iw = reg.installing
         if (!iw) return
         iw.addEventListener('statechange', function () {
-          if (iw.state === 'installed') onWaiting(reg)
+          if (iw.state !== 'installed') return
+          if (reg.waiting) {
+            waitingWorker = reg.waiting
+            console.log('Waiting worker:', waitingWorker)
+          }
+          onWaiting(reg)
         })
       })
     }

@@ -47,12 +47,16 @@ export default function BatchStudentsPage({ onLogout }) {
           display: flex;
           flex-direction: column;
           align-items: stretch;
+          max-width: min(100%, 1536px);
+          width: 100%;
+          margin-left: auto;
+          margin-right: auto;
         }
         .batch-2014-top {
           width: 100%;
-          max-width: 1200px;
+          max-width: 1536px;
           margin: 0 auto;
-          padding: 0 clamp(8px, 2vw, 16px);
+          padding: 0 clamp(8px, 2vw, 24px);
           box-sizing: border-box;
         }
         .batch-2014-back {
@@ -92,18 +96,172 @@ export default function BatchStudentsPage({ onLogout }) {
         .batch-2014-page .alumni-grid {
           margin-top: 0;
         }
+        /* Wider / taller student grid + name block on 2014 batch page only */
+        .batch-2014-page .batch-2014-student-names {
+          max-width: min(100%, 1536px);
+          width: 100%;
+          gap: clamp(16px, 3.2vw, 28px);
+          padding-left: clamp(12px, 2.8vw, 28px);
+          padding-right: clamp(12px, 2.8vw, 28px);
+        }
+        .batch-2014-page .batch-2014-student-names a.alumni-item {
+          padding: 26px 20px;
+        }
+        .batch-2014-page .batch-2014-student-names .alumni-meta {
+          width: 100%;
+          min-height: 4.85rem;
+          padding: 12px 10px 10px;
+          box-sizing: border-box;
+        }
+        .batch-2014-page .batch-2014-aquarium-root {
+          max-width: min(100%, 1536px);
+        }
+        .batch-2014-page .batch-2014-aquarium {
+          height: clamp(312px, 44vh, 480px);
+          max-height: min(480px, 60vh);
+        }
+        @supports (height: 1dvh) {
+          .batch-2014-page .batch-2014-aquarium {
+            max-height: min(480px, 60dvh);
+          }
+        }
+        /* Tablet / phone: use width for content, safe areas for notches (PWA-friendly) */
+        @media (max-width: 900px) {
+          .batch-2014-page.alumni-section.container {
+            padding-left: max(10px, env(safe-area-inset-left, 0px));
+            padding-right: max(10px, env(safe-area-inset-right, 0px));
+          }
+          .batch-2014-page .batch-2014-student-names {
+            padding-left: max(4px, env(safe-area-inset-left, 0px));
+            padding-right: max(4px, env(safe-area-inset-right, 0px));
+          }
+          .batch-2014-page .batch-2014-aquarium-root {
+            padding-left: max(4px, env(safe-area-inset-left, 0px));
+            padding-right: max(4px, env(safe-area-inset-right, 0px));
+          }
+          .batch-page-gallery-extra {
+            padding-left: max(8px, env(safe-area-inset-left, 0px));
+            padding-right: max(8px, env(safe-area-inset-right, 0px));
+          }
+        }
+        /* Mobile: larger vertical rhythm + taller hero blocks */
+        @media (max-width: 768px) {
+          .batch-students-page-main {
+            padding-top: max(1rem, env(safe-area-inset-top, 0px));
+            padding-bottom: max(2.35rem, calc(env(safe-area-inset-bottom, 0px) + 1.5rem));
+          }
+          .batch-2014-page.alumni-section.container {
+            padding-top: clamp(26px, 6.5vw, 40px);
+            padding-bottom: clamp(28px, 7vw, 44px);
+          }
+          .batch-2014-top {
+            padding-top: 4px;
+            padding-bottom: 8px;
+          }
+          .batch-2014-back {
+            margin-bottom: clamp(16px, 4vw, 22px);
+            padding: 8px 0;
+            min-height: 44px;
+            box-sizing: border-box;
+          }
+          .batch-2014-page .section-title-wrap {
+            margin-bottom: clamp(22px, 5vw, 32px);
+            padding-top: 6px;
+          }
+          .batch-2014-page .section-title {
+            margin-bottom: clamp(12px, 3vw, 16px);
+          }
+          .batch-2014-page .batch-2014-student-names {
+            max-width: 100%;
+            row-gap: clamp(20px, 5vw, 30px);
+            column-gap: clamp(12px, 3.2vw, 16px);
+            padding-top: 6px;
+            padding-bottom: 12px;
+          }
+          .batch-2014-page .batch-2014-student-names a.alumni-item {
+            padding: 28px 16px;
+            border-radius: 16px;
+          }
+          .batch-2014-page .batch-2014-student-names .alumni-thumb-wrap {
+            width: clamp(72px, 32vw, 96px);
+            height: clamp(72px, 32vw, 96px);
+          }
+          .batch-2014-page .batch-2014-student-names .alumni-meta {
+            min-height: 5rem;
+            padding: 14px 10px 12px;
+          }
+          .batch-2014-page .batch-2014-aquarium-root {
+            margin-top: clamp(28px, 7vw, 42px);
+            margin-bottom: 8px;
+          }
+          .batch-2014-page .batch-2014-aquarium {
+            height: clamp(328px, 52vh, 580px);
+            max-height: min(580px, 68vh);
+            border-radius: 22px;
+          }
+          @supports (height: 1dvh) {
+            .batch-2014-page .batch-2014-aquarium {
+              height: clamp(328px, 52dvh, 580px);
+              max-height: min(580px, 68dvh);
+            }
+          }
+          .batch-page-gallery-extra {
+            margin-top: clamp(1.5rem, 5vw, 2.35rem);
+            padding-bottom: max(14px, env(safe-area-inset-bottom, 0px));
+          }
+          .batch-page-gallery-extra__thumb {
+            max-width: 100%;
+          }
+        }
+        @media (max-width: 480px) {
+          .batch-students-page-main {
+            padding-bottom: max(2.5rem, calc(env(safe-area-inset-bottom, 0px) + 1.65rem));
+          }
+          .batch-2014-page.alumni-section.container {
+            padding-top: clamp(24px, 6vw, 34px);
+            padding-bottom: clamp(26px, 6.5vw, 38px);
+          }
+          .batch-2014-page .batch-2014-student-names {
+            row-gap: clamp(18px, 4.8vw, 26px);
+            column-gap: clamp(10px, 2.8vw, 14px);
+          }
+          .batch-2014-page .batch-2014-student-names a.alumni-item {
+            padding: 26px 14px;
+          }
+          .batch-2014-page .batch-2014-student-names .alumni-meta {
+            min-height: 4.75rem;
+            padding: 12px 8px 10px;
+          }
+          .batch-2014-page .batch-2014-student-names .alumni-thumb-wrap {
+            width: clamp(68px, 30vw, 92px);
+            height: clamp(68px, 30vw, 92px);
+          }
+          .batch-2014-page .batch-2014-aquarium {
+            height: clamp(308px, 54vh, 560px);
+            max-height: min(560px, 72vh);
+          }
+          @supports (height: 1dvh) {
+            .batch-2014-page .batch-2014-aquarium {
+              height: clamp(308px, 54dvh, 560px);
+              max-height: min(560px, 72dvh);
+            }
+          }
+        }
         .batch-page-gallery-extra {
           width: 100%;
-          max-width: 1200px;
+          max-width: 1536px;
           margin: clamp(1rem, 3vw, 1.75rem) auto 0;
           padding: 0 clamp(8px, 2vw, 16px);
           box-sizing: border-box;
         }
         .batch-page-gallery-extra__thumbs {
-          display: flex;
-          flex-wrap: wrap;
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
           gap: clamp(10px, 2vw, 16px);
-          justify-content: center;
+          width: 100%;
+          max-width: min(100%, 1536px);
+          margin: 0 auto;
+          box-sizing: border-box;
         }
         .batch-page-gallery-extra__thumb {
           margin: 0;
@@ -114,7 +272,8 @@ export default function BatchStudentsPage({ onLogout }) {
           border-radius: 12px;
           overflow: hidden;
           box-shadow: 0 4px 20px rgba(15, 23, 42, 0.12);
-          max-width: min(100%, 420px);
+          max-width: 100%;
+          min-width: 0;
         }
         .batch-page-gallery-extra__thumb:focus-visible {
           outline: 2px solid #3b82f6;
@@ -193,7 +352,7 @@ export default function BatchStudentsPage({ onLogout }) {
               <div className="section-title-accent" aria-hidden="true" />
             </div>
 
-            <div className="alumni-grid">
+            <div className="alumni-grid batch-2014-student-names">
               {BATCH_2014_STUDENTS.map((s, i) => (
                 <Link
                   key={s.name}
@@ -233,6 +392,14 @@ export default function BatchStudentsPage({ onLogout }) {
                 aria-label="Open gallery image larger"
               >
                 <img src="/gallery/m7.jpg" alt="2014 batch gallery" decoding="async" onError={handleImgError} />
+              </button>
+              <button
+                type="button"
+                className="batch-page-gallery-extra__thumb"
+                onClick={() => setLightboxSrc("/gallery/img17.jpg")}
+                aria-label="Open gallery image img17 larger"
+              >
+                <img src="/gallery/img17.jpg" alt="2014 batch gallery photo 2" decoding="async" onError={handleImgError} />
               </button>
             </div>
           </div>

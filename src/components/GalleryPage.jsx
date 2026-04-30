@@ -1,12 +1,29 @@
 import React, { useState } from 'react';
 import { handleImgError, publicAssetUrl } from '../utils/imageFallback';
 
-/** Paths under `public/gallery/` that exist in the repo (avoids 404 storms in WebView / PWA). */
+/** Paths under `public/gallery/` (avoids 404 storms in WebView / PWA). */
 const GalleryPage = () => {
     const images = [
-        ...Array.from({ length: 12 }, (_, i) => publicAssetUrl(`gallery/m${i + 1}.jpg`)),
-        ...Array.from({ length: 7 }, (_, i) => publicAssetUrl(`gallery/s${i + 1}.jpg`)),
+        publicAssetUrl('gallery/00.jpg'),
+        publicAssetUrl('gallery/2.jpg'),
+        publicAssetUrl('gallery/21.jpg'),
+        publicAssetUrl('gallery/22.jpg'),
+        publicAssetUrl('gallery/23.jpg'),
+        publicAssetUrl('gallery/33.jpg'),
+        publicAssetUrl('gallery/78.jpg'),
+        publicAssetUrl('gallery/99.jpg'),
+        publicAssetUrl('gallery/friends.jpg'),
         publicAssetUrl('gallery/image.jpg'),
+        publicAssetUrl('gallery/img1.jpg'),
+        publicAssetUrl('gallery/img2.jpg'),
+        publicAssetUrl('gallery/img3.jpg'),
+        publicAssetUrl('gallery/img4.jpg'),
+        publicAssetUrl('gallery/img6.jpg'),
+        publicAssetUrl('gallery/img9.jpg'),
+        publicAssetUrl('gallery/img10.jpg'),
+        publicAssetUrl('gallery/img11.jpg'),
+        publicAssetUrl('gallery/img12.jpg'),
+        publicAssetUrl('gallery/img13.jpg'),
     ];
 
     const [selectedImage, setSelectedImage] = useState(null);

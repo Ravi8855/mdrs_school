@@ -99,10 +99,15 @@ export default function Batch2013StudentsPage({ onLogout }) {
           box-sizing: border-box;
         }
         .batch-page-gallery-extra__thumbs {
-          display: flex;
-          flex-wrap: wrap;
-          gap: clamp(10px, 2vw, 16px);
-          justify-content: center;
+          --batch-gallery-gap: clamp(10px, 2vw, 16px);
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: var(--batch-gallery-gap);
+          width: 100%;
+          max-width: min(100%, 1200px);
+          margin: 0 auto;
+          box-sizing: border-box;
+          align-items: stretch;
         }
         .batch-page-gallery-extra__thumb {
           margin: 0;
@@ -113,7 +118,17 @@ export default function Batch2013StudentsPage({ onLogout }) {
           border-radius: 12px;
           overflow: hidden;
           box-shadow: 0 4px 20px rgba(15, 23, 42, 0.12);
-          max-width: min(100%, 420px);
+          max-width: 100%;
+          min-width: 0;
+          width: 100%;
+          aspect-ratio: 1;
+          position: relative;
+        }
+        .batch-page-gallery-extra__thumb:last-child:nth-child(odd) {
+          grid-column: 1 / -1;
+          justify-self: center;
+          width: calc((100% - var(--batch-gallery-gap)) / 2);
+          max-width: calc((100% - var(--batch-gallery-gap)) / 2);
         }
         .batch-page-gallery-extra__thumb:focus-visible {
           outline: 2px solid #3b82f6;
@@ -122,7 +137,8 @@ export default function Batch2013StudentsPage({ onLogout }) {
         .batch-page-gallery-extra__thumb img {
           display: block;
           width: 100%;
-          height: auto;
+          height: 100%;
+          object-fit: cover;
           vertical-align: middle;
         }
         .batch-gallery-lightbox {
@@ -240,6 +256,14 @@ export default function Batch2013StudentsPage({ onLogout }) {
                 aria-label="Open gallery image m2 larger"
               >
                 <img src="/gallery/m2.jpg" alt="2013 batch gallery photo 2" decoding="async" onError={handleImgError} />
+              </button>
+              <button
+                type="button"
+                className="batch-page-gallery-extra__thumb"
+                onClick={() => setLightboxSrc("/gallery/img18.jpg")}
+                aria-label="Open gallery image img18 larger"
+              >
+                <img src="/gallery/img18.jpg" alt="2013 batch gallery photo 3" decoding="async" onError={handleImgError} />
               </button>
             </div>
           </div>
