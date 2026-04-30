@@ -27,7 +27,7 @@ export const BATCH_2014_CLASS_NAMES = [
   "Prakash",
   "Ramesh",
   "Mahesh",
-  "Kiran",
+  "Kiran Kumara",
   "Ashok",
   "Jattappa",
   "Arun",
@@ -45,4 +45,8 @@ export const BATCH_2014_CLASS_NAMES = [
   "Sakareppa",
   "Hulagappa",
   "Aishwarya",
+  "Sharanamma",
+  "Girija",
+  "Prashant Rathod",
+
 ];

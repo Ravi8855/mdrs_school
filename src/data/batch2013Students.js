@@ -23,13 +23,20 @@ export const BATCH_2013_STUDENTS = [];
 /** Names shown in the 2013 batch aquarium. */
 export const BATCH_2013_CLASS_NAMES = [
   "Ayyappa Swamy",
-  "Kiran",
+  "Karan",
   "Bhimashankar",
   "Prashant",
   "Shivakumar",
   "Siddaling",
   "Anand",
-  "Ashok",
+  "Ashok Rathod",
   "Mallikarjun",
+  "Praveen patil",
+  "Pavan",
+  "Mounesh",
+  "Ajay",
+  "Kodachi(Siddanna)",
   "Praveen",
+  "Bhojappa",
+  "Arun Chawan",
 ];

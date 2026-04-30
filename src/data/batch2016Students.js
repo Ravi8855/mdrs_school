@@ -32,4 +32,8 @@ export const BATCH_2016_CLASS_NAMES = [
   "Shweta",
   "Sangita",
   "kavya",
+  "mallappa.R",
+  "Sharanamma",
+  "Minakshi",
+  
 ];

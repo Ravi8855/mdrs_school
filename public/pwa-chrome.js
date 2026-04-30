@@ -239,8 +239,104 @@
     if (!toast || !btn) return
 
     var bound = false
+    var updateTriggered = false
+    var updateAutoTimer = null
+    var updateCountdownTimer = null
+    var updateDefaultMsg = ''
+
+    function getUpdateMsgEl() {
+      return toast.querySelector('.pwa-update-toast__msg')
+    }
+
+    function clearUpdateAutoTimers() {
+      if (updateAutoTimer) {
+        clearTimeout(updateAutoTimer)
+        updateAutoTimer = null
+      }
+      if (updateCountdownTimer) {
+        clearInterval(updateCountdownTimer)
+        updateCountdownTimer = null
+      }
+    }
+
+    function restoreUpdateToastMessage() {
+      var msgEl = getUpdateMsgEl()
+      if (msgEl && updateDefaultMsg) msgEl.textContent = updateDefaultMsg
+    }
+
+    function setUpdateCountdownLabel(secondsLeft) {
+      var msgEl = getUpdateMsgEl()
+      if (!msgEl) return
+      if (!updateDefaultMsg) updateDefaultMsg = msgEl.textContent || ''
+      if (secondsLeft < 1) {
+        msgEl.textContent = updateDefaultMsg
+        return
+      }
+      msgEl.textContent =
+        'Updating automatically in ' +
+        secondsLeft +
+        ' second' +
+        (secondsLeft === 1 ? '' : 's') +
+        '…'
+    }
+
+    function registerReloadFallback() {
+      var done = false
+      function reloadOnce() {
+        if (done) return
+        done = true
+        window.location.reload()
+      }
+      navigator.serviceWorker.addEventListener('controllerchange', reloadOnce)
+      setTimeout(reloadOnce, 2000)
+    }
+
+    function scheduleAutoUpdate(reg) {
+      clearUpdateAutoTimers()
+      if (updateTriggered) return
+      if (!reg || !reg.waiting) return
+      try {
+        if (sessionStorage.getItem(UPDATE_DISMISS_SESSION) === '1') return
+      } catch (e) {}
+
+      var msgEl = getUpdateMsgEl()
+      if (msgEl && !updateDefaultMsg) updateDefaultMsg = msgEl.textContent || ''
+
+      var totalSec = 6
+      var remaining = totalSec
+      setUpdateCountdownLabel(remaining)
+
+      updateCountdownTimer = setInterval(function () {
+        if (updateTriggered) return
+        remaining -= 1
+        if (remaining < 1) {
+          clearInterval(updateCountdownTimer)
+          updateCountdownTimer = null
+          return
+        }
+        setUpdateCountdownLabel(remaining)
+      }, 1000)
+
+      updateAutoTimer = setTimeout(function () {
+        updateAutoTimer = null
+        if (updateCountdownTimer) {
+          clearInterval(updateCountdownTimer)
+          updateCountdownTimer = null
+        }
+        if (updateTriggered) return
+        if (!reg.waiting) return
+        try {
+          if (sessionStorage.getItem(UPDATE_DISMISS_SESSION) === '1') return
+        } catch (e) {}
+
+        updateTriggered = true
+        if (reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' })
+        registerReloadFallback()
+      }, totalSec * 1000)
+    }
 
     function hideUpdate() {
+      clearUpdateAutoTimers()
       toast.classList.remove('pwa-update-toast--visible', 'pwa-update-toast--ready')
       setTimeout(function () {
         toast.hidden = true
@@ -265,16 +361,14 @@
       if (bound) return
       bound = true
       btn.addEventListener('click', function () {
+        if (updateTriggered) return
+        clearUpdateAutoTimers()
+        restoreUpdateToastMessage()
+        if (!reg.waiting) return
+        updateTriggered = true
         triggerHaptic()
-        if (reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' })
-        var done = false
-        function reloadOnce() {
-          if (done) return
-          done = true
-          window.location.reload()
-        }
-        navigator.serviceWorker.addEventListener('controllerchange', reloadOnce)
-        setTimeout(reloadOnce, 2000)
+        reg.waiting.postMessage({ type: 'SKIP_WAITING' })
+        registerReloadFallback()
       })
     }
 
@@ -292,8 +386,10 @@
       try {
         if (sessionStorage.getItem(UPDATE_DISMISS_SESSION) === '1') return
       } catch (e) {}
+      if (updateTriggered) return
       showUpdate()
       wire(reg)
+      scheduleAutoUpdate(reg)
     }
 
     function attach(reg) {
