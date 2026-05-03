@@ -13,10 +13,12 @@ import {
   Batch2013StudentsPage,
   Batch2015StudentsPage,
   Batch2016StudentsPage,
+  Batch2017StudentsPage,
   Batch2014StudentProfile,
   Batch2013StudentProfile,
   Batch2015StudentProfile,
   Batch2016StudentProfile,
+  Batch2017StudentProfile,
   TeachersPage,
   GalleryPage,
   Alumni,
@@ -207,6 +209,15 @@ function App() {
                 element={
                   <AnimatedSection>
                     <Batch2016StudentProfile />
+                  </AnimatedSection>
+                }
+              />
+              <Route path="/batch-2017-students" element={<Batch2017StudentsPage onLogout={handleLogout} />} />
+              <Route
+                path="/batch-2017-students/:slug"
+                element={
+                  <AnimatedSection>
+                    <Batch2017StudentProfile />
                   </AnimatedSection>
                 }
               />

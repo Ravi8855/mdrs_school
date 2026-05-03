@@ -35,5 +35,9 @@ export const BATCH_2016_CLASS_NAMES = [
   "mallappa.R",
   "Sharanamma",
   "Minakshi",
+  "Mahuli",
+  "Aishwarya",
+  "Gurunath",
+  
   
 ];

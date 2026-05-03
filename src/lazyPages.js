@@ -6,10 +6,12 @@ export const BatchStudentsPage = lazy(() => import("./components/BatchStudentsPa
 export const Batch2013StudentsPage = lazy(() => import("./components/Batch2013StudentsPage"));
 export const Batch2015StudentsPage = lazy(() => import("./components/Batch2015StudentsPage"));
 export const Batch2016StudentsPage = lazy(() => import("./components/Batch2016StudentsPage"));
+export const Batch2017StudentsPage = lazy(() => import("./components/Batch2017StudentsPage"));
 export const Batch2014StudentProfile = lazy(() => import("./components/Batch2014StudentProfile"));
 export const Batch2013StudentProfile = lazy(() => import("./components/Batch2013StudentProfile"));
 export const Batch2015StudentProfile = lazy(() => import("./components/Batch2015StudentProfile"));
 export const Batch2016StudentProfile = lazy(() => import("./components/Batch2016StudentProfile"));
+export const Batch2017StudentProfile = lazy(() => import("./components/Batch2017StudentProfile"));
 export const TeachersPage = lazy(() => import("./components/TeachersPage"));
 export const GalleryPage = lazy(() => import("./components/GalleryPage"));
 export const Alumni = lazy(() => import("./components/Alumni"));
@@ -33,10 +35,12 @@ const CHUNK_IMPORTS = [
   () => import("./components/Batch2013StudentsPage"),
   () => import("./components/Batch2015StudentsPage"),
   () => import("./components/Batch2016StudentsPage"),
+  () => import("./components/Batch2017StudentsPage"),
   () => import("./components/Batch2014StudentProfile"),
   () => import("./components/Batch2013StudentProfile"),
   () => import("./components/Batch2015StudentProfile"),
   () => import("./components/Batch2016StudentProfile"),
+  () => import("./components/Batch2017StudentProfile"),
   () => import("./components/TeachersPage"),
   () => import("./components/GalleryPage"),
   () => import("./components/Alumni"),

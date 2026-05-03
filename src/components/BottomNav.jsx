@@ -21,7 +21,9 @@ function tabForPath(pathname) {
     pathname === "/batch-2015-students" ||
     pathname.startsWith("/batch-2015-students/") ||
     pathname === "/batch-2016-students" ||
-    pathname.startsWith("/batch-2016-students/")
+    pathname.startsWith("/batch-2016-students/") ||
+    pathname === "/batch-2017-students" ||
+    pathname.startsWith("/batch-2017-students/")
   ) {
     return "batches";
   }

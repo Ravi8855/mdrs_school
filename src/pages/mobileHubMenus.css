@@ -510,6 +510,11 @@
   color: #9a3412;
 }
 
+.premium-tile--batches-2017 .premium-tile__icon {
+  background: linear-gradient(145deg, #e9d5ff, #d8b4fe);
+  color: #6b21a8;
+}
+
 .premium-tile--feat-hostel .premium-tile__icon {
   background: linear-gradient(145deg, #d1fae5, #a7f3d0);
   color: #047857;

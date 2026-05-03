@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { FaLayerGroup, FaChevronRight } from "react-icons/fa";
 import "./mobileHubMenus.css";
 
-/** Serial order: earlier graduating year first (2013 → 2014 → 2015 → 2016). */
+/** Serial order: earlier graduating year first (2013 → 2014 → 2015 → 2016 → 2017). */
 const items = [
   {
     serial: 1,
@@ -36,6 +36,14 @@ const items = [
     desc: "Class list & aquarium",
     Icon: FaLayerGroup,
     accent: "batches-2016",
+  },
+  {
+    serial: 5,
+    to: "/batch-2017-students",
+    title: "2017 batch students",
+    desc: "Class list & aquarium",
+    Icon: FaLayerGroup,
+    accent: "batches-2017",
   },
 ];
 

@@ -49,5 +49,10 @@ export const BATCH_2014_CLASS_NAMES = [
   "Girija",
   "Prashant Rathod",
   "Chandu",
+  "Suma",
+  "vanitha",
+  "uma",
+  "Roopa",
+  
 
 ];
