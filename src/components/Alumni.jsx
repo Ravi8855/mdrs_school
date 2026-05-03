@@ -57,7 +57,7 @@ export default function Alumni() {
       <div className="section-title-wrap">
         <h2 className="section-title">Alumni</h2>
         <div className="section-title-accent" aria-hidden="true" />
-        <p className="section-subtitle alumni-subtitle">Passout students of MDRS — where they are now.</p>
+        <p className="section-subtitle alumni-subtitle">2015 batch Passout students where they are now.</p>
       </div>
 
       <div className="alumni-grid">

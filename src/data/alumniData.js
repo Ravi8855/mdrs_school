@@ -41,7 +41,12 @@ import RaviImg from "../assets/Ravi.png";
 export const ALUMNI_STUDENTS = [
   { name: "Jattappa", qual: "2nd PUC (working)" },
   { name: "Chandrashekar", qual: "B.A in Yadagir" },
-  { name: "Viresh", qual: "Medical (MBBS) in Russia" },
+  { name: "Viresh", 
+    qual: "MBBS",
+    qualification:"Medical (MBBS)",
+    collegeUniversity: "Mari state university Russia",
+     location:"Russia",
+     },
   {
     name: "Ambadas",
     qual: "Medical (BAMS) in Bidar",

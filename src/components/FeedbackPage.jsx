@@ -767,11 +767,13 @@ export default function FeedbackPage({ onLogout }) {
               ) : null}
             </fieldset>
 
-            {moreMemories === "yes" && (
+            {moreMemories === "yes" &&
+             (
               <p className="feedback-memories-hint" role="status">
-                Ok nice — share your memories with Ravi.
+                Ok nice —
               </p>
-            )}
+            )
+            }
 
             <button type="submit" className="feedback-submit" disabled={submitting}>
               {submitting ? "Submitting…" : "Submit"}

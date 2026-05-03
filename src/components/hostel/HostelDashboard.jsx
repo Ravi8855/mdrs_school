@@ -17,7 +17,7 @@ export default function HostelDashboard() {
               <span className="hostel-title-word">Hostel</span>
             </h1>
             <p className="hostel-subtitle">
-              Explore boys and girls hostel houses, house masters, leaders, and roommates in one
+              Explore "2015 batch" boys and girls hostel houses, house masters, leaders, and roommates in one
               place.
             </p>
           </div>

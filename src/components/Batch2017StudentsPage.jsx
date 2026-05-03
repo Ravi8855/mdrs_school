@@ -18,6 +18,8 @@ const BATCH_2017_GALLERY_IMAGES = [
   { src: "/gallery/04.jpg", alt: "2017 batch photo 4" },
   { src: "/gallery/05.jpg", alt: "2017 batch photo 5" },
   { src: "/gallery/06.jpg", alt: "2017 batch photo 6" },
+  { src: "/gallery/m5.jpg", alt: "2017 batch photo 7" },
+  { src: "/gallery/m4.jpg", alt: "2017 batch photo 8" },
 ];
 
 /**
