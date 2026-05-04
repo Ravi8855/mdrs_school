@@ -8,7 +8,6 @@ import MobileHomeMenu from "./pages/MobileHomeMenu";
 import { clearProfileSession } from "./lib/profileSession";
 import CinematicIntro from "./components/CinematicIntro";
 import {
-  ClassmatesPage,
   BatchStudentsPage,
   Batch2013StudentsPage,
   Batch2015StudentsPage,
@@ -128,14 +127,6 @@ function App() {
               <Route path="/features" element={<MobileFeaturesMenu />} />
               <Route path="/feedback" element={<FeedbackPage onLogout={handleLogout} />} />
               <Route path="/profile" element={<StudentProfilePage />} />
-              <Route
-                path="/classmates"
-                element={
-                  <AnimatedSection>
-                    <ClassmatesPage variant="full" />
-                  </AnimatedSection>
-                }
-              />
               <Route
                 path="/teachers"
                 element={

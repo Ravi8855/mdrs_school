@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import {
-  FaUsers,
   FaChalkboardTeacher,
   FaGraduationCap,
   FaChevronRight,
@@ -10,13 +9,6 @@ import {
 import "./mobileHubMenus.css";
 
 const items = [
-  {
-    to: "/classmates",
-    title: "Classmates",
-    desc: "SSLC batch & memories",
-    Icon: FaUsers,
-    accent: "people-classmates",
-  },
   {
     to: "/teachers",
     title: "Teachers",
@@ -47,7 +39,7 @@ export default function MobilePeopleMenu() {
         <p className="premium-hub__eyebrow">Community</p>
         <h1 className="premium-hub__title">People</h1>
         <p className="premium-hub__lead">
-          Teachers, classmates, seniors &amp; juniors, and alumni — all in one place.
+          Teachers, seniors &amp; juniors, and alumni — all in one place.
         </p>
       </header>
       <nav className="premium-hub__list" aria-label="People and community">

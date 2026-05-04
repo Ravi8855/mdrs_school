@@ -470,11 +470,6 @@
   color: #0f172a;
 }
 
-.premium-tile--people-classmates .premium-tile__icon {
-  background: linear-gradient(145deg, #fef3c7, #fde68a);
-  color: #92400e;
-}
-
 .premium-tile--people-teachers .premium-tile__icon {
   background: linear-gradient(145deg, #e0f2fe, #bae6fd);
   color: #0369a1;

@@ -29,7 +29,6 @@ function tabForPath(pathname) {
   }
 
   if (
-    pathname === "/classmates" ||
     pathname === "/teachers" ||
     pathname === "/meet-seniors-juniors" ||
     pathname === "/alumni" ||

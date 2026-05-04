@@ -1,7 +1,6 @@
 import { lazy } from "react";
 
 /** Route-level code splitting — chunks warm up via `prefetchAppRouteChunks` after shell mounts. */
-export const ClassmatesPage = lazy(() => import("./components/ClassmatesPage"));
 export const BatchStudentsPage = lazy(() => import("./components/BatchStudentsPage"));
 export const Batch2013StudentsPage = lazy(() => import("./components/Batch2013StudentsPage"));
 export const Batch2015StudentsPage = lazy(() => import("./components/Batch2015StudentsPage"));
@@ -30,7 +29,6 @@ export const MobileFeaturesMenu = lazy(() => import("./pages/MobileFeaturesMenu"
 export const MeetStudentsGalleryPage = lazy(() => import("./pages/MeetStudentsGalleryPage"));
 
 const CHUNK_IMPORTS = [
-  () => import("./components/ClassmatesPage"),
   () => import("./components/BatchStudentsPage"),
   () => import("./components/Batch2013StudentsPage"),
   () => import("./components/Batch2015StudentsPage"),
