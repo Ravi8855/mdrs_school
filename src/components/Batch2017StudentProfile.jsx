@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
-import { getBatch2017BySlug } from "../data/batch2017Students";
+import { getBatch2017BySlug } from "../data/batch-2017-students";
 import { handleImgError } from "../utils/imageFallback";
 import "./Alumni.css";
 

@@ -6,7 +6,7 @@ import {
   BATCH_2017_STUDENTS,
   BATCH_2017_CLASS_NAMES,
   batch2017Slug,
-} from "../data/batch2017Students";
+} from "../data/batch-2017-students";
 import { handleImgError } from "../utils/imageFallback";
 import Batch2014NameAquarium from "./Batch2014NameAquarium";
 import "./Alumni.css";
@@ -20,6 +20,9 @@ const BATCH_2017_GALLERY_IMAGES = [
   { src: "/gallery/06.jpg", alt: "2017 batch photo 6" },
   { src: "/gallery/m5.jpg", alt: "2017 batch photo 7" },
   { src: "/gallery/m4.jpg", alt: "2017 batch photo 8" },
+  { src: "/gallery/71.jpg", alt: "2017 batch photo 9" },
+  { src: "/gallery/72.jpg", alt: "2017 batch photo 10" },
+  { src: "/gallery/73.jpg", alt: "2017 batch photo 11" },
 ];
 
 /**
