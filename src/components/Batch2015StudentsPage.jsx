@@ -282,6 +282,22 @@ export default function Batch2015StudentsPage({ onLogout }) {
               >
                 <img src="/gallery/img33.jpg" alt="2015 batch gallery" decoding="async" onError={handleImgError} />
               </button>
+              <button
+                type="button"
+                className="batch-page-gallery-extra__thumb"
+                onClick={() => setLightboxSrc("/gallery/08.jpg")}
+                aria-label="Open gallery image 08 larger"
+              >
+                <img src="/gallery/08.jpg" alt="2015 batch gallery" decoding="async" onError={handleImgError} />
+              </button>
+              <button
+                type="button"
+                className="batch-page-gallery-extra__thumb"
+                onClick={() => setLightboxSrc("/gallery/09.jpg")}
+                aria-label="Open gallery image 09 larger"
+              >
+                <img src="/gallery/09.jpg" alt="2015 batch gallery" decoding="async" onError={handleImgError} />
+              </button>
             </div>
           </div>
 
