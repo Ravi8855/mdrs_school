@@ -1,19 +1,56 @@
-# React + Vite
+# MDRS School Mobile App (Flutter)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A native mobile application built with **Flutter** for **Morarji Desai Residential School (MDRS)**, Dorigudda Ukkenala, Shahapur, Yadgir Dist – 585309.
 
-Currently, two official plugins are available:
+This is a standalone, independent mobile application that runs directly on Android and iOS devices with no dependency on web hosting or Vercel.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Cinematic Opening:** Atmospheric intro animation with Morarji Desai emblem and golden typography.
+- **Native Bottom Navigation:** Quick access to Home, Batches, People, Features, and Feedback.
+- **Batches Roster (2013–2017):** Classmate directories with search and interactive 60 FPS Bouncing Name Aquarium.
+- **Faculty Tribute & Alumni Directory:** Complete teacher profiles, subject assignments, and alumni career paths (MBBS, BAMS, Engineering, Forensic Science, etc.).
+- **Hostel Life:** Boys and Girls hostel house mappings (Krishna, Bhima, Sindhu, Godhawari, Kaveri, Yamuna, Ganga), house masters, leaders, and roommates.
+- **Bell Ring Madness Game:** Nostalgic 20-second reaction tap game with native haptics, score calculation, and local/Supabase leaderboard.
+- **Class Voting System:** Real-time poll nominations with celebratory confetti particle explosions.
+- **Campus Gallery:** Interactive image gallery with smooth multi-touch zoom.
+- **Direct Feedback & WhatsApp:** In-app feedback form saving to Supabase or local storage, plus one-tap WhatsApp messaging (`wa.me/918855025560`).
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-// Trigger redeploy 12/20/2025 18:23:34
-// Build fix deployed 12/20/2025 18:36:04
-// Force latest commit deploy 12/20/2025 18:43:11
+## Standalone & Independent Architecture
+
+- **No Vercel / Web Hosting Required:** The application is compiled to native ARM machine code and bundles all assets locally on the user's device.
+- **Direct Backend Connect:** Connects directly from the mobile client to **Supabase** via `supabase_flutter`.
+- **Offline First:** Automatically falls back to native `SharedPreferences` if the device is offline or credentials are not yet configured.
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Flutter SDK (3.11+ / Dart 3.11+)
+- Android Studio / VS Code with Flutter extension
+- Android SDK (for Android build) or Xcode (for iOS build)
+
+### Run the App
+
+```bash
+# Get dependencies
+flutter pub get
+
+# Run on connected device / emulator
+flutter run
+```
+
+### Build Release APK
+
+```bash
+flutter build apk --release
+```
+
+The APK will be generated at:
+`build/app/outputs/flutter-apk/app-release.apk`
