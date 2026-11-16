@@ -53,16 +53,16 @@ class _PeopleScreenState extends State<PeopleScreen> with SingleTickerProviderSt
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    Color(0xFF1E2530),
-                    Color(0xFF12151B),
+                    Color(0xFF260847),
+                    Color(0xFF16042B),
                   ],
                 ),
                 borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: AppColors.primary, width: 2.0),
+                border: Border.all(color: AppColors.gold, width: 2.2),
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.primary.withAlpha(80),
-                    blurRadius: 30,
+                    color: AppColors.primary.withAlpha(100),
+                    blurRadius: 32,
                     spreadRadius: 2,
                   ),
                   BoxShadow(
@@ -107,12 +107,12 @@ class _PeopleScreenState extends State<PeopleScreen> with SingleTickerProviderSt
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(Icons.school, size: 14, color: AppColors.primary),
+                            const Icon(Icons.school, size: 14, color: AppColors.gold),
                             const SizedBox(width: 6),
                             Text(
                               "MDRS DORIGUDDA",
                               style: GoogleFonts.cinzel(
-                                color: AppColors.primary,
+                                color: AppColors.gold,
                                 fontSize: 9.5,
                                 fontWeight: FontWeight.w700,
                                 letterSpacing: 1.5,
@@ -128,10 +128,10 @@ class _PeopleScreenState extends State<PeopleScreen> with SingleTickerProviderSt
                           height: 88,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(18),
-                            border: Border.all(color: AppColors.primary, width: 2),
+                            border: Border.all(color: AppColors.gold, width: 2),
                             boxShadow: [
                               BoxShadow(
-                                color: AppColors.primary.withAlpha(60),
+                                color: AppColors.gold.withAlpha(80),
                                 blurRadius: 12,
                                 spreadRadius: 1,
                               ),
@@ -252,10 +252,10 @@ class _PeopleScreenState extends State<PeopleScreen> with SingleTickerProviderSt
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.surface,
+        backgroundColor: AppColors.primaryDeep,
         title: Text(
           "Mentors & Alumni",
-          style: GoogleFonts.cinzel(fontWeight: FontWeight.w700, fontSize: 20),
+          style: GoogleFonts.cinzel(fontWeight: FontWeight.w700, fontSize: 20, color: Colors.white),
         ),
         centerTitle: true,
         bottom: PreferredSize(
@@ -266,15 +266,20 @@ class _PeopleScreenState extends State<PeopleScreen> with SingleTickerProviderSt
             child: TabBar(
               controller: _tabController,
               physics: const BouncingScrollPhysics(),
-              indicatorColor: AppColors.primary,
               indicatorSize: TabBarIndicatorSize.tab,
               indicator: BoxDecoration(
                 borderRadius: BorderRadius.circular(22),
-                color: AppColors.primary.withAlpha(45),
-                border: Border.all(color: AppColors.primary, width: 1.5),
+                color: AppColors.primary,
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.primaryLight.withAlpha(90),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
               ),
-              labelColor: AppColors.primary,
-              unselectedLabelColor: AppColors.textSecondary,
+              labelColor: Colors.white,
+              unselectedLabelColor: const Color(0xFFD8B4FE),
               labelStyle: GoogleFonts.poppins(fontWeight: FontWeight.w700, fontSize: 13),
               unselectedLabelStyle: GoogleFonts.poppins(fontWeight: FontWeight.w500, fontSize: 13),
               tabs: const [
@@ -319,19 +324,19 @@ class _PeopleScreenState extends State<PeopleScreen> with SingleTickerProviderSt
               margin: const EdgeInsets.only(bottom: 16),
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
+                gradient: const LinearGradient(
                   colors: [
-                    AppColors.primary.withAlpha(45),
-                    AppColors.surface,
+                    Color(0xFF3B0D66),
+                    Color(0xFF581C87),
                   ],
                 ),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.primary, width: 1.5),
-                boxShadow: [
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: AppColors.gold, width: 1.8),
+                boxShadow: const [
                   BoxShadow(
-                    color: AppColors.primary.withAlpha(35),
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
+                    color: Color(0x357C3AED),
+                    blurRadius: 16,
+                    offset: Offset(0, 5),
                   ),
                 ],
               ),
@@ -354,7 +359,7 @@ class _PeopleScreenState extends State<PeopleScreen> with SingleTickerProviderSt
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                           decoration: BoxDecoration(
-                            color: AppColors.primary,
+                            color: AppColors.gold,
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: Text(
@@ -378,7 +383,7 @@ class _PeopleScreenState extends State<PeopleScreen> with SingleTickerProviderSt
                         Text(
                           p.bio ?? "",
                           style: GoogleFonts.poppins(
-                            color: AppColors.textSecondary,
+                            color: const Color(0xFFE9D5FF),
                             fontSize: 11,
                           ),
                         ),
@@ -386,7 +391,7 @@ class _PeopleScreenState extends State<PeopleScreen> with SingleTickerProviderSt
                         Text(
                           "Tap to view profile card",
                           style: GoogleFonts.poppins(
-                            color: AppColors.primary,
+                            color: AppColors.gold,
                             fontSize: 10,
                             fontWeight: FontWeight.w600,
                           ),
@@ -394,7 +399,7 @@ class _PeopleScreenState extends State<PeopleScreen> with SingleTickerProviderSt
                       ],
                     ),
                   ),
-                  const Icon(Icons.arrow_forward_ios, color: AppColors.primary, size: 14),
+                  const Icon(Icons.arrow_forward_ios, color: AppColors.gold, size: 14),
                 ],
               ),
             ),
@@ -416,14 +421,21 @@ class _PeopleScreenState extends State<PeopleScreen> with SingleTickerProviderSt
             margin: const EdgeInsets.only(bottom: 12),
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: AppColors.surface,
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: AppColors.cardBorder),
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: AppColors.cardBorder, width: 0.8),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0x127C3AED),
+                  blurRadius: 14,
+                  offset: Offset(0, 4),
+                ),
+              ],
             ),
             child: Row(
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(12),
                   child: Image.asset(
                     t.image,
                     width: 60,
@@ -445,25 +457,25 @@ class _PeopleScreenState extends State<PeopleScreen> with SingleTickerProviderSt
                       Text(
                         t.name,
                         style: GoogleFonts.poppins(
-                          color: Colors.white,
+                          color: AppColors.textPrimary,
                           fontSize: 15,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
-                      const SizedBox(height: 2),
+                      const SizedBox(height: 3),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(
-                          color: AppColors.primary.withAlpha(25),
+                          color: AppColors.primary.withAlpha(20),
                           borderRadius: BorderRadius.circular(6),
-                          border: Border.all(color: AppColors.primary.withAlpha(80)),
+                          border: Border.all(color: AppColors.primary.withAlpha(60)),
                         ),
                         child: Text(
                           t.subject,
                           style: GoogleFonts.poppins(
                             color: AppColors.primary,
                             fontSize: 11,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ),
@@ -488,16 +500,16 @@ class _PeopleScreenState extends State<PeopleScreen> with SingleTickerProviderSt
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+          padding: const EdgeInsets.fromLTRB(16, 14, 16, 8),
           child: TextField(
             onChanged: (v) => setState(() => _searchQuery = v.trim().toLowerCase()),
-            style: const TextStyle(color: Colors.white, fontSize: 14),
+            style: const TextStyle(color: AppColors.textPrimary, fontSize: 14),
             decoration: InputDecoration(
               hintText: "Search alumni by name...",
               hintStyle: const TextStyle(color: AppColors.textMuted, fontSize: 13),
               prefixIcon: const Icon(Icons.search, color: AppColors.primary, size: 20),
               filled: true,
-              fillColor: AppColors.surface,
+              fillColor: Colors.white,
               contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(24),
@@ -509,7 +521,7 @@ class _PeopleScreenState extends State<PeopleScreen> with SingleTickerProviderSt
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(24),
-                borderSide: const BorderSide(color: AppColors.primary),
+                borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
               ),
             ),
           ),
@@ -532,13 +544,20 @@ class _PeopleScreenState extends State<PeopleScreen> with SingleTickerProviderSt
                   location: m.location,
                   isTeacher: false,
                 ),
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(16),
                 child: Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppColors.surface,
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: AppColors.cardBorder),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: AppColors.cardBorder, width: 0.8),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Color(0x127C3AED),
+                        blurRadius: 14,
+                        offset: Offset(0, 4),
+                      ),
+                    ],
                   ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -566,7 +585,7 @@ class _PeopleScreenState extends State<PeopleScreen> with SingleTickerProviderSt
                             Text(
                               m.name,
                               style: GoogleFonts.poppins(
-                                color: Colors.white,
+                                color: AppColors.textPrimary,
                                 fontSize: 15,
                                 fontWeight: FontWeight.w700,
                               ),

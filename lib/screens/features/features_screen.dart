@@ -15,10 +15,10 @@ class FeaturesScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.surface,
+        backgroundColor: AppColors.primaryDeep,
         title: Text(
           "Interactive Features",
-          style: GoogleFonts.cinzel(fontWeight: FontWeight.w700, fontSize: 20),
+          style: GoogleFonts.cinzel(fontWeight: FontWeight.w700, fontSize: 20, color: Colors.white),
         ),
         centerTitle: true,
       ),
@@ -96,18 +96,18 @@ class FeaturesScreen extends StatelessWidget {
         HapticFeedback.lightImpact();
         onTap();
       },
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(22),
       child: Container(
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.cardBorder),
-          boxShadow: [
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(22),
+          border: Border.all(color: AppColors.cardBorder, width: 0.8),
+          boxShadow: const [
             BoxShadow(
-              color: Colors.black.withAlpha(60),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
+              color: Color(0x187C3AED),
+              blurRadius: 18,
+              offset: Offset(0, 5),
             ),
           ],
         ),
@@ -117,9 +117,9 @@ class FeaturesScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: accentColor.withAlpha(35),
-                borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: accentColor.withAlpha(100)),
+                color: accentColor.withAlpha(25),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: accentColor.withAlpha(70)),
               ),
               child: Icon(icon, color: accentColor, size: 28),
             ),
@@ -134,8 +134,9 @@ class FeaturesScreen extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(
-                          color: accentColor.withAlpha(30),
+                          color: accentColor.withAlpha(20),
                           borderRadius: BorderRadius.circular(6),
+                          border: Border.all(color: accentColor.withAlpha(50)),
                         ),
                         child: Text(
                           badge,
@@ -147,16 +148,16 @@ class FeaturesScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Icon(Icons.arrow_forward_ios, size: 14, color: AppColors.textMuted),
+                      const Icon(Icons.arrow_forward_ios, size: 14, color: AppColors.textMuted),
                     ],
                   ),
                   const SizedBox(height: 6),
                   Text(
                     title,
                     style: GoogleFonts.poppins(
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                       fontSize: 16,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                   const SizedBox(height: 4),

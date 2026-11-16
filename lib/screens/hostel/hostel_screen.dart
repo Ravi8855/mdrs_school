@@ -34,22 +34,42 @@ class _HostelScreenState extends State<HostelScreen> with SingleTickerProviderSt
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.surface,
+        backgroundColor: AppColors.primaryDeep,
         title: Text(
           "Hostel Life",
-          style: GoogleFonts.cinzel(fontWeight: FontWeight.w700, fontSize: 20),
+          style: GoogleFonts.cinzel(fontWeight: FontWeight.w700, fontSize: 20, color: Colors.white),
         ),
         centerTitle: true,
-        bottom: TabBar(
-          controller: _tabController,
-          indicatorColor: AppColors.primary,
-          labelColor: AppColors.primary,
-          unselectedLabelColor: AppColors.textSecondary,
-          labelStyle: GoogleFonts.poppins(fontWeight: FontWeight.w700, fontSize: 14),
-          tabs: const [
-            Tab(text: "Boys Hostel"),
-            Tab(text: "Girls Hostel"),
-          ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(48),
+          child: Container(
+            height: 48,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            child: TabBar(
+              controller: _tabController,
+              physics: const BouncingScrollPhysics(),
+              indicatorSize: TabBarIndicatorSize.tab,
+              indicator: BoxDecoration(
+                borderRadius: BorderRadius.circular(22),
+                color: AppColors.primary,
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.primaryLight.withAlpha(90),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              labelColor: Colors.white,
+              unselectedLabelColor: const Color(0xFFD8B4FE),
+              labelStyle: GoogleFonts.poppins(fontWeight: FontWeight.w700, fontSize: 13.5),
+              unselectedLabelStyle: GoogleFonts.poppins(fontWeight: FontWeight.w500, fontSize: 13.5),
+              tabs: const [
+                Tab(text: "Boys Hostel"),
+                Tab(text: "Girls Hostel"),
+              ],
+            ),
+          ),
         ),
       ),
       body: TabBarView(
@@ -72,11 +92,18 @@ class _HostelScreenState extends State<HostelScreen> with SingleTickerProviderSt
         final house = houses[i];
         return Container(
           margin: const EdgeInsets.only(bottom: 16),
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(18),
           decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.cardBorder),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(22),
+            border: Border.all(color: AppColors.cardBorder, width: 0.8),
+            boxShadow: const [
+              BoxShadow(
+                color: Color(0x187C3AED),
+                blurRadius: 18,
+                offset: Offset(0, 5),
+              ),
+            ],
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,12 +114,12 @@ class _HostelScreenState extends State<HostelScreen> with SingleTickerProviderSt
                 children: [
                   Row(
                     children: [
-                      Icon(Icons.villa, color: accent, size: 24),
+                      Icon(Icons.villa_rounded, color: accent, size: 24),
                       const SizedBox(width: 10),
                       Text(
                         house.name,
                         style: GoogleFonts.poppins(
-                          color: Colors.white,
+                          color: AppColors.textPrimary,
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
                         ),
@@ -102,15 +129,16 @@ class _HostelScreenState extends State<HostelScreen> with SingleTickerProviderSt
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                     decoration: BoxDecoration(
-                      color: accent.withAlpha(35),
+                      color: accent.withAlpha(20),
                       borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: accent.withAlpha(60)),
                     ),
                     child: Text(
                       "${house.roommates.length} Members",
                       style: GoogleFonts.poppins(
                         color: accent,
                         fontSize: 11,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),
@@ -122,8 +150,9 @@ class _HostelScreenState extends State<HostelScreen> with SingleTickerProviderSt
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: AppColors.surfaceElevated,
-                  borderRadius: BorderRadius.circular(10),
+                  color: const Color(0xFFFAF7FF),
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(color: AppColors.cardBorder),
                 ),
                 child: Row(
                   children: [
@@ -142,7 +171,7 @@ class _HostelScreenState extends State<HostelScreen> with SingleTickerProviderSt
                           Text(
                             house.houseMaster,
                             style: GoogleFonts.poppins(
-                              color: Colors.white,
+                              color: AppColors.textPrimary,
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
                             ),
@@ -169,7 +198,7 @@ class _HostelScreenState extends State<HostelScreen> with SingleTickerProviderSt
                             style: GoogleFonts.poppins(
                               color: AppColors.primary,
                               fontSize: 13,
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                         ],
@@ -200,10 +229,10 @@ class _HostelScreenState extends State<HostelScreen> with SingleTickerProviderSt
                   return Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      color: isLeader ? AppColors.primary.withAlpha(40) : AppColors.surfaceElevated,
+                      color: isLeader ? AppColors.primary.withAlpha(25) : const Color(0xFFF3E8FF),
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: isLeader ? AppColors.primary : AppColors.divider,
+                        color: isLeader ? AppColors.primary : const Color(0xFFE9D5FF),
                       ),
                     ),
                     child: Row(
@@ -216,7 +245,7 @@ class _HostelScreenState extends State<HostelScreen> with SingleTickerProviderSt
                         Text(
                           name,
                           style: GoogleFonts.poppins(
-                            color: isLeader ? AppColors.primary : Colors.white,
+                            color: isLeader ? AppColors.primary : AppColors.textPrimary,
                             fontSize: 12,
                             fontWeight: isLeader ? FontWeight.w700 : FontWeight.w500,
                           ),

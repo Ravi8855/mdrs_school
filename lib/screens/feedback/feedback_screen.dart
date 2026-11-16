@@ -70,10 +70,10 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.surface,
+        backgroundColor: AppColors.primaryDeep,
         title: Text(
           "Memories & Feedback",
-          style: GoogleFonts.cinzel(fontWeight: FontWeight.w700, fontSize: 18),
+          style: GoogleFonts.cinzel(fontWeight: FontWeight.w700, fontSize: 18, color: Colors.white),
         ),
         centerTitle: true,
       ),
@@ -88,9 +88,9 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
               Text(
                 "SHARE YOUR WORDS",
                 style: GoogleFonts.poppins(
-                  color: AppColors.primary,
+                  color: AppColors.textViolet,
                   fontSize: 12,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w800,
                   letterSpacing: 1.5,
                 ),
               ),
@@ -105,23 +105,23 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
               TextFormField(
                 controller: _nameController,
                 validator: (v) => v == null || v.trim().isEmpty ? "Please enter your name" : null,
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(color: AppColors.textPrimary),
                 decoration: InputDecoration(
                   labelText: "Your Full Name *",
                   labelStyle: const TextStyle(color: AppColors.textSecondary),
                   filled: true,
-                  fillColor: AppColors.surface,
+                  fillColor: Colors.white,
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(16),
                     borderSide: const BorderSide(color: AppColors.cardBorder),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(16),
                     borderSide: const BorderSide(color: AppColors.cardBorder),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: AppColors.primary),
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
                   ),
                 ),
               ),
@@ -130,15 +130,19 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
               // Role Dropdown
               DropdownButtonFormField<String>(
                 initialValue: _selectedRole,
-                dropdownColor: AppColors.surface,
-                style: const TextStyle(color: Colors.white),
+                dropdownColor: Colors.white,
+                style: const TextStyle(color: AppColors.textPrimary),
                 decoration: InputDecoration(
                   labelText: "Your Role *",
                   labelStyle: const TextStyle(color: AppColors.textSecondary),
                   filled: true,
-                  fillColor: AppColors.surface,
+                  fillColor: Colors.white,
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: const BorderSide(color: AppColors.cardBorder),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
                     borderSide: const BorderSide(color: AppColors.cardBorder),
                   ),
                 ),
@@ -154,16 +158,24 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                 controller: _messageController,
                 maxLines: 4,
                 validator: (v) => v == null || v.trim().isEmpty ? "Please enter your message" : null,
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(color: AppColors.textPrimary),
                 decoration: InputDecoration(
                   labelText: "Your Message / Memory *",
                   labelStyle: const TextStyle(color: AppColors.textSecondary),
                   alignLabelWithHint: true,
                   filled: true,
-                  fillColor: AppColors.surface,
+                  fillColor: Colors.white,
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(16),
                     borderSide: const BorderSide(color: AppColors.cardBorder),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: const BorderSide(color: AppColors.cardBorder),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
                   ),
                 ),
               ),
@@ -172,27 +184,29 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
               // Submit Button
               SizedBox(
                 width: double.infinity,
-                height: 50,
+                height: 52,
                 child: ElevatedButton.icon(
                   onPressed: _submitting ? null : _submitForm,
                   icon: _submitting
                       ? const SizedBox(
                           width: 18,
                           height: 18,
-                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black),
+                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                         )
-                      : const Icon(Icons.send_rounded, color: Colors.black),
+                      : const Icon(Icons.send_rounded, color: Colors.white),
                   label: Text(
                     _submitting ? "Sending..." : "Submit Feedback",
                     style: GoogleFonts.poppins(
-                      color: Colors.black,
+                      color: Colors.white,
                       fontWeight: FontWeight.w700,
                       fontSize: 15,
                     ),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    elevation: 3,
+                    shadowColor: AppColors.primary.withAlpha(100),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   ),
                 ),
               ),
@@ -202,21 +216,22 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
               // WhatsApp Direct Button
               SizedBox(
                 width: double.infinity,
-                height: 48,
+                height: 50,
                 child: OutlinedButton.icon(
                   onPressed: _openWhatsApp,
                   icon: const Icon(Icons.chat_bubble_outline, color: Color(0xFF25D366)),
                   label: Text(
                     "Chat on WhatsApp",
                     style: GoogleFonts.poppins(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14,
+                      color: const Color(0xFF16A34A),
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14.5,
                     ),
                   ),
                   style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: Color(0xFF25D366), width: 1.2),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    backgroundColor: Colors.white,
+                    side: const BorderSide(color: Color(0xFF25D366), width: 1.4),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   ),
                 ),
               ),

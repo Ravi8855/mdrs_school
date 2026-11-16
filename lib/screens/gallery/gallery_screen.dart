@@ -13,10 +13,10 @@ class GalleryScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.surface,
+        backgroundColor: AppColors.primaryDeep,
         title: Text(
           "Campus Memories",
-          style: GoogleFonts.cinzel(fontWeight: FontWeight.w700, fontSize: 18),
+          style: GoogleFonts.cinzel(fontWeight: FontWeight.w700, fontSize: 18, color: Colors.white),
         ),
         centerTitle: true,
       ),

@@ -52,10 +52,10 @@ class _BatchesScreenState extends State<BatchesScreen> with SingleTickerProvider
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.surface,
+        backgroundColor: AppColors.primaryDeep,
         title: Text(
           "School Batches",
-          style: GoogleFonts.cinzel(fontWeight: FontWeight.w700, fontSize: 20),
+          style: GoogleFonts.cinzel(fontWeight: FontWeight.w700, fontSize: 20, color: Colors.white),
         ),
         centerTitle: true,
         bottom: PreferredSize(
@@ -72,11 +72,17 @@ class _BatchesScreenState extends State<BatchesScreen> with SingleTickerProvider
               indicatorSize: TabBarIndicatorSize.tab,
               indicator: BoxDecoration(
                 borderRadius: BorderRadius.circular(22),
-                color: AppColors.primary.withAlpha(45),
-                border: Border.all(color: AppColors.primary, width: 1.5),
+                color: AppColors.primary,
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.primaryLight.withAlpha(100),
+                    blurRadius: 10,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
               ),
-              labelColor: AppColors.primary,
-              unselectedLabelColor: AppColors.textSecondary,
+              labelColor: Colors.white,
+              unselectedLabelColor: const Color(0xFFD8B4FE),
               labelStyle: GoogleFonts.poppins(fontWeight: FontWeight.w700, fontSize: 13),
               unselectedLabelStyle: GoogleFonts.poppins(fontWeight: FontWeight.w500, fontSize: 13),
               padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -98,16 +104,16 @@ class _BatchesScreenState extends State<BatchesScreen> with SingleTickerProvider
         children: [
           // Search Bar
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+            padding: const EdgeInsets.fromLTRB(16, 14, 16, 8),
             child: TextField(
               onChanged: (v) => setState(() => _searchQuery = v.trim().toLowerCase()),
-              style: const TextStyle(color: Colors.white, fontSize: 14),
+              style: const TextStyle(color: AppColors.textPrimary, fontSize: 14),
               decoration: InputDecoration(
                 hintText: "Search classmate name...",
                 hintStyle: const TextStyle(color: AppColors.textMuted, fontSize: 13),
                 prefixIcon: const Icon(Icons.search, color: AppColors.primary, size: 20),
                 filled: true,
-                fillColor: AppColors.surface,
+                fillColor: Colors.white,
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(24),
@@ -119,7 +125,7 @@ class _BatchesScreenState extends State<BatchesScreen> with SingleTickerProvider
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(24),
-                  borderSide: const BorderSide(color: AppColors.primary),
+                  borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
                 ),
               ),
             ),
@@ -144,19 +150,19 @@ class _BatchesScreenState extends State<BatchesScreen> with SingleTickerProvider
                     Container(
                       height: 200,
                       decoration: BoxDecoration(
-                        color: const Color(0xFF141A22),
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: AppColors.primary.withAlpha(60), width: 1.2),
+                        color: const Color(0xFF220A40),
+                        borderRadius: BorderRadius.circular(18),
+                        border: Border.all(color: AppColors.primaryLight.withAlpha(100), width: 1.4),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withAlpha(120),
-                            blurRadius: 10,
+                            color: AppColors.primaryDark.withAlpha(80),
+                            blurRadius: 14,
                             offset: const Offset(0, 4),
                           ),
                         ],
                       ),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(18),
                         child: Stack(
                           children: [
                             Positioned.fill(
@@ -205,18 +211,21 @@ class _BatchesScreenState extends State<BatchesScreen> with SingleTickerProvider
                         Text(
                           "STUDENT ROSTER",
                           style: GoogleFonts.poppins(
-                            color: AppColors.primary,
+                            color: AppColors.textViolet,
                             fontSize: 12,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w800,
                             letterSpacing: 1.2,
                           ),
                         ),
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                           decoration: BoxDecoration(
-                            color: AppColors.surface,
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(color: AppColors.cardBorder),
+                            boxShadow: const [
+                              BoxShadow(color: Color(0x107C3AED), blurRadius: 8),
+                            ],
                           ),
                           child: Text(
                             "${filtered.length} Students",
@@ -242,15 +251,22 @@ class _BatchesScreenState extends State<BatchesScreen> with SingleTickerProvider
                         return Container(
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                           decoration: BoxDecoration(
-                            color: AppColors.surface,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: AppColors.cardBorder),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(14),
+                            border: Border.all(color: AppColors.cardBorder, width: 0.8),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Color(0x107C3AED),
+                                blurRadius: 10,
+                                offset: Offset(0, 3),
+                              ),
+                            ],
                           ),
                           child: Row(
                             children: [
                               CircleAvatar(
                                 radius: 18,
-                                backgroundColor: AppColors.primary.withAlpha(40),
+                                backgroundColor: AppColors.primary.withAlpha(25),
                                 child: Text(
                                   studentName.isNotEmpty ? studentName[0].toUpperCase() : '?',
                                   style: GoogleFonts.poppins(
@@ -264,16 +280,16 @@ class _BatchesScreenState extends State<BatchesScreen> with SingleTickerProvider
                                 child: Text(
                                   studentName,
                                   style: GoogleFonts.poppins(
-                                    color: Colors.white,
+                                    color: AppColors.textPrimary,
                                     fontSize: 14,
-                                    fontWeight: FontWeight.w500,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
                               ),
-                              Icon(
+                              const Icon(
                                 Icons.school,
                                 size: 18,
-                                color: AppColors.textMuted.withAlpha(120),
+                                color: AppColors.primaryLight,
                               ),
                             ],
                           ),

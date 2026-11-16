@@ -168,10 +168,10 @@ class _BellGameScreenState extends State<BellGameScreen> with SingleTickerProvid
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.surface,
+        backgroundColor: AppColors.primaryDeep,
         title: Text(
           "Bell Ring Madness",
-          style: GoogleFonts.cinzel(fontWeight: FontWeight.w700, fontSize: 18),
+          style: GoogleFonts.cinzel(fontWeight: FontWeight.w700, fontSize: 18, color: Colors.white),
         ),
         centerTitle: true,
       ),
@@ -189,9 +189,12 @@ class _BellGameScreenState extends State<BellGameScreen> with SingleTickerProvid
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
                   decoration: BoxDecoration(
-                    color: AppColors.surface,
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: AppColors.cardBorder),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: AppColors.cardBorder, width: 0.8),
+                    boxShadow: const [
+                      BoxShadow(color: Color(0x127C3AED), blurRadius: 10, offset: Offset(0, 3)),
+                    ],
                   ),
                   child: Column(
                     children: [
@@ -219,9 +222,12 @@ class _BellGameScreenState extends State<BellGameScreen> with SingleTickerProvid
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
                   decoration: BoxDecoration(
-                    color: AppColors.surface,
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: AppColors.cardBorder),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: AppColors.cardBorder, width: 0.8),
+                    boxShadow: const [
+                      BoxShadow(color: Color(0x127C3AED), blurRadius: 10, offset: Offset(0, 3)),
+                    ],
                   ),
                   child: Column(
                     children: [
@@ -236,7 +242,7 @@ class _BellGameScreenState extends State<BellGameScreen> with SingleTickerProvid
                       Text(
                         "${_timeLeft}s",
                         style: GoogleFonts.poppins(
-                          color: _timeLeft <= 5 ? Colors.redAccent : Colors.white,
+                          color: _timeLeft <= 5 ? AppColors.error : AppColors.textPrimary,
                           fontSize: 22,
                           fontWeight: FontWeight.w800,
                         ),
@@ -345,17 +351,24 @@ class _BellGameScreenState extends State<BellGameScreen> with SingleTickerProvid
                               final entry = _leaderboard[i];
                               final isTop3 = i < 3;
                               return Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                                 decoration: BoxDecoration(
                                   color: isTop3
-                                      ? AppColors.primary.withAlpha(25)
-                                      : AppColors.surfaceElevated,
-                                  borderRadius: BorderRadius.circular(10),
+                                      ? AppColors.primary.withAlpha(15)
+                                      : Colors.white,
+                                  borderRadius: BorderRadius.circular(12),
                                   border: Border.all(
                                     color: isTop3
                                         ? AppColors.primary.withAlpha(80)
-                                        : AppColors.divider,
+                                        : AppColors.cardBorder,
                                   ),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Color(0x0C7C3AED),
+                                      blurRadius: 8,
+                                      offset: Offset(0, 2),
+                                    ),
+                                  ],
                                 ),
                                 child: Row(
                                   children: [
@@ -372,7 +385,7 @@ class _BellGameScreenState extends State<BellGameScreen> with SingleTickerProvid
                                       child: Text(
                                         entry.name,
                                         style: GoogleFonts.poppins(
-                                          color: Colors.white,
+                                          color: AppColors.textPrimary,
                                           fontWeight: FontWeight.w600,
                                           fontSize: 13,
                                         ),

@@ -63,10 +63,10 @@ class _VotingScreenState extends State<VotingScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.surface,
+        backgroundColor: AppColors.primaryDeep,
         title: Text(
           "Class Voting",
-          style: GoogleFonts.cinzel(fontWeight: FontWeight.w700, fontSize: 18),
+          style: GoogleFonts.cinzel(fontWeight: FontWeight.w700, fontSize: 18, color: Colors.white),
         ),
         centerTitle: true,
       ),
@@ -82,14 +82,23 @@ class _VotingScreenState extends State<VotingScreen> {
 
               return Container(
                 margin: const EdgeInsets.only(bottom: 18),
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(18),
                 decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  borderRadius: BorderRadius.circular(16),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(22),
                   border: Border.all(
                     color: currentVote != null ? AppColors.primary : AppColors.cardBorder,
-                    width: currentVote != null ? 1.5 : 1,
+                    width: currentVote != null ? 1.8 : 0.8,
                   ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: currentVote != null
+                          ? AppColors.primary.withAlpha(40)
+                          : const Color(0x157C3AED),
+                      blurRadius: 18,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -106,7 +115,7 @@ class _VotingScreenState extends State<VotingScreen> {
                               Text(
                                 cat.title,
                                 style: GoogleFonts.poppins(
-                                  color: Colors.white,
+                                  color: AppColors.textPrimary,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -140,23 +149,32 @@ class _VotingScreenState extends State<VotingScreen> {
                             decoration: BoxDecoration(
                               color: isSelected
                                   ? AppColors.primary
-                                  : AppColors.surfaceElevated,
+                                  : const Color(0xFFF6F0FF),
                               borderRadius: BorderRadius.circular(20),
                               border: Border.all(
-                                color: isSelected ? AppColors.primary : AppColors.divider,
+                                color: isSelected ? AppColors.primary : const Color(0xFFE9D5FF),
                               ),
+                              boxShadow: isSelected
+                                  ? [
+                                      BoxShadow(
+                                        color: AppColors.primary.withAlpha(80),
+                                        blurRadius: 8,
+                                        offset: const Offset(0, 2),
+                                      ),
+                                    ]
+                                  : null,
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 if (isSelected) ...[
-                                  const Icon(Icons.check_circle, size: 14, color: Colors.black),
+                                  const Icon(Icons.check_circle, size: 14, color: Colors.white),
                                   const SizedBox(width: 6),
                                 ],
                                 Text(
                                   nom.name,
                                   style: GoogleFonts.poppins(
-                                    color: isSelected ? Colors.black : Colors.white,
+                                    color: isSelected ? Colors.white : AppColors.textPrimary,
                                     fontSize: 13,
                                     fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
                                   ),
