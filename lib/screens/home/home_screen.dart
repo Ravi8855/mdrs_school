@@ -38,19 +38,20 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
 
-                  // Deep Royal Purple Tint Overlay with smooth gradient
+                  // Crystal-clear building image at top with smooth purple transition towards bottom
                   Container(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
-                          const Color(0xAA1E0A3C),
-                          const Color(0xDD2A0D52),
-                          const Color(0xF03B0D66),
+                          Colors.transparent,
+                          Colors.transparent,
+                          const Color(0x552A0D52),
+                          const Color(0xEE3B0D66),
                           AppColors.background,
                         ],
-                        stops: const [0.0, 0.45, 0.85, 1.0],
+                        stops: const [0.0, 0.36, 0.62, 0.88, 1.0],
                       ),
                     ),
                   ),
