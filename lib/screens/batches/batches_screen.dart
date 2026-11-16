@@ -155,9 +155,9 @@ class _BatchesScreenState extends State<BatchesScreen> with SingleTickerProvider
                     physics: const BouncingScrollPhysics(),
                     padding: const EdgeInsets.fromLTRB(14, 4, 14, 28),
                     children: [
-                      // 1. Batch 2013 Interactive Fish Aquarium - pure freely floating student names
+                      // 1. Batch 2013 Interactive Fish Aquarium - increased vertically for free floating
                       SizedBox(
-                        height: 320,
+                        height: 480,
                         child: FishAquariumTank(
                           key: const ValueKey("aquarium_2013"),
                           names: all,
@@ -165,7 +165,7 @@ class _BatchesScreenState extends State<BatchesScreen> with SingleTickerProvider
                           searchQuery: _searchQuery,
                         ),
                       ),
-                      const SizedBox(height: 18),
+                      const SizedBox(height: 20),
 
                       // 2. Batch 2013 Memories Header
                       Row(
@@ -252,15 +252,21 @@ class _BatchesScreenState extends State<BatchesScreen> with SingleTickerProvider
                   );
                 }
 
-                // Other Batches: Full-Height Fish Aquarium
-                return Padding(
-                  padding: const EdgeInsets.fromLTRB(14, 4, 14, 14),
-                  child: FishAquariumTank(
-                    key: ValueKey("aquarium_${_batchYears[idx]}"),
-                    names: all,
-                    batchYear: _batchYears[idx],
-                    searchQuery: _searchQuery,
-                  ),
+                // Other Batches: Increased vertically so all names float freely without overlap
+                return ListView(
+                  physics: const BouncingScrollPhysics(),
+                  padding: const EdgeInsets.fromLTRB(14, 4, 14, 20),
+                  children: [
+                    SizedBox(
+                      height: 560,
+                      child: FishAquariumTank(
+                        key: ValueKey("aquarium_${_batchYears[idx]}"),
+                        names: all,
+                        batchYear: _batchYears[idx],
+                        searchQuery: _searchQuery,
+                      ),
+                    ),
+                  ],
                 );
               }),
             ),
@@ -734,8 +740,8 @@ class _FishAquariumTankState extends State<FishAquariumTank>
         final double dy = f2.cy - f1.cy;
 
         // Minimum required separation along horizontal and vertical axes
-        final double minW = (f1.width + f2.width) / 2 + 5.5;
-        final double minH = (f1.height + f2.height) / 2 + 5.0;
+        final double minW = (f1.width + f2.width) / 2 + 7.0;
+        final double minH = (f1.height + f2.height) / 2 + 6.0;
 
         // Elliptical normalized distance
         final double distSq = (dx * dx) / (minW * minW) + (dy * dy) / (minH * minH);
@@ -748,8 +754,8 @@ class _FishAquariumTankState extends State<FishAquariumTank>
           final double ny = (dy / minH) / dist;
 
           // Displace apart instantly to guarantee NO OVERLAP
-          final double sepX = nx * overlap * minW * 0.52;
-          final double sepY = ny * overlap * minH * 0.52;
+          final double sepX = nx * overlap * minW * 0.54;
+          final double sepY = ny * overlap * minH * 0.54;
 
           f1.cx -= sepX;
           f1.cy -= sepY;
