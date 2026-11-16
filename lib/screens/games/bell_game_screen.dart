@@ -338,6 +338,7 @@ class _BellGameScreenState extends State<BellGameScreen> with SingleTickerProvid
                             ),
                           )
                         : ListView.separated(
+                            physics: const BouncingScrollPhysics(),
                             itemCount: _leaderboard.length,
                             separatorBuilder: (context, index) => const SizedBox(height: 8),
                             itemBuilder: (ctx, i) {

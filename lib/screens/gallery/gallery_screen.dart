@@ -21,6 +21,7 @@ class GalleryScreen extends StatelessWidget {
         centerTitle: true,
       ),
       body: GridView.builder(
+        physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         padding: const EdgeInsets.all(12),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,

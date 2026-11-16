@@ -54,6 +54,7 @@ class _HostelScreenState extends State<HostelScreen> with SingleTickerProviderSt
       ),
       body: TabBarView(
         controller: _tabController,
+        physics: const BouncingScrollPhysics(),
         children: [
           _buildHouseList(boysHouses, Colors.blueAccent),
           _buildHouseList(girlsHouses, Colors.pinkAccent),
@@ -64,6 +65,7 @@ class _HostelScreenState extends State<HostelScreen> with SingleTickerProviderSt
 
   Widget _buildHouseList(List<HostelHouse> houses, Color accent) {
     return ListView.builder(
+      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       padding: const EdgeInsets.all(16),
       itemCount: houses.length,
       itemBuilder: (ctx, i) {

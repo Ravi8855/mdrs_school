@@ -78,6 +78,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         padding: const EdgeInsets.all(20),
         child: Form(
           key: _formKey,

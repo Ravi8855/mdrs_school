@@ -73,6 +73,7 @@ class _VotingScreenState extends State<VotingScreen> {
       body: Stack(
         children: [
           ListView.builder(
+            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             padding: const EdgeInsets.all(16),
             itemCount: StaticData.votingCategories.length,
             itemBuilder: (ctx, i) {

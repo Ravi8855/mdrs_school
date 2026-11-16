@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -24,6 +25,23 @@ void main() async {
   runApp(const MdrsApp());
 }
 
+class AppScrollBehavior extends MaterialScrollBehavior {
+  const AppScrollBehavior();
+
+  @override
+  ScrollPhysics getScrollPhysics(BuildContext context) {
+    return const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics());
+  }
+
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+        PointerDeviceKind.trackpad,
+        PointerDeviceKind.stylus,
+      };
+}
+
 class MdrsApp extends StatelessWidget {
   const MdrsApp({super.key});
 
@@ -32,10 +50,18 @@ class MdrsApp extends StatelessWidget {
     return MaterialApp(
       title: 'MDRS School',
       debugShowCheckedModeBanner: false,
+      scrollBehavior: const AppScrollBehavior(),
       theme: ThemeData(
         brightness: Brightness.dark,
         scaffoldBackgroundColor: AppColors.background,
         primaryColor: AppColors.primary,
+        pageTransitionsTheme: const PageTransitionsTheme(
+          builders: {
+            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.windows: CupertinoPageTransitionsBuilder(),
+          },
+        ),
         colorScheme: const ColorScheme.dark(
           primary: AppColors.primary,
           secondary: AppColors.primaryLight,
@@ -64,6 +90,68 @@ class MdrsApp extends StatelessWidget {
           ),
         ),
       ),
+      builder: (context, child) {
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            // If running on a wide desktop browser, render inside an authentic smartphone frame
+            if (constraints.maxWidth > 550) {
+              return Scaffold(
+                backgroundColor: const Color(0xFF0D0F12),
+                body: Center(
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(vertical: 20),
+                    width: 412,
+                    decoration: BoxDecoration(
+                      color: AppColors.background,
+                      borderRadius: BorderRadius.circular(44),
+                      border: Border.all(color: const Color(0xFF2C323C), width: 10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withAlpha(220),
+                          blurRadius: 50,
+                          spreadRadius: 8,
+                          offset: const Offset(0, 15),
+                        ),
+                        BoxShadow(
+                          color: AppColors.primary.withAlpha(30),
+                          blurRadius: 24,
+                          spreadRadius: 2,
+                        ),
+                      ],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(34),
+                      child: Stack(
+                        children: [
+                          child ?? const SizedBox(),
+                          // Mobile speaker notch at top
+                          Positioned(
+                            top: 8,
+                            left: 0,
+                            right: 0,
+                            child: Center(
+                              child: Container(
+                                width: 72,
+                                height: 5,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF3A424E),
+                                  borderRadius: BorderRadius.circular(3),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }
+            // Real mobile device or emulator: take full native screen
+            return child ?? const SizedBox();
+          },
+        );
+      },
       home: const IntroScreen(),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../core/app_colors.dart';
 import 'home/home_screen.dart';
 import 'batches/batches_screen.dart';
@@ -48,7 +49,10 @@ class _MainShellState extends State<MainShell> {
         ),
         child: NavigationBar(
           selectedIndex: _currentIndex,
-          onDestinationSelected: (index) => setState(() => _currentIndex = index),
+          onDestinationSelected: (index) {
+            HapticFeedback.selectionClick();
+            setState(() => _currentIndex = index);
+          },
           backgroundColor: Colors.transparent,
           indicatorColor: AppColors.primary.withAlpha(50),
           elevation: 0,
