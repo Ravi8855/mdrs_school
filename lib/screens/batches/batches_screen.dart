@@ -19,30 +19,6 @@ class _BatchesScreenState extends State<BatchesScreen> with SingleTickerProvider
 
   final List<String> _batchYears = ["2013", "2014", "2015", "2016", "2017"];
 
-  final List<Map<String, String>> _photos2013 = const [
-    {
-      "title": "Batch 2013 Campus Group Photo",
-      "path": "assets/images/batch2013_3.jpg",
-      "badge": "Official Group Photo",
-      "subtitle": "Official school campus portrait with students & teachers",
-      "short": "📸 Campus Photo",
-    },
-    {
-      "title": "Classroom Celebration",
-      "path": "assets/images/batch2013_1.jpg",
-      "badge": "Classroom",
-      "subtitle": "Memorable classroom gathering and fun moments",
-      "short": "🎉 Class Fun",
-    },
-    {
-      "title": "Cake Cutting Ceremony",
-      "path": "assets/images/batch2013_2.jpg",
-      "badge": "Celebration",
-      "subtitle": "Special celebration with faculty and classmates",
-      "short": "🎂 Celebration",
-    },
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -172,30 +148,21 @@ class _BatchesScreenState extends State<BatchesScreen> with SingleTickerProvider
                 final all = _getBatchList(idx);
                 final year = _batchYears[idx];
 
-                // Batch 2013: Aquarium (with floating photo bubbles) + Memories Gallery below
+                // Batch 2013: Aquarium (pure floating student names) + Memories Gallery below
                 if (year == "2013") {
                   return ListView(
                     controller: _scroll2013,
                     physics: const BouncingScrollPhysics(),
                     padding: const EdgeInsets.fromLTRB(14, 4, 14, 28),
                     children: [
-                      // 1. Batch 2013 Interactive Fish Aquarium with 3 Floating Photo Memories
+                      // 1. Batch 2013 Interactive Fish Aquarium - pure freely floating student names
                       SizedBox(
-                        height: 300,
+                        height: 320,
                         child: FishAquariumTank(
                           key: const ValueKey("aquarium_2013"),
                           names: all,
                           batchYear: "2013",
                           searchQuery: _searchQuery,
-                          photoMemories: _photos2013,
-                          onPhotoTap: (path, title) => _openFullPhotoViewer(context, path, title),
-                          onScrollToPhotos: () {
-                            _scroll2013.animateTo(
-                              310.0,
-                              duration: const Duration(milliseconds: 400),
-                              curve: Curves.easeInOut,
-                            );
-                          },
                         ),
                       ),
                       const SizedBox(height: 18),
@@ -534,8 +501,6 @@ class _NameFish {
   double scale = 1.0;
   bool isTouched = false;
   final int seed;
-  final String? imagePath;
-  final String? badge;
 
   _NameFish({
     required this.text,
@@ -547,8 +512,6 @@ class _NameFish {
     required this.height,
     required this.color,
     required this.seed,
-    this.imagePath,
-    this.badge,
   });
 
   double get cx => x + width / 2;
@@ -564,18 +527,12 @@ class FishAquariumTank extends StatefulWidget {
   final List<String> names;
   final String batchYear;
   final String searchQuery;
-  final List<Map<String, String>>? photoMemories;
-  final void Function(String path, String title)? onPhotoTap;
-  final VoidCallback? onScrollToPhotos;
 
   const FishAquariumTank({
     super.key,
     required this.names,
     required this.batchYear,
     required this.searchQuery,
-    this.photoMemories,
-    this.onPhotoTap,
-    this.onScrollToPhotos,
   });
 
   @override
@@ -677,36 +634,6 @@ class _FishAquariumTankState extends State<FishAquariumTank>
         color: _palette[i % _palette.length],
         seed: i,
       ));
-    }
-
-    // 3. Setup Special Photo Memory Fish (if provided for Batch 2013)
-    if (widget.photoMemories != null) {
-      for (int i = 0; i < widget.photoMemories!.length; i++) {
-        final photo = widget.photoMemories![i];
-        final text = photo["short"] ?? photo["title"] ?? "Memory";
-        final double width = (text.length * 6.5 + 24).clamp(68.0, 115.0);
-        const double height = 26.0;
-
-        final double startX = 14 + (i * 95.0) % max(40.0, w - width - 20);
-        final double startY = 46 + (i * 55.0) % max(40.0, h - height - 50);
-
-        final double vx = (_rng.nextBool() ? 1 : -1) * (0.35 + _rng.nextDouble() * 0.40);
-        final double vy = (_rng.nextBool() ? 1 : -1) * (0.30 + _rng.nextDouble() * 0.35);
-
-        _fishes.add(_NameFish(
-          text: text,
-          x: startX.clamp(8.0, max(8.0, w - width - 8)),
-          y: startY.clamp(42.0, max(42.0, h - height - 42)),
-          vx: vx,
-          vy: vy,
-          width: width,
-          height: height,
-          color: const Color(0xFFFFD700), // Radiant Gold for Photo Memories
-          seed: 100 + i,
-          imagePath: photo["path"],
-          badge: photo["badge"],
-        ));
-      }
     }
 
     // Run 25 relaxation steps to ensure strict separation before first frame
@@ -1019,11 +946,10 @@ class _FishAquariumTankState extends State<FishAquariumTank>
                   ),
                 ),
 
-                // 4. Interactive Student Name Fish
+                // 4. Interactive Student Name Fish (Freely floating classmate names)
                 ..._fishes.map((f) {
                   final bool isMatch = query.isEmpty || f.text.toLowerCase().contains(query);
                   final double opacity = query.isEmpty ? 1.0 : (isMatch ? 1.0 : 0.22);
-                  final bool isPhoto = f.imagePath != null;
                   // Hydrodynamic swimming tilt angle based on horizontal velocity
                   final double tiltAngle = (f.vx * 0.07).clamp(-0.20, 0.20);
                   // Gentle natural swimming breathing scale
@@ -1033,12 +959,7 @@ class _FishAquariumTankState extends State<FishAquariumTank>
                     left: f.x,
                     top: f.y,
                     child: GestureDetector(
-                      onTap: () {
-                        _reflectFish(f);
-                        if (isPhoto) {
-                          widget.onPhotoTap?.call(f.imagePath!, f.text);
-                        }
-                      },
+                      onTap: () => _reflectFish(f),
                       child: AnimatedOpacity(
                         duration: const Duration(milliseconds: 200),
                         opacity: opacity,
@@ -1049,29 +970,23 @@ class _FishAquariumTankState extends State<FishAquariumTank>
                             child: Container(
                               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3.5),
                               decoration: BoxDecoration(
-                                color: isPhoto
-                                    ? const Color(0xFFD97706).withAlpha(f.scale > 1.05 ? 120 : 75)
-                                    : f.color.withAlpha(f.scale > 1.05 ? 100 : (isMatch && query.isNotEmpty ? 90 : 55)),
+                                color: f.color.withAlpha(f.scale > 1.05 ? 100 : (isMatch && query.isNotEmpty ? 90 : 55)),
                                 borderRadius: BorderRadius.circular(14),
                                 border: Border.all(
                                   color: f.scale > 1.05
                                       ? Colors.white
-                                      : (isPhoto
+                                      : (isMatch && query.isNotEmpty
                                           ? const Color(0xFFFFD700)
-                                          : (isMatch && query.isNotEmpty
-                                              ? const Color(0xFFFFD700)
-                                              : f.color.withAlpha(170))),
-                                  width: f.scale > 1.05 ? 1.8 : (isPhoto || (isMatch && query.isNotEmpty) ? 1.6 : 1.1),
+                                          : f.color.withAlpha(170)),
+                                  width: f.scale > 1.05 ? 1.8 : (isMatch && query.isNotEmpty ? 1.6 : 1.1),
                                 ),
                                 boxShadow: [
                                   BoxShadow(
                                     color: f.scale > 1.05
                                         ? Colors.white.withAlpha(150)
-                                        : (isPhoto
-                                            ? const Color(0xFFFFD700).withAlpha(140)
-                                            : (isMatch && query.isNotEmpty
-                                                ? const Color(0xFFFFD700).withAlpha(130)
-                                                : f.color.withAlpha(60))),
+                                        : (isMatch && query.isNotEmpty
+                                            ? const Color(0xFFFFD700).withAlpha(130)
+                                            : f.color.withAlpha(60)),
                                     blurRadius: f.scale > 1.05 ? 14 : 7,
                                     spreadRadius: f.scale > 1.05 ? 1.5 : 0.5,
                                   ),
@@ -1080,38 +995,29 @@ class _FishAquariumTankState extends State<FishAquariumTank>
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  // Leading Indicator (Camera icon for photo memories, Glowing Dot for student fish)
-                                  if (isPhoto) ...[
-                                    const Icon(
-                                      Icons.camera_alt_rounded,
-                                      size: 11,
-                                      color: Color(0xFFFFD700),
+                                  // Leading Indicator (Glowing Dot for student fish)
+                                  Container(
+                                    width: 5.5,
+                                    height: 5.5,
+                                    decoration: BoxDecoration(
+                                      color: f.scale > 1.05 ? Colors.white : f.color,
+                                      shape: BoxShape.circle,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: f.color,
+                                          blurRadius: 4,
+                                          spreadRadius: 1,
+                                        ),
+                                      ],
                                     ),
-                                    const SizedBox(width: 4),
-                                  ] else ...[
-                                    Container(
-                                      width: 5.5,
-                                      height: 5.5,
-                                      decoration: BoxDecoration(
-                                        color: f.scale > 1.05 ? Colors.white : f.color,
-                                        shape: BoxShape.circle,
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: f.color,
-                                            blurRadius: 4,
-                                            spreadRadius: 1,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(width: 5),
-                                  ],
+                                  ),
+                                  const SizedBox(width: 5),
                                   Text(
                                     f.text,
                                     style: GoogleFonts.poppins(
                                       fontSize: 10.5,
-                                      color: isPhoto ? const Color(0xFFFEF3C7) : Colors.white,
-                                      fontWeight: isPhoto || (isMatch && query.isNotEmpty) ? FontWeight.w700 : FontWeight.w600,
+                                      color: Colors.white,
+                                      fontWeight: isMatch && query.isNotEmpty ? FontWeight.w700 : FontWeight.w600,
                                       letterSpacing: 0.2,
                                     ),
                                   ),
@@ -1176,58 +1082,24 @@ class _FishAquariumTankState extends State<FishAquariumTank>
                           ],
                         ),
 
-                        // Right: Live Swimmers Count Chip & Photos shortcut
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            if (widget.photoMemories != null && widget.onScrollToPhotos != null) ...[
-                              GestureDetector(
-                                onTap: widget.onScrollToPhotos,
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                                  margin: const EdgeInsets.only(right: 6),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFFFD700).withAlpha(45),
-                                    borderRadius: BorderRadius.circular(12),
-                                    border: Border.all(color: const Color(0xFFFFD700).withAlpha(180)),
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const Icon(Icons.photo_library, size: 11, color: Color(0xFFFFD700)),
-                                      const SizedBox(width: 4),
-                                      Text(
-                                        "3 Photos ↓",
-                                        style: GoogleFonts.poppins(
-                                          color: const Color(0xFFFFD700),
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                              decoration: BoxDecoration(
-                                color: Colors.white.withAlpha(25),
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(color: const Color(0xFF38BDF8).withAlpha(100)),
-                              ),
-                              child: Text(
-                                query.isEmpty
-                                    ? "${_fishes.length} Swimmers"
-                                    : "$matchCount / ${_fishes.length}",
-                                style: GoogleFonts.poppins(
-                                  color: Colors.white,
-                                  fontSize: 10.5,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
+                        // Right: Live Swimmers Count Chip
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withAlpha(25),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: const Color(0xFF38BDF8).withAlpha(100)),
+                          ),
+                          child: Text(
+                            query.isEmpty
+                                ? "${_fishes.length} Swimmers"
+                                : "$matchCount / ${_fishes.length}",
+                            style: GoogleFonts.poppins(
+                              color: Colors.white,
+                              fontSize: 10.5,
+                              fontWeight: FontWeight.w600,
                             ),
-                          ],
+                          ),
                         ),
                       ],
                     ),
@@ -1277,65 +1149,32 @@ class _FishAquariumTankState extends State<FishAquariumTank>
                             ),
                           ],
                         ),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            if (widget.onScrollToPhotos != null) ...[
-                              GestureDetector(
-                                onTap: widget.onScrollToPhotos,
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                                  margin: const EdgeInsets.only(right: 6),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFFFD700).withAlpha(45),
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(color: const Color(0xFFFFD700).withAlpha(160)),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      const Icon(Icons.photo, size: 12, color: Color(0xFFFFD700)),
-                                      const SizedBox(width: 4),
-                                      Text(
-                                        "Photos",
-                                        style: GoogleFonts.poppins(
-                                          color: const Color(0xFFFFD700),
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                        // Stir / Ripple Tank Button
+                        GestureDetector(
+                          onTap: _stirTank,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFF0284C7), Color(0xFF7C3AED)],
                               ),
-                            ],
-                            // Stir / Ripple Tank Button
-                            GestureDetector(
-                              onTap: _stirTank,
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                                decoration: BoxDecoration(
-                                  gradient: const LinearGradient(
-                                    colors: [Color(0xFF0284C7), Color(0xFF7C3AED)],
-                                  ),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Row(
-                                  children: [
-                                    const Icon(Icons.waves, size: 12, color: Colors.white),
-                                    const SizedBox(width: 4),
-                                    Text(
-                                      "Stir",
-                                      style: GoogleFonts.poppins(
-                                        color: Colors.white,
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                          ],
+                            child: Row(
+                              children: [
+                                const Icon(Icons.waves, size: 12, color: Colors.white),
+                                const SizedBox(width: 4),
+                                Text(
+                                  "Stir",
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ],
                     ),
