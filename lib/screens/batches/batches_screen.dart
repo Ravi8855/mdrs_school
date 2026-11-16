@@ -345,6 +345,109 @@ class _BatchesScreenState extends State<BatchesScreen> with SingleTickerProvider
                   );
                 }
 
+                // Batch 2015: Aquarium + Memories Gallery below
+                if (year == "2015") {
+                  return ListView(
+                    physics: const BouncingScrollPhysics(),
+                    padding: const EdgeInsets.fromLTRB(14, 4, 14, 28),
+                    children: [
+                      // 1. Batch 2015 Interactive Fish Aquarium - spacious vertical height for 36 students
+                      SizedBox(
+                        height: 520,
+                        child: FishAquariumTank(
+                          key: const ValueKey("aquarium_2015"),
+                          names: all,
+                          batchYear: "2015",
+                          searchQuery: _searchQuery,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+
+                      // 2. Batch 2015 Memories Header
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(6),
+                                decoration: BoxDecoration(
+                                  color: AppColors.primary.withAlpha(25),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Icon(
+                                  Icons.photo_library_rounded,
+                                  size: 16,
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                "BATCH 2015 MEMORIES",
+                                style: GoogleFonts.poppins(
+                                  color: AppColors.textViolet,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w800,
+                                  letterSpacing: 1.2,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: AppColors.cardBorder),
+                              boxShadow: const [
+                                BoxShadow(color: Color(0x107C3AED), blurRadius: 8),
+                              ],
+                            ),
+                            child: Text(
+                              "3 Photos",
+                              style: GoogleFonts.poppins(
+                                color: AppColors.textSecondary,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+
+                      // 3. Batch 2015 Campus Portrait
+                      _buildMemoryCard(
+                        context,
+                        imagePath: "assets/images/batch2015_1.jpg",
+                        title: "Batch 2015 Campus Gathering",
+                        subtitle: "School portrait with faculty, staff & classmates",
+                        badge: "Campus Portrait",
+                      ),
+                      const SizedBox(height: 12),
+
+                      // 4. Cultural Celebration
+                      _buildMemoryCard(
+                        context,
+                        imagePath: "assets/images/batch2015_2.jpg",
+                        title: "Cultural Celebration",
+                        subtitle: "Festive celebration and cultural moments",
+                        badge: "Celebration",
+                      ),
+                      const SizedBox(height: 12),
+
+                      // 5. Corridor Group Portrait
+                      _buildMemoryCard(
+                        context,
+                        imagePath: "assets/images/batch2015_3.jpg",
+                        title: "Corridor Class Gathering",
+                        subtitle: "Memorable moments in the school hallway",
+                        badge: "Campus Memories",
+                      ),
+                    ],
+                  );
+                }
+
                 // Other Batches: Increased vertically so all names float freely without overlap
                 return ListView(
                   physics: const BouncingScrollPhysics(),
