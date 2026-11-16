@@ -14,19 +14,45 @@ class BatchesScreen extends StatefulWidget {
 
 class _BatchesScreenState extends State<BatchesScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  final ScrollController _scroll2013 = ScrollController();
   String _searchQuery = "";
 
   final List<String> _batchYears = ["2013", "2014", "2015", "2016", "2017"];
 
+  final List<Map<String, String>> _photos2013 = const [
+    {
+      "title": "Batch 2013 Campus Group Photo",
+      "path": "assets/images/batch2013_3.jpg",
+      "badge": "Official Group Photo",
+      "subtitle": "Official school campus portrait with students & teachers",
+      "short": "📸 Campus Photo",
+    },
+    {
+      "title": "Classroom Celebration",
+      "path": "assets/images/batch2013_1.jpg",
+      "badge": "Classroom",
+      "subtitle": "Memorable classroom gathering and fun moments",
+      "short": "🎉 Class Fun",
+    },
+    {
+      "title": "Cake Cutting Ceremony",
+      "path": "assets/images/batch2013_2.jpg",
+      "badge": "Celebration",
+      "subtitle": "Special celebration with faculty and classmates",
+      "short": "🎂 Celebration",
+    },
+  ];
+
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: _batchYears.length, vsync: this, initialIndex: 1); // default 2014
+    _tabController = TabController(length: _batchYears.length, vsync: this, initialIndex: 0); // default 2013
   }
 
   @override
   void dispose() {
     _tabController.dispose();
+    _scroll2013.dispose();
     super.dispose();
   }
 
@@ -146,20 +172,30 @@ class _BatchesScreenState extends State<BatchesScreen> with SingleTickerProvider
                 final all = _getBatchList(idx);
                 final year = _batchYears[idx];
 
-                // Batch 2013: Aquarium + Memories Gallery below
+                // Batch 2013: Aquarium (with floating photo bubbles) + Memories Gallery below
                 if (year == "2013") {
                   return ListView(
+                    controller: _scroll2013,
                     physics: const BouncingScrollPhysics(),
                     padding: const EdgeInsets.fromLTRB(14, 4, 14, 28),
                     children: [
-                      // 1. Batch 2013 Interactive Fish Aquarium
+                      // 1. Batch 2013 Interactive Fish Aquarium with 3 Floating Photo Memories
                       SizedBox(
-                        height: 330,
+                        height: 300,
                         child: FishAquariumTank(
                           key: const ValueKey("aquarium_2013"),
                           names: all,
                           batchYear: "2013",
                           searchQuery: _searchQuery,
+                          photoMemories: _photos2013,
+                          onPhotoTap: (path, title) => _openFullPhotoViewer(context, path, title),
+                          onScrollToPhotos: () {
+                            _scroll2013.animateTo(
+                              310.0,
+                              duration: const Duration(milliseconds: 400),
+                              curve: Curves.easeInOut,
+                            );
+                          },
                         ),
                       ),
                       const SizedBox(height: 18),
@@ -498,6 +534,8 @@ class _NameFish {
   double scale = 1.0;
   bool isTouched = false;
   final int seed;
+  final String? imagePath;
+  final String? badge;
 
   _NameFish({
     required this.text,
@@ -509,6 +547,8 @@ class _NameFish {
     required this.height,
     required this.color,
     required this.seed,
+    this.imagePath,
+    this.badge,
   });
 
   double get cx => x + width / 2;
@@ -524,12 +564,18 @@ class FishAquariumTank extends StatefulWidget {
   final List<String> names;
   final String batchYear;
   final String searchQuery;
+  final List<Map<String, String>>? photoMemories;
+  final void Function(String path, String title)? onPhotoTap;
+  final VoidCallback? onScrollToPhotos;
 
   const FishAquariumTank({
     super.key,
     required this.names,
     required this.batchYear,
     required this.searchQuery,
+    this.photoMemories,
+    this.onPhotoTap,
+    this.onScrollToPhotos,
   });
 
   @override
@@ -597,12 +643,11 @@ class _FishAquariumTankState extends State<FishAquariumTank>
 
     // 2. Setup All Student Name Fish from the Roster
     final sample = widget.names;
-    if (sample.isEmpty) return;
 
     final int count = sample.length;
     // Multi-column grid distribution to start with maximum spacing
     final int cols = count > 24 ? 5 : (count > 15 ? 4 : 3);
-    final int rows = (count / cols).ceil();
+    final int rows = max(1, (count / max(1, cols)).ceil());
     final double colSpacing = (w - 24) / max(1, cols);
     final double rowSpacing = (h - 90) / max(1, rows);
 
@@ -612,8 +657,8 @@ class _FishAquariumTankState extends State<FishAquariumTank>
       final double width = (text.length * 6.4 + 22).clamp(50.0, 96.0);
       const double height = 25.0;
 
-      final int row = i ~/ cols;
-      final int col = i % cols;
+      final int row = i ~/ max(1, cols);
+      final int col = i % max(1, cols);
 
       final double startX = 12 + col * colSpacing + (_rng.nextDouble() * 8 - 4);
       final double startY = 44 + row * rowSpacing + (_rng.nextDouble() * 6 - 3);
@@ -632,6 +677,36 @@ class _FishAquariumTankState extends State<FishAquariumTank>
         color: _palette[i % _palette.length],
         seed: i,
       ));
+    }
+
+    // 3. Setup Special Photo Memory Fish (if provided for Batch 2013)
+    if (widget.photoMemories != null) {
+      for (int i = 0; i < widget.photoMemories!.length; i++) {
+        final photo = widget.photoMemories![i];
+        final text = photo["short"] ?? photo["title"] ?? "Memory";
+        final double width = (text.length * 6.5 + 24).clamp(68.0, 115.0);
+        const double height = 26.0;
+
+        final double startX = 14 + (i * 95.0) % max(40.0, w - width - 20);
+        final double startY = 46 + (i * 55.0) % max(40.0, h - height - 50);
+
+        final double vx = (_rng.nextBool() ? 1 : -1) * (0.35 + _rng.nextDouble() * 0.40);
+        final double vy = (_rng.nextBool() ? 1 : -1) * (0.30 + _rng.nextDouble() * 0.35);
+
+        _fishes.add(_NameFish(
+          text: text,
+          x: startX.clamp(8.0, max(8.0, w - width - 8)),
+          y: startY.clamp(42.0, max(42.0, h - height - 42)),
+          vx: vx,
+          vy: vy,
+          width: width,
+          height: height,
+          color: const Color(0xFFFFD700), // Radiant Gold for Photo Memories
+          seed: 100 + i,
+          imagePath: photo["path"],
+          badge: photo["badge"],
+        ));
+      }
     }
 
     // Run 25 relaxation steps to ensure strict separation before first frame
@@ -948,6 +1023,7 @@ class _FishAquariumTankState extends State<FishAquariumTank>
                 ..._fishes.map((f) {
                   final bool isMatch = query.isEmpty || f.text.toLowerCase().contains(query);
                   final double opacity = query.isEmpty ? 1.0 : (isMatch ? 1.0 : 0.22);
+                  final bool isPhoto = f.imagePath != null;
                   // Hydrodynamic swimming tilt angle based on horizontal velocity
                   final double tiltAngle = (f.vx * 0.07).clamp(-0.20, 0.20);
                   // Gentle natural swimming breathing scale
@@ -957,7 +1033,12 @@ class _FishAquariumTankState extends State<FishAquariumTank>
                     left: f.x,
                     top: f.y,
                     child: GestureDetector(
-                      onTap: () => _reflectFish(f),
+                      onTap: () {
+                        _reflectFish(f);
+                        if (isPhoto) {
+                          widget.onPhotoTap?.call(f.imagePath!, f.text);
+                        }
+                      },
                       child: AnimatedOpacity(
                         duration: const Duration(milliseconds: 200),
                         opacity: opacity,
@@ -968,23 +1049,29 @@ class _FishAquariumTankState extends State<FishAquariumTank>
                             child: Container(
                               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3.5),
                               decoration: BoxDecoration(
-                                color: f.color.withAlpha(f.scale > 1.05 ? 100 : (isMatch && query.isNotEmpty ? 90 : 55)),
+                                color: isPhoto
+                                    ? const Color(0xFFD97706).withAlpha(f.scale > 1.05 ? 120 : 75)
+                                    : f.color.withAlpha(f.scale > 1.05 ? 100 : (isMatch && query.isNotEmpty ? 90 : 55)),
                                 borderRadius: BorderRadius.circular(14),
                                 border: Border.all(
                                   color: f.scale > 1.05
                                       ? Colors.white
-                                      : (isMatch && query.isNotEmpty
+                                      : (isPhoto
                                           ? const Color(0xFFFFD700)
-                                          : f.color.withAlpha(170)),
-                                  width: f.scale > 1.05 ? 1.8 : (isMatch && query.isNotEmpty ? 1.6 : 1.1),
+                                          : (isMatch && query.isNotEmpty
+                                              ? const Color(0xFFFFD700)
+                                              : f.color.withAlpha(170))),
+                                  width: f.scale > 1.05 ? 1.8 : (isPhoto || (isMatch && query.isNotEmpty) ? 1.6 : 1.1),
                                 ),
                                 boxShadow: [
                                   BoxShadow(
                                     color: f.scale > 1.05
                                         ? Colors.white.withAlpha(150)
-                                        : (isMatch && query.isNotEmpty
-                                            ? const Color(0xFFFFD700).withAlpha(130)
-                                            : f.color.withAlpha(60)),
+                                        : (isPhoto
+                                            ? const Color(0xFFFFD700).withAlpha(140)
+                                            : (isMatch && query.isNotEmpty
+                                                ? const Color(0xFFFFD700).withAlpha(130)
+                                                : f.color.withAlpha(60))),
                                     blurRadius: f.scale > 1.05 ? 14 : 7,
                                     spreadRadius: f.scale > 1.05 ? 1.5 : 0.5,
                                   ),
@@ -993,29 +1080,38 @@ class _FishAquariumTankState extends State<FishAquariumTank>
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  // Glowing Fish Leading Eye / Fin Dot
-                                  Container(
-                                    width: 5.5,
-                                    height: 5.5,
-                                    decoration: BoxDecoration(
-                                      color: f.scale > 1.05 ? Colors.white : f.color,
-                                      shape: BoxShape.circle,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: f.color,
-                                          blurRadius: 4,
-                                          spreadRadius: 1,
-                                        ),
-                                      ],
+                                  // Leading Indicator (Camera icon for photo memories, Glowing Dot for student fish)
+                                  if (isPhoto) ...[
+                                    const Icon(
+                                      Icons.camera_alt_rounded,
+                                      size: 11,
+                                      color: Color(0xFFFFD700),
                                     ),
-                                  ),
-                                  const SizedBox(width: 5),
+                                    const SizedBox(width: 4),
+                                  ] else ...[
+                                    Container(
+                                      width: 5.5,
+                                      height: 5.5,
+                                      decoration: BoxDecoration(
+                                        color: f.scale > 1.05 ? Colors.white : f.color,
+                                        shape: BoxShape.circle,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: f.color,
+                                            blurRadius: 4,
+                                            spreadRadius: 1,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(width: 5),
+                                  ],
                                   Text(
                                     f.text,
                                     style: GoogleFonts.poppins(
                                       fontSize: 10.5,
-                                      color: Colors.white,
-                                      fontWeight: isMatch && query.isNotEmpty ? FontWeight.w700 : FontWeight.w600,
+                                      color: isPhoto ? const Color(0xFFFEF3C7) : Colors.white,
+                                      fontWeight: isPhoto || (isMatch && query.isNotEmpty) ? FontWeight.w700 : FontWeight.w600,
                                       letterSpacing: 0.2,
                                     ),
                                   ),
@@ -1080,18 +1176,47 @@ class _FishAquariumTankState extends State<FishAquariumTank>
                           ],
                         ),
 
-                        // Right: Live Swimmers Count Chip
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withAlpha(25),
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: const Color(0xFF38BDF8).withAlpha(100)),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
+                        // Right: Live Swimmers Count Chip & Photos shortcut
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (widget.photoMemories != null && widget.onScrollToPhotos != null) ...[
+                              GestureDetector(
+                                onTap: widget.onScrollToPhotos,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                  margin: const EdgeInsets.only(right: 6),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFFFD700).withAlpha(45),
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(color: const Color(0xFFFFD700).withAlpha(180)),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Icon(Icons.photo_library, size: 11, color: Color(0xFFFFD700)),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        "3 Photos ↓",
+                                        style: GoogleFonts.poppins(
+                                          color: const Color(0xFFFFD700),
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withAlpha(25),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: const Color(0xFF38BDF8).withAlpha(100)),
+                              ),
+                              child: Text(
                                 query.isEmpty
                                     ? "${_fishes.length} Swimmers"
                                     : "$matchCount / ${_fishes.length}",
@@ -1101,8 +1226,8 @@ class _FishAquariumTankState extends State<FishAquariumTank>
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -1152,32 +1277,65 @@ class _FishAquariumTankState extends State<FishAquariumTank>
                             ),
                           ],
                         ),
-                        // Stir / Ripple Tank Button
-                        GestureDetector(
-                          onTap: _stirTank,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                            decoration: BoxDecoration(
-                              gradient: const LinearGradient(
-                                colors: [Color(0xFF0284C7), Color(0xFF7C3AED)],
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Row(
-                              children: [
-                                const Icon(Icons.waves, size: 12, color: Colors.white),
-                                const SizedBox(width: 4),
-                                Text(
-                                  "Stir",
-                                  style: GoogleFonts.poppins(
-                                    color: Colors.white,
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w600,
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (widget.onScrollToPhotos != null) ...[
+                              GestureDetector(
+                                onTap: widget.onScrollToPhotos,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                  margin: const EdgeInsets.only(right: 6),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFFFD700).withAlpha(45),
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(color: const Color(0xFFFFD700).withAlpha(160)),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      const Icon(Icons.photo, size: 12, color: Color(0xFFFFD700)),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        "Photos",
+                                        style: GoogleFonts.poppins(
+                                          color: const Color(0xFFFFD700),
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ],
+                              ),
+                            ],
+                            // Stir / Ripple Tank Button
+                            GestureDetector(
+                              onTap: _stirTank,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                decoration: BoxDecoration(
+                                  gradient: const LinearGradient(
+                                    colors: [Color(0xFF0284C7), Color(0xFF7C3AED)],
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Row(
+                                  children: [
+                                    const Icon(Icons.waves, size: 12, color: Colors.white),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      "Stir",
+                                      style: GoogleFonts.poppins(
+                                        color: Colors.white,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                          ),
+                          ],
                         ),
                       ],
                     ),
