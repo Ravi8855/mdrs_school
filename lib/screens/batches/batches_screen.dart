@@ -144,6 +144,112 @@ class _BatchesScreenState extends State<BatchesScreen> with SingleTickerProvider
               physics: const BouncingScrollPhysics(),
               children: List.generate(_batchYears.length, (idx) {
                 final all = _getBatchList(idx);
+                final year = _batchYears[idx];
+
+                // Batch 2013: Aquarium + Memories Gallery below
+                if (year == "2013") {
+                  return ListView(
+                    physics: const BouncingScrollPhysics(),
+                    padding: const EdgeInsets.fromLTRB(14, 4, 14, 28),
+                    children: [
+                      // 1. Batch 2013 Interactive Fish Aquarium
+                      SizedBox(
+                        height: 330,
+                        child: FishAquariumTank(
+                          key: const ValueKey("aquarium_2013"),
+                          names: all,
+                          batchYear: "2013",
+                          searchQuery: _searchQuery,
+                        ),
+                      ),
+                      const SizedBox(height: 18),
+
+                      // 2. Batch 2013 Memories Header
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(6),
+                                decoration: BoxDecoration(
+                                  color: AppColors.primary.withAlpha(25),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Icon(
+                                  Icons.photo_library_rounded,
+                                  size: 16,
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                "BATCH 2013 MEMORIES",
+                                style: GoogleFonts.poppins(
+                                  color: AppColors.textViolet,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w800,
+                                  letterSpacing: 1.2,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: AppColors.cardBorder),
+                              boxShadow: const [
+                                BoxShadow(color: Color(0x107C3AED), blurRadius: 8),
+                              ],
+                            ),
+                            child: Text(
+                              "3 Photos",
+                              style: GoogleFonts.poppins(
+                                color: AppColors.textSecondary,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+
+                      // 3. Official Campus Group Photo
+                      _buildMemoryCard(
+                        context,
+                        imagePath: "assets/images/batch2013_3.jpg",
+                        title: "Batch 2013 Campus Group Photo",
+                        subtitle: "Official school portrait with students & teachers",
+                        badge: "Official Portrait",
+                      ),
+                      const SizedBox(height: 12),
+
+                      // 4. Classroom Celebration
+                      _buildMemoryCard(
+                        context,
+                        imagePath: "assets/images/batch2013_1.jpg",
+                        title: "Classroom Celebration",
+                        subtitle: "Memorable classroom gathering and fun moments",
+                        badge: "Classroom",
+                      ),
+                      const SizedBox(height: 12),
+
+                      // 5. Cake Cutting Ceremony
+                      _buildMemoryCard(
+                        context,
+                        imagePath: "assets/images/batch2013_2.jpg",
+                        title: "Cake Cutting Ceremony",
+                        subtitle: "Special celebration with faculty and classmates",
+                        badge: "Celebration",
+                      ),
+                    ],
+                  );
+                }
+
+                // Other Batches: Full-Height Fish Aquarium
                 return Padding(
                   padding: const EdgeInsets.fromLTRB(14, 4, 14, 14),
                   child: FishAquariumTank(
@@ -157,6 +263,181 @@ class _BatchesScreenState extends State<BatchesScreen> with SingleTickerProvider
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  // Luxury framed memory photo card with tap-to-zoom
+  Widget _buildMemoryCard(
+    BuildContext context, {
+    required String imagePath,
+    required String title,
+    required String subtitle,
+    required String badge,
+  }) {
+    return GestureDetector(
+      onTap: () => _openFullPhotoViewer(context, imagePath, title),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: AppColors.cardBorder, width: 1.0),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x127C3AED),
+              blurRadius: 14,
+              offset: Offset(0, 4),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(18),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Stack(
+                children: [
+                  AspectRatio(
+                    aspectRatio: 16 / 10,
+                    child: Image.asset(
+                      imagePath,
+                      fit: BoxFit.cover,
+                      errorBuilder: (ctx, err, stack) => Container(
+                        color: AppColors.background,
+                        child: const Center(
+                          child: Icon(Icons.broken_image, color: AppColors.textMuted),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 10,
+                    right: 10,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: const Color(0xCC1E1035),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.white.withAlpha(60), width: 0.8),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.zoom_in, size: 12, color: Colors.white),
+                          const SizedBox(width: 4),
+                          Text(
+                            badge,
+                            style: GoogleFonts.poppins(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            title,
+                            style: GoogleFonts.poppins(
+                              color: AppColors.textPrimary,
+                              fontSize: 13.5,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            subtitle,
+                            style: GoogleFonts.poppins(
+                              color: AppColors.textSecondary,
+                              fontSize: 11,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withAlpha(15),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.fullscreen_rounded,
+                        size: 18,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Interactive full-screen zoomable photo viewer modal
+  void _openFullPhotoViewer(BuildContext context, String imagePath, String title) {
+    showDialog(
+      context: context,
+      builder: (ctx) => Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: const EdgeInsets.all(12),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Container(
+            color: const Color(0xF50D061A),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          title,
+                          style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close, color: Colors.white),
+                        onPressed: () => Navigator.pop(ctx),
+                      ),
+                    ],
+                  ),
+                ),
+                InteractiveViewer(
+                  maxScale: 4.0,
+                  child: Image.asset(
+                    imagePath,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+                const SizedBox(height: 14),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
