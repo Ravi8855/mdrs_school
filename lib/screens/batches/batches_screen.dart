@@ -148,7 +148,7 @@ class _BatchesScreenState extends State<BatchesScreen> with SingleTickerProvider
                   children: [
                     // Interactive Name Aquarium Canvas Banner
                     Container(
-                      height: 200,
+                      height: 245,
                       decoration: BoxDecoration(
                         color: const Color(0xFF220A40),
                         borderRadius: BorderRadius.circular(18),
@@ -388,28 +388,29 @@ class _BouncingNamesAquariumState extends State<BouncingNamesAquarium>
     _lastH = h;
     _bubbles.clear();
 
-    // Select up to 10 unique names so they have ample breathing room to float without overlapping
-    final sample = widget.names.take(10).toList();
+    // Include ALL student names from the roster in the aquarium
+    final sample = widget.names;
     if (sample.isEmpty) return;
 
-    // Arrange in a clean spaced 3-row grid to guarantee no initial overlap
-    const int cols = 4;
-    final double colSpacing = (w - 24) / cols;
-    final double rowSpacing = (h - 45) / 3;
+    final int count = sample.length;
+    final int cols = count > 24 ? 6 : (count > 15 ? 5 : 4);
+    final int rows = (count / cols).ceil();
+    final double colSpacing = (w - 20) / cols;
+    final double rowSpacing = (h - 38) / max(1, rows);
 
-    for (int i = 0; i < sample.length; i++) {
+    for (int i = 0; i < count; i++) {
       final text = sample[i];
-      final double width = (text.length * 7.5 + 24).clamp(60.0, 110.0);
-      const double height = 30.0;
+      final double width = (text.length * 6.0 + 18).clamp(46.0, 92.0);
+      const double height = 24.0;
 
       final int row = i ~/ cols;
       final int col = i % cols;
 
-      final double startX = 12 + col * colSpacing + (_rng.nextDouble() * 8 - 4);
-      final double startY = 32 + row * rowSpacing + (_rng.nextDouble() * 6 - 3);
+      final double startX = 8 + col * colSpacing + (_rng.nextDouble() * 6 - 3);
+      final double startY = 28 + row * rowSpacing + (_rng.nextDouble() * 4 - 2);
 
-      final double vx = (_rng.nextBool() ? 1 : -1) * (0.6 + _rng.nextDouble() * 0.7);
-      final double vy = (_rng.nextBool() ? 1 : -1) * (0.5 + _rng.nextDouble() * 0.6);
+      final double vx = (_rng.nextBool() ? 1 : -1) * (0.35 + _rng.nextDouble() * 0.45);
+      final double vy = (_rng.nextBool() ? 1 : -1) * (0.30 + _rng.nextDouble() * 0.40);
 
       _bubbles.add(_NameBubble(
         text: text,
@@ -423,8 +424,8 @@ class _BouncingNamesAquariumState extends State<BouncingNamesAquarium>
       ));
     }
 
-    // Run 15 relaxation steps to ensure strict separation before first frame
-    for (int step = 0; step < 15; step++) {
+    // Run 25 relaxation steps to ensure strict separation before first frame
+    for (int step = 0; step < 25; step++) {
       _resolveCollisions(w, h);
     }
 
@@ -472,12 +473,12 @@ class _BouncingNamesAquariumState extends State<BouncingNamesAquarium>
     // Keep velocities smooth & continuous (avoid stalling or extreme speeds)
     for (final b in _bubbles) {
       final double speed = sqrt(b.vx * b.vx + b.vy * b.vy);
-      if (speed > 3.2) {
-        b.vx = (b.vx / speed) * 3.2;
-        b.vy = (b.vy / speed) * 3.2;
-      } else if (speed < 0.4) {
-        b.vx = (b.vx >= 0 ? 0.45 : -0.45);
-        b.vy = (b.vy >= 0 ? 0.40 : -0.40);
+      if (speed > 2.4) {
+        b.vx = (b.vx / speed) * 2.4;
+        b.vy = (b.vy / speed) * 2.4;
+      } else if (speed < 0.28) {
+        b.vx = (b.vx >= 0 ? 0.35 : -0.35);
+        b.vy = (b.vy >= 0 ? 0.30 : -0.30);
       }
     }
 
@@ -609,19 +610,19 @@ class _BouncingNamesAquariumState extends State<BouncingNamesAquarium>
                 child: Transform.scale(
                   scale: b.scale,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
                     decoration: BoxDecoration(
-                      color: b.color.withAlpha(b.scale > 1.05 ? 85 : 45),
-                      borderRadius: BorderRadius.circular(16),
+                      color: b.color.withAlpha(b.scale > 1.05 ? 90 : 50),
+                      borderRadius: BorderRadius.circular(12),
                       border: Border.all(
                         color: b.scale > 1.05 ? Colors.white : b.color.withAlpha(160),
-                        width: b.scale > 1.05 ? 1.8 : 1.2,
+                        width: b.scale > 1.05 ? 1.6 : 1.0,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: b.color.withAlpha(b.scale > 1.05 ? 120 : 50),
-                          blurRadius: b.scale > 1.05 ? 12 : 6,
-                          spreadRadius: b.scale > 1.05 ? 1.5 : 0,
+                          color: b.color.withAlpha(b.scale > 1.05 ? 120 : 45),
+                          blurRadius: b.scale > 1.05 ? 10 : 5,
+                          spreadRadius: b.scale > 1.05 ? 1.2 : 0,
                         ),
                       ],
                     ),
@@ -629,18 +630,18 @@ class _BouncingNamesAquariumState extends State<BouncingNamesAquarium>
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Container(
-                          width: 5,
-                          height: 5,
+                          width: 4.5,
+                          height: 4.5,
                           decoration: BoxDecoration(
                             color: b.color,
                             shape: BoxShape.circle,
                           ),
                         ),
-                        const SizedBox(width: 5),
+                        const SizedBox(width: 4),
                         Text(
                           b.text,
                           style: GoogleFonts.poppins(
-                            fontSize: 11,
+                            fontSize: 10,
                             color: Colors.white,
                             fontWeight: FontWeight.w600,
                           ),
