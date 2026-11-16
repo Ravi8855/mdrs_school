@@ -448,6 +448,179 @@ class _BatchesScreenState extends State<BatchesScreen> with SingleTickerProvider
                   );
                 }
 
+                // Batch 2017 with Aquarium + 10 Memories Photos below
+                if (year == "2017") {
+                  return ListView(
+                    physics: const BouncingScrollPhysics(),
+                    padding: const EdgeInsets.fromLTRB(14, 4, 14, 28),
+                    children: [
+                      // 1. Batch 2017 Interactive Fish Aquarium
+                      SizedBox(
+                        height: 520,
+                        child: FishAquariumTank(
+                          key: const ValueKey("aquarium_2017"),
+                          names: all,
+                          batchYear: "2017",
+                          searchQuery: _searchQuery,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+
+                      // 2. Batch 2017 Memories Header
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(6),
+                                decoration: BoxDecoration(
+                                  color: AppColors.primary.withAlpha(25),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Icon(
+                                  Icons.photo_library_rounded,
+                                  size: 16,
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                "BATCH 2017 MEMORIES",
+                                style: GoogleFonts.poppins(
+                                  color: AppColors.textViolet,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w800,
+                                  letterSpacing: 1.2,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: AppColors.cardBorder),
+                              boxShadow: const [
+                                BoxShadow(color: Color(0x107C3AED), blurRadius: 8),
+                              ],
+                            ),
+                            child: Text(
+                              "10 Photos",
+                              style: GoogleFonts.poppins(
+                                color: AppColors.textSecondary,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+
+                      // Photo 1: Cultural Stage Celebration
+                      _buildMemoryCard(
+                        context,
+                        imagePath: "assets/images/batch2017_1.jpg",
+                        title: "Cultural Stage Celebration",
+                        subtitle: "Traditional gathering & festive celebration on stage",
+                        badge: "Cultural Event",
+                      ),
+                      const SizedBox(height: 12),
+
+                      // Photo 2: Classroom Fellowship
+                      _buildMemoryCard(
+                        context,
+                        imagePath: "assets/images/batch2017_2.jpg",
+                        title: "Classroom Fellowship",
+                        subtitle: "Cheerful classroom selfie in school uniform",
+                        badge: "Classroom Fun",
+                      ),
+                      const SizedBox(height: 12),
+
+                      // Photo 3: Hallway Gathering
+                      _buildMemoryCard(
+                        context,
+                        imagePath: "assets/images/batch2017_3.jpg",
+                        title: "Hallway Gathering",
+                        subtitle: "Memorable get-together with classmates in the hall",
+                        badge: "Hall Gathering",
+                      ),
+                      const SizedBox(height: 12),
+
+                      // Photo 4: Mentor & Students
+                      _buildMemoryCard(
+                        context,
+                        imagePath: "assets/images/batch2017_4.jpg",
+                        title: "Mentor & Students",
+                        subtitle: "Heartwarming moment with respected faculty mentor",
+                        badge: "Mentorship",
+                      ),
+                      const SizedBox(height: 12),
+
+                      // Photo 5: New Year Celebration
+                      _buildMemoryCard(
+                        context,
+                        imagePath: "assets/images/batch2017_5.jpg",
+                        title: "New Year Celebration",
+                        subtitle: "Festive blackboard decoration & cake celebration",
+                        badge: "New Year Event",
+                      ),
+                      const SizedBox(height: 12),
+
+                      // Photo 6: Study & Examination Session
+                      _buildMemoryCard(
+                        context,
+                        imagePath: "assets/images/batch2017_6.jpg",
+                        title: "Study & Examination Session",
+                        subtitle: "Dedicated revision and quiet focus in the examination hall",
+                        badge: "Academics",
+                      ),
+                      const SizedBox(height: 12),
+
+                      // Photo 7: Classroom Cake Ceremony
+                      _buildMemoryCard(
+                        context,
+                        imagePath: "assets/images/batch2017_7.jpg",
+                        title: "Classroom Cake Ceremony",
+                        subtitle: "Festive cake cutting with teachers & decorative rangoli",
+                        badge: "Celebration",
+                      ),
+                      const SizedBox(height: 12),
+
+                      // Photo 8: Grand Cultural Stage Portrait
+                      _buildMemoryCard(
+                        context,
+                        imagePath: "assets/images/batch2017_8.jpg",
+                        title: "Grand Cultural Stage Portrait",
+                        subtitle: "Classmates and respected teachers in traditional attire",
+                        badge: "Stage Portrait",
+                      ),
+                      const SizedBox(height: 12),
+
+                      // Photo 9: Official Farewell Group Photo (2021-22)
+                      _buildMemoryCard(
+                        context,
+                        imagePath: "assets/images/batch2017_9.jpg",
+                        title: "Official Farewell Group Photo (2021-22)",
+                        subtitle: "Historic commemorative batch portrait dated 25-03-2022",
+                        badge: "Official Farewell",
+                      ),
+                      const SizedBox(height: 12),
+
+                      // Photo 10: Teacher Tribute & Gift Presentation
+                      _buildMemoryCard(
+                        context,
+                        imagePath: "assets/images/batch2017_10.jpg",
+                        title: "Teacher Tribute & Gift Presentation",
+                        subtitle: "Presenting token of heartfelt gratitude & respect to teachers",
+                        badge: "Teacher Tribute",
+                      ),
+                    ],
+                  );
+                }
+
                 // Other Batches: Increased vertically so all names float freely without overlap
                 return ListView(
                   physics: const BouncingScrollPhysics(),
