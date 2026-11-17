@@ -4,8 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../core/app_colors.dart';
 import '../../data/static_data.dart';
 import '../gallery/gallery_screen.dart';
-import '../games/bell_game_screen.dart';
 import '../hostel/hostel_screen.dart';
+import '../students_zone/students_zone_screen.dart';
 import '../voting/voting_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -261,13 +261,13 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       _buildFeatureCard(
                         context,
-                        title: "Bell Madness",
-                        subtitle: "Nostalgic tap game",
-                        icon: Icons.notifications_active_rounded,
+                        title: "Students Zone",
+                        subtitle: "Wall of Fame & Legends",
+                        icon: Icons.school_rounded,
                         iconColor: const Color(0xFFD946EF), // Vibrant Magenta
                         onTap: () => Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (_) => const BellGameScreen()),
+                          MaterialPageRoute(builder: (_) => const StudentsZoneScreen()),
                         ),
                       ),
                       _buildFeatureCard(
