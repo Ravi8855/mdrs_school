@@ -3,9 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/app_colors.dart';
 import '../gallery/gallery_screen.dart';
-import '../games/bell_game_screen.dart';
 import '../hostel/hostel_screen.dart';
 import '../voting/voting_screen.dart';
+import 'day_at_mdrs_screen.dart';
+import 'mdrsian_bingo_screen.dart';
 
 class FeaturesScreen extends StatelessWidget {
   const FeaturesScreen({super.key});
@@ -41,14 +42,27 @@ class FeaturesScreen extends StatelessWidget {
           const SizedBox(height: 14),
           _buildFeatureTile(
             context,
-            title: "Bell Ring Madness",
-            subtitle: "Test your lightning reaction time on the school bell! Global & local leaderboard.",
-            icon: Icons.notifications_active_rounded,
-            badge: "GAME",
+            title: "How Much MDRSian Are You?",
+            subtitle: "Tick classic hostel & school memories you lived and unlock your shareable MDRS Legend Score!",
+            icon: Icons.fact_check_rounded,
+            badge: "MEMORY BINGO",
             accentColor: AppColors.primary,
             onTap: () => Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => const BellGameScreen()),
+              MaterialPageRoute(builder: (_) => const MdrsianBingoScreen()),
+            ),
+          ),
+          const SizedBox(height: 14),
+          _buildFeatureTile(
+            context,
+            title: "A Day at MDRS",
+            subtitle: "Live 24-hour hostel & school routine — see what you used to do at this exact hour on campus!",
+            icon: Icons.wb_twilight_rounded,
+            badge: "LIVE TIMELINE",
+            accentColor: const Color(0xFFD97706),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const DayAtMdrsScreen()),
             ),
           ),
           const SizedBox(height: 14),

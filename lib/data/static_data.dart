@@ -387,12 +387,7 @@ class StaticData {
   // Gallery Photos
   static const List<String> galleryPhotos = [
     "assets/gallery/00.jpg",
-    "assets/gallery/01.jpg",
-    "assets/gallery/02.jpg",
-    "assets/gallery/03.jpg",
-    "assets/gallery/04.jpg",
     "assets/gallery/05.jpg",
-    "assets/gallery/06.jpg",
     "assets/gallery/08.jpg",
     "assets/gallery/09.jpg",
     "assets/gallery/2.jpg",

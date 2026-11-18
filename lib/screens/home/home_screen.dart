@@ -4,8 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../core/app_colors.dart';
 import '../../data/static_data.dart';
 import '../gallery/gallery_screen.dart';
-import '../hostel/hostel_screen.dart';
 import '../students_zone/students_zone_screen.dart';
+import '../uniform_kits/uniform_kits_screen.dart';
 import '../voting/voting_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -63,100 +63,72 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
 
-                  // Hero Contents (Morarji Photo + Name + MDRS School + Laurel Wreath)
+                  // Hero Contents (Morarji Photo + Name)
                   Positioned(
                     bottom: 24,
                     left: 20,
                     right: 20,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        // Row with Morarji Desai Avatar + School Details
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 66,
-                              height: 66,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(color: AppColors.gold, width: 2.5),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: AppColors.gold.withAlpha(150),
-                                    blurRadius: 14,
-                                    spreadRadius: 1,
-                                  ),
-                                  BoxShadow(
-                                    color: Colors.black.withAlpha(120),
-                                    blurRadius: 8,
-                                    offset: const Offset(0, 3),
-                                  ),
-                                ],
+                        Container(
+                          width: 66,
+                          height: 66,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: AppColors.gold, width: 2.5),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.gold.withAlpha(150),
+                                blurRadius: 14,
+                                spreadRadius: 1,
                               ),
-                              child: ClipOval(
-                                child: Image.asset(
-                                  'assets/images/desai.jpg',
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) =>
-                                      const Icon(Icons.person, color: Colors.white),
-                                ),
+                              BoxShadow(
+                                color: Colors.black.withAlpha(120),
+                                blurRadius: 8,
+                                offset: const Offset(0, 3),
                               ),
-                            ),
-                            const SizedBox(width: 14),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    "Morarji Desai",
-                                    style: GoogleFonts.poppins(
-                                      color: Colors.white,
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.w700,
-                                      shadows: const [
-                                        Shadow(color: Colors.black54, blurRadius: 6),
-                                      ],
-                                    ),
-                                  ),
-                                  Text(
-                                    "Residential School, Dorigudda",
-                                    style: GoogleFonts.poppins(
-                                      color: AppColors.gold,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600,
-                                      shadows: const [
-                                        Shadow(color: Colors.black54, blurRadius: 6),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 14),
-
-                        // MDRS SCHOOL Title
-                        Text(
-                          "MDRS SCHOOL",
-                          style: GoogleFonts.cinzel(
-                            color: Colors.white,
-                            fontSize: 22,
-                            fontWeight: FontWeight.w800,
-                            letterSpacing: 2.0,
-                            shadows: const [
-                              Shadow(color: Colors.black87, blurRadius: 10),
                             ],
                           ),
+                          child: ClipOval(
+                            child: Image.asset(
+                              'assets/images/desai.jpg',
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  const Icon(Icons.person, color: Colors.white),
+                            ),
+                          ),
                         ),
-                        const SizedBox(height: 2),
-
-                        // Golden Laurel Wreath Ornament
-                        CustomPaint(
-                          size: const Size(190, 22),
-                          painter: _LaurelWreathPainter(color: AppColors.gold),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                "Morarji Desai",
+                                style: GoogleFonts.poppins(
+                                  color: Colors.white,
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w700,
+                                  shadows: const [
+                                    Shadow(color: Colors.black54, blurRadius: 6),
+                                  ],
+                                ),
+                              ),
+                              Text(
+                                "Residential School, Dorigudda",
+                                style: GoogleFonts.poppins(
+                                  color: AppColors.gold,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  shadows: const [
+                                    Shadow(color: Colors.black54, blurRadius: 6),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -272,13 +244,13 @@ class HomeScreen extends StatelessWidget {
                       ),
                       _buildFeatureCard(
                         context,
-                        title: "Hostel Life",
-                        subtitle: "Boys & Girls Houses",
-                        icon: Icons.hotel_rounded,
+                        title: "Uniform & Kits",
+                        subtitle: "School dress & kit box",
+                        icon: Icons.checkroom_rounded,
                         iconColor: AppColors.primary, // Royal Violet
                         onTap: () => Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (_) => const HostelScreen()),
+                          MaterialPageRoute(builder: (_) => const UniformKitsScreen()),
                         ),
                       ),
                       _buildFeatureCard(
@@ -510,75 +482,6 @@ class _HeroWavePainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2.5;
     canvas.drawPath(wave2, paint2);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}
-
-// Golden Laurel Wreath Ornament Painter
-class _LaurelWreathPainter extends CustomPainter {
-  final Color color;
-  const _LaurelWreathPainter({required this.color});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = color
-      ..strokeWidth = 1.6
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round;
-
-    final fillPaint = Paint()
-      ..color = color
-      ..style = PaintingStyle.fill;
-
-    final double w = size.width;
-    final double h = size.height;
-    final double midX = w / 2;
-
-    // Left curved branch
-    final leftPath = Path();
-    leftPath.moveTo(midX - 6, h - 3);
-    leftPath.quadraticBezierTo(midX - w * 0.28, h + 2, midX - w * 0.46, h * 0.15);
-    canvas.drawPath(leftPath, paint);
-
-    // Right curved branch
-    final rightPath = Path();
-    rightPath.moveTo(midX + 6, h - 3);
-    rightPath.quadraticBezierTo(midX + w * 0.28, h + 2, midX + w * 0.46, h * 0.15);
-    canvas.drawPath(rightPath, paint);
-
-    // Center ribbon dot
-    canvas.drawCircle(Offset(midX, h - 3), 2.2, fillPaint);
-
-    // Draw leaf pairs
-    void drawLeaf(double cx, double cy, double angle, double scale) {
-      canvas.save();
-      canvas.translate(cx, cy);
-      canvas.rotate(angle);
-      final leafRect = Rect.fromCenter(
-        center: const Offset(0, 0),
-        width: 8.5 * scale,
-        height: 4.0 * scale,
-      );
-      canvas.drawOval(leafRect, fillPaint);
-      canvas.restore();
-    }
-
-    // Left leaves
-    drawLeaf(midX - 18, h - 2, -0.25, 0.8);
-    drawLeaf(midX - 34, h - 1, -0.45, 0.9);
-    drawLeaf(midX - 50, h - 3, -0.75, 1.0);
-    drawLeaf(midX - 64, h - 8, -1.05, 0.9);
-    drawLeaf(midX - 74, h - 15, -1.35, 0.8);
-
-    // Right leaves
-    drawLeaf(midX + 18, h - 2, 0.25, 0.8);
-    drawLeaf(midX + 34, h - 1, 0.45, 0.9);
-    drawLeaf(midX + 50, h - 3, 0.75, 1.0);
-    drawLeaf(midX + 64, h - 8, 1.05, 0.9);
-    drawLeaf(midX + 74, h - 15, 1.35, 0.8);
   }
 
   @override
