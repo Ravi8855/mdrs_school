@@ -48,12 +48,51 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
   }
 
   Future<void> _openWhatsApp() async {
-    final text = Uri.encodeComponent(
-      "Hello MDRS School! Name: ${_nameController.text.isNotEmpty ? _nameController.text : 'Alumni'}, Message: ${_messageController.text}",
-    );
-    final url = Uri.parse("https://wa.me/918855025560?text=$text");
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url, mode: LaunchMode.externalApplication);
+    final name = _nameController.text.trim();
+    final role = _selectedRole;
+    final message = _messageController.text.trim();
+    final memories = _memoriesController.text.trim();
+
+    final buffer = StringBuffer();
+    buffer.writeln("✨ *MDRS School - Feedback & Memories* ✨\n");
+    if (name.isNotEmpty) {
+      buffer.writeln("👤 *From:* $name ($role)");
+    } else {
+      buffer.writeln("👤 *Role:* $role");
+    }
+    if (message.isNotEmpty) {
+      buffer.writeln("💬 *Feedback:* $message");
+    }
+    if (memories.isNotEmpty) {
+      buffer.writeln("🏫 *Memories:* $memories");
+    }
+    if (name.isEmpty && message.isEmpty && memories.isEmpty) {
+      buffer.writeln("Hello MDRS School! I would like to share my feedback.");
+    }
+
+    final text = Uri.encodeComponent(buffer.toString());
+    const phone = "918855025560";
+    final deepLink = Uri.parse("whatsapp://send?phone=$phone&text=$text");
+    final webLink = Uri.parse("https://wa.me/$phone?text=$text");
+
+    try {
+      if (await canLaunchUrl(deepLink)) {
+        await launchUrl(deepLink, mode: LaunchMode.externalApplication);
+        return;
+      }
+    } catch (_) {}
+
+    try {
+      await launchUrl(webLink, mode: LaunchMode.externalApplication);
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Could not open WhatsApp. Please check if WhatsApp is installed."),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 
@@ -211,26 +250,39 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                 ),
               ),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: 14),
+              Center(
+                child: Text(
+                  "— OR CHAT WITH US —",
+                  style: GoogleFonts.poppins(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textSecondary.withAlpha(150),
+                    letterSpacing: 1.2,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 14),
 
-              // WhatsApp Direct Button
+              // WhatsApp Send Feedback Button
               SizedBox(
                 width: double.infinity,
-                height: 50,
-                child: OutlinedButton.icon(
+                height: 52,
+                child: ElevatedButton.icon(
                   onPressed: _openWhatsApp,
-                  icon: const Icon(Icons.chat_bubble_outline, color: Color(0xFF25D366)),
+                  icon: const Icon(Icons.chat_bubble_rounded, color: Colors.white, size: 20),
                   label: Text(
-                    "Chat on WhatsApp",
+                    "Send Feedback",
                     style: GoogleFonts.poppins(
-                      color: const Color(0xFF16A34A),
+                      color: Colors.white,
                       fontWeight: FontWeight.w700,
-                      fontSize: 14.5,
+                      fontSize: 15,
                     ),
                   ),
-                  style: OutlinedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    side: const BorderSide(color: Color(0xFF25D366), width: 1.4),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF25D366), // WhatsApp Green
+                    elevation: 3,
+                    shadowColor: const Color(0xFF25D366).withAlpha(100),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   ),
                 ),
