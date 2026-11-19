@@ -6,7 +6,7 @@ import '../../data/static_data.dart';
 import '../gallery/gallery_screen.dart';
 import '../students_zone/students_zone_screen.dart';
 import '../uniform_kits/uniform_kits_screen.dart';
-import '../voting/voting_screen.dart';
+import '../farewell_shirt/farewell_shirt_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -255,13 +255,13 @@ class HomeScreen extends StatelessWidget {
                       ),
                       _buildFeatureCard(
                         context,
-                        title: "Class Voting",
-                        subtitle: "Who's who titles",
-                        icon: Icons.how_to_vote_rounded,
-                        iconColor: const Color(0xFF9333EA), // Purple
+                        title: "Farewell Shirt",
+                        subtitle: "Class 10th autographs",
+                        icon: Icons.draw_rounded,
+                        iconColor: const Color(0xFFE11D48), // Nostalgic Ruby Rose
                         onTap: () => Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (_) => const VotingScreen()),
+                          MaterialPageRoute(builder: (_) => const FarewellShirtScreen()),
                         ),
                       ),
                       _buildFeatureCard(
