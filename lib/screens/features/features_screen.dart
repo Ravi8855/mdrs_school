@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../core/app_colors.dart';
 import '../gallery/gallery_screen.dart';
 import '../hostel/hostel_screen.dart';
-import '../voting/voting_screen.dart';
+import '../teachers_soundboard/teachers_soundboard_screen.dart';
 import 'day_at_mdrs_screen.dart';
 import 'mdrsian_bingo_screen.dart';
 
@@ -68,14 +68,14 @@ class FeaturesScreen extends StatelessWidget {
           const SizedBox(height: 14),
           _buildFeatureTile(
             context,
-            title: "Class Voting",
-            subtitle: "Vote for Class Comedian, Non-Stop Talker, Debate Champion & celebrate winners!",
-            icon: Icons.how_to_vote_rounded,
-            badge: "LIVE POLL",
-            accentColor: Colors.purpleAccent,
+            title: "Teachers' Soundboard",
+            subtitle: "Revansiddappa Sir, Subhash Sir, Shatlingappa Sir & masters' iconic dialogues with Mic audio!",
+            icon: Icons.record_voice_over_rounded,
+            badge: "ಗುರುಗಳ ಧ್ವನಿ",
+            accentColor: const Color(0xFFE11D48),
             onTap: () => Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => const VotingScreen()),
+              MaterialPageRoute(builder: (_) => const TeachersSoundboardScreen()),
             ),
           ),
           const SizedBox(height: 14),
