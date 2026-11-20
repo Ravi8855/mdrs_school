@@ -84,7 +84,7 @@ class _BatchesScreenState extends State<BatchesScreen> with SingleTickerProvider
                 ],
               ),
               labelColor: Colors.white,
-              unselectedLabelColor: const Color(0xFFD8B4FE),
+              unselectedLabelColor: AppColors.navInactive,
               labelStyle: GoogleFonts.poppins(fontWeight: FontWeight.w700, fontSize: 13),
               unselectedLabelStyle: GoogleFonts.poppins(fontWeight: FontWeight.w500, fontSize: 13),
               padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -121,7 +121,7 @@ class _BatchesScreenState extends State<BatchesScreen> with SingleTickerProvider
                       )
                     : null,
                 filled: true,
-                fillColor: Colors.white,
+                fillColor: AppColors.surface,
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(24),
@@ -200,11 +200,11 @@ class _BatchesScreenState extends State<BatchesScreen> with SingleTickerProvider
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: AppColors.surface,
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(color: AppColors.cardBorder),
                               boxShadow: const [
-                                BoxShadow(color: Color(0x107C3AED), blurRadius: 8),
+                                BoxShadow(color: AppColors.cardShadow, blurRadius: 8),
                               ],
                             ),
                             child: Text(
@@ -303,11 +303,11 @@ class _BatchesScreenState extends State<BatchesScreen> with SingleTickerProvider
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: AppColors.surface,
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(color: AppColors.cardBorder),
                               boxShadow: const [
-                                BoxShadow(color: Color(0x107C3AED), blurRadius: 8),
+                                BoxShadow(color: AppColors.cardShadow, blurRadius: 8),
                               ],
                             ),
                             child: Text(
@@ -396,11 +396,11 @@ class _BatchesScreenState extends State<BatchesScreen> with SingleTickerProvider
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: AppColors.surface,
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(color: AppColors.cardBorder),
                               boxShadow: const [
-                                BoxShadow(color: Color(0x107C3AED), blurRadius: 8),
+                                BoxShadow(color: AppColors.cardShadow, blurRadius: 8),
                               ],
                             ),
                             child: Text(
@@ -499,11 +499,11 @@ class _BatchesScreenState extends State<BatchesScreen> with SingleTickerProvider
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: AppColors.surface,
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(color: AppColors.cardBorder),
                               boxShadow: const [
-                                BoxShadow(color: Color(0x107C3AED), blurRadius: 8),
+                                BoxShadow(color: AppColors.cardShadow, blurRadius: 8),
                               ],
                             ),
                             child: Text(

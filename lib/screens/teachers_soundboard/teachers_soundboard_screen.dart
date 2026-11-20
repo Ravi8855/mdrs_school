@@ -86,8 +86,8 @@ class _TeachersSoundboardScreenState extends State<TeachersSoundboardScreen>
       heartCount: 118,
     ),
     TeacherDialogue(
-      id: "somanth",
-      name: "Somanth Sir",
+      id: "sumanth",
+      name: "Sumanth Sir",
       subject: "English",
       subjectKannada: "ಇಂಗ್ಲಿಷ್",
       dialogue: "Hey! Stand up on the bench! Speak only in English in my class, don't talk like a fish market! What is the past tense of 'Go'?",
@@ -318,7 +318,7 @@ Download MDRS Alumni App to relive your hostel memories!
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
-                  colors: [Color(0xFF3B0764), Color(0xFF1E1B4B)],
+                  colors: [Color(0xFF4C0519), Color(0xFF1A0208)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -461,7 +461,7 @@ Download MDRS Alumni App to relive your hostel memories!
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1B4B),
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: isPlaying ? teacher.themeColor : AppColors.cardBorder,
@@ -787,7 +787,7 @@ class _MimicryStudioSheetState extends State<_MimicryStudioSheet>
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        color: Color(0xFF131127),
+        color: Color(0xFF160207),
         borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
       ),
       padding: EdgeInsets.only(

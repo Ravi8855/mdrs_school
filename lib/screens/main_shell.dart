@@ -99,7 +99,7 @@ class _MainShellState extends State<MainShell> {
                     children: [
                       Icon(
                         isSelected ? item.activeIcon : item.icon,
-                        color: isSelected ? const Color(0xFFFEF08A) : AppColors.navInactive,
+                        color: isSelected ? Colors.white : AppColors.navInactive,
                         size: 23,
                       ),
                       const SizedBox(height: 3),

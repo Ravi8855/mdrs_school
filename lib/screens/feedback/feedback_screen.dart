@@ -149,7 +149,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                   labelText: "Your Full Name *",
                   labelStyle: const TextStyle(color: AppColors.textSecondary),
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor: AppColors.surface,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                     borderSide: const BorderSide(color: AppColors.cardBorder),
@@ -169,13 +169,13 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
               // Role Dropdown
               DropdownButtonFormField<String>(
                 initialValue: _selectedRole,
-                dropdownColor: Colors.white,
+                dropdownColor: AppColors.surface,
                 style: const TextStyle(color: AppColors.textPrimary),
                 decoration: InputDecoration(
                   labelText: "Your Role *",
                   labelStyle: const TextStyle(color: AppColors.textSecondary),
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor: AppColors.surface,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                     borderSide: const BorderSide(color: AppColors.cardBorder),
@@ -203,7 +203,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                   labelStyle: const TextStyle(color: AppColors.textSecondary),
                   alignLabelWithHint: true,
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor: AppColors.surface,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                     borderSide: const BorderSide(color: AppColors.cardBorder),

@@ -1,6 +1,6 @@
 {
-    "name": "mdrs_mobile_app",
-    "short_name": "mdrs_mobile_app",
+    "name": "MDRS",
+    "short_name": "MDRS",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

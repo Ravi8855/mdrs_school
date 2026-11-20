@@ -114,12 +114,12 @@ class FeaturesScreen extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.surface,
           borderRadius: BorderRadius.circular(22),
           border: Border.all(color: AppColors.cardBorder, width: 0.8),
           boxShadow: const [
             BoxShadow(
-              color: Color(0x187C3AED),
+              color: AppColors.cardShadow,
               blurRadius: 18,
               offset: Offset(0, 5),
             ),

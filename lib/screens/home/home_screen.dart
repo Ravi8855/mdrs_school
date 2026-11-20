@@ -18,9 +18,9 @@ class HomeScreen extends StatelessWidget {
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         slivers: [
-          // Hero Campus Header with Royal Purple Atmosphere & Golden Accents
+          // Hero Campus Header with Deep Obsidian Crimson Atmosphere & Sculpted Metallic Branding
           SliverAppBar(
-            expandedHeight: 330,
+            expandedHeight: 340,
             pinned: false,
             elevation: 0,
             backgroundColor: AppColors.primaryDeep,
@@ -38,7 +38,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
 
-                  // Crystal-clear building image at top with smooth purple transition towards bottom
+                  // Smooth Obsidian Crimson transition towards bottom
                   Container(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
@@ -46,26 +46,106 @@ class HomeScreen extends StatelessWidget {
                         end: Alignment.bottomCenter,
                         colors: [
                           Colors.transparent,
-                          Colors.transparent,
-                          const Color(0x552A0D52),
-                          const Color(0xEE3B0D66),
+                          const Color(0x33000000),
+                          const Color(0x883B040F),
+                          const Color(0xF0120105),
                           AppColors.background,
                         ],
-                        stops: const [0.0, 0.36, 0.62, 0.88, 1.0],
+                        stops: const [0.0, 0.30, 0.60, 0.88, 1.0],
                       ),
                     ),
                   ),
 
-                  // Glowing Neon Violet / Magenta Aurora Wave Curves
+                  // Glowing Sculpted Ruby Red Satin Wave Curves (matching reference image)
                   Positioned.fill(
                     child: CustomPaint(
                       painter: _HeroWavePainter(),
                     ),
                   ),
 
+                  // Top Sculpted MDRS Metallic Brand Emblem
+                  Positioned(
+                    top: 48,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withAlpha(160),
+                          borderRadius: BorderRadius.circular(24),
+                          border: Border.all(color: AppColors.cardBorder, width: 1.2),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.primary.withAlpha(60),
+                              blurRadius: 18,
+                              spreadRadius: 1,
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // "MD" in Brushed Silver Chrome
+                            ShaderMask(
+                              shaderCallback: (bounds) => const LinearGradient(
+                                colors: [Color(0xFFFFFFFF), Color(0xFFCBD5E1), Color(0xFF94A3B8)],
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                              ).createShader(bounds),
+                              child: Text(
+                                "MD",
+                                style: GoogleFonts.orbitron(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: 2,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            // "R" in Sculpted Crimson Neon
+                            ShaderMask(
+                              shaderCallback: (bounds) => const LinearGradient(
+                                colors: [Color(0xFFFF2A55), Color(0xFFDC2626), Color(0xFF991B1B)],
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                              ).createShader(bounds),
+                              child: Text(
+                                "R",
+                                style: GoogleFonts.orbitron(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: 1.5,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            // "S" in Brushed Silver Chrome
+                            ShaderMask(
+                              shaderCallback: (bounds) => const LinearGradient(
+                                colors: [Color(0xFFFFFFFF), Color(0xFFCBD5E1), Color(0xFF94A3B8)],
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                              ).createShader(bounds),
+                              child: Text(
+                                "S",
+                                style: GoogleFonts.orbitron(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: 2,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+
                   // Hero Contents (Morarji Photo + Name)
                   Positioned(
-                    bottom: 24,
+                    bottom: 22,
                     left: 20,
                     right: 20,
                     child: Row(
@@ -76,15 +156,15 @@ class HomeScreen extends StatelessWidget {
                           height: 66,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            border: Border.all(color: AppColors.gold, width: 2.5),
+                            border: Border.all(color: AppColors.primaryLight, width: 2.5),
                             boxShadow: [
                               BoxShadow(
-                                color: AppColors.gold.withAlpha(150),
-                                blurRadius: 14,
-                                spreadRadius: 1,
+                                color: AppColors.primary.withAlpha(160),
+                                blurRadius: 16,
+                                spreadRadius: 2,
                               ),
                               BoxShadow(
-                                color: Colors.black.withAlpha(120),
+                                color: Colors.black.withAlpha(150),
                                 blurRadius: 8,
                                 offset: const Offset(0, 3),
                               ),
@@ -108,22 +188,22 @@ class HomeScreen extends StatelessWidget {
                               Text(
                                 "Morarji Desai",
                                 style: GoogleFonts.poppins(
-                                  color: Colors.white,
+                                  color: AppColors.chromeSilver,
                                   fontSize: 17,
                                   fontWeight: FontWeight.w700,
                                   shadows: const [
-                                    Shadow(color: Colors.black54, blurRadius: 6),
+                                    Shadow(color: Colors.black87, blurRadius: 8),
                                   ],
                                 ),
                               ),
                               Text(
                                 "Residential School, Dorigudda",
                                 style: GoogleFonts.poppins(
-                                  color: AppColors.gold,
+                                  color: AppColors.primaryLight,
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
                                   shadows: const [
-                                    Shadow(color: Colors.black54, blurRadius: 6),
+                                    Shadow(color: Colors.black87, blurRadius: 8),
                                   ],
                                 ),
                               ),
@@ -145,16 +225,16 @@ class HomeScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Floating Campus Location Card
+                  // Floating Campus Location Card (Deep Obsidian Satin Ruby)
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.surface,
                       borderRadius: BorderRadius.circular(22),
-                      border: Border.all(color: AppColors.cardBorder, width: 0.8),
+                      border: Border.all(color: AppColors.cardBorder, width: 1.0),
                       boxShadow: const [
                         BoxShadow(
-                          color: Color(0x1F7C3AED),
+                          color: AppColors.cardShadow,
                           blurRadius: 18,
                           spreadRadius: 1,
                           offset: Offset(0, 6),
@@ -166,12 +246,13 @@ class HomeScreen extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(9),
                           decoration: BoxDecoration(
-                            color: AppColors.primary.withAlpha(25),
+                            color: AppColors.primary.withAlpha(35),
                             shape: BoxShape.circle,
+                            border: Border.all(color: AppColors.primary.withAlpha(80)),
                           ),
                           child: const Icon(
                             Icons.location_on,
-                            color: AppColors.primary,
+                            color: AppColors.primaryLight,
                             size: 24,
                           ),
                         ),
@@ -183,7 +264,7 @@ class HomeScreen extends StatelessWidget {
                               Text(
                                 "Campus Location",
                                 style: GoogleFonts.poppins(
-                                  color: AppColors.textViolet,
+                                  color: AppColors.primaryLight,
                                   fontSize: 13,
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -214,15 +295,15 @@ class HomeScreen extends StatelessWidget {
                   Text(
                     "EXPLORE COMMUNITY",
                     style: GoogleFonts.poppins(
-                      color: AppColors.textViolet,
+                      color: AppColors.primaryLight,
                       fontSize: 13,
                       fontWeight: FontWeight.w800,
-                      letterSpacing: 1.2,
+                      letterSpacing: 1.3,
                     ),
                   ),
                   const SizedBox(height: 12),
 
-                  // 2x2 Feature Highlights (Matching exact screenshot layout & icons)
+                  // 2x2 Feature Highlights (Sculpted Metallic Cards)
                   GridView.count(
                     crossAxisCount: 2,
                     shrinkWrap: true,
@@ -236,7 +317,7 @@ class HomeScreen extends StatelessWidget {
                         title: "Students Zone",
                         subtitle: "Wall of Fame & Legends",
                         icon: Icons.school_rounded,
-                        iconColor: const Color(0xFFD946EF), // Vibrant Magenta
+                        iconColor: const Color(0xFFFF2A55), // Radiant Scarlet
                         onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(builder: (_) => const StudentsZoneScreen()),
@@ -247,7 +328,7 @@ class HomeScreen extends StatelessWidget {
                         title: "Uniform & Kits",
                         subtitle: "School dress & kit box",
                         icon: Icons.checkroom_rounded,
-                        iconColor: AppColors.primary, // Royal Violet
+                        iconColor: AppColors.primary, // Ruby Red
                         onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(builder: (_) => const UniformKitsScreen()),
@@ -258,7 +339,7 @@ class HomeScreen extends StatelessWidget {
                         title: "Farewell Shirt",
                         subtitle: "Class 10th autographs",
                         icon: Icons.draw_rounded,
-                        iconColor: const Color(0xFFE11D48), // Nostalgic Ruby Rose
+                        iconColor: const Color(0xFFF43F5E), // Nostalgic Ruby Rose
                         onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(builder: (_) => const FarewellShirtScreen()),
@@ -269,7 +350,7 @@ class HomeScreen extends StatelessWidget {
                         title: "Photo Gallery",
                         subtitle: "Campus memories",
                         icon: Icons.photo_library_rounded,
-                        iconColor: AppColors.primaryLight, // Orchid Violet
+                        iconColor: AppColors.chromeSilver, // Polished Silver
                         onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(builder: (_) => const GalleryScreen()),
@@ -284,24 +365,24 @@ class HomeScreen extends StatelessWidget {
                   Text(
                     "SCHOOL LEADERSHIP",
                     style: GoogleFonts.poppins(
-                      color: AppColors.textViolet,
+                      color: AppColors.primaryLight,
                       fontSize: 13,
                       fontWeight: FontWeight.w800,
-                      letterSpacing: 1.2,
+                      letterSpacing: 1.3,
                     ),
                   ),
                   const SizedBox(height: 12),
 
-                  // Headmaster Card in Pure White Card Styling
+                  // Headmaster Card in Obsidian Ruby Card Styling
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.surface,
                       borderRadius: BorderRadius.circular(22),
-                      border: Border.all(color: AppColors.cardBorder, width: 0.8),
+                      border: Border.all(color: AppColors.cardBorder, width: 1.0),
                       boxShadow: const [
                         BoxShadow(
-                          color: Color(0x1F7C3AED),
+                          color: AppColors.cardShadow,
                           blurRadius: 18,
                           offset: Offset(0, 6),
                         ),
@@ -312,7 +393,7 @@ class HomeScreen extends StatelessWidget {
                         Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: AppColors.primary.withAlpha(80), width: 1.5),
+                            border: Border.all(color: AppColors.primary.withAlpha(120), width: 1.5),
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(15),
@@ -332,14 +413,14 @@ class HomeScreen extends StatelessWidget {
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                                 decoration: BoxDecoration(
-                                  color: AppColors.primary.withAlpha(25),
+                                  color: AppColors.primary.withAlpha(35),
                                   borderRadius: BorderRadius.circular(6),
-                                  border: Border.all(color: AppColors.primary.withAlpha(70)),
+                                  border: Border.all(color: AppColors.primary.withAlpha(90)),
                                 ),
                                 child: Text(
                                   "HEADMASTER",
                                   style: GoogleFonts.poppins(
-                                    color: AppColors.primary,
+                                    color: AppColors.primaryLight,
                                     fontSize: 9.5,
                                     fontWeight: FontWeight.w800,
                                   ),
@@ -380,7 +461,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // Feature Card: Clean White Card with Drop Shadow, Top Centered Colorful Icon
+  // Feature Card: Obsidian Ruby Satin Card with Drop Shadow, Top Centered Metallic Icon
   Widget _buildFeatureCard(
     BuildContext context, {
     required String title,
@@ -398,12 +479,12 @@ class HomeScreen extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.surface,
           borderRadius: BorderRadius.circular(22),
-          border: Border.all(color: AppColors.cardBorder, width: 0.8),
+          border: Border.all(color: AppColors.cardBorder, width: 1.0),
           boxShadow: const [
             BoxShadow(
-              color: Color(0x187C3AED),
+              color: AppColors.cardShadow,
               blurRadius: 16,
               spreadRadius: 1,
               offset: Offset(0, 5),
@@ -441,14 +522,14 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-// Glowing Neon Wave Painter for Hero Sky
+// Glowing Sculpted Ruby Red Satin Wave Painter for Hero Sky (matching user reference image)
 class _HeroWavePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final w = size.width;
     final h = size.height;
 
-    // Soft Purple Aurora Ribbon 1
+    // Sculpted Deep Ruby Crimson Satin Wave 1
     final wave1 = Path();
     wave1.moveTo(0, h * 0.65);
     wave1.cubicTo(w * 0.35, h * 0.82, w * 0.65, h * 0.55, w, h * 0.72);
@@ -459,14 +540,14 @@ class _HeroWavePainter extends CustomPainter {
     final paint1 = Paint()
       ..shader = const LinearGradient(
         colors: [
-          Color(0x35C084FC),
-          Color(0x40D946EF),
-          Color(0x20A855F7),
+          Color(0x35DC2626),
+          Color(0x50FF2A55),
+          Color(0x207F1D1D),
         ],
       ).createShader(Rect.fromLTWH(0, 0, w, h));
     canvas.drawPath(wave1, paint1);
 
-    // Flowing Neon Stroke Ribbon 2
+    // Flowing High-Gloss Neon Scarlet Stroke Ribbon 2
     final wave2 = Path();
     wave2.moveTo(-20, h * 0.75);
     wave2.cubicTo(w * 0.38, h * 0.62, w * 0.72, h * 0.85, w + 20, h * 0.68);
@@ -474,14 +555,31 @@ class _HeroWavePainter extends CustomPainter {
     final paint2 = Paint()
       ..shader = const LinearGradient(
         colors: [
-          Color(0x779333EA),
-          Color(0xCCE879F9),
-          Color(0x66C084FC),
+          Color(0x88991B1B),
+          Color(0xFFFF2A55),
+          Color(0x66DC2626),
         ],
       ).createShader(Rect.fromLTWH(0, 0, w, h))
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.5;
+      ..strokeWidth = 2.8;
     canvas.drawPath(wave2, paint2);
+
+    // Top-left smooth satin red curve accent (like the image)
+    final wave3 = Path();
+    wave3.moveTo(0, h * 0.18);
+    wave3.cubicTo(w * 0.3, h * 0.05, w * 0.5, h * 0.25, w, h * 0.12);
+
+    final paint3 = Paint()
+      ..shader = const LinearGradient(
+        colors: [
+          Color(0x55DC2626),
+          Color(0x20FF2A55),
+          Colors.transparent,
+        ],
+      ).createShader(Rect.fromLTWH(0, 0, w, h))
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.0;
+    canvas.drawPath(wave3, paint3);
   }
 
   @override

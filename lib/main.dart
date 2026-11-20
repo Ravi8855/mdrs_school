@@ -10,7 +10,7 @@ import 'services/supabase_service.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Royal Purple status & navigation bars for immersive feel matching the new theme
+  // Deep Obsidian Crimson status & navigation bars for immersive feel matching the new theme
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
@@ -49,42 +49,43 @@ class MdrsApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'MDRS School',
+      title: 'MDRS',
       debugShowCheckedModeBanner: false,
       scrollBehavior: const AppScrollBehavior(),
       theme: ThemeData(
-        brightness: Brightness.light,
+        brightness: Brightness.dark,
         scaffoldBackgroundColor: AppColors.background,
         primaryColor: AppColors.primary,
-        pageTransitionsTheme: PageTransitionsTheme(
+        pageTransitionsTheme: const PageTransitionsTheme(
           builders: {
             TargetPlatform.android: CupertinoPageTransitionsBuilder(),
             TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
             TargetPlatform.windows: CupertinoPageTransitionsBuilder(),
           },
         ),
-        colorScheme: const ColorScheme.light(
+        colorScheme: const ColorScheme.dark(
           primary: AppColors.primary,
           secondary: AppColors.accent,
           surface: AppColors.surface,
+          surfaceTint: Colors.transparent,
         ),
         textTheme: GoogleFonts.poppinsTextTheme(
-          ThemeData(brightness: Brightness.light).textTheme,
+          ThemeData(brightness: Brightness.dark).textTheme,
         ),
         appBarTheme: AppBarTheme(
           backgroundColor: AppColors.primaryDeep,
           elevation: 0,
           centerTitle: true,
           titleTextStyle: GoogleFonts.cinzel(
-            color: Colors.white,
+            color: AppColors.chromeSilver,
             fontWeight: FontWeight.w700,
             fontSize: 19,
           ),
-          iconTheme: const IconThemeData(color: Colors.white),
+          iconTheme: const IconThemeData(color: AppColors.chromeSilver),
         ),
         cardTheme: CardThemeData(
           color: AppColors.surface,
-          elevation: 2,
+          elevation: 3,
           shadowColor: AppColors.cardShadow,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(22),
@@ -95,10 +96,10 @@ class MdrsApp extends StatelessWidget {
       builder: (context, child) {
         return LayoutBuilder(
           builder: (context, constraints) {
-            // If running on a wide desktop browser, render inside a sleek purple smartphone frame
+            // If running on a wide desktop browser, render inside a sleek obsidian ruby smartphone frame
             if (constraints.maxWidth > 550) {
               return Scaffold(
-                backgroundColor: const Color(0xFF140726),
+                backgroundColor: const Color(0xFF070002),
                 body: Center(
                   child: Container(
                     margin: const EdgeInsets.symmetric(vertical: 20),
@@ -106,23 +107,23 @@ class MdrsApp extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: AppColors.background,
                       borderRadius: BorderRadius.circular(44),
-                      border: Border.all(color: const Color(0xFF4C1D95), width: 9),
+                      border: Border.all(color: const Color(0xFF4A040F), width: 8),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withAlpha(220),
+                          color: Colors.black.withAlpha(240),
                           blurRadius: 50,
                           spreadRadius: 8,
                           offset: const Offset(0, 15),
                         ),
                         BoxShadow(
                           color: AppColors.primary.withAlpha(90),
-                          blurRadius: 30,
+                          blurRadius: 32,
                           spreadRadius: 4,
                         ),
                       ],
                     ),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(35),
+                      borderRadius: BorderRadius.circular(36),
                       child: Stack(
                         children: [
                           child ?? const SizedBox(),
@@ -136,7 +137,7 @@ class MdrsApp extends StatelessWidget {
                                 width: 72,
                                 height: 5,
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFF6D28D9),
+                                  color: const Color(0xFF7F1D1D),
                                   borderRadius: BorderRadius.circular(3),
                                 ),
                               ),
