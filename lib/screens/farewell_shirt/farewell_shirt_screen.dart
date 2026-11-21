@@ -1,57 +1,62 @@
 import 'dart:convert';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../core/app_colors.dart';
 
-class ShirtSignature {
+class UniformSignature {
   final String id;
   final String name;
+  final String photo;
   final String roleOrBatch;
   final String message;
   final Color markerColor;
-  final double rotation; // In radians
-  final bool isBackSide;
+  final double rotation;
   final String doodle;
+  final bool isGirlsUniform;
   int hearts;
 
-  ShirtSignature({
+  UniformSignature({
     required this.id,
     required this.name,
+    required this.photo,
     required this.roleOrBatch,
     required this.message,
     required this.markerColor,
     this.rotation = 0.0,
-    this.isBackSide = false,
-    this.doodle = '❤️',
+    required this.doodle,
+    required this.isGirlsUniform,
     this.hearts = 12,
   });
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'name': name,
-    'roleOrBatch': roleOrBatch,
-    'message': message,
-    'markerColor': markerColor.value,
-    'rotation': rotation,
-    'isBackSide': isBackSide,
-    'doodle': doodle,
-    'hearts': hearts,
-  };
+        'id': id,
+        'name': name,
+        'photo': photo,
+        'roleOrBatch': roleOrBatch,
+        'message': message,
+        'markerColor': markerColor.value,
+        'rotation': rotation,
+        'doodle': doodle,
+        'isGirlsUniform': isGirlsUniform,
+        'hearts': hearts,
+      };
 
-  factory ShirtSignature.fromJson(Map<String, dynamic> json) => ShirtSignature(
-    id: json['id'] ?? '',
-    name: json['name'] ?? '',
-    roleOrBatch: json['roleOrBatch'] ?? '',
-    message: json['message'] ?? '',
-    markerColor: Color(json['markerColor'] ?? 0xFF1E40AF),
-    rotation: (json['rotation'] as num?)?.toDouble() ?? 0.0,
-    isBackSide: json['isBackSide'] ?? false,
-    doodle: json['doodle'] ?? '❤️',
-    hearts: json['hearts'] ?? 0,
-  );
+  factory UniformSignature.fromJson(Map<String, dynamic> json) => UniformSignature(
+        id: json['id'] ?? '',
+        name: json['name'] ?? '',
+        photo: json['photo'] ?? '',
+        roleOrBatch: json['roleOrBatch'] ?? '',
+        message: json['message'] ?? '',
+        markerColor: Color(json['markerColor'] ?? 0xFF1D4ED8),
+        rotation: (json['rotation'] as num?)?.toDouble() ?? 0.0,
+        doodle: json['doodle'] ?? '❤️',
+        isGirlsUniform: json['isGirlsUniform'] ?? false,
+        hearts: json['hearts'] ?? 0,
+      );
 }
 
 class FarewellShirtScreen extends StatefulWidget {
@@ -61,147 +66,211 @@ class FarewellShirtScreen extends StatefulWidget {
   State<FarewellShirtScreen> createState() => _FarewellShirtScreenState();
 }
 
-class _FarewellShirtScreenState extends State<FarewellShirtScreen> with SingleTickerProviderStateMixin {
-  bool _isBackSide = false;
-  late TabController _sideController;
-  List<ShirtSignature> _customSignatures = [];
+class _FarewellShirtScreenState extends State<FarewellShirtScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _genderController;
+  bool _isGirlsUniform = false;
+  List<UniformSignature> _customSignatures = [];
   bool _isLoading = true;
 
-  // Authentic Default Signatures
-  final List<ShirtSignature> _defaultSignatures = [
-    // FRONT SIDE SIGNATURES
-    ShirtSignature(
-      id: 'f1',
-      name: 'Ramesh Sir',
-      roleOrBatch: 'Science Teacher',
-      message: 'Always be curious and aim high. Make MDRS proud! God bless you.',
-      markerColor: const Color(0xFF047857), // Green marker
-      rotation: -0.04,
-      isBackSide: false,
-      doodle: '🔬',
-      hearts: 48,
-    ),
-    ShirtSignature(
-      id: 'f2',
-      name: 'Ravi',
-      roleOrBatch: 'Batch 2013 • Roll 14',
-      message: 'Night study partner! You always slept at 9:30 PM & told warden sir you were meditating! 😂',
-      markerColor: const Color(0xFF1D4ED8), // Blue marker
-      rotation: 0.03,
-      isBackSide: false,
-      doodle: '⭐',
-      hearts: 64,
-    ),
-    ShirtSignature(
-      id: 'f3',
-      name: 'Laxmi Aunty',
-      roleOrBatch: 'Hostel Mother',
-      message: '6th std crying champion who missed home, 10th std school hero! Always eat well putta.',
-      markerColor: const Color(0xFFDC2626), // Red marker
-      rotation: -0.02,
-      isBackSide: false,
-      doodle: '❤️',
-      hearts: 92,
-    ),
-    ShirtSignature(
-      id: 'f4',
-      name: 'Kiran B.',
-      roleOrBatch: 'Batch 2014',
-      message: 'Best Kho-Kho raider! Never forget our red mud ground matches. Keep this shirt safe!',
-      markerColor: const Color(0xFF7C3AED), // Purple marker
-      rotation: 0.05,
-      isBackSide: false,
-      doodle: '🏆',
-      hearts: 39,
-    ),
-    ShirtSignature(
-      id: 'f5',
-      name: 'Ambadas',
-      roleOrBatch: 'Batch 2015',
-      message: 'Who will share Sunday chicken gravy with me now? 😢 Miss our dining hall sprints!',
-      markerColor: const Color(0xFF111827), // Black marker
+  // 1. Authentic Girls Signatures with exact requested names
+  final List<UniformSignature> _girlsSignatures = [
+    UniformSignature(
+      id: 'g_shweta',
+      name: 'Shweta',
+      photo: 'assets/images/Shweta.jpg',
+      roleOrBatch: 'Batch 2017 • Roll 28',
+      message:
+          'Our 5:30 AM hot water bucket sprints & blanket gossips! Never forget 10th standard SSLC study nights. Best friends forever! 💕',
+      markerColor: const Color(0xFFBE185D), // Deep Rose Pink
       rotation: -0.03,
-      isBackSide: false,
-      doodle: '🍗',
-      hearts: 55,
+      doodle: '💖',
+      isGirlsUniform: true,
+      hearts: 94,
     ),
-
-    // BACK SIDE SIGNATURES (Big Canvas)
-    ShirtSignature(
-      id: 'b1',
-      name: 'Rajkumar Sir',
-      roleOrBatch: 'Head Master',
-      message: 'Discipline and hard work lead to greatness. Wishing you a golden future! — MDRS Principal',
-      markerColor: const Color(0xFF1E3A8A), // Deep Navy
-      rotation: -0.02,
-      isBackSide: true,
-      doodle: '🎓',
-      hearts: 81,
-    ),
-    ShirtSignature(
-      id: 'b2',
-      name: 'Bhimu',
-      roleOrBatch: 'Dormitory Leader',
-      message: 'Warden sir whistle could never wake you, but 1:00 PM lunch bell did! CEO of skipping morning PT! 🏃‍♂️',
-      markerColor: const Color(0xFFB91C1C), // Deep Crimson
+    UniformSignature(
+      id: 'g_chaitra',
+      name: 'Chaitra',
+      photo: 'assets/images/Chaitra.jpeg',
+      roleOrBatch: 'Batch 2017 • Roll 09',
+      message:
+          'Sharing home snacks from the trunk box before prayer bell! You always saved the last Laddoo for me. Love you Sakhi! ✨',
+      markerColor: const Color(0xFF7C3AED), // Purple
       rotation: 0.04,
-      isBackSide: true,
-      doodle: '⏰',
-      hearts: 73,
-    ),
-    ShirtSignature(
-      id: 'b3',
-      name: 'Sunil',
-      roleOrBatch: 'Room #3 Partner',
-      message: 'Kit box seller! Secretly traded Mysore Sandal soap for pocket money to buy bakery puffs! 🤫',
-      markerColor: const Color(0xFF0F766E), // Teal Green
-      rotation: -0.05,
-      isBackSide: true,
-      doodle: '🧼',
+      doodle: '✨',
+      isGirlsUniform: true,
       hearts: 88,
     ),
-    ShirtSignature(
-      id: 'b4',
-      name: 'Suchitra & Prema',
-      roleOrBatch: 'Batch 2017',
-      message: 'Water scarcity days in girls hostel were unforgettable! You always helped carry the extra bucket. Best friend!',
-      markerColor: const Color(0xFFBE185D), // Pink/Magenta
-      rotation: 0.03,
-      isBackSide: true,
-      doodle: '🪣',
-      hearts: 67,
-    ),
-    ShirtSignature(
-      id: 'b5',
-      name: 'Raju Anna',
-      roleOrBatch: 'Campus Cook',
-      message: 'Always came for 2nd round of Upma with sweet smile. Study big and visit MDRS again!',
-      markerColor: const Color(0xFFC2410C), // Orange Red
+    UniformSignature(
+      id: 'g_ambika',
+      name: 'Ambika',
+      photo: 'assets/images/Ambika.jpeg',
+      roleOrBatch: 'Batch 2017 • Roll 03',
+      message:
+          'Class 10th Maths study partner — solving theorem proofs on the hostel floor till midnight! We made it! 🌸',
+      markerColor: const Color(0xFF1D4ED8), // Royal Blue
       rotation: -0.02,
-      isBackSide: true,
-      doodle: '🍲',
+      doodle: '🌸',
+      isGirlsUniform: true,
+      hearts: 76,
+    ),
+    UniformSignature(
+      id: 'g_umashree',
+      name: 'Umashree',
+      photo: 'assets/images/Umashree.jpg',
+      roleOrBatch: 'Batch 2017 • Roll 36',
+      message:
+          'Dining hall laughs with Laxmi Aunty’s sweet smiles! Stay the kindest soul always. Remember MDRS days! 👭',
+      markerColor: const Color(0xFF047857), // Emerald Green
+      rotation: 0.03,
+      doodle: '🎀',
+      isGirlsUniform: true,
+      hearts: 69,
+    ),
+    UniformSignature(
+      id: 'g_roopa',
+      name: 'Roopa',
+      photo: 'assets/images/Roopa.jpeg',
+      roleOrBatch: 'Batch 2017 • Roll 24',
+      message:
+          'Sharing secret chits under the wooden desk during science class! Don’t forget our hostel corridor chats. 💫',
+      markerColor: const Color(0xFFB91C1C), // Crimson Red
+      rotation: -0.04,
+      doodle: '💫',
+      isGirlsUniform: true,
+      hearts: 83,
+    ),
+    UniformSignature(
+      id: 'g_prema',
+      name: 'Prema',
+      photo: 'assets/images/Prema.jpeg',
+      roleOrBatch: 'Batch 2017 • Roll 21',
+      message:
+          'Sunday special chicken sambar fights & washing uniform together at the pump! True sisters for life! ❤️',
+      markerColor: const Color(0xFFC2410C), // Deep Orange
+      rotation: 0.02,
+      doodle: '❤️',
+      isGirlsUniform: true,
+      hearts: 91,
+    ),
+  ];
+
+  // 2. Authentic Boys Signatures with exact requested names
+  final List<UniformSignature> _boysSignatures = [
+    UniformSignature(
+      id: 'b_arun',
+      name: 'Arun',
+      photo: 'assets/images/Arun.jpeg',
+      roleOrBatch: 'Kho-Kho Captain • Roll 04',
+      message:
+          'Kho-Kho captain & ground hero! Scoring the winning point against Shahapur school will be remembered forever! 🏆',
+      markerColor: const Color(0xFF1E3A8A), // Deep Navy
+      rotation: -0.03,
+      doodle: '🏆',
+      isGirlsUniform: false,
+      hearts: 102,
+    ),
+    UniformSignature(
+      id: 'b_hrutik',
+      name: 'Hrutik',
+      photo: 'assets/images/Hrutik.jpeg',
+      roleOrBatch: 'Backbencher • Roll 12',
+      message:
+          'Sleeping in 8:00 AM morning prep class with open textbook! Master thought you were deep in contemplation! 😂',
+      markerColor: const Color(0xFF0F766E), // Teal Green
+      rotation: 0.04,
+      doodle: '😴',
+      isGirlsUniform: false,
+      hearts: 87,
+    ),
+    UniformSignature(
+      id: 'b_ambadas',
+      name: 'Ambadas',
+      photo: 'assets/images/Ambadas.jpeg',
+      roleOrBatch: 'Batch 2015 • Roll 02',
+      message:
+          'First in line when 1:00 PM lunch bell rang! Who will share Sunday biryani gravy now? Miss you brother! 🍗',
+      markerColor: const Color(0xFFB91C1C), // Crimson Red
+      rotation: -0.04,
+      doodle: '🍗',
+      isGirlsUniform: false,
       hearts: 95,
     ),
-    ShirtSignature(
-      id: 'b6',
-      name: 'Chandrashekar',
-      roleOrBatch: 'Backbencher Legend',
-      message: 'Packing our trunks 3 days before holiday announcement! We made hostel feel like home. Friends 4ever! ✨',
-      markerColor: const Color(0xFF1E40AF), // Blue
+    UniformSignature(
+      id: 'b_vinod',
+      name: 'Vinod',
+      photo: 'assets/images/Vinod.jpg',
+      roleOrBatch: 'Night Study Incharge • Roll 38',
+      message:
+          'Late night study tea kettle master! We kept the whole dormitory awake with our laughter. Friends 4ever! ☕',
+      markerColor: const Color(0xFF7C3AED), // Purple
+      rotation: 0.03,
+      doodle: '☕',
+      isGirlsUniform: false,
+      hearts: 79,
+    ),
+    UniformSignature(
+      id: 'b_bhimu',
+      name: 'Bhimu',
+      photo: 'assets/images/Bhimu.jpeg',
+      roleOrBatch: 'Dorm Leader • Roll 08',
+      message:
+          'Whistle runner & warden sir’s favorite backbencher! 6th std homesick boy became 10th std champion! 🏃‍♂️',
+      markerColor: const Color(0xFFDC2626), // Ruby Red
+      rotation: -0.02,
+      doodle: '🏃‍♂️',
+      isGirlsUniform: false,
+      hearts: 91,
+    ),
+    UniformSignature(
+      id: 'b_bhimashankar',
+      name: 'Bhimashankar',
+      photo: 'assets/images/Bhimashankar.jpeg',
+      roleOrBatch: 'Krishna House Leader • Roll 07',
+      message:
+          'Packing steel trunk 3 days before holiday notice! The most disciplined leader of Krishna house! 🧳',
+      markerColor: const Color(0xFF047857), // Forest Green
       rotation: 0.04,
-      isBackSide: true,
       doodle: '🧳',
-      hearts: 58,
+      isGirlsUniform: false,
+      hearts: 84,
+    ),
+    UniformSignature(
+      id: 'b_marilinga',
+      name: 'Marilinga',
+      photo: 'assets/images/Marilinga.jpeg',
+      roleOrBatch: 'Batch 2014 • Roll 18',
+      message:
+          'Saturday night hostel ghost stories in room #4! Even warden sir was scared to enter our hall! 👻',
+      markerColor: const Color(0xFF1D4ED8), // Royal Blue
+      rotation: -0.03,
+      doodle: '👻',
+      isGirlsUniform: false,
+      hearts: 73,
+    ),
+    UniformSignature(
+      id: 'b_viresh',
+      name: 'Viresh',
+      photo: 'assets/images/Viresh.jpg',
+      roleOrBatch: 'Class Monitor • Roll 40',
+      message:
+          'Classroom monitor who wrote everyone’s name on the blackboard except his own gang! Legend! ⭐',
+      markerColor: const Color(0xFFC2410C), // Orange
+      rotation: 0.02,
+      doodle: '⭐',
+      isGirlsUniform: false,
+      hearts: 99,
     ),
   ];
 
   @override
   void initState() {
     super.initState();
-    _sideController = TabController(length: 2, vsync: this);
-    _sideController.addListener(() {
+    _genderController = TabController(length: 2, vsync: this);
+    _genderController.addListener(() {
+      if (_genderController.indexIsChanging) return;
       setState(() {
-        _isBackSide = _sideController.index == 1;
+        _isGirlsUniform = _genderController.index == 1;
       });
     });
     _loadCustomSignatures();
@@ -209,16 +278,17 @@ class _FarewellShirtScreenState extends State<FarewellShirtScreen> with SingleTi
 
   @override
   void dispose() {
-    _sideController.dispose();
+    _genderController.dispose();
     super.dispose();
   }
 
   Future<void> _loadCustomSignatures() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final data = prefs.getStringList('mdrs_farewell_signatures') ?? [];
+      final data = prefs.getStringList('mdrs_farewell_uniform_sigs_v2') ?? [];
       setState(() {
-        _customSignatures = data.map((item) => ShirtSignature.fromJson(jsonDecode(item))).toList();
+        _customSignatures =
+            data.map((item) => UniformSignature.fromJson(jsonDecode(item))).toList();
         _isLoading = false;
       });
     } catch (_) {
@@ -226,31 +296,348 @@ class _FarewellShirtScreenState extends State<FarewellShirtScreen> with SingleTi
     }
   }
 
-  Future<void> _saveCustomSignature(ShirtSignature sig) async {
+  Future<void> _saveCustomSignature(UniformSignature sig) async {
     setState(() {
       _customSignatures.insert(0, sig);
     });
     try {
       final prefs = await SharedPreferences.getInstance();
       final data = _customSignatures.map((s) => jsonEncode(s.toJson())).toList();
-      await prefs.setStringList('mdrs_farewell_signatures', data);
+      await prefs.setStringList('mdrs_farewell_uniform_sigs_v2', data);
     } catch (_) {}
   }
 
-  List<ShirtSignature> get _currentSignatures {
-    final list = [
-      ..._customSignatures.where((s) => s.isBackSide == _isBackSide),
-      ..._defaultSignatures.where((s) => s.isBackSide == _isBackSide),
+  List<UniformSignature> get _currentSignatures {
+    final custom = _customSignatures.where((s) => s.isGirlsUniform == _isGirlsUniform);
+    final defaults = _isGirlsUniform ? _girlsSignatures : _boysSignatures;
+    return [...custom, ...defaults];
+  }
+
+  void _shareOnWhatsApp() async {
+    HapticFeedback.lightImpact();
+    final names = _isGirlsUniform
+        ? "Shweta, Chaitra, Ambika, Umashree, Roopa, Prema"
+        : "Arun, Hrutik, Ambadas, Vinod, Bhimu, Bhimashankar, Marilinga, Viresh";
+    final uniformName = _isGirlsUniform ? "Girls Uniform" : "Boys Uniform";
+
+    final text = """
+🎓 *MDRS SSLC Farewell $uniformName Autograph Canvas* ✍️👕
+
+Our batch mates signed on the official MDRS school uniform:
+$names
+
+Check out the signatures, memories & hostel dialogues in our MDRS School Memories App! ❤️
+""";
+
+    final url = Uri.parse('whatsapp://send?text=${Uri.encodeComponent(text)}');
+    final webUrl = Uri.parse('https://wa.me/?text=${Uri.encodeComponent(text)}');
+
+    try {
+      if (await canLaunchUrl(url)) {
+        await launchUrl(url, mode: LaunchMode.externalApplication);
+        return;
+      }
+    } catch (_) {}
+
+    try {
+      await launchUrl(webUrl, mode: LaunchMode.externalApplication);
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Could not open WhatsApp.")),
+        );
+      }
+    }
+  }
+
+  void _showSignatureDialog(UniformSignature sig) {
+    HapticFeedback.lightImpact();
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(22),
+          side: const BorderSide(color: AppColors.cardBorder, width: 1.2),
+        ),
+        title: Row(
+          children: [
+            if (sig.photo.isNotEmpty)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.asset(
+                  sig.photo,
+                  width: 44,
+                  height: 48,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) => CircleAvatar(
+                    backgroundColor: AppColors.blushPink,
+                    child: Text(sig.name.isNotEmpty ? sig.name[0] : 'S'),
+                  ),
+                ),
+              ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    sig.name,
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 16,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                  Text(
+                    sig.roleOrBatch,
+                    style: GoogleFonts.poppins(
+                      fontSize: 11,
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Text(sig.doodle, style: const TextStyle(fontSize: 22)),
+          ],
+        ),
+        content: Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: AppColors.background,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: AppColors.roseGold.withAlpha(80)),
+          ),
+          child: Text(
+            sig.message,
+            style: GoogleFonts.kalam(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+              color: sig.markerColor,
+              height: 1.4,
+            ),
+          ),
+        ),
+        actions: [
+          TextButton.icon(
+            onPressed: () {
+              setState(() => sig.hearts++);
+              Navigator.pop(ctx);
+            },
+            icon: const Icon(Icons.favorite_rounded, color: Color(0xFFE11D48)),
+            label: Text("Heart (${sig.hearts})", style: const TextStyle(color: Color(0xFFE11D48))),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(ctx),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            ),
+            child: const Text("Close", style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showSignShirtDialog() {
+    HapticFeedback.selectionClick();
+    final nameCtrl = TextEditingController();
+    final roleCtrl = TextEditingController();
+    final msgCtrl = TextEditingController();
+    Color selectedColor = const Color(0xFF1D4ED8);
+    String selectedDoodle = '❤️';
+
+    final markerColors = [
+      const Color(0xFF1D4ED8), // Blue
+      const Color(0xFFDC2626), // Red
+      const Color(0xFF047857), // Green
+      const Color(0xFF7C3AED), // Purple
+      const Color(0xFFC2410C), // Orange
+      const Color(0xFF111827), // Black
     ];
-    return list;
+
+    final doodles = ['❤️', '⭐', '🎓', '🔥', '✨', '🏆', '🌸', '👑'];
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
+      ),
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setModalState) => Padding(
+          padding: EdgeInsets.fromLTRB(20, 20, 20, MediaQuery.of(ctx).viewInsets.bottom + 20),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      _isGirlsUniform ? "Sign On Girls Uniform ✍️👗" : "Sign On Boys Uniform ✍️👕",
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 16,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close_rounded),
+                      onPressed: () => Navigator.pop(ctx),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: nameCtrl,
+                  decoration: InputDecoration(
+                    labelText: "Your Name",
+                    hintText: "e.g. Raju, Sunita...",
+                    filled: true,
+                    fillColor: AppColors.background,
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                TextField(
+                  controller: roleCtrl,
+                  decoration: InputDecoration(
+                    labelText: "Batch or Dormitory Roll",
+                    hintText: "e.g. Batch 2017 • Roll 15",
+                    filled: true,
+                    fillColor: AppColors.background,
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                TextField(
+                  controller: msgCtrl,
+                  maxLines: 3,
+                  decoration: InputDecoration(
+                    labelText: "Farewell Autograph Message",
+                    hintText: "Write your favorite memory or wish on the uniform...",
+                    filled: true,
+                    fillColor: AppColors.background,
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                  ),
+                ),
+                const SizedBox(height: 14),
+                Text(
+                  "Choose Permanent Marker Color:",
+                  style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 12),
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: markerColors.map((col) {
+                    final isSel = selectedColor == col;
+                    return GestureDetector(
+                      onTap: () => setModalState(() => selectedColor = col),
+                      child: Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: col,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: isSel ? Colors.black : Colors.transparent,
+                            width: 3,
+                          ),
+                        ),
+                        child: isSel
+                            ? const Icon(Icons.check, color: Colors.white, size: 20)
+                            : null,
+                      ),
+                    );
+                  }).toList(),
+                ),
+                const SizedBox(height: 14),
+                Text(
+                  "Choose Doodle / Stamp:",
+                  style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 12),
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: doodles.map((d) {
+                    final isSel = selectedDoodle == d;
+                    return GestureDetector(
+                      onTap: () => setModalState(() => selectedDoodle = d),
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: isSel ? AppColors.blushPink : Colors.transparent,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: isSel ? AppColors.primary : Colors.black12,
+                          ),
+                        ),
+                        child: Text(d, style: const TextStyle(fontSize: 20)),
+                      ),
+                    );
+                  }).toList(),
+                ),
+                const SizedBox(height: 18),
+                SizedBox(
+                  width: double.infinity,
+                  height: 48,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      final n = nameCtrl.text.trim();
+                      final m = msgCtrl.text.trim();
+                      if (n.isEmpty || m.isEmpty) return;
+
+                      final sig = UniformSignature(
+                        id: 'custom_${DateTime.now().millisecondsSinceEpoch}',
+                        name: n,
+                        photo: '',
+                        roleOrBatch: roleCtrl.text.trim().isNotEmpty
+                            ? roleCtrl.text.trim()
+                            : 'MDRS Alumni',
+                        message: m,
+                        markerColor: selectedColor,
+                        rotation: (math.Random().nextDouble() * 0.08) - 0.04,
+                        doodle: selectedDoodle,
+                        isGirlsUniform: _isGirlsUniform,
+                        hearts: 1,
+                      );
+
+                      _saveCustomSignature(sig);
+                      Navigator.pop(ctx);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                    ),
+                    child: Text(
+                      "Write On Uniform ✨",
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 15,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0F0B1A), // Dark atmospheric classroom theme
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF1B0E33),
+        backgroundColor: AppColors.primaryDeep,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white, size: 20),
@@ -262,21 +649,21 @@ class _FarewellShirtScreenState extends State<FarewellShirtScreen> with SingleTi
             Row(
               children: [
                 Text(
-                  'Class 10th Farewell Shirt',
-                  style: GoogleFonts.poppins(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                  'Class 10th Farewell Uniform',
+                  style: GoogleFonts.playfairDisplay(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w800,
                     color: Colors.white,
                   ),
                 ),
                 const SizedBox(width: 6),
-                const Icon(Icons.verified, color: Colors.amber, size: 16),
+                const Icon(Icons.verified, color: AppColors.metallicGold, size: 16),
               ],
             ),
             Text(
-              'The official SSLC last day autograph memory canvas',
+              'Official SSLC last day autograph uniform canvas',
               style: GoogleFonts.poppins(
-                fontSize: 11,
+                fontSize: 10.5,
                 color: Colors.white70,
               ),
             ),
@@ -284,256 +671,304 @@ class _FarewellShirtScreenState extends State<FarewellShirtScreen> with SingleTi
         ),
         actions: [
           IconButton(
-            tooltip: 'Share Shirt on WhatsApp',
-            icon: const Icon(Icons.share_rounded, color: Colors.amber),
+            tooltip: 'Share Uniform on WhatsApp',
+            icon: const Icon(Icons.share_rounded, color: Colors.white),
             onPressed: _shareOnWhatsApp,
           ),
         ],
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator(color: AppColors.accent))
+          ? const Center(child: CircularProgressIndicator(color: AppColors.primary))
           : Column(
               children: [
-                // Top Flip Toggle Bar
+                // Top Gender Uniform Switcher Bar
                 Container(
                   margin: const EdgeInsets.fromLTRB(16, 12, 16, 8),
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.06),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Colors.white.withOpacity(0.12)),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: AppColors.cardBorder, width: 1.2),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.primary.withAlpha(12),
+                        blurRadius: 10,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
                   ),
                   child: TabBar(
-                    controller: _sideController,
+                    controller: _genderController,
                     indicator: BoxDecoration(
-                      color: AppColors.primary,
-                      borderRadius: BorderRadius.circular(12),
+                      gradient: const LinearGradient(
+                        colors: [AppColors.navActiveStart, AppColors.navActiveEnd],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.primary.withOpacity(0.4),
+                          color: AppColors.primary.withAlpha(60),
                           blurRadius: 8,
                           offset: const Offset(0, 2),
                         ),
                       ],
                     ),
                     labelColor: Colors.white,
-                    unselectedLabelColor: Colors.white60,
-                    labelStyle: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.bold),
-                    unselectedLabelStyle: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w500),
+                    unselectedLabelColor: AppColors.textPrimary,
+                    labelStyle: GoogleFonts.poppins(fontSize: 12.5, fontWeight: FontWeight.w700),
+                    unselectedLabelStyle:
+                        GoogleFonts.poppins(fontSize: 12.5, fontWeight: FontWeight.w600),
                     tabs: const [
-                      Tab(text: '👔 Front Side (Pocket & Chest)'),
-                      Tab(text: '🔄 Back Side (Big Slam Canvas)'),
+                      Tab(text: '👔 Boys Uniform (ಹುಡುಗರ ಡ್ರೆಸ್)'),
+                      Tab(text: '👗 Girls Uniform (ಹುಡುಗಿಯರ ಡ್ರೆಸ್)'),
                     ],
                   ),
                 ),
 
                 // Hint Banner
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
                   child: Row(
                     children: [
-                      Icon(
-                        _isBackSide ? Icons.auto_awesome_rounded : Icons.touch_app_rounded,
-                        color: Colors.amber,
-                        size: 14,
-                      ),
+                      const Icon(Icons.draw_rounded, color: AppColors.primary, size: 14),
                       const SizedBox(width: 6),
                       Expanded(
                         child: Text(
-                          _isBackSide
-                              ? 'Tap any marker note to read or heart ❤️ • Tap "+ Sign Shirt" to write your autograph!'
-                              : 'Front uniform pocket side • Flip to Back side for the large batch autograph board!',
-                          style: GoogleFonts.poppins(fontSize: 11, color: Colors.white70),
+                          _isGirlsUniform
+                              ? 'Shweta, Chaitra, Ambika, Umashree, Roopa & Prema signatures on uniform!'
+                              : 'Arun, Hrutik, Ambadas, Vinod, Bhimu, Bhimashankar, Marilinga & Viresh signatures!',
+                          style: GoogleFonts.poppins(
+                            fontSize: 11,
+                            color: AppColors.textSecondary,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
 
-                // The Realistic Uniform Shirt Canvas
+                // The Realistic Uniform Shirt Canvas & Interactive Autographs
                 Expanded(
-                  child: SingleChildScrollView(
+                  child: ListView(
                     physics: const BouncingScrollPhysics(),
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                    child: _buildRealisticShirtCanvas(),
+                    children: [
+                      // 1. The Uniform Canvas with Autographs Written Over It
+                      _buildUniformCanvas(),
+
+                      const SizedBox(height: 18),
+
+                      // 2. Autograph Signers Roll Call Header
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              color: AppColors.blushPink,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.groups_rounded,
+                              size: 16,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            _isGirlsUniform
+                                ? "GIRLS CLASSMATES SIGNATURES"
+                                : "BOYS CLASSMATES SIGNATURES",
+                            style: GoogleFonts.poppins(
+                              color: AppColors.primary,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: 1.0,
+                            ),
+                          ),
+                          const Spacer(),
+                          Text(
+                            "${_currentSignatures.length} Autographs",
+                            style: GoogleFonts.poppins(
+                              color: AppColors.textSecondary,
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 10),
+
+                      // 3. Classmates Autograph Cards with Photos
+                      ...List.generate(_currentSignatures.length, (idx) {
+                        final sig = _currentSignatures[idx];
+                        return _buildSignerCard(sig);
+                      }),
+
+                      const SizedBox(height: 80),
+                    ],
                   ),
                 ),
               ],
             ),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: const Color(0xFFE11D48), // Permanent marker crimson red
+        backgroundColor: AppColors.primary,
         elevation: 6,
         icon: const Icon(Icons.draw_rounded, color: Colors.white),
         label: Text(
-          'Sign On Shirt',
-          style: GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: 13, color: Colors.white),
+          _isGirlsUniform ? 'Sign Girls Uniform' : 'Sign Boys Uniform',
+          style: GoogleFonts.poppins(
+            fontWeight: FontWeight.bold,
+            fontSize: 13,
+            color: Colors.white,
+          ),
         ),
         onPressed: _showSignShirtDialog,
       ),
     );
   }
 
-  Widget _buildRealisticShirtCanvas() {
+  // ==========================================
+  // UNIFORM CANVAS (Existing Boys & Girls Uniform Image + Overlaid Handwritings)
+  // ==========================================
+  Widget _buildUniformCanvas() {
+    final uniformAsset = _isGirlsUniform
+        ? 'assets/images/mdrs_girls_uniform.png'
+        : 'assets/images/mdrs_boys_uniform.png';
+
     final signatures = _currentSignatures;
 
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FAFC), // Authentic crisp white school shirt cotton
+        color: Colors.white,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: const Color(0xFFCBD5E1), width: 3), // Stitched edge
-        boxShadow: [
+        border: Border.all(color: AppColors.roseGold.withAlpha(120), width: 1.4),
+        boxShadow: const [
           BoxShadow(
-            color: Colors.black.withOpacity(0.4),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
-          ),
-          BoxShadow(
-            color: Colors.white.withOpacity(0.1),
-            blurRadius: 4,
-            offset: const Offset(0, -2),
+            color: AppColors.cardShadow,
+            blurRadius: 18,
+            offset: Offset(0, 6),
           ),
         ],
       ),
-      child: Column(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+      child: Stack(
+        alignment: Alignment.center,
         children: [
-          // Realistic Shirt Collar Header
-          _buildCollarHeader(),
+          // Background: The Authentic MDRS Uniform Shirt Image
+          ClipRRect(
+            borderRadius: BorderRadius.circular(18),
+            child: SizedBox(
+              height: 480,
+              width: double.infinity,
+              child: Image.asset(
+                uniformAsset,
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) => Container(
+                  color: AppColors.background,
+                  child: const Center(child: Icon(Icons.checkroom, size: 60, color: AppColors.primary)),
+                ),
+              ),
+            ),
+          ),
 
-          const Divider(height: 1, color: Color(0xFFE2E8F0)),
+          // Translucent Parchment Overlay so handwritings stay razor sharp
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(18),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.white.withAlpha(35),
+                    Colors.white.withAlpha(60),
+                    Colors.white.withAlpha(90),
+                  ],
+                ),
+              ),
+            ),
+          ),
 
-          // Signatures Area
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Front Side Specific: MDRS Chest Pocket Badge
-                if (!_isBackSide) ...[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // MDRS Embroidered Crest Pocket
-                      Container(
-                        width: 130,
-                        padding: const EdgeInsets.all(10),
+          // Overlaid Autographs Written Directly on Uniform Fabric
+          SizedBox(
+            height: 480,
+            width: double.infinity,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+              child: Wrap(
+                spacing: 12,
+                runSpacing: 14,
+                alignment: WrapAlignment.center,
+                children: List.generate(signatures.length, (idx) {
+                  final sig = signatures[idx];
+                  return Transform.rotate(
+                    angle: sig.rotation,
+                    child: InkWell(
+                      onTap: () => _showSignatureDialog(sig),
+                      borderRadius: BorderRadius.circular(12),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFF1F5F9),
-                          borderRadius: const BorderRadius.only(
-                            bottomLeft: Radius.circular(16),
-                            bottomRight: Radius.circular(16),
+                          color: Colors.white.withAlpha(210),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: sig.markerColor.withAlpha(110),
+                            width: 1.2,
                           ),
-                          border: Border.all(color: const Color(0xFF94A3B8), width: 1.5),
-                        ),
-                        child: Column(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF1E3A8A),
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Text(
-                                'M.D.R.S.',
-                                style: GoogleFonts.poppins(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w900,
-                                  color: Colors.white,
-                                  letterSpacing: 1.2,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              'CLASS X • SSLC\nFAREWELL 2026',
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.robotoMono(
-                                fontSize: 8,
-                                fontWeight: FontWeight.bold,
-                                color: const Color(0xFF475569),
-                              ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: sig.markerColor.withAlpha(25),
+                              blurRadius: 6,
+                              offset: const Offset(0, 2),
                             ),
                           ],
-                        ),
-                      ),
-
-                      // Pen clipped in pocket visual
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: Colors.amber.shade100,
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.amber.shade300),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Text('🖊️', style: TextStyle(fontSize: 12)),
-                            const SizedBox(width: 4),
                             Text(
-                              'Permanent Marker Ready',
-                              style: GoogleFonts.poppins(
-                                fontSize: 9,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.amber.shade900,
+                              "${sig.name} ✍️",
+                              style: GoogleFonts.kalam(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w800,
+                                color: sig.markerColor,
                               ),
                             ),
+                            const SizedBox(width: 4),
+                            Text(sig.doodle, style: const TextStyle(fontSize: 12)),
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                ],
-
-                // Back Side Specific: Giant "MDRS MEMORIES FOREVER" Header
-                if (_isBackSide) ...[
-                  Center(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: Colors.red.shade50,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.red.shade200, width: 1.5),
-                      ),
-                      child: Text(
-                        '★ MORARJI DESAI RESIDENTIAL SCHOOL ★\nLAST DAY AUTOGRAPH CANVAS',
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.permanentMarker(
-                          fontSize: 12,
-                          color: const Color(0xFF991B1B),
-                          letterSpacing: 1,
-                        ),
-                      ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                ],
+                  );
+                }),
+              ),
+            ),
+          ),
 
-                // The Marker Notes Grid
-                ...signatures.map((sig) => _buildMarkerScribbleItem(sig)),
-
-                const SizedBox(height: 40),
-
-                // Bottom Shirt Hem Line
-                Center(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                    decoration: BoxDecoration(
-                      border: Border(top: BorderSide(color: Colors.blueGrey.shade300, width: 1.5)),
-                    ),
-                    child: Text(
-                      '~ END OF SCHOOL DAYS • FOREVER MDRSIANS ~',
-                      style: GoogleFonts.poppins(
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blueGrey.shade400,
-                        letterSpacing: 1.2,
-                      ),
-                    ),
-                  ),
+          // Bottom Watermark Pill
+          Positioned(
+            bottom: 8,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              decoration: BoxDecoration(
+                color: Colors.white.withAlpha(230),
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: AppColors.roseGold.withAlpha(140), width: 1.0),
+              ),
+              child: Text(
+                _isGirlsUniform
+                    ? "MDRS Girls Farewell Uniform • Tap Autograph to Read"
+                    : "MDRS Boys Farewell Uniform • Tap Autograph to Read",
+                style: GoogleFonts.poppins(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.primary,
                 ),
-              ],
+              ),
             ),
           ),
         ],
@@ -541,494 +976,156 @@ class _FarewellShirtScreenState extends State<FarewellShirtScreen> with SingleTi
     );
   }
 
-  Widget _buildCollarHeader() {
+  // ==========================================
+  // SIGNER CARD WITH PHOTO & FULL MESSAGE
+  // ==========================================
+  Widget _buildSignerCard(UniformSignature sig) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-      decoration: const BoxDecoration(
-        color: Color(0xFFE2E8F0),
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Left Collar Wing
-          Transform.rotate(
-            angle: -0.15,
-            child: Container(
-              width: 50,
-              height: 18,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(4),
-                border: Border.all(color: const Color(0xFFCBD5E1)),
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
-
-          // Central Collar Button
-          Container(
-            width: 14,
-            height: 14,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
-              border: Border.all(color: const Color(0xFF94A3B8), width: 2),
-            ),
-            child: Center(
-              child: Container(
-                width: 4,
-                height: 4,
-                decoration: const BoxDecoration(
-                  color: Color(0xFF94A3B8),
-                  shape: BoxShape.circle,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
-
-          // Right Collar Wing
-          Transform.rotate(
-            angle: 0.15,
-            child: Container(
-              width: 50,
-              height: 18,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(4),
-                border: Border.all(color: const Color(0xFFCBD5E1)),
-              ),
-            ),
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.cardBorder, width: 1.0),
+        boxShadow: const [
+          BoxShadow(
+            color: AppColors.cardShadow,
+            blurRadius: 10,
+            offset: Offset(0, 3),
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildMarkerScribbleItem(ShirtSignature sig) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 14),
-      child: Transform.rotate(
-        angle: sig.rotation,
-        child: InkWell(
-          onTap: () => _showSignatureDetails(sig),
-          borderRadius: BorderRadius.circular(16),
-          child: Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.95),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: sig.markerColor.withOpacity(0.3), width: 1.5),
-              boxShadow: [
-                BoxShadow(
-                  color: sig.markerColor.withOpacity(0.08),
-                  blurRadius: 8,
-                  offset: const Offset(1, 3),
+      child: InkWell(
+        onTap: () => _showSignatureDialog(sig),
+        borderRadius: BorderRadius.circular(18),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Photo Thumbnail
+              Container(
+                width: 52,
+                height: 58,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: AppColors.roseGold.withAlpha(120), width: 1.2),
                 ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Top Row: Name & Doodle
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(11),
+                  child: sig.photo.isNotEmpty
+                      ? Image.asset(
+                          sig.photo,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => Container(
+                            color: AppColors.blushPink,
+                            child: Center(
+                              child: Text(
+                                sig.name[0],
+                                style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.primary,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                      : Container(
+                          color: AppColors.blushPink,
+                          child: Center(
+                            child: Text(
+                              sig.name[0],
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.primary,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ),
+                        ),
+                ),
+              ),
+
+              const SizedBox(width: 12),
+
+              // Name, Role & Message
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
                         Text(
-                          sig.doodle,
-                          style: const TextStyle(fontSize: 16),
+                          sig.name,
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.w800,
+                            fontSize: 14.5,
+                            color: AppColors.textPrimary,
+                          ),
                         ),
                         const SizedBox(width: 6),
-                        Text(
-                          sig.name,
-                          style: GoogleFonts.permanentMarker(
-                            fontSize: 15,
-                            color: sig.markerColor,
-                            letterSpacing: 0.5,
+                        Text(sig.doodle, style: const TextStyle(fontSize: 13)),
+                        const Spacer(),
+                        InkWell(
+                          onTap: () {
+                            HapticFeedback.lightImpact();
+                            setState(() => sig.hearts++);
+                          },
+                          borderRadius: BorderRadius.circular(8),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            child: Row(
+                              children: [
+                                const Icon(Icons.favorite_rounded,
+                                    color: Color(0xFFE11D48), size: 14),
+                                const SizedBox(width: 3),
+                                Text(
+                                  "${sig.hearts}",
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.textSecondary,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ],
                     ),
+                    Text(
+                      sig.roleOrBatch,
+                      style: GoogleFonts.poppins(
+                        fontSize: 10.5,
+                        color: AppColors.textSecondary,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: sig.markerColor.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(6),
+                        color: AppColors.background,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border(left: BorderSide(color: sig.markerColor, width: 3.5)),
                       ),
                       child: Text(
-                        sig.roleOrBatch,
-                        style: GoogleFonts.poppins(
-                          fontSize: 9,
+                        "“${sig.message}”",
+                        style: GoogleFonts.kalam(
+                          fontSize: 13,
                           fontWeight: FontWeight.bold,
                           color: sig.markerColor,
+                          height: 1.35,
                         ),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 6),
-
-                // Authentic Handwriting Message
-                Text(
-                  '"${sig.message}"',
-                  style: GoogleFonts.kalam(
-                    fontSize: 14,
-                    height: 1.3,
-                    fontWeight: FontWeight.w700,
-                    color: sig.markerColor.withOpacity(0.95),
-                  ),
-                ),
-                const SizedBox(height: 6),
-
-                // Heart / Like counter
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          sig.hearts++;
-                        });
-                      },
-                      child: Row(
-                        children: [
-                          const Icon(Icons.favorite, size: 14, color: Colors.redAccent),
-                          const SizedBox(width: 4),
-                          Text(
-                            '${sig.hearts}',
-                            style: GoogleFonts.poppins(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w600,
-                              color: const Color(0xFF64748B),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
     );
-  }
-
-  void _showSignatureDetails(ShirtSignature sig) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: const Color(0xFF1B0E33),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      builder: (ctx) => Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Text(sig.doodle, style: const TextStyle(fontSize: 28)),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        sig.name,
-                        style: GoogleFonts.permanentMarker(fontSize: 18, color: Colors.white),
-                      ),
-                      Text(
-                        sig.roleOrBatch,
-                        style: GoogleFonts.poppins(fontSize: 12, color: AppColors.accent),
-                      ),
-                    ],
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.favorite, color: Colors.redAccent),
-                  onPressed: () {
-                    setState(() => sig.hearts++);
-                    Navigator.pop(ctx);
-                  },
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.06),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.white12),
-              ),
-              child: Text(
-                '"${sig.message}"',
-                style: GoogleFonts.kalam(
-                  fontSize: 16,
-                  height: 1.4,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            const SizedBox(height: 18),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                ),
-                icon: const Icon(Icons.share, color: Colors.white, size: 18),
-                label: Text('Share this memory with friends', style: GoogleFonts.poppins(color: Colors.white)),
-                onPressed: () {
-                  Navigator.pop(ctx);
-                  _shareSingleMemory(sig);
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showSignShirtDialog() {
-    final nameCtrl = TextEditingController();
-    final batchCtrl = TextEditingController(text: 'Batch 2014');
-    final msgCtrl = TextEditingController();
-    Color selectedColor = const Color(0xFF1D4ED8); // Default Blue
-    String selectedDoodle = '❤️';
-    bool signOnBack = _isBackSide;
-
-    final colors = [
-      const Color(0xFF1D4ED8), // Blue
-      const Color(0xFF111827), // Black
-      const Color(0xFFDC2626), // Red
-      const Color(0xFF047857), // Green
-      const Color(0xFF7C3AED), // Violet
-    ];
-
-    final doodles = ['❤️', '⭐', '🏏', '🏆', '✌️', '🎓', '🔥'];
-
-    showDialog(
-      context: context,
-      builder: (ctx) => StatefulBuilder(
-        builder: (ctx, setDlgState) => AlertDialog(
-          backgroundColor: const Color(0xFF1B0E33),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          title: Text(
-            '✍️ Sign on Farewell Shirt',
-            style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
-          ),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Name
-                TextField(
-                  controller: nameCtrl,
-                  style: const TextStyle(color: Colors.white, fontSize: 13),
-                  decoration: InputDecoration(
-                    labelText: 'Your Name / Nickname',
-                    labelStyle: const TextStyle(color: Colors.white60, fontSize: 12),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.white24),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: AppColors.accent),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-
-                // Batch
-                TextField(
-                  controller: batchCtrl,
-                  style: const TextStyle(color: Colors.white, fontSize: 13),
-                  decoration: InputDecoration(
-                    labelText: 'Batch or Role (e.g. Batch 2013, Roll 08)',
-                    labelStyle: const TextStyle(color: Colors.white60, fontSize: 12),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.white24),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: AppColors.accent),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-
-                // Message
-                TextField(
-                  controller: msgCtrl,
-                  maxLines: 3,
-                  style: const TextStyle(color: Colors.white, fontSize: 13),
-                  decoration: InputDecoration(
-                    labelText: 'Farewell Memory or Message',
-                    hintText: 'e.g. Never forget our night study hour fights!',
-                    hintStyle: const TextStyle(color: Colors.white30, fontSize: 11),
-                    labelStyle: const TextStyle(color: Colors.white60, fontSize: 12),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.white24),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: AppColors.accent),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 12),
-
-                // Marker Color Picker
-                Text('Marker Pen Color:', style: GoogleFonts.poppins(fontSize: 11, color: Colors.white70)),
-                const SizedBox(height: 6),
-                Row(
-                  children: colors.map((c) => GestureDetector(
-                    onTap: () => setDlgState(() => selectedColor = c),
-                    child: Container(
-                      margin: const EdgeInsets.only(right: 10),
-                      width: 28,
-                      height: 28,
-                      decoration: BoxDecoration(
-                        color: c,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: selectedColor == c ? Colors.white : Colors.transparent,
-                          width: 2.5,
-                        ),
-                      ),
-                    ),
-                  )).toList(),
-                ),
-                const SizedBox(height: 12),
-
-                // Doodle Picker
-                Text('Add Little Doodle:', style: GoogleFonts.poppins(fontSize: 11, color: Colors.white70)),
-                const SizedBox(height: 6),
-                Wrap(
-                  spacing: 8,
-                  children: doodles.map((d) => GestureDetector(
-                    onTap: () => setDlgState(() => selectedDoodle = d),
-                    child: Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: selectedDoodle == d ? Colors.white24 : Colors.transparent,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(d, style: const TextStyle(fontSize: 18)),
-                    ),
-                  )).toList(),
-                ),
-                const SizedBox(height: 12),
-
-                // Placement (Front or Back)
-                Row(
-                  children: [
-                    Text('Side:', style: GoogleFonts.poppins(fontSize: 11, color: Colors.white70)),
-                    const SizedBox(width: 10),
-                    ChoiceChip(
-                      label: const Text('Front'),
-                      selected: !signOnBack,
-                      onSelected: (val) => setDlgState(() => signOnBack = !val),
-                      selectedColor: AppColors.primary,
-                      labelStyle: TextStyle(color: !signOnBack ? Colors.white : Colors.white60, fontSize: 11),
-                    ),
-                    const SizedBox(width: 8),
-                    ChoiceChip(
-                      label: const Text('Back'),
-                      selected: signOnBack,
-                      onSelected: (val) => setDlgState(() => signOnBack = val),
-                      selectedColor: AppColors.primary,
-                      labelStyle: TextStyle(color: signOnBack ? Colors.white : Colors.white60, fontSize: 11),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: const Text('Cancel', style: TextStyle(color: Colors.white60)),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFE11D48)),
-              onPressed: () {
-                final name = nameCtrl.text.trim();
-                final msg = msgCtrl.text.trim();
-                if (name.isEmpty || msg.isEmpty) return;
-
-                // Random slight natural marker tilt between -0.05 and +0.05 rad
-                final random = math.Random();
-                final rot = (random.nextDouble() * 0.1) - 0.05;
-
-                final newSig = ShirtSignature(
-                  id: 'user_${DateTime.now().millisecondsSinceEpoch}',
-                  name: name,
-                  roleOrBatch: batchCtrl.text.trim().isEmpty ? 'MDRSian' : batchCtrl.text.trim(),
-                  message: msg,
-                  markerColor: selectedColor,
-                  rotation: rot,
-                  isBackSide: signOnBack,
-                  doodle: selectedDoodle,
-                  hearts: 1,
-                );
-
-                _saveCustomSignature(newSig);
-                Navigator.pop(ctx);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    backgroundColor: const Color(0xFF047857),
-                    content: Text('🎉 Your signature was permanently inked on the ${signOnBack ? "Back" : "Front"} of the shirt!'),
-                  ),
-                );
-              },
-              child: const Text('Ink on Shirt ✍️', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _shareOnWhatsApp() async {
-    final text = '👕 *MDRS School — Class 10th Farewell Autograph Shirt*\n\n'
-        'Remember the last day of SSLC exams when we signed each other\'s white shirts with marker pens?\n\n'
-        'Check out our batch memories & sign your own message on the shirt in the MDRS School app! ❤️\n\n'
-        '#MDRSSchool #FarewellShirt #HostelMemories';
-    final url = Uri.parse('whatsapp://send?text=${Uri.encodeComponent(text)}');
-    try {
-      await launchUrl(url);
-    } catch (_) {}
-  }
-
-  void _shareSingleMemory(ShirtSignature sig) async {
-    final text = '👕 *MDRS Farewell Shirt Memory*\n\n'
-        'From: *${sig.name}* (${sig.roleOrBatch})\n'
-        '"${sig.message}"\n\n'
-        '— Signed on the MDRS School Farewell Shirt ❤️';
-    final url = Uri.parse('whatsapp://send?text=${Uri.encodeComponent(text)}');
-    try {
-      await launchUrl(url);
-    } catch (_) {}
   }
 }
-

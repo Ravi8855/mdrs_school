@@ -203,27 +203,12 @@ class _TeachersSoundboardScreenState extends State<TeachersSoundboardScreen>
     setState(() => _currentlyPlayingId = teacher.id);
     speakDialogue(teacher.dialogue, teacher.voiceLang);
 
-    // Auto reset indicator after 4.5 seconds
-    Future.delayed(const Duration(milliseconds: 4500), () {
+    // Auto reset indicator after 5 seconds
+    Future.delayed(const Duration(milliseconds: 5000), () {
       if (mounted && _currentlyPlayingId == teacher.id) {
         setState(() => _currentlyPlayingId = null);
       }
     });
-  }
-
-  void _openMimicryStudio(TeacherDialogue teacher) {
-    HapticFeedback.selectionClick();
-    triggerMicPermission();
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (ctx) => _MimicryStudioSheet(
-        teacher: teacher,
-        onPlayMaster: () => _playTeacherVoice(teacher),
-      ),
-    );
   }
 
   void _shareOnWhatsApp(TeacherDialogue teacher) async {
@@ -298,16 +283,6 @@ Download MDRS Alumni App to relive your hostel memories!
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: const Color(0xFFE11D48), // Rose
-        elevation: 4,
-        icon: const Icon(Icons.mic_rounded, color: Colors.white),
-        label: Text(
-          "Mimic Studio",
-          style: GoogleFonts.poppins(fontWeight: FontWeight.w700, color: Colors.white),
-        ),
-        onPressed: () => _openMimicryStudio(_teachers.first),
-      ),
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         slivers: [
@@ -378,7 +353,7 @@ Download MDRS Alumni App to relive your hostel memories!
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    "Tap the Mic / Play button on each teacher to hear their legendary dialogue. Tap Mimic Studio to test your voice!",
+                    "Tap the Hear Sound button on each teacher to hear their legendary dialogue!",
                     style: GoogleFonts.poppins(
                       fontSize: 12.5,
                       color: const Color(0xFFCBD5E1),
@@ -588,12 +563,11 @@ Download MDRS Alumni App to relive your hostel memories!
 
             const SizedBox(height: 14),
 
-            // Bottom Action Bar: Play Voice (Mick) + Mimic Studio + Laugh/Heart
+            // Bottom Action Bar: Play Sound + Laugh/Heart Reactions
             Row(
               children: [
-                // Voice / Mic Play Button
+                // Voice Play Button (Speaker icon, no mic)
                 Expanded(
-                  flex: 3,
                   child: ElevatedButton.icon(
                     onPressed: () => _playTeacherVoice(teacher),
                     icon: isPlaying
@@ -615,52 +589,25 @@ Download MDRS Alumni App to relive your hostel memories!
                               ),
                             ),
                           )
-                        : const Icon(Icons.mic_rounded, color: Colors.white, size: 18),
+                        : const Icon(Icons.volume_up_rounded, color: Colors.white, size: 20),
                     label: Text(
-                      isPlaying ? "Speaking..." : "Hear Voice",
+                      isPlaying ? "Speaking..." : "Hear Sound",
                       style: GoogleFonts.poppins(
-                        fontSize: 12.5,
+                        fontSize: 13,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: isPlaying ? const Color(0xFF10B981) : teacher.themeColor,
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      padding: const EdgeInsets.symmetric(vertical: 11),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                       elevation: isPlaying ? 4 : 1,
                     ),
                   ),
                 ),
 
-                const SizedBox(width: 8),
-
-                // Mimic Button
-                OutlinedButton(
-                  onPressed: () => _openMimicryStudio(teacher),
-                  style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: teacher.themeColor.withAlpha(120), width: 1.2),
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(Icons.graphic_eq_rounded, size: 16, color: Colors.white70),
-                      const SizedBox(width: 4),
-                      Text(
-                        "Mimic",
-                        style: GoogleFonts.poppins(
-                          fontSize: 11.5,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const Spacer(),
+                const SizedBox(width: 14),
 
                 // Reaction: Laugh
                 InkWell(
@@ -674,14 +621,14 @@ Download MDRS Alumni App to relive your hostel memories!
                         const SizedBox(width: 4),
                         Text(
                           "${teacher.laughCount}",
-                          style: GoogleFonts.poppins(fontSize: 11, color: Colors.white70, fontWeight: FontWeight.w600),
+                          style: GoogleFonts.poppins(fontSize: 12, color: Colors.white70, fontWeight: FontWeight.w600),
                         ),
                       ],
                     ),
                   ),
                 ),
 
-                const SizedBox(width: 4),
+                const SizedBox(width: 8),
 
                 // Reaction: Heart
                 InkWell(
@@ -695,7 +642,7 @@ Download MDRS Alumni App to relive your hostel memories!
                         const SizedBox(width: 4),
                         Text(
                           "${teacher.heartCount}",
-                          style: GoogleFonts.poppins(fontSize: 11, color: Colors.white70, fontWeight: FontWeight.w600),
+                          style: GoogleFonts.poppins(fontSize: 12, color: Colors.white70, fontWeight: FontWeight.w600),
                         ),
                       ],
                     ),
@@ -709,291 +656,3 @@ Download MDRS Alumni App to relive your hostel memories!
     );
   }
 }
-
-// -------------------------------------------------------------
-// MIMICRY STUDIO BOTTOM SHEET (Live Mic Animation & Verdict)
-// -------------------------------------------------------------
-class _MimicryStudioSheet extends StatefulWidget {
-  final TeacherDialogue teacher;
-  final VoidCallback onPlayMaster;
-
-  const _MimicryStudioSheet({
-    required this.teacher,
-    required this.onPlayMaster,
-  });
-
-  @override
-  State<_MimicryStudioSheet> createState() => _MimicryStudioSheetState();
-}
-
-class _MimicryStudioSheetState extends State<_MimicryStudioSheet>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _pulseController;
-  bool _isRecording = false;
-  int? _mimicScore;
-  String? _verdictText;
-
-  @override
-  void initState() {
-    super.initState();
-    _pulseController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 900),
-    );
-  }
-
-  @override
-  void dispose() {
-    _pulseController.dispose();
-    super.dispose();
-  }
-
-  void _toggleRecording() {
-    HapticFeedback.heavyImpact();
-    if (_isRecording) {
-      // Stop recording and compute score
-      _pulseController.stop();
-      setState(() {
-        _isRecording = false;
-        final rnd = Random();
-        _mimicScore = 88 + rnd.nextInt(12); // 88 - 99
-        final verdicts = [
-          "ಮಾರಾಯಾ, ${widget.teacher.name} ಸರ್ ತರಾನೇ ಹೇಳ್ದೆ ನೋಡು! 😂",
-          "ಅಬ್ಬಾ! ಕ್ಲಾಸ್‌ರೂಮ್ ನೆನಪು ಬಂತು, 100% ಪಕ್ಕಾ ಡೈಲಾಗ್!",
-          "ಸರ್ ಈ ಧ್ವನಿ ಕೇಳಿದ್ರೆ ನಕ್ಕು ಬಿಡ್ತಾರೆ! Class Comedian Score!",
-          "Master Level Mimicry! Friends WhatsApp ಗ್ರೂಪ್‌ಗೆ ಶೇರ್ ಮಾಡಿ!",
-        ];
-        _verdictText = verdicts[rnd.nextInt(verdicts.length)];
-      });
-    } else {
-      // Start recording
-      _pulseController.repeat(reverse: true);
-      setState(() {
-        _isRecording = true;
-        _mimicScore = null;
-        _verdictText = null;
-      });
-
-      // Auto stop after 4 seconds
-      Future.delayed(const Duration(seconds: 4), () {
-        if (mounted && _isRecording) {
-          _toggleRecording();
-        }
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: Color(0xFF160207),
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-      ),
-      padding: EdgeInsets.only(
-        left: 20,
-        right: 20,
-        top: 20,
-        bottom: MediaQuery.of(context).viewInsets.bottom + 24,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Drag handle
-          Container(
-            width: 40,
-            height: 4,
-            decoration: BoxDecoration(
-              color: Colors.white24,
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-          const SizedBox(height: 16),
-
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: widget.teacher.themeColor.withAlpha(35),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(widget.teacher.icon, color: widget.teacher.themeColor, size: 22),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Mimic Studio: ${widget.teacher.name}",
-                      style: GoogleFonts.cinzel(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Text(
-                      "Hold Mic & say this dialogue in master's style!",
-                      style: GoogleFonts.poppins(fontSize: 11, color: const Color(0xFF94A3B8)),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 16),
-
-          // Dialogue reminder
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(
-              color: const Color(0xFF1E1B4B),
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: widget.teacher.themeColor.withAlpha(80)),
-            ),
-            child: Text(
-              widget.teacher.dialogue,
-              textAlign: TextAlign.center,
-              style: GoogleFonts.kalam(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: const Color(0xFFFEF08A),
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 24),
-
-          // Big Pulsing Mic Button
-          GestureDetector(
-            onTap: _toggleRecording,
-            child: AnimatedBuilder(
-              animation: _pulseController,
-              builder: (context, child) {
-                final scale = _isRecording ? 1.0 + (_pulseController.value * 0.15) : 1.0;
-                final glow = _isRecording ? _pulseController.value * 25 : 8.0;
-                return Transform.scale(
-                  scale: scale,
-                  child: Container(
-                    width: 90,
-                    height: 90,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      gradient: LinearGradient(
-                        colors: _isRecording
-                            ? [const Color(0xFFEF4444), const Color(0xFFB91C1C)]
-                            : [widget.teacher.themeColor, widget.teacher.themeColor.withAlpha(180)],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: (_isRecording ? const Color(0xFFEF4444) : widget.teacher.themeColor)
-                              .withAlpha(140),
-                          blurRadius: glow,
-                          spreadRadius: _isRecording ? 4 : 0,
-                        ),
-                      ],
-                    ),
-                    child: Icon(
-                      _isRecording ? Icons.stop_rounded : Icons.mic_rounded,
-                      color: Colors.white,
-                      size: 44,
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-
-          const SizedBox(height: 14),
-
-          Text(
-            _isRecording ? "🔴 Listening... Speak now!" : "Tap Mic to Mimic Master",
-            style: GoogleFonts.poppins(
-              fontSize: 13,
-              fontWeight: FontWeight.bold,
-              color: _isRecording ? const Color(0xFFEF4444) : Colors.white,
-            ),
-          ),
-
-          // Score / Verdict Section
-          if (_mimicScore != null) ...[
-            const SizedBox(height: 18),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: BoxDecoration(
-                color: const Color(0xFF10B981).withAlpha(25),
-                borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: const Color(0xFF10B981), width: 1.4),
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text("🏆", style: TextStyle(fontSize: 20)),
-                      const SizedBox(width: 6),
-                      Text(
-                        "Score: $_mimicScore / 100",
-                        style: GoogleFonts.poppins(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                          color: const Color(0xFF34D399),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    _verdictText ?? "",
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.kalam(
-                      fontSize: 14,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-
-          const SizedBox(height: 18),
-
-          // Action buttons: Listen to Master + Close
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton.icon(
-                  onPressed: widget.onPlayMaster,
-                  icon: const Icon(Icons.volume_up_rounded, color: Colors.white, size: 18),
-                  label: Text("Hear Master", style: GoogleFonts.poppins(color: Colors.white, fontSize: 12)),
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: Colors.white30),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () => Navigator.pop(context),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white12,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  ),
-                  child: Text("Done", style: GoogleFonts.poppins(color: Colors.white, fontSize: 12)),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-

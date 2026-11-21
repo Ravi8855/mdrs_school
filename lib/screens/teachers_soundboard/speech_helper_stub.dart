@@ -1,11 +1,12 @@
+import 'package:flutter/services.dart';
+
 void speakDialogue(String text, String lang) {
-  // Stub for non-web
+  try {
+    SystemSound.play(SystemSoundType.click);
+    HapticFeedback.heavyImpact();
+  } catch (_) {}
 }
 
 void stopDialogue() {
-  // Stub
-}
-
-void triggerMicPermission() {
   // Stub
 }
