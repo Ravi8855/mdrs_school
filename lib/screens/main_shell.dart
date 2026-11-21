@@ -27,11 +27,11 @@ class _MainShellState extends State<MainShell> {
   ];
 
   final List<_NavItem> _navItems = const [
-    _NavItem(icon: Icons.home_outlined, activeIcon: Icons.home, label: 'Home'),
-    _NavItem(icon: Icons.groups_outlined, activeIcon: Icons.groups, label: 'Batches'),
-    _NavItem(icon: Icons.person_outline, activeIcon: Icons.person, label: 'People'),
-    _NavItem(icon: Icons.grid_view_outlined, activeIcon: Icons.grid_view, label: 'Features'),
-    _NavItem(icon: Icons.chat_bubble_outline, activeIcon: Icons.chat_bubble, label: 'Feedback'),
+    _NavItem(icon: Icons.home_outlined, activeIcon: Icons.home_rounded, label: 'Home'),
+    _NavItem(icon: Icons.groups_outlined, activeIcon: Icons.groups_rounded, label: 'Batches'),
+    _NavItem(icon: Icons.person_outline_rounded, activeIcon: Icons.person_rounded, label: 'People'),
+    _NavItem(icon: Icons.grid_view_outlined, activeIcon: Icons.grid_view_rounded, label: 'Features'),
+    _NavItem(icon: Icons.chat_bubble_outline_rounded, activeIcon: Icons.chat_bubble_rounded, label: 'Feedback'),
   ];
 
   @override
@@ -45,21 +45,21 @@ class _MainShellState extends State<MainShell> {
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: AppColors.navBackground,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(26)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withAlpha(140),
-              blurRadius: 18,
-              offset: const Offset(0, -4),
+              color: AppColors.primary.withAlpha(22),
+              blurRadius: 20,
+              offset: const Offset(0, -5),
             ),
             BoxShadow(
-              color: AppColors.primary.withAlpha(50),
-              blurRadius: 14,
+              color: AppColors.roseGold.withAlpha(30),
+              blurRadius: 10,
               offset: const Offset(0, -2),
             ),
           ],
         ),
-        padding: const EdgeInsets.only(top: 8, bottom: 10, left: 6, right: 6),
+        padding: const EdgeInsets.only(top: 8, bottom: 10, left: 8, right: 8),
         child: SafeArea(
           top: false,
           child: Row(
@@ -73,23 +73,30 @@ class _MainShellState extends State<MainShell> {
                   HapticFeedback.selectionClick();
                   setState(() => _currentIndex = idx);
                 },
-                borderRadius: BorderRadius.circular(18),
+                borderRadius: BorderRadius.circular(22),
                 child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 220),
+                  duration: const Duration(milliseconds: 240),
                   curve: Curves.easeOutCubic,
                   padding: EdgeInsets.symmetric(
-                    horizontal: isSelected ? 14 : 10,
-                    vertical: 6,
+                    horizontal: isSelected ? 18 : 10,
+                    vertical: 7,
                   ),
                   decoration: BoxDecoration(
-                    color: isSelected ? AppColors.navActivePill : Colors.transparent,
-                    borderRadius: BorderRadius.circular(20),
+                    gradient: isSelected
+                        ? const LinearGradient(
+                            colors: [AppColors.navActiveStart, AppColors.navActiveEnd],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          )
+                        : null,
+                    color: isSelected ? null : Colors.transparent,
+                    borderRadius: BorderRadius.circular(22),
                     boxShadow: isSelected
                         ? [
                             BoxShadow(
-                              color: AppColors.primaryLight.withAlpha(100),
+                              color: AppColors.primary.withAlpha(80),
                               blurRadius: 12,
-                              spreadRadius: 1,
+                              offset: const Offset(0, 4),
                             ),
                           ]
                         : null,
@@ -100,7 +107,7 @@ class _MainShellState extends State<MainShell> {
                       Icon(
                         isSelected ? item.activeIcon : item.icon,
                         color: isSelected ? Colors.white : AppColors.navInactive,
-                        size: 23,
+                        size: 22,
                       ),
                       const SizedBox(height: 3),
                       Text(

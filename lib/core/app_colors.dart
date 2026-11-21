@@ -1,39 +1,48 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  // Deep Obsidian Crimson & Satin Ruby Red Metallic Theme (with Polished Chrome Silver)
-  static const Color primary = Color(0xFFDC2626); // Sculpted Metallic Ruby Red
-  static const Color primaryLight = Color(0xFFFF2A55); // Radiant Neon Scarlet Highlight
-  static const Color primaryDark = Color(0xFF7F1D1D); // Deep Burgundy Wine
-  static const Color primaryDeep = Color(0xFF0F0104); // Darkest Obsidian Carbon Maroon
-  static const Color accent = Color(0xFFFF0033); // Laser Scarlet Red
-  static const Color gold = Color(0xFFE2E8F0); // Polished Chrome Silver Accent
-
-  // Chrome & Platinum Metallic Accents
-  static const Color chromeSilver = Color(0xFFF8FAFC); // Polished Platinum Silver White
-  static const Color chromeMid = Color(0xFFCBD5E1); // Brushed Stainless Steel
-  static const Color chromeDark = Color(0xFF94A3B8); // Cool Stainless Slate
-
-  // Canvas & Surfaces
-  static const Color background = Color(0xFF0A0104); // Ultra-deep Obsidian Velvet Canvas
-  static const Color surface = Color(0xFF160309); // Deep Burgundy-tinted Card Surface
-  static const Color surfaceElevated = Color(0xFF240610); // Elevated Rich Ruby Slate Card Surface
-
-  static const Color cardBorder = Color(0x35DC2626); // Subtle Glowing Ruby Edge Border
-  static const Color cardShadow = Color(0x35E11D48); // Radiant Crimson Ambient Glow
-  static const Color divider = Color(0x22CBD5E1); // Soft Chrome Silver Divider
+  // Luxury White & Rose Gold Theme
+  static const Color primary = Color(0xFF8B1538); // Primary Burgundy
+  static const Color deepWine = Color(0xFF650D2B); // Deep Wine
+  static const Color roseGold = Color(0xFFC98B73); // Rose Gold
+  static const Color metallicGold = Color(0xFFD8A45B); // Metallic Gold
+  static const Color blushPink = Color(0xFFFBE4E8); // Soft Blush Pink
+  static const Color lightRose = Color(0xFFFFF0F2); // Light Rose
+  static const Color warmPeach = Color(0xFFFFF5F0); // Warm Peach
+  static const Color warmIvory = Color(0xFFFFF9F7); // Warm Ivory
+  static const Color background = Color(0xFFFFF9F7); // Warm Ivory Background
+  static const Color surface = Color(0xFFFFFFFF); // Pure White
+  static const Color surfaceElevated = Color(0xFFFFF4F2); // Elevated Warm Blush
 
   // Typography
-  static const Color textPrimary = Color(0xFFF8FAFC); // Brilliant Chrome White
-  static const Color textSecondary = Color(0xFFCBD5E1); // Brushed Silver Slate Subtitle
-  static const Color textMuted = Color(0xFF94A3B8); // Cool Chrome Slate
-  static const Color textViolet = Color(0xFFFF3366); // Radiant Ruby Scarlet for Section Headers
+  static const Color textPrimary = Color(0xFF351C29); // Deep Burgundy Black
+  static const Color textSecondary = Color(0xFF765C67); // Mauve Slate Subtitle
+  static const Color textMuted = Color(0xFFA58B97); // Cool Mauve Slate
+  static const Color textLight = Color(0xFFFFFFFF); // Pure White
+  static const Color textViolet = Color(0xFF8B1538); // Burgundy Header Accent
+
+  // Borders & Shadows
+  static const Color cardBorder = Color(0x38C98B73); // Subtle Rose Gold Border
+  static const Color cardShadow = Color(0x108B1538); // Delicate Rose/Burgundy Elevation Shadow
+  static const Color divider = Color(0x28C98B73); // Soft Rose Gold Divider
 
   // Bottom Navigation Bar
-  static const Color navBackground = Color(0xFF0C0105); // Deepest Obsidian Maroon
-  static const Color navActivePill = Color(0xFFDC2626); // Sculpted Ruby Red Active Pill
-  static const Color navInactive = Color(0xFF94A3B8); // Brushed Silver Inactive Text/Icon
+  static const Color navBackground = Color(0xFFFFFFFF); // Floating Pure White
+  static const Color navActiveStart = Color(0xFF8B1538); // Burgundy Start
+  static const Color navActiveEnd = Color(0xFF650D2B); // Deep Wine End
+  static const Color navActivePill = Color(0xFF8B1538); // Burgundy Pill
+  static const Color navInactive = Color(0xFF765C67); // Slate Mauve Inactive Text/Icon
 
-  static const Color error = Color(0xFFEF4444);
+  // Compatibility Aliases for other screens
+  static const Color primaryLight = Color(0xFFC98B73); // Rose Gold Accent
+  static const Color primaryDark = Color(0xFF650D2B); // Deep Wine
+  static const Color primaryDeep = Color(0xFF8B1538); // Primary Burgundy AppBar
+  static const Color accent = Color(0xFF8B1538); // Primary Burgundy
+  static const Color gold = Color(0xFFD8A45B); // Metallic Gold
+  static const Color chromeSilver = Color(0xFFFFFFFF); // Pure White Accent
+  static const Color chromeMid = Color(0xFFFBE4E8); // Soft Blush Pink
+  static const Color chromeDark = Color(0xFF765C67); // Mauve Slate
+
+  static const Color error = Color(0xFFE11D48);
   static const Color success = Color(0xFF10B981);
 }
