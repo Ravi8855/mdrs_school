@@ -35,35 +35,46 @@ class _HostelScreenState extends State<HostelScreen> with SingleTickerProviderSt
       backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: AppColors.primaryDeep,
+        elevation: 0,
         title: Text(
           "Hostel Life",
-          style: GoogleFonts.cinzel(fontWeight: FontWeight.w700, fontSize: 20, color: Colors.white),
+          style: GoogleFonts.playfairDisplay(fontWeight: FontWeight.w800, fontSize: 20, color: Colors.white),
         ),
         centerTitle: true,
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(48),
+          preferredSize: const Size.fromHeight(50),
           child: Container(
-            height: 48,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            height: 50,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+            decoration: BoxDecoration(
+              color: AppColors.primaryDark,
+              border: Border(
+                bottom: BorderSide(
+                  color: AppColors.roseGold.withAlpha(90),
+                  width: 1.0,
+                ),
+              ),
+            ),
             child: TabBar(
               controller: _tabController,
               physics: const BouncingScrollPhysics(),
               indicatorSize: TabBarIndicatorSize.tab,
+              dividerColor: Colors.transparent,
               indicator: BoxDecoration(
                 borderRadius: BorderRadius.circular(22),
-                color: AppColors.primary,
-                boxShadow: [
+                color: Colors.white,
+                boxShadow: const [
                   BoxShadow(
-                    color: AppColors.primaryLight.withAlpha(90),
+                    color: Colors.black26,
                     blurRadius: 8,
-                    offset: const Offset(0, 2),
+                    offset: Offset(0, 2),
                   ),
                 ],
               ),
-              labelColor: Colors.white,
-              unselectedLabelColor: const Color(0xFFD8B4FE),
-              labelStyle: GoogleFonts.poppins(fontWeight: FontWeight.w700, fontSize: 13.5),
-              unselectedLabelStyle: GoogleFonts.poppins(fontWeight: FontWeight.w500, fontSize: 13.5),
+              labelColor: AppColors.primary,
+              unselectedLabelColor: Colors.white,
+              labelStyle: GoogleFonts.poppins(fontWeight: FontWeight.w800, fontSize: 13.5),
+              unselectedLabelStyle: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 13.5),
               tabs: const [
                 Tab(text: "Boys Hostel"),
                 Tab(text: "Girls Hostel"),

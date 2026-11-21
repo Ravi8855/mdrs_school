@@ -144,34 +144,12 @@ class HomeScreen extends StatelessWidget {
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                           colors: [
-                            Colors.white.withAlpha(200),
+                            Colors.transparent,
+                            Colors.transparent,
                             Colors.white.withAlpha(120),
-                            Colors.white.withAlpha(180),
                             AppColors.background,
                           ],
-                          stops: const [0.0, 0.40, 0.80, 1.0],
-                        ),
-                      ),
-                    ),
-
-                    // Top Left Soft White/Pink Vignette for brand readability
-                    Positioned(
-                      top: 0,
-                      left: 0,
-                      right: 120,
-                      bottom: 80,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: RadialGradient(
-                            center: Alignment.topLeft,
-                            radius: 1.2,
-                            colors: [
-                              Colors.white.withAlpha(235),
-                              Colors.white.withAlpha(180),
-                              Colors.transparent,
-                            ],
-                            stops: const [0.0, 0.55, 1.0],
-                          ),
+                          stops: const [0.0, 0.45, 0.85, 1.0],
                         ),
                       ),
                     ),
@@ -191,87 +169,6 @@ class HomeScreen extends StatelessWidget {
                       height: 80,
                       child: CustomPaint(
                         painter: _HeroWavePainter(),
-                      ),
-                    ),
-
-                    // Top Left "School Memory App" Branding
-                    Positioned(
-                      top: topPadding + 10,
-                      left: 16,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          // Camera Logo with Heart
-                          Container(
-                            width: 48,
-                            height: 48,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              gradient: const LinearGradient(
-                                colors: [Color(0xFFFFF0F2), Color(0xFFFBE4E8)],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
-                              border: Border.all(color: AppColors.roseGold.withAlpha(140), width: 1.5),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppColors.primary.withAlpha(25),
-                                  blurRadius: 10,
-                                  offset: const Offset(0, 3),
-                                ),
-                              ],
-                            ),
-                            child: ClipOval(
-                              child: Image.asset(
-                                'assets/images/school_memory_logo.png',
-                                fit: BoxFit.cover,
-                                errorBuilder: (_, __, ___) => const Icon(
-                                  Icons.camera_alt_rounded,
-                                  color: AppColors.primary,
-                                  size: 26,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    "School ",
-                                    style: GoogleFonts.playfairDisplay(
-                                      color: AppColors.textPrimary,
-                                      fontSize: 19,
-                                      fontWeight: FontWeight.w700,
-                                      fontStyle: FontStyle.italic,
-                                    ),
-                                  ),
-                                  Text(
-                                    "Memory App",
-                                    style: GoogleFonts.poppins(
-                                      color: AppColors.primary,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 1),
-                              Text(
-                                "Capture • Relive • Cherish\nOur School Journey ♡",
-                                style: GoogleFonts.poppins(
-                                  color: AppColors.textSecondary,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w500,
-                                  height: 1.25,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
                       ),
                     ),
                   ],

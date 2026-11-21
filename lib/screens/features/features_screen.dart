@@ -18,15 +18,16 @@ class FeaturesScreen extends StatelessWidget {
       backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: AppColors.primaryDeep,
+        elevation: 0,
         title: Text(
           "Interactive Features",
-          style: GoogleFonts.cinzel(fontWeight: FontWeight.w700, fontSize: 20, color: Colors.white),
+          style: GoogleFonts.playfairDisplay(fontWeight: FontWeight.w800, fontSize: 20, color: Colors.white),
         ),
         centerTitle: true,
       ),
       body: ListView(
         physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         children: [
           _buildFeatureTile(
             context,
@@ -34,7 +35,7 @@ class FeaturesScreen extends StatelessWidget {
             subtitle: "5:30 AM ಬಕೆಟ್ ಯುದ್ಧ, ಟ್ರಂಕ್ ತಿಂಡಿ ಡಬ್ಬಿ, ಕಂಬಳಿ ಹರಟೆ, ಡೆಸ್ಕ್ ಚೀಟಿ & ಬರ್ತ್‌ಡೇ ಚಾಕೋಲೇಟ್!",
             icon: Icons.auto_awesome_rounded,
             badge: "ಹಾಸ್ಟೆಲ್ ಸಖಿಯರು",
-            accentColor: const Color(0xFFF43F5E),
+            accentColor: const Color(0xFFBE185D), // Deep Ruby Rose
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const GirlsMemoriesScreen()),
@@ -47,7 +48,7 @@ class FeaturesScreen extends StatelessWidget {
             subtitle: "Explore Krishna, Bhima, Sindhu, Godhawari, Kaveri, Yamuna & Ganga houses.",
             icon: Icons.hotel_rounded,
             badge: "COMMUNITY",
-            accentColor: Colors.blueAccent,
+            accentColor: const Color(0xFF1D4ED8), // Deep Royal Blue
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const HostelScreen()),
@@ -60,7 +61,7 @@ class FeaturesScreen extends StatelessWidget {
             subtitle: "Tick classic hostel & school memories you lived and unlock your shareable MDRS Legend Score!",
             icon: Icons.fact_check_rounded,
             badge: "MEMORY BINGO",
-            accentColor: AppColors.primary,
+            accentColor: AppColors.primary, // Deep Burgundy
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const MdrsianBingoScreen()),
@@ -73,7 +74,7 @@ class FeaturesScreen extends StatelessWidget {
             subtitle: "Live 24-hour hostel & school routine — see what you used to do at this exact hour on campus!",
             icon: Icons.wb_twilight_rounded,
             badge: "LIVE TIMELINE",
-            accentColor: const Color(0xFFD97706),
+            accentColor: const Color(0xFFB45309), // Deep Warm Amber
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const DayAtMdrsScreen()),
@@ -86,7 +87,7 @@ class FeaturesScreen extends StatelessWidget {
             subtitle: "Revansiddappa Sir, Subhash Sir, Shatlingappa Sir & masters' iconic dialogues with Mic audio!",
             icon: Icons.record_voice_over_rounded,
             badge: "ಗುರುಗಳ ಧ್ವನಿ",
-            accentColor: const Color(0xFFE11D48),
+            accentColor: const Color(0xFFB91C1C), // Deep Crimson
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const TeachersSoundboardScreen()),
@@ -99,7 +100,7 @@ class FeaturesScreen extends StatelessWidget {
             subtitle: "Historical collection of school memories, events, functions, and campus views.",
             icon: Icons.photo_library_rounded,
             badge: "MEMORIES",
-            accentColor: Colors.greenAccent,
+            accentColor: const Color(0xFF047857), // Deep Emerald Forest Green
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const GalleryScreen()),
@@ -124,34 +125,41 @@ class FeaturesScreen extends StatelessWidget {
         HapticFeedback.lightImpact();
         onTap();
       },
-      borderRadius: BorderRadius.circular(22),
+      borderRadius: BorderRadius.circular(20),
       child: Container(
-        padding: const EdgeInsets.all(18),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.circular(22),
-          border: Border.all(color: AppColors.cardBorder, width: 0.8),
-          boxShadow: const [
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: AppColors.roseGold.withAlpha(100), width: 1.1),
+          boxShadow: [
             BoxShadow(
-              color: AppColors.cardShadow,
-              blurRadius: 18,
-              offset: Offset(0, 5),
+              color: AppColors.primary.withAlpha(16),
+              blurRadius: 14,
+              spreadRadius: 1,
+              offset: const Offset(0, 4),
+            ),
+            BoxShadow(
+              color: Colors.black.withAlpha(10),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
             ),
           ],
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Icon Container with rich tint
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: accentColor.withAlpha(25),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: accentColor.withAlpha(70)),
+                border: Border.all(color: accentColor.withAlpha(80), width: 1.0),
               ),
               child: Icon(icon, color: accentColor, size: 28),
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: 14),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,24 +167,39 @@ class FeaturesScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      // Badge Pill
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
                         decoration: BoxDecoration(
-                          color: accentColor.withAlpha(20),
-                          borderRadius: BorderRadius.circular(6),
-                          border: Border.all(color: accentColor.withAlpha(50)),
+                          color: accentColor.withAlpha(25),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: accentColor.withAlpha(70), width: 0.9),
                         ),
                         child: Text(
                           badge,
                           style: GoogleFonts.poppins(
                             color: accentColor,
                             fontSize: 10,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w800,
                             letterSpacing: 0.8,
                           ),
                         ),
                       ),
-                      const Icon(Icons.arrow_forward_ios, size: 14, color: AppColors.textMuted),
+                      // Circular Chevron Button
+                      Container(
+                        width: 26,
+                        height: 26,
+                        decoration: BoxDecoration(
+                          color: AppColors.blushPink,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: AppColors.roseGold.withAlpha(70), width: 0.8),
+                        ),
+                        child: const Icon(
+                          Icons.chevron_right_rounded,
+                          size: 18,
+                          color: AppColors.primary,
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 6),
@@ -184,16 +207,17 @@ class FeaturesScreen extends StatelessWidget {
                     title,
                     style: GoogleFonts.poppins(
                       color: AppColors.textPrimary,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
+                      fontSize: 15.5,
+                      fontWeight: FontWeight.w800,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     subtitle,
                     style: GoogleFonts.poppins(
-                      color: AppColors.textSecondary,
-                      fontSize: 12,
+                      color: const Color(0xFF4A343F),
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w500,
                       height: 1.35,
                     ),
                   ),
