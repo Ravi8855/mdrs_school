@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/app_colors.dart';
 import '../gallery/gallery_screen.dart';
-import '../girls_memories/girls_memories_screen.dart';
 import '../hostel/hostel_screen.dart';
 import '../teachers_soundboard/teachers_soundboard_screen.dart';
 import 'day_at_mdrs_screen.dart';
@@ -29,19 +28,6 @@ class FeaturesScreen extends StatelessWidget {
         physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         children: [
-          _buildFeatureTile(
-            context,
-            title: "Sakhi Vault • Girls' Memories",
-            subtitle: "5:30 AM ಬಕೆಟ್ ಯುದ್ಧ, ಟ್ರಂಕ್ ತಿಂಡಿ ಡಬ್ಬಿ, ಕಂಬಳಿ ಹರಟೆ, ಡೆಸ್ಕ್ ಚೀಟಿ & ಬರ್ತ್‌ಡೇ ಚಾಕೋಲೇಟ್!",
-            icon: Icons.auto_awesome_rounded,
-            badge: "ಹಾಸ್ಟೆಲ್ ಸಖಿಯರು",
-            accentColor: const Color(0xFFBE185D), // Deep Ruby Rose
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const GirlsMemoriesScreen()),
-            ),
-          ),
-          const SizedBox(height: 14),
           _buildFeatureTile(
             context,
             title: "Hostel Life & Houses",
