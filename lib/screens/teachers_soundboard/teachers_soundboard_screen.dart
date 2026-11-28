@@ -272,16 +272,7 @@ Download MDRS Alumni App to relive your hostel memories!
           style: GoogleFonts.cinzel(fontWeight: FontWeight.w700, fontSize: 18, color: Colors.white),
         ),
         centerTitle: true,
-        actions: [
-          IconButton(
-            tooltip: "Stop Voice",
-            icon: const Icon(Icons.volume_off_rounded, color: Colors.white70),
-            onPressed: () {
-              stopDialogue();
-              setState(() => _currentlyPlayingId = null);
-            },
-          ),
-        ],
+        actions: const [],
       ),
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
@@ -353,7 +344,7 @@ Download MDRS Alumni App to relive your hostel memories!
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    "Tap the Hear Sound button on each teacher to hear their legendary dialogue!",
+                    "Relive the legendary dialogues and memorable moments of our beloved teachers!",
                     style: GoogleFonts.poppins(
                       fontSize: 12.5,
                       color: const Color(0xFFCBD5E1),
@@ -567,52 +558,10 @@ Download MDRS Alumni App to relive your hostel memories!
 
             const SizedBox(height: 14),
 
-            // Bottom Action Bar: Play Sound + Laugh/Heart Reactions
+            // Bottom Action Bar: Laugh/Heart Reactions
             Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                // Voice Play Button (Speaker icon, no mic)
-                Expanded(
-                  child: ElevatedButton.icon(
-                    onPressed: () => _playTeacherVoice(teacher),
-                    icon: isPlaying
-                        ? AnimatedBuilder(
-                            animation: _waveController,
-                            builder: (context, child) => Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: List.generate(
-                                3,
-                                (i) => Container(
-                                  margin: const EdgeInsets.symmetric(horizontal: 1.5),
-                                  width: 3,
-                                  height: 8 + (sin((_waveController.value * 2 * pi) + (i * 1.5)).abs() * 10),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(2),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
-                        : const Icon(Icons.volume_up_rounded, color: Colors.white, size: 20),
-                    label: Text(
-                      isPlaying ? "Speaking..." : "Hear Sound",
-                      style: GoogleFonts.poppins(
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: isPlaying ? const Color(0xFF10B981) : teacher.themeColor,
-                      padding: const EdgeInsets.symmetric(vertical: 11),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                      elevation: isPlaying ? 4 : 1,
-                    ),
-                  ),
-                ),
-
-                const SizedBox(width: 14),
-
                 // Reaction: Laugh
                 InkWell(
                   borderRadius: BorderRadius.circular(10),
