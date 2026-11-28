@@ -720,8 +720,8 @@ Check out the signatures, memories & hostel dialogues in our MDRS School Memorie
                     unselectedLabelStyle:
                         GoogleFonts.poppins(fontSize: 12.5, fontWeight: FontWeight.w600),
                     tabs: const [
-                      Tab(text: '👔 Boys Uniform (ಹುಡುಗರ ಡ್ರೆಸ್)'),
-                      Tab(text: '👗 Girls Uniform (ಹುಡುಗಿಯರ ಡ್ರೆಸ್)'),
+                      Tab(text: '👔 Boys Uniform'),
+                      Tab(text: '👗 Girls Uniform'),
                     ],
                   ),
                 ),
@@ -838,8 +838,6 @@ Check out the signatures, memories & hostel dialogues in our MDRS School Memorie
         ? 'assets/images/mdrs_girls_uniform.png'
         : 'assets/images/mdrs_boys_uniform.png';
 
-    final signatures = _currentSignatures;
-
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -857,7 +855,7 @@ Check out the signatures, memories & hostel dialogues in our MDRS School Memorie
       child: Stack(
         alignment: Alignment.center,
         children: [
-          // Background: The Authentic MDRS Uniform Shirt Image
+          // Background: Clean Authentic MDRS Uniform Shirt Image (no text/names overlay)
           ClipRRect(
             borderRadius: BorderRadius.circular(18),
             child: SizedBox(
@@ -874,97 +872,22 @@ Check out the signatures, memories & hostel dialogues in our MDRS School Memorie
             ),
           ),
 
-          // Translucent Parchment Overlay so handwritings stay razor sharp
-          Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(18),
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.white.withAlpha(35),
-                    Colors.white.withAlpha(60),
-                    Colors.white.withAlpha(90),
-                  ],
-                ),
-              ),
-            ),
-          ),
-
-          // Overlaid Autographs Written Directly on Uniform Fabric
-          SizedBox(
-            height: 480,
-            width: double.infinity,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
-              child: Wrap(
-                spacing: 12,
-                runSpacing: 14,
-                alignment: WrapAlignment.center,
-                children: List.generate(signatures.length, (idx) {
-                  final sig = signatures[idx];
-                  return Transform.rotate(
-                    angle: sig.rotation,
-                    child: InkWell(
-                      onTap: () => _showSignatureDialog(sig),
-                      borderRadius: BorderRadius.circular(12),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withAlpha(210),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: sig.markerColor.withAlpha(110),
-                            width: 1.2,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: sig.markerColor.withAlpha(25),
-                              blurRadius: 6,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              "${sig.name} ✍️",
-                              style: GoogleFonts.kalam(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w800,
-                                color: sig.markerColor,
-                              ),
-                            ),
-                            const SizedBox(width: 4),
-                            Text(sig.doodle, style: const TextStyle(fontSize: 12)),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                }),
-              ),
-            ),
-          ),
-
           // Bottom Watermark Pill
           Positioned(
             bottom: 8,
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
               decoration: BoxDecoration(
-                color: Colors.white.withAlpha(230),
+                color: Colors.white.withAlpha(235),
                 borderRadius: BorderRadius.circular(14),
                 border: Border.all(color: AppColors.roseGold.withAlpha(140), width: 1.0),
               ),
               child: Text(
                 _isGirlsUniform
-                    ? "MDRS Girls Farewell Uniform • Tap Autograph to Read"
-                    : "MDRS Boys Farewell Uniform • Tap Autograph to Read",
+                    ? "MDRS Girls Official Farewell Uniform"
+                    : "MDRS Boys Official Farewell Uniform",
                 style: GoogleFonts.poppins(
-                  fontSize: 10,
+                  fontSize: 11,
                   fontWeight: FontWeight.w700,
                   color: AppColors.primary,
                 ),
