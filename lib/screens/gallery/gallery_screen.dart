@@ -165,9 +165,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
                         ),
                         icon: const Text('✨', style: TextStyle(fontSize: 18)),
                         label: Text(
-                          _revealedPhoto == null
-                              ? 'Click to see the surprise'
-                              : 'Click for next surprise (${(_revealedIndex! + 1)} / ${photos.length})',
+                          'Click to see the surprise',
                           style: GoogleFonts.poppins(
                             fontWeight: FontWeight.w800,
                             fontSize: 14,
@@ -178,9 +176,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      _revealedPhoto == null
-                          ? 'Total ${photos.length} campus memories waiting to be unlocked'
-                          : 'Memory ${(_revealedIndex! + 1)} of ${photos.length} unlocked • Loops back after completion',
+                      'Tap to reveal unseen photos • No duplicates',
                       textAlign: TextAlign.center,
                       style: GoogleFonts.poppins(
                         color: Colors.white.withAlpha(200),
@@ -309,15 +305,6 @@ class _GalleryScreenState extends State<GalleryScreen> {
                                 ],
                               ),
                             ),
-                            const Spacer(),
-                            Text(
-                              'Photo ${_revealedIndex! + 1} of ${photos.length}',
-                              style: GoogleFonts.poppins(
-                                color: AppColors.primaryDeep,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
                           ],
                         ),
                       ),
@@ -376,7 +363,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
                         ),
                       ),
 
-                      // Card Footer with next action
+                      // Card Footer
                       Padding(
                         padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
                         child: Row(
@@ -403,26 +390,6 @@ class _GalleryScreenState extends State<GalleryScreen> {
                                 ],
                               ),
                             ),
-                            ElevatedButton.icon(
-                              onPressed: _onSurpriseClick,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF8B1E3F),
-                                foregroundColor: Colors.white,
-                                elevation: 2,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                              ),
-                              icon: const Text('🎁', style: TextStyle(fontSize: 14)),
-                              label: Text(
-                                'Next Photo',
-                                style: GoogleFonts.poppins(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 12.5,
-                                ),
-                              ),
-                            ),
                           ],
                         ),
                       ),
@@ -447,7 +414,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
             backgroundColor: Colors.black,
             iconTheme: const IconThemeData(color: Colors.white),
             title: Text(
-              'Memory ${_revealedIndex != null ? _revealedIndex! + 1 : 1} of ${StaticData.galleryPhotos.length}',
+              'Campus Memory',
               style: GoogleFonts.poppins(color: Colors.white, fontSize: 14),
             ),
           ),
