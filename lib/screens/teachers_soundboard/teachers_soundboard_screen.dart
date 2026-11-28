@@ -59,7 +59,7 @@ class _TeachersSoundboardScreenState extends State<TeachersSoundboardScreen>
   final List<TeacherDialogue> _teachers = [
     TeacherDialogue(
       id: "revensiddappa",
-      name: "Revensiddappa Sir",
+      name: "Revansiddappa Sir",
       subject: "Mathematics",
       subjectKannada: "ಗಣಿತ",
       dialogue: "ಯಾಕೋಲೇ ತಮ್ಮ್ಯಾ... ಕೊಡ್ತೀನ್ ಕೊಡ್ತೀನ್ ನೋಡು ಒಂದ್ ಏಟು!",
@@ -73,9 +73,9 @@ class _TeachersSoundboardScreenState extends State<TeachersSoundboardScreen>
     ),
     TeacherDialogue(
       id: "shatlingappa",
-      name: "Shatlingappa Sir",
+      name: "Shantlingappa Sir",
       subject: "Kannada",
-      subjectKannada: "ಕನ್ನಡ ಪಂಡಿತರು",
+      subjectKannada: "ಕನ್ನಡ",
       dialogue: "ತಲೆಯೊಳಗೆ ಕತ್ತಲಿದ್ದರೆ ಬದುಕಿನಲ್ಲಿ ಬೆಳಕು ಹೇಗೆ ಬರುತ್ತದೆ? ಪದ್ಯವನ್ನು ರಾಗವಾಗಿ ಹೇಳಿ, ಇಲ್ಲದಿದ್ದರೆ 5 ರೌಂಡ್ ಗ್ರೌಂಡ್ ಸುತ್ತಬೇಕು!",
       dialoguePhonetic: "Taleyolage kattaliddare badukalli belaku hege barutte? Padyavannu ragavagi heli!",
       contextNote: "ಕನ್ನಡ ಸಾಹಿತ್ಯ ಮತ್ತು ಪದ್ಯ ಕಂಠಪಾಠದ ಶಿಸ್ತು!",
@@ -115,7 +115,7 @@ class _TeachersSoundboardScreenState extends State<TeachersSoundboardScreen>
     ),
     TeacherDialogue(
       id: "subhash",
-      name: "Subhash Sir",
+      name: "Subash Sir",
       subject: "Science",
       subjectKannada: "ವಿಜ್ಞಾನ",
       dialogue: "ಹೇಯ್ ಯಾರ್ ಇವನು ಸತ್ಯಾನ್ ಸುವಾರ್! ಲ್ಯಾಬ್ ಉಪಕರಣಗಳನ್ನು ಮುಟ್ಟಿದರೆ ದಂಡ ಹಾಕ್ತೀನಿ!",
@@ -201,7 +201,7 @@ class _TeachersSoundboardScreenState extends State<TeachersSoundboardScreen>
     }
 
     setState(() => _currentlyPlayingId = teacher.id);
-    speakDialogue(teacher.dialogue, teacher.voiceLang);
+    speakDialogue(teacher.dialogue, teacher.voiceLang, teacherId: teacher.id);
 
     // Auto reset indicator after 5 seconds
     Future.delayed(const Duration(milliseconds: 5000), () {
@@ -489,24 +489,28 @@ Download MDRS Alumni App to relive your hostel memories!
                         style: GoogleFonts.cinzel(
                           fontSize: 16,
                           fontWeight: FontWeight.w800,
-                          color: Colors.white,
+                          color: AppColors.textPrimary,
                         ),
                       ),
-                      const SizedBox(height: 2),
+                      const SizedBox(height: 4),
                       Row(
                         children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                            decoration: BoxDecoration(
-                              color: teacher.themeColor.withAlpha(35),
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            child: Text(
-                              "${teacher.subject} • ${teacher.subjectKannada}",
-                              style: GoogleFonts.poppins(
-                                fontSize: 10.5,
-                                fontWeight: FontWeight.bold,
-                                color: teacher.themeColor,
+                          Flexible(
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                              decoration: BoxDecoration(
+                                color: teacher.themeColor.withAlpha(22),
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(color: teacher.themeColor.withAlpha(90), width: 1),
+                              ),
+                              child: Text(
+                                "${teacher.name} • ${teacher.subject} • ${teacher.subjectKannada}",
+                                style: GoogleFonts.poppins(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.bold,
+                                  color: teacher.themeColor,
+                                ),
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                           ),

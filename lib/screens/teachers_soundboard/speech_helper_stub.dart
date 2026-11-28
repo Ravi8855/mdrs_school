@@ -14,7 +14,7 @@ Future<void> _initTts() async {
   } catch (_) {}
 }
 
-void speakDialogue(String text, String lang) async {
+void speakDialogue(String text, String lang, {String? teacherId}) async {
   try {
     await _initTts();
     try {
