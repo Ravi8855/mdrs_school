@@ -12,16 +12,18 @@ class GalleryScreen extends StatefulWidget {
 }
 
 class _GalleryScreenState extends State<GalleryScreen> {
-  static const String _prefKey = 'mdrs_gallery_surprise_index_v2';
+  static const String _prefKey = 'mdrs_gallery_surprise_index_v3';
   int _surpriseIndex = 0;
+  String? _revealedPhoto;
+  int? _revealedIndex;
 
   @override
   void initState() {
     super.initState();
-    _loadSavedIndex();
+    _loadSavedState();
   }
 
-  Future<void> _loadSavedIndex() async {
+  Future<void> _loadSavedState() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final saved = prefs.getInt(_prefKey) ?? 0;
@@ -47,205 +49,20 @@ class _GalleryScreenState extends State<GalleryScreen> {
     final photos = StaticData.galleryPhotos;
     if (photos.isEmpty) return;
 
-    // Current surprise photo to reveal
+    // Pick current photo in strict sequential order (no duplicates)
     final currentIdx = _surpriseIndex % photos.length;
-    final currentImage = photos[currentIdx];
+    final photoToShow = photos[currentIdx];
 
-    // Advance to next photo (strictly no duplicates; cycles back to first after all finished)
+    // Prepare next index (loops back to 0 once all 18 photos are shown)
     final nextIdx = (currentIdx + 1) % photos.length;
+
     setState(() {
+      _revealedIndex = currentIdx;
+      _revealedPhoto = photoToShow;
       _surpriseIndex = nextIdx;
     });
+
     _saveIndex(nextIdx);
-
-    _showSurpriseDialog(currentImage, currentIdx, photos.length);
-  }
-
-  void _showSurpriseDialog(String initialImage, int initialIndex, int totalPhotos) {
-    String activeImage = initialImage;
-    int activeIndex = initialIndex;
-
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (ctx) {
-        return StatefulBuilder(
-          builder: (dialogCtx, setDialogState) {
-            return Dialog(
-              backgroundColor: Colors.transparent,
-              insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF2C0A15), Color(0xFF4A1020), Color(0xFF1E050E)],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ),
-                  borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: const Color(0xFFF59E0B).withAlpha(160), width: 1.5),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withAlpha(160),
-                      blurRadius: 24,
-                      offset: const Offset(0, 8),
-                    ),
-                  ],
-                ),
-                padding: const EdgeInsets.fromLTRB(16, 18, 16, 16),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Header Bar with celebration badge and close button
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFF59E0B),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Text('🎁 ', style: TextStyle(fontSize: 13)),
-                              Text(
-                                'SURPRISE PHOTO',
-                                style: GoogleFonts.poppins(
-                                  color: Colors.black,
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w800,
-                                  letterSpacing: 0.5,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const Spacer(),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withAlpha(25),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Text(
-                            '${activeIndex + 1} of $totalPhotos',
-                            style: GoogleFonts.poppins(
-                              color: Colors.white,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 6),
-                        IconButton(
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(),
-                          icon: const Icon(Icons.close_rounded, color: Colors.white, size: 22),
-                          onPressed: () => Navigator.of(dialogCtx).pop(),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-
-                    // Surprise image container with zoom support
-                    Flexible(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(18),
-                        child: Container(
-                          constraints: const BoxConstraints(maxHeight: 360),
-                          decoration: BoxDecoration(
-                            color: Colors.black.withAlpha(90),
-                            border: Border.all(color: Colors.white.withAlpha(20)),
-                          ),
-                          child: InteractiveViewer(
-                            minScale: 0.8,
-                            maxScale: 3.5,
-                            child: Image.asset(
-                              activeImage,
-                              fit: BoxFit.contain,
-                              errorBuilder: (context, error, stackTrace) => Container(
-                                height: 200,
-                                color: AppColors.surface,
-                                alignment: Alignment.center,
-                                child: const Icon(Icons.broken_image_rounded, color: Colors.white54, size: 48),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-
-                    // Subtitle tag
-                    Text(
-                      '✨ MDRS Nostalgia Moment • No Duplicates',
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.poppins(
-                        color: Colors.white.withAlpha(220),
-                        fontSize: 11.5,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(height: 14),
-
-                    // Action buttons: Next Surprise & Close
-                    Row(
-                      children: [
-                        Expanded(
-                          child: OutlinedButton(
-                            onPressed: () => Navigator.of(dialogCtx).pop(),
-                            style: OutlinedButton.styleFrom(
-                              foregroundColor: Colors.white70,
-                              side: BorderSide(color: Colors.white.withAlpha(50)),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                            ),
-                            child: Text(
-                              'Close',
-                              style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 13),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          flex: 2,
-                          child: ElevatedButton.icon(
-                            onPressed: () {
-                              final photos = StaticData.galleryPhotos;
-                              final nextI = (activeIndex + 1) % photos.length;
-                              setDialogState(() {
-                                activeIndex = nextI;
-                                activeImage = photos[nextI];
-                              });
-                              setState(() {
-                                _surpriseIndex = (nextI + 1) % photos.length;
-                              });
-                              _saveIndex(_surpriseIndex);
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFF59E0B),
-                              foregroundColor: Colors.black,
-                              elevation: 2,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                            ),
-                            icon: const Text('🎁', style: TextStyle(fontSize: 15)),
-                            label: Text(
-                              'Next Surprise',
-                              style: GoogleFonts.poppins(fontWeight: FontWeight.w700, fontSize: 13),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
   }
 
   @override
@@ -258,185 +75,364 @@ class _GalleryScreenState extends State<GalleryScreen> {
         backgroundColor: AppColors.primaryDeep,
         title: Text(
           "Campus Memories",
-          style: GoogleFonts.cinzel(fontWeight: FontWeight.w700, fontSize: 18, color: Colors.white),
+          style: GoogleFonts.cinzel(
+            fontWeight: FontWeight.w700,
+            fontSize: 18,
+            color: Colors.white,
+          ),
         ),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          // 🎁 Top Surprise Photo Card
-          Container(
-            margin: const EdgeInsets.fromLTRB(14, 12, 14, 8),
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF5A0E23), Color(0xFF8B1E3F)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF5A0E23).withAlpha(80),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 42,
-                      height: 42,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withAlpha(30),
-                        shape: BoxShape.circle,
-                      ),
-                      alignment: Alignment.center,
-                      child: const Text('🎁', style: TextStyle(fontSize: 22)),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Campus Nostalgia Surprise',
-                            style: GoogleFonts.poppins(
-                              color: Colors.white,
-                              fontSize: 14.5,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          Text(
-                            'Tap button to reveal unseen photos in order!',
-                            style: GoogleFonts.poppins(
-                              color: Colors.white.withAlpha(210),
-                              fontSize: 11,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+          child: Column(
+            children: [
+              // 🎁 Surprise Action Card
+              Container(
+                padding: const EdgeInsets.all(18),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF5A0E23), Color(0xFF8B1E3F)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(22),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF5A0E23).withAlpha(90),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
-                SizedBox(
-                  width: double.infinity,
-                  height: 46,
-                  child: ElevatedButton.icon(
-                    onPressed: _onSurpriseClick,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFF59E0B), // Vibrant Amber Gold
-                      foregroundColor: Colors.black,
-                      elevation: 3,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                    ),
-                    icon: const Text('✨', style: TextStyle(fontSize: 16)),
-                    label: Text(
-                      'Click to see the surprise',
-                      style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.w800,
-                        fontSize: 13.5,
-                        letterSpacing: 0.3,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  'Showing photo ${_surpriseIndex % photos.length + 1} of ${photos.length} • Loops back when complete',
-                  style: GoogleFonts.poppins(
-                    color: Colors.white.withAlpha(200),
-                    fontSize: 10.5,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // Header for Photo Grid
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 4, 16, 6),
-            child: Row(
-              children: [
-                Text(
-                  'ALL CAMPUS PHOTOS',
-                  style: GoogleFonts.poppins(
-                    color: AppColors.textSecondary,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 0.8,
-                  ),
-                ),
-                const Spacer(),
-                Text(
-                  '${photos.length} Memories',
-                  style: GoogleFonts.poppins(
-                    color: AppColors.textMuted,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // All Photos Grid
-          Expanded(
-            child: GridView.builder(
-              physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-              padding: const EdgeInsets.fromLTRB(12, 0, 12, 14),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 10,
-                childAspectRatio: 1.1,
-              ),
-              itemCount: photos.length,
-              itemBuilder: (ctx, i) {
-                final p = photos[i];
-                return GestureDetector(
-                  onTap: () => _openFullscreen(context, p),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Stack(
-                      fit: StackFit.expand,
+                child: Column(
+                  children: [
+                    Row(
                       children: [
-                        Image.asset(
-                          p,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) => Container(
-                            color: AppColors.surface,
-                            child: const Icon(Icons.image, color: AppColors.primary),
-                          ),
-                        ),
                         Container(
+                          width: 44,
+                          height: 44,
                           decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                Colors.transparent,
-                                Colors.black.withAlpha(90),
-                              ],
-                            ),
+                            color: Colors.white.withAlpha(28),
+                            shape: BoxShape.circle,
+                          ),
+                          alignment: Alignment.center,
+                          child: const Text('🎁', style: TextStyle(fontSize: 22)),
+                        ),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Campus Nostalgia Surprise',
+                                style: GoogleFonts.poppins(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              Text(
+                                'Tap to reveal one photo at a time • No duplicates!',
+                                style: GoogleFonts.poppins(
+                                  color: Colors.white.withAlpha(210),
+                                  fontSize: 11.5,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
+                    const SizedBox(height: 16),
+
+                    // ✨ The Main Button
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton.icon(
+                        onPressed: _onSurpriseClick,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFF59E0B), // Vibrant Amber Gold
+                          foregroundColor: Colors.black,
+                          elevation: 4,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                        ),
+                        icon: const Text('✨', style: TextStyle(fontSize: 18)),
+                        label: Text(
+                          _revealedPhoto == null
+                              ? 'Click to see the surprise'
+                              : 'Click for next surprise (${(_revealedIndex! + 1)} / ${photos.length})',
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.w800,
+                            fontSize: 14,
+                            letterSpacing: 0.3,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      _revealedPhoto == null
+                          ? 'Total ${photos.length} campus memories waiting to be unlocked'
+                          : 'Memory ${(_revealedIndex! + 1)} of ${photos.length} unlocked • Loops back after completion',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.poppins(
+                        color: Colors.white.withAlpha(200),
+                        fontSize: 11,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              // 🖼️ The Display Area (Shows ONLY after click, strictly one at a time)
+              if (_revealedPhoto == null) ...[
+                // Mystery placeholder before first click
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 24),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(22),
+                    border: Border.all(
+                      color: AppColors.primary.withAlpha(40),
+                      width: 1.5,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withAlpha(15),
+                        blurRadius: 16,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
                   ),
-                );
-              },
-            ),
+                  child: Column(
+                    children: [
+                      Container(
+                        width: 76,
+                        height: 76,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFF7ED),
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: const Color(0xFFF59E0B).withAlpha(120),
+                            width: 2,
+                          ),
+                        ),
+                        alignment: Alignment.center,
+                        child: const Text('🔒', style: TextStyle(fontSize: 34)),
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'Photos Are Hidden',
+                        style: GoogleFonts.cinzel(
+                          color: AppColors.primaryDeep,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Click the surprise button above to reveal one unseen school photo. No duplicate photos will be shown!',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.poppins(
+                          color: AppColors.textSecondary,
+                          fontSize: 12.5,
+                          height: 1.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ] else ...[
+                // The Revealed Surprise Photo Card
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(24),
+                    border: Border.all(
+                      color: const Color(0xFFF59E0B).withAlpha(140),
+                      width: 2,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFF8B1E3F).withAlpha(30),
+                        blurRadius: 20,
+                        offset: const Offset(0, 6),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      // Header badge
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFFFFBEB),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(22),
+                            topRight: Radius.circular(22),
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFF59E0B),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Text('🎁 ', style: TextStyle(fontSize: 12)),
+                                  Text(
+                                    'SURPRISE MEMORY',
+                                    style: GoogleFonts.poppins(
+                                      color: Colors.black,
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w800,
+                                      letterSpacing: 0.5,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const Spacer(),
+                            Text(
+                              'Photo ${_revealedIndex! + 1} of ${photos.length}',
+                              style: GoogleFonts.poppins(
+                                color: AppColors.primaryDeep,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      // The Image
+                      GestureDetector(
+                        onTap: () => _openFullscreen(context, _revealedPhoto!),
+                        child: Stack(
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              constraints: const BoxConstraints(minHeight: 280, maxHeight: 420),
+                              color: Colors.black,
+                              child: InteractiveViewer(
+                                minScale: 0.8,
+                                maxScale: 4.0,
+                                child: Image.asset(
+                                  _revealedPhoto!,
+                                  fit: BoxFit.contain,
+                                  errorBuilder: (context, error, stackTrace) => Container(
+                                    height: 260,
+                                    color: AppColors.surface,
+                                    alignment: Alignment.center,
+                                    child: const Icon(Icons.broken_image_rounded, color: Colors.grey, size: 48),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              right: 12,
+                              bottom: 12,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withAlpha(160),
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(Icons.fullscreen_rounded, color: Colors.white, size: 16),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      'Tap to expand',
+                                      style: GoogleFonts.poppins(
+                                        color: Colors.white,
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      // Card Footer with next action
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'MDRS Campus Memory',
+                                    style: GoogleFonts.poppins(
+                                      color: AppColors.primaryDeep,
+                                      fontSize: 13.5,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Pinch or double-tap image to zoom',
+                                    style: GoogleFonts.poppins(
+                                      color: AppColors.textMuted,
+                                      fontSize: 11,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            ElevatedButton.icon(
+                              onPressed: _onSurpriseClick,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF8B1E3F),
+                                foregroundColor: Colors.white,
+                                elevation: 2,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                              ),
+                              icon: const Text('🎁', style: TextStyle(fontSize: 14)),
+                              label: Text(
+                                'Next Photo',
+                                style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 12.5,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -450,6 +446,10 @@ class _GalleryScreenState extends State<GalleryScreen> {
           appBar: AppBar(
             backgroundColor: Colors.black,
             iconTheme: const IconThemeData(color: Colors.white),
+            title: Text(
+              'Memory ${_revealedIndex != null ? _revealedIndex! + 1 : 1} of ${StaticData.galleryPhotos.length}',
+              style: GoogleFonts.poppins(color: Colors.white, fontSize: 14),
+            ),
           ),
           body: Center(
             child: InteractiveViewer(
@@ -463,3 +463,4 @@ class _GalleryScreenState extends State<GalleryScreen> {
     );
   }
 }
+
