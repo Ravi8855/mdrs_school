@@ -480,7 +480,7 @@ Download MDRS Alumni App to relive your hostel memories!
                         style: GoogleFonts.cinzel(
                           fontSize: 16,
                           fontWeight: FontWeight.w800,
-                          color: AppColors.textPrimary,
+                          color: Colors.black,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -495,7 +495,7 @@ Download MDRS Alumni App to relive your hostel memories!
                                 border: Border.all(color: teacher.themeColor.withAlpha(90), width: 1),
                               ),
                               child: Text(
-                                "${teacher.name} • ${teacher.subject} • ${teacher.subjectKannada}",
+                                "${teacher.subject} • ${teacher.subjectKannada}",
                                 style: GoogleFonts.poppins(
                                   fontSize: 11,
                                   fontWeight: FontWeight.bold,
