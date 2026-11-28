@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../data/student_zone_model.dart';
 
 class StudentZoneService {
-  static const String _storageKey = 'mdrs_students_zone_all_batches_v8';
+  static const String _storageKey = 'mdrs_students_zone_all_batches_v9';
   static const String _adminPinKey = 'mdrs_students_zone_admin_pin';
   static const String defaultPin = '2013';
 
@@ -46,7 +46,7 @@ class StudentZoneService {
           tag: 'SSLC 94.6% • Mathematics Genius',
           badge: '⭐ School 1st Rank',
           rankOrDetail: 'Rank 2 • Math Master',
-          image: 'assets/images/college.jpg',
+          image: null,
           description:
               'Never missed a class, solved advanced theorems before teachers finished on the blackboard, and led group study sessions that helped everyone pass mathematics.',
         ),
@@ -58,7 +58,7 @@ class StudentZoneService {
           tag: 'Science & Technology Star',
           badge: '🥇 Science Star',
           rankOrDetail: 'Distinction Achiever',
-          image: 'assets/images/Praveen.jpeg',
+          image: null,
           description:
               'Consistently scored top marks across science and mathematics, brilliant problem solver, and represented MDRS in district competitions.',
         ),

@@ -105,46 +105,81 @@ class _UniformKitsScreenState extends State<UniformKitsScreen>
         ),
         centerTitle: true,
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(54),
+          preferredSize: const Size.fromHeight(56),
           child: Container(
-            height: 54,
+            height: 56,
             padding: const EdgeInsets.fromLTRB(16, 4, 16, 10),
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.black.withAlpha(55),
-                borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: Colors.white.withAlpha(35), width: 1),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(28),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withAlpha(40),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
               ),
               child: TabBar(
                 controller: _tabController,
                 dividerColor: Colors.transparent,
+                dividerHeight: 0,
                 indicatorSize: TabBarIndicatorSize.tab,
                 indicator: BoxDecoration(
-                  borderRadius: BorderRadius.circular(22),
-                  gradient: const LinearGradient(
-                    colors: [AppColors.primary, Color(0xFF9333EA)],
-                  ),
+                  borderRadius: BorderRadius.circular(26),
+                  color: const Color(0xFF8B1E3F),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withAlpha(70),
-                      blurRadius: 8,
+                      color: const Color(0xFF8B1E3F).withAlpha(90),
+                      blurRadius: 6,
                       offset: const Offset(0, 2),
                     ),
                   ],
                 ),
                 labelColor: Colors.white,
-                unselectedLabelColor: Colors.white.withAlpha(235),
+                unselectedLabelColor: const Color(0xFF701A32),
                 labelStyle: GoogleFonts.poppins(
-                  fontSize: 12.5,
+                  fontSize: 13,
                   fontWeight: FontWeight.w700,
+                  letterSpacing: 0.2,
                 ),
                 unselectedLabelStyle: GoogleFonts.poppins(
-                  fontSize: 12.5,
-                  fontWeight: FontWeight.w600,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.2,
                 ),
                 tabs: const [
-                  Tab(text: '👔  School Uniforms'),
-                  Tab(text: '🎁  Hostel Kit Box'),
+                  Tab(
+                    height: 42,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('👔 ', style: TextStyle(fontSize: 14)),
+                        Flexible(
+                          child: Text(
+                            'School Uniforms',
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Tab(
+                    height: 42,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('🎁 ', style: TextStyle(fontSize: 14)),
+                        Flexible(
+                          child: Text(
+                            'Hostel Kit Box',
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
