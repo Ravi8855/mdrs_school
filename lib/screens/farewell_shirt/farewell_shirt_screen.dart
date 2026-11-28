@@ -683,11 +683,12 @@ Check out the signatures, memories & hostel dialogues in our MDRS School Memorie
               children: [
                 // Top Gender Uniform Switcher Bar
                 Container(
+                  height: 48,
                   margin: const EdgeInsets.fromLTRB(16, 12, 16, 8),
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(24),
                     border: Border.all(color: AppColors.cardBorder, width: 1.2),
                     boxShadow: [
                       BoxShadow(
@@ -697,19 +698,21 @@ Check out the signatures, memories & hostel dialogues in our MDRS School Memorie
                       ),
                     ],
                   ),
+                  clipBehavior: Clip.antiAlias,
                   child: TabBar(
                     controller: _genderController,
+                    dividerColor: Colors.transparent,
+                    dividerHeight: 0,
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    indicatorPadding: EdgeInsets.zero,
+                    labelPadding: EdgeInsets.zero,
                     indicator: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [AppColors.navActiveStart, AppColors.navActiveEnd],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(16),
+                      color: const Color(0xFF9E2A4B), // Professional Light Maroon
+                      borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.primary.withAlpha(60),
-                          blurRadius: 8,
+                          color: const Color(0xFF9E2A4B).withAlpha(45),
+                          blurRadius: 6,
                           offset: const Offset(0, 2),
                         ),
                       ],
@@ -720,8 +723,34 @@ Check out the signatures, memories & hostel dialogues in our MDRS School Memorie
                     unselectedLabelStyle:
                         GoogleFonts.poppins(fontSize: 12.5, fontWeight: FontWeight.w600),
                     tabs: const [
-                      Tab(text: '👔 Boys Uniform'),
-                      Tab(text: '👗 Girls Uniform'),
+                      Tab(
+                        height: 40,
+                        child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text('👔', style: TextStyle(fontSize: 14)),
+                              SizedBox(width: 6),
+                              Text('Boys Uniform'),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Tab(
+                        height: 40,
+                        child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text('👗', style: TextStyle(fontSize: 14)),
+                              SizedBox(width: 6),
+                              Text('Girls Uniform'),
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
