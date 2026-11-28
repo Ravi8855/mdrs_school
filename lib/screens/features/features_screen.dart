@@ -6,6 +6,7 @@ import '../gallery/gallery_screen.dart';
 import '../hostel/hostel_screen.dart';
 import '../teachers_soundboard/teachers_soundboard_screen.dart';
 import 'day_at_mdrs_screen.dart';
+import 'iconic_moments_screen.dart';
 import 'mdrsian_bingo_screen.dart';
 
 class FeaturesScreen extends StatelessWidget {
@@ -90,6 +91,19 @@ class FeaturesScreen extends StatelessWidget {
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const GalleryScreen()),
+            ),
+          ),
+          const SizedBox(height: 14),
+          _buildFeatureTile(
+            context,
+            title: "Iconic Moments",
+            subtitle: "Explore legendary stories from all students or share your own iconic campus moment!",
+            icon: Icons.military_tech_rounded,
+            badge: "HALL OF LEGENDS",
+            accentColor: const Color(0xFFD97706), // Warm Gold Amber
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const IconicMomentsScreen()),
             ),
           ),
         ],
