@@ -111,8 +111,9 @@ class _UniformKitsScreenState extends State<UniformKitsScreen>
             padding: const EdgeInsets.fromLTRB(16, 4, 16, 10),
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.white.withAlpha(20),
+                color: Colors.black.withAlpha(55),
                 borderRadius: BorderRadius.circular(24),
+                border: Border.all(color: Colors.white.withAlpha(35), width: 1),
               ),
               child: TabBar(
                 controller: _tabController,
@@ -125,21 +126,21 @@ class _UniformKitsScreenState extends State<UniformKitsScreen>
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.primaryLight.withAlpha(90),
-                      blurRadius: 10,
+                      color: Colors.black.withAlpha(70),
+                      blurRadius: 8,
                       offset: const Offset(0, 2),
                     ),
                   ],
                 ),
                 labelColor: Colors.white,
-                unselectedLabelColor: AppColors.navInactive,
+                unselectedLabelColor: Colors.white.withAlpha(235),
                 labelStyle: GoogleFonts.poppins(
                   fontSize: 12.5,
                   fontWeight: FontWeight.w700,
                 ),
                 unselectedLabelStyle: GoogleFonts.poppins(
                   fontSize: 12.5,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w600,
                 ),
                 tabs: const [
                   Tab(text: '👔  School Uniforms'),

@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'core/app_colors.dart';
-import 'screens/intro/intro_screen.dart';
+import 'screens/main_shell.dart';
 import 'services/supabase_service.dart';
 
 void main() async {
@@ -155,7 +155,7 @@ class MdrsApp extends StatelessWidget {
           },
         );
       },
-      home: const IntroScreen(),
+      home: const MainShell(),
     );
   }
 }
